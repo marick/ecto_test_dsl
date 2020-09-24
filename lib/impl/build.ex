@@ -49,7 +49,12 @@ defmodule TransformerTestSupport.Impl.Build do
     expanded_params =
       case params do
         {:__like, earlier_name, overriding_params} ->
-          Map.merge(acc[earlier_name].params, overriding_params)
+          case acc[earlier_name] do
+            nil ->
+              raise("Build.like/2: there is no exemplar named `#{inspect earlier_name}`")
+            exemplar -> 
+              Map.merge(exemplar.params, overriding_params)
+          end
         _ ->
           params
       end
