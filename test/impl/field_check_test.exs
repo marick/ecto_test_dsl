@@ -7,7 +7,6 @@ defmodule TransformerTestSupport.Impl.FieldCheckTest do
     checks = for s <- snippets, do: {:message, s}
     
     assert_raise(RuntimeError, f)
-    |> IO.inspect
     |> assert_fields(checks)
   end
 

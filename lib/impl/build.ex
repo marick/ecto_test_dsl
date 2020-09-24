@@ -24,14 +24,38 @@ defmodule TransformerTestSupport.Impl.Build do
     do: keywords |> Enum.into(%{}) |> build
 
   def build(map) when is_map(map) do
-    Map.merge(@build_defaults, map)
-    |> assert_required_fields
-    |> refute_extra_fields
+    start =
+      Map.merge(@build_defaults, map)
+      |> assert_required_fields
+      |> refute_extra_fields
+
+    expanded_exemplars =
+      Enum.reduce(start.exemplars, %{}, &add_real_exemplar/2)
+
+    Map.put(start, :exemplars, expanded_exemplars)
   end
 
   def to_strings(map) when is_map(map), do: map_to_strings(map)
   def to_strings(kws) when is_list(kws), do: Enum.into(kws, %{}) |> to_strings
 
+  def like(valid, except: map) when is_map(map),
+    do: {:__like, valid, to_strings(map)}
+  def like(valid, except: kws) when is_list(kws), 
+    do: like(valid, except: Enum.into(kws, %{}))
+
+  # ----------------------------------------------------------------------------
+
+  def add_real_exemplar({new_name, %{params: params} = raw_data}, acc) do
+    expanded_params =
+      case params do
+        {:__like, earlier_name, overriding_params} ->
+          Map.merge(acc[earlier_name].params, overriding_params)
+        _ ->
+          params
+      end
+    expanded_data = Map.put(raw_data, :params, expanded_params)
+    Map.put(acc, new_name, expanded_data)
+  end
 
   # ----------------------------------------------------------------------------
 
@@ -63,12 +87,14 @@ defmodule TransformerTestSupport.Impl.Build do
     end
   end
 
+  # ----------------------------------------------------------------------------
+
+  
   defp map_to_strings(map) when is_map(map) do
     map
     |> Enum.map(fn {k,v} -> {value_to_string(k), value_to_string(v)} end)
     |> Map.new
   end
-
 
   defp value_to_string(value) when is_list(value),
     do: Enum.map(value, &to_string/1)
@@ -76,6 +102,4 @@ defmodule TransformerTestSupport.Impl.Build do
     do: map_to_strings(value)
   defp value_to_string(value),
       do: to_string(value)
-
-
 end
