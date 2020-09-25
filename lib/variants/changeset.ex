@@ -18,8 +18,8 @@ defmodule TransformerTestSupport.Variants.Changeset do
 
       def accept_example(example_name) do
         params = params(example_name)
-        actual = struct(module_under_test())
-        module_under_test().changeset(actual, params)
+        older = struct(module_under_test())
+        module_under_test().changeset(older, params)
       end
     end
   end
