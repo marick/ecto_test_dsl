@@ -4,7 +4,7 @@ defmodule Definitions.Changeset.JustParams do
 
   build(
     module_under_test: Schema,
-    exemplars: [
+    examples: [
       # -------------------------------------------VALID-------------------
       ok: %{
         params: to_strings(

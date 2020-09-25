@@ -18,10 +18,10 @@ defmodule TransformerTestSupport.Impl.FieldCheckTest do
 
   test "rejects unknown fields" do
     assert_raises_runtime_error([~r/The following fields are unknown/,
-                                 ~r/:examplars/,
-                                 ~r/:exemplars/],
+                                 ~r/:exemples/,
+                                 ~r/:examples/],
       fn -> Build.create_test_data([module_under_test: List,
-                         examplars: []
+                         exemples: []
                         ]) end)
   end
 end

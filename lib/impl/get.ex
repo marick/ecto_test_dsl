@@ -2,9 +2,9 @@ defmodule TransformerTestSupport.Impl.Get do
   @moduledoc """
   """
 
-  def exemplar(test_data, exemplar_name),
-    do: test_data.exemplars[exemplar_name]
+  def example(test_data, example_name),
+    do: test_data.examples[example_name]
 
-  def params(test_data, exemplar_name),
-    do: exemplar(test_data, exemplar_name).params
+  def params(test_data, example_name),
+    do: example(test_data, example_name).params
 end

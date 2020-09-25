@@ -16,8 +16,8 @@ defmodule TransformerTestSupport.Variants.Changeset do
       use TransformerTestSupport.Impl.Predefines, Variant
       import Variant, only: [build: 1]
 
-      def accept_exemplar(exampler_name) do
-        params = params(exampler_name)
+      def accept_example(example_name) do
+        params = params(example_name)
         actual = struct(module_under_test())
         module_under_test().changeset(actual, params)
       end

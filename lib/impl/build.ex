@@ -5,16 +5,16 @@ defmodule TransformerTestSupport.Impl.Build do
 
   def build_defaults do
     %{
-      exemplars: [],
-      accept_exemplar: fn _ ->
-        raise("Either the variant or the param code must define function `:accept_exemplar`.")
+      examples: [],
+      accept_example: fn _ ->
+        raise("Either the variant or the param code must define function `:accept_example`.")
       end,
     }
   end
 
   def top_level_requires do
     MapSet.union(
-      MapSet.new([:module_under_test, :exemplars, :accept_exemplar
+      MapSet.new([:module_under_test, :examples, :accept_example
                  ]),
       keyset(build_defaults())
     )
@@ -40,10 +40,10 @@ defmodule TransformerTestSupport.Impl.Build do
       |> assert_required_fields
       |> refute_extra_fields
 
-    expanded_exemplars =
-      Enum.reduce(start.exemplars, %{}, &add_real_exemplar/2)
+    expanded_examples =
+      Enum.reduce(start.examples, %{}, &add_real_example/2)
 
-    Map.put(start, :exemplars, expanded_exemplars)
+    Map.put(start, :examples, expanded_examples)
   end
 
   def to_strings(map) when is_map(map), do: map_to_strings(map)
@@ -56,15 +56,15 @@ defmodule TransformerTestSupport.Impl.Build do
 
   # ----------------------------------------------------------------------------
 
-  def add_real_exemplar({new_name, %{params: params} = raw_data}, acc) do
+  def add_real_example({new_name, %{params: params} = raw_data}, acc) do
     expanded_params =
       case params do
         {:__like, earlier_name, overriding_params} ->
           case acc[earlier_name] do
             nil ->
-              raise("Build.like/2: there is no exemplar named `#{inspect earlier_name}`")
-            exemplar -> 
-              Map.merge(exemplar.params, overriding_params)
+              raise("Build.like/2: there is no example named `#{inspect earlier_name}`")
+            example -> 
+              Map.merge(example.params, overriding_params)
           end
         _ ->
           params
