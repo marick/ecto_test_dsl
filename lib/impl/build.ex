@@ -3,9 +3,11 @@ defmodule TransformerTestSupport.Impl.Build do
   @moduledoc """
   """
 
-  @build_defaults %{
-    exemplars: []
-  }
+  def build_defaults do
+    %{
+      exemplars: [],
+    }
+  end
 
   @top_level_requires MapSet.new(
     [:module_under_test,
@@ -25,7 +27,7 @@ defmodule TransformerTestSupport.Impl.Build do
 
   def build(map) when is_map(map) do
     start =
-      Map.merge(@build_defaults, map)
+      Map.merge(build_defaults(), map)
       |> assert_required_fields
       |> refute_extra_fields
 
