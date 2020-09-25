@@ -7,13 +7,13 @@ defmodule Definitions.Changeset.AddLike do
       module_under_test: Schema,
       exemplars: [
         # -------------------------------------------VALID-------------------
-        valid: %{
+        ok: %{
           params: to_strings(
             lock_version: 1,
             date: "2001-01-01"), 
         },
-        invalid: %{
-          params: like(:valid, except: [date: "1-1-1"])
+        error: %{
+          params: like(:ok, except: [date: "1-1-1"])
         }
       ])
   end

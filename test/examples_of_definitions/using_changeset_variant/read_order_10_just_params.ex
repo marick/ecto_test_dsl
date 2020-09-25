@@ -7,12 +7,12 @@ defmodule Definitions.Changeset.JustParams do
       module_under_test: Schema,
       exemplars: [
         # -------------------------------------------VALID-------------------
-        valid: %{
+        ok: %{
           params: to_strings(
             lock_version: 1,
             date: "2001-01-01"), 
         },
-        invalid: %{
+        error: %{
           params: to_strings(
             lock_version: 1,
             date: "1-1-1"),
