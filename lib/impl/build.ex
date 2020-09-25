@@ -6,20 +6,29 @@ defmodule TransformerTestSupport.Impl.Build do
   def build_defaults do
     %{
       exemplars: [],
+      accept_exemplar: fn _ ->
+        raise("Either the variant or the param code must define function `:accept_exemplar`.")
+      end,
     }
   end
 
-  @top_level_requires MapSet.new(
-    [:module_under_test,
-    ]
-  )
+  def top_level_requires do
+    MapSet.union(
+      MapSet.new([:module_under_test, :exemplars, :accept_exemplar
+                 ]),
+      keyset(build_defaults())
+    )
+  end
 
-  @top_level_optional MapSet.new(
-    [:exemplars,
-    ]
-  )
+  def top_level_optional do 
+    MapSet.new(
+      [
+      ])
+  end
 
-  @top_level_allowed MapSet.union(@top_level_requires, @top_level_optional)
+  def top_level_allowed do
+    MapSet.union(top_level_requires(), top_level_optional())
+  end
         
 
   def create_test_data(keywords) when is_list(keywords),
@@ -75,7 +84,7 @@ defmodule TransformerTestSupport.Impl.Build do
   end  
 
   defp assert_required_fields(map) do 
-    missing = sorted_difference(@top_level_requires, keyset(map))
+    missing = sorted_difference(top_level_requires(), keyset(map))
     if Enum.empty?(missing) do
       map
     else
@@ -84,11 +93,11 @@ defmodule TransformerTestSupport.Impl.Build do
   end
 
   defp refute_extra_fields(map) do
-    extras = sorted_difference(keyset(map), @top_level_allowed)
+    extras = sorted_difference(keyset(map), top_level_allowed())
     if Enum.empty?(extras) do
       map
     else
-      per_extra = did_you_mean(extras, @top_level_allowed)
+      per_extra = did_you_mean(extras, top_level_allowed())
       message = Enum.join(["The following fields are unknown:\n" | per_extra], "")
       raise message
     end
