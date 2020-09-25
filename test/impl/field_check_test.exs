@@ -13,14 +13,14 @@ defmodule TransformerTestSupport.Impl.FieldCheckTest do
   test "required top-level fields are present" do
     assert_raises_runtime_error([~r/The following fields are required/,
                                  ~r/:module_under_test/],
-      fn -> Build.build([]) end)
+      fn -> Build.create_test_data([]) end)
   end
 
   test "rejects unknown fields" do
     assert_raises_runtime_error([~r/The following fields are unknown/,
                                  ~r/:examplars/,
                                  ~r/:exemplars/],
-      fn -> Build.build([module_under_test: List,
+      fn -> Build.create_test_data([module_under_test: List,
                          examplars: []
                         ]) end)
   end

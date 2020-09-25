@@ -22,10 +22,10 @@ defmodule TransformerTestSupport.Impl.Build do
   @top_level_allowed MapSet.union(@top_level_requires, @top_level_optional)
         
 
-  def build(keywords) when is_list(keywords),
-    do: keywords |> Enum.into(%{}) |> build
+  def create_test_data(keywords) when is_list(keywords),
+    do: keywords |> Enum.into(%{}) |> create_test_data
 
-  def build(map) when is_map(map) do
+  def create_test_data(map) when is_map(map) do
     start =
       Map.merge(build_defaults(), map)
       |> assert_required_fields
