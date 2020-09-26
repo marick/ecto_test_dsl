@@ -10,6 +10,7 @@ defmodule Definitions.Changeset.Validation do
         params: to_strings(
           lock_version: 1,
           date: "2001-01-01"),
+        changes: [lock_version: 1, date: ~D[2001-01-01]],
         categories: [:valid],
       },
       error: %{
