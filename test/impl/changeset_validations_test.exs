@@ -16,7 +16,7 @@ defmodule Impl.ChangesetValidationsTest do
         Validations.validate_changeset_against_example(
           %Changeset{changes: %{a: 1}},
           :some_example_name,
-          %{changes: [a: 2]})
+          %{changeset: [changes: [a: 2]]})
       end)
   end
 
@@ -29,13 +29,13 @@ defmodule Impl.ChangesetValidationsTest do
     end)
 
     [valid.( true  ), category.(  :valid   )] |> a.pass.()
-    [valid.( false ), category.(  :valid   )] 
-      |> a.fail.(message: Messages.should_be_valid(:some_example_name), 
-                 left: valid.(false))
+    [valid.( false ), category.(  :valid   )] |> a.fail.(
+      message: Messages.should_be_valid(:some_example_name), 
+      left: valid.(false))
 
-    [valid.( true  ), category.(  :invalid )]
-      |> a.fail.(Messages.should_be_invalid(:some_example_name))
-      |> a.plus.(left: valid.(true))
+    [valid.( true  ), category.(  :invalid )] |> a.fail.(
+      message: Messages.should_be_invalid(:some_example_name),
+      left: valid.(true))
     [valid.( false ), category.(  :invalid )] |> a.pass.()
 
     # If there is neither valid nor invalid, no check is done.
@@ -43,22 +43,32 @@ defmodule Impl.ChangesetValidationsTest do
     [valid.( false ), category.(  :other   )] |> a.pass.()
   end
   
-  describe "changes" do
+  describe "changeset" do
     setup do 
       a = assertion_runners_for(fn changeset, example ->
-        Validations.assert_changes(changeset, :some_example_name, example)
+        Validations.assert_changeset(changeset, :some_example_name, example)
       end)
       [a: a]
     end
     
     test "changes explicitly", %{a: a} do
       actual = &(%Changeset{changes: &1})
-      checkable = &(%{changes: &1})
+      checkable = &(%{changeset: [changes: &1]})
       
       [actual.(%{value: 1}), checkable.(value: 1)] |> a.pass.()
       [actual.(%{value: 1}), checkable.(value: 2)] |> a.fail.(
         message: ~r/Field `:value` has the wrong value/,
         left: 1, right: 2)
+    end
+
+    test "you can use single-valued assertions" do
+      assertion_fails("The changeset is invalid",
+        fn -> 
+          Validations.assert_changeset(
+            %Changeset{valid?: false},
+            :some_example_name,
+            %{changeset: [valid: true]})
+        end)
     end
   end
 end

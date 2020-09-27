@@ -9,12 +9,11 @@ defmodule TransformerTestSupport.Impl.Validations do
   """
 
   defchain validate_changeset_against_example(changeset, example_name, example) do
-
     adjust_assertion_message(
       fn ->
         changeset
         |> assert_validity(example_name, example)
-        |> assert_changes(example_name, example)
+        |> assert_changeset(example_name, example)
       end,
       fn message -> 
          """
@@ -22,30 +21,6 @@ defmodule TransformerTestSupport.Impl.Validations do
            Changeset: #{inspect changeset}
          """
       end)
-      
-    
-    # try do
-
-      # if Map.has_key?(example, :changes),
-      #   do: assert_changes(changeset, example.changes)
-    #     changeset
-    #     |> assert_change(Get.as_cast(test_data, descriptor, without: unchanged_fields))
-    #     |> assert_no_changes(unchanged_fields)
-    #     |> assert_errors(errors)
-    #     check_spies(example[:because_of])
-    # rescue
-    #   exception in [ExUnit.AssertionError] ->
-    #     new_message =
-    #       """
-    #       Example `#{inspect example_name}`: #{exception.message}"
-    #       Changeset: 
-    #         #{inspect changeset}
-    #       Underlying changeset data:
-    #         #{inspect changeset.data}
-    #       """
-    #     new = %{exception | message: new_message}
-    #     reraise new, __STACKTRACE__
-    # end
   end
     
   def validate_changeset(changeset, example_name, test_data) do
@@ -72,9 +47,21 @@ defmodule TransformerTestSupport.Impl.Validations do
     end
   end
 
-  defchain assert_changes(changeset, example_name, example) do
-    if Map.has_key?(example, :changes) do
-      assert_changes(changeset, example.changes)
+  defchain assert_changeset(changeset, _example_name, example) do
+    if Map.has_key?(example, :changeset) do
+      for {check_type, arg} <- example.changeset,
+        do: apply_assertion(changeset, check_type, arg)
     end
   end
+
+  alias FlowAssertions.Ecto.ChangesetA
+  
+  defp apply_assertion(changeset, check_type, true),
+    do: apply ChangesetA, assert_name(check_type), [changeset]
+
+  defp apply_assertion(changeset, check_type, arg),
+    do: apply ChangesetA, assert_name(check_type), [changeset, arg]
+
+  defp assert_name(check_type),
+    do: "assert_#{to_string check_type}" |> String.to_atom
 end
