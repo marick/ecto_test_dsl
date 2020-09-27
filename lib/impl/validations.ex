@@ -9,22 +9,22 @@ defmodule TransformerTestSupport.Impl.Validations do
   """
 
   defchain validate_changeset_against_example(changeset, example_name, example) do
-    # try do
-      if Map.has_key?(example, :categories) do
-        cond do
-          Enum.member?(example.categories, :valid) ->
-            elaborate_assert(changeset.valid?,
-              Impl.Messages.should_be_valid(example_name),
-              left: changeset)
-          Enum.member?(example.categories, :invalid) ->
-            elaborate_refute(changeset.valid?,
-              Impl.Messages.should_be_invalid(example_name),
-              left: changeset)
 
-          :else ->
-            :no_checking_has_been_requested
-        end
-      end
+    adjust_assertion_message(
+      fn ->
+        changeset
+        |> assert_validity(example_name, example)
+        |> assert_changes(example_name, example)
+      end,
+      fn message -> 
+         """
+         Example `#{inspect example_name}`: #{message}
+           Changeset: #{inspect changeset}
+         """
+      end)
+      
+    
+    # try do
 
       # if Map.has_key?(example, :changes),
       #   do: assert_changes(changeset, example.changes)
@@ -52,5 +52,29 @@ defmodule TransformerTestSupport.Impl.Validations do
     example = Impl.Get.example(test_data, example_name)
     validate_changeset_against_example(changeset, example_name, example)
   end
-    
+
+
+  defchain assert_validity(changeset, example_name, example) do 
+    if Map.has_key?(example, :categories) do
+      cond do
+        Enum.member?(example.categories, :valid) ->
+          elaborate_assert(changeset.valid?,
+            Impl.Messages.should_be_valid(example_name),
+            left: changeset)
+        Enum.member?(example.categories, :invalid) ->
+          elaborate_refute(changeset.valid?,
+            Impl.Messages.should_be_invalid(example_name),
+            left: changeset)
+          
+        :else ->
+          :no_checking_has_been_requested
+      end
+    end
+  end
+
+  defchain assert_changes(changeset, example_name, example) do
+    if Map.has_key?(example, :changes) do
+      assert_changes(changeset, example.changes)
+    end
+  end
 end

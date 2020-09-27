@@ -5,30 +5,60 @@ defmodule Impl.ChangesetValidationsTest do
   import FlowAssertions.Define.Tabular
   alias Ecto.Changeset
 
-  describe "validity test" do
-
-    test "foo" do
-      valid = &(%Changeset{valid?: &1})
-      category = &(%{categories: [&1]}) # Produces an example.
-
-      a = assertion_runners_for(fn changeset, example ->
+  test "common message handling" do
+    assertion_fails(
+      ~r/.*/, #Field `:a` has the wrong value/,  # The base message
+      # and surrounding messages
+      [message: ~r/Example `:some_example_name`/,
+       message: ~r/Field `:a` has the wrong value/,
+       message: ~r/Changeset: /],
+      fn ->
         Validations.validate_changeset_against_example(
-          changeset, :some_example_name, example)
+          %Changeset{changes: %{a: 1}},
+          :some_example_name,
+          %{changes: [a: 2]})
       end)
+  end
 
-      [valid.( true  ), category.(  :valid   )] |> a.pass.()
-      [valid.( false ), category.(  :valid   )] 
-        |> a.fail.(Messages.should_be_valid(:some_example_name))
-        |> a.plus.(left: valid.(false))
+  test "valid? field" do
+    valid = &(%Changeset{valid?: &1})
+    category = &(%{categories: [&1]}) # Produces an example.
 
-      [valid.( true  ), category.(  :invalid )]
-        |> a.fail.(Messages.should_be_invalid(:some_example_name))
-        |> a.plus.(left: valid.(true))
-      [valid.( false ), category.(  :invalid )] |> a.pass.()
+    a = assertion_runners_for(fn changeset, example ->
+      Validations.assert_validity(changeset, :some_example_name, example)
+    end)
 
-      # If there is neither valid nor invalid, no check is done.
-      [valid.( true  ), category.(  :other   )] |> a.pass.()
-      [valid.( false ), category.(  :other   )] |> a.pass.()
+    [valid.( true  ), category.(  :valid   )] |> a.pass.()
+    [valid.( false ), category.(  :valid   )] 
+      |> a.fail.(message: Messages.should_be_valid(:some_example_name), 
+                 left: valid.(false))
+
+    [valid.( true  ), category.(  :invalid )]
+      |> a.fail.(Messages.should_be_invalid(:some_example_name))
+      |> a.plus.(left: valid.(true))
+    [valid.( false ), category.(  :invalid )] |> a.pass.()
+
+    # If there is neither valid nor invalid, no check is done.
+    [valid.( true  ), category.(  :other   )] |> a.pass.()
+    [valid.( false ), category.(  :other   )] |> a.pass.()
+  end
+  
+  describe "changes" do
+    setup do 
+      a = assertion_runners_for(fn changeset, example ->
+        Validations.assert_changes(changeset, :some_example_name, example)
+      end)
+      [a: a]
+    end
+    
+    test "changes explicitly", %{a: a} do
+      actual = &(%Changeset{changes: &1})
+      checkable = &(%{changes: &1})
+      
+      [actual.(%{value: 1}), checkable.(value: 1)] |> a.pass.()
+      [actual.(%{value: 1}), checkable.(value: 2)] |> a.fail.(
+        message: ~r/Field `:value` has the wrong value/,
+        left: 1, right: 2)
     end
   end
 end
