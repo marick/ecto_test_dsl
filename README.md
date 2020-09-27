@@ -20,7 +20,7 @@ You get terse tests:
   
 ```
 
-... and examples that do a lot in (comparatively) few words. Consider
+... and examples that explain a lot in (comparatively) few words. Consider
 this form data:
 
 
@@ -42,7 +42,9 @@ The code under test fills a "view model" structure and validates
 it. If valid, the view model is "lowered" into *N* Ecto Schema structures.
 
 The test data declaration follows. (Note that this is an earlier
-version of the notation used in an app of mine. This repo contains (or will contain) a a considerably improved mechanism and a somewhat-rethought notation.)
+version of the notation used in an app of mine. This repo contains (or
+will contain) a considerably improved mechanism and a
+somewhat-rethought notation.)
 
 ```elixir
   @test_data build(
