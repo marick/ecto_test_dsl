@@ -24,6 +24,7 @@ defmodule TransformerTestSupport.Variants.Changeset do
       import Variant, only: [build: 1]
       
       alias TransformerTestSupport.Impl.Validations
+      alias TransformerTestSupport.Impl.Get
 
       def accept_example(example_name) do
         params = params(example_name)
@@ -34,6 +35,13 @@ defmodule TransformerTestSupport.Variants.Changeset do
       def validate_example(example_name) do
         changeset = accept_example(example_name)
         Validations.validate_changeset(changeset, example_name, test_data())
+      end
+
+      def validate_categories(category_names) do
+        Validations.validate_categories(
+          test_data(),
+          category_names,
+          &validate_example/1)
       end
     end
   end

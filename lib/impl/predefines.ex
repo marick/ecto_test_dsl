@@ -23,7 +23,9 @@ defmodule TransformerTestSupport.Impl.Predefines do
       def params(example_name) do
         Get.params(test_data(), example_name)
       end
-          
+
+      def validate_category(category_name),
+        do: validate_categories([category_name])
     end
   end
 end

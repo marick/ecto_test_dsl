@@ -2,6 +2,7 @@ defmodule TransformerTestSupport.Impl.Validations do
   import FlowAssertions.Define.{Defchain,BodyParts}
   import ExUnit.Assertions
   use FlowAssertions.Ecto
+  import Mockery.Macro
   alias TransformerTestSupport.Impl
   
 
@@ -52,6 +53,14 @@ defmodule TransformerTestSupport.Impl.Validations do
       for {check_type, arg} <- example.changeset,
         do: apply_assertion(changeset, check_type, arg)
     end
+  end
+
+  def validate_categories(test_data, category_names, example_validator) do
+    example_names = Impl.Get.all_example_names(test_data)
+
+    test_data
+    |> Impl.Get.filter_by_categories(example_names, category_names)
+    |> mockable(Enum).map(example_validator)
   end
 
   alias FlowAssertions.Ecto.ChangesetA

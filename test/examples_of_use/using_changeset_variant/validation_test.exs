@@ -17,17 +17,14 @@ defmodule App.Schemas.Basic.ValidationTest do
     end
   end
 
-  describe "second version" do 
-    test "valid dates are accepted" do
-      Params.validate_example(:ok)
-      |> assert_changes(lock_version: 1,
-      date: ~D[2001-01-01])
-    end
-    
-    test "invalid dates are rejected" do
-      Params.validate_example(:error)
-      |> assert_error(date: "is invalid")
-    end
+  test "second version" do 
+    Params.validate_example(:ok)
+    Params.validate_example(:error)
+  end
+
+  test "third version" do 
+    Params.validate_category(:valid)
+    Params.validate_categories([:invalid])
   end
   
 end
