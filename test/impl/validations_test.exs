@@ -18,5 +18,9 @@ defmodule Impl.ValidationsTest do
       end)
   end
 
+
+  @tag :skip
+  test "require an example to have a category."
+
   
 end
