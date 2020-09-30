@@ -49,10 +49,11 @@ defmodule TransformerTestSupport.Impl.Build do
   def to_strings(map) when is_map(map), do: map_to_strings(map)
   def to_strings(kws) when is_list(kws), do: Enum.into(kws, %{}) |> to_strings
 
-  def like(valid, except: map) when is_map(map),
-    do: {:__like, valid, to_strings(map)}
-  def like(valid, except: kws) when is_list(kws), 
-    do: like(valid, except: Enum.into(kws, %{}))
+  def like(original, except: map) when is_map(map),
+    do: {:__like, original, to_strings(map)}
+  def like(original, except: kws) when is_list(kws), 
+    do: like(original, except: Enum.into(kws, %{}))
+  def like(original), do: like(original, except: [])
 
   # ----------------------------------------------------------------------------
 
