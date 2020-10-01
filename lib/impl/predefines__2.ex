@@ -2,20 +2,21 @@ defmodule TransformerTestSupport.Impl.Predefines__2 do
   @moduledoc """
   """
 
-  defmacro __using__(_variant_module) do
+  defmacro __using__(_) do
     quote do
-      import TransformerTestSupport.Impl.Build__2
+      alias TransformerTestSupport.Impl.Build__2, as: Build
       alias TransformerTestSupport.Impl.Get__2, as: Get
 
-      def test_data() do
-        case TransformerTestSupport.get(__MODULE__) do
-          nil -> 
-            TransformerTestSupport.put(__MODULE__, create_test_data())
-            test_data()
-          example_data ->
-            example_data
-        end
-      end
+      @name_of_test_data __MODULE__
+
+      def start(global_data), 
+        do: Build.start(@name_of_test_data, global_data)
+
+      def category(category_name, examples),
+          do: Build.category(@name_of_test_data, category_name, examples)
+
+      def params(example_name),
+        do: Get.params(@name_of_test_data, example_name)
     end
   end
 end
