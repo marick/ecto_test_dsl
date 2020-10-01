@@ -3,13 +3,13 @@ defmodule TransformerTestSupport__2 do
   alias DeepMerge
 
   def start(),
-    do: Agent.start_link(fn -> %{} end, name: __MODULE__) |> IO.inspect
+    do: Agent.start_link(fn -> %{} end, name: __MODULE__)
 
   @doc """
   Lazy getter that triggers the creation of the data contained in `param_module`.
   """
   def test_data(param_module) do 
-    case get(param_module) |> IO.inspect do
+    case get(param_module) do
       nil -> 
         param_module.create_test_data()
         get(param_module)

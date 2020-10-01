@@ -3,10 +3,17 @@ defmodule TransformerTestSupport.Impl.Build__2 do
   @moduledoc """
   """
 
+  @starting_test_data %{
+    format: :raw
+  }
+
   def start(test_data_module, global_configuration \\ []) do
-    TransformerTestSupport__2.add_test_data(
-      test_data_module,
-      valid_top_level(global_configuration))
+    top_level =
+      Map.merge(
+        @starting_test_data,
+        valid_top_level(global_configuration))
+    
+    TransformerTestSupport__2.add_test_data(test_data_module, top_level)
   end
 
   def category(test_data_module, _category, examples) do
