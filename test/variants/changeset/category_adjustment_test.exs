@@ -1,4 +1,4 @@
-defmodule Impl.ChangesetCategoriesTest do
+defmodule Variants.Changeset.CategoryAdjustmentTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.Variants.Changeset__2, as: Changeset
   import FlowAssertions.AssertionA

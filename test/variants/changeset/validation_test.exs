@@ -1,4 +1,4 @@
-defmodule Impl.ChangesetValidationsTest__2 do
+defmodule Variants.Changeset.ValidationTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.Variants.Changeset__2, as: Changeset
 #  import FlowAssertions.AssertionA
