@@ -1,6 +1,6 @@
 defmodule TransformerTestSupport.Variants.Changeset__2 do
   import FlowAssertions.Define.{Defchain,BodyParts}
-#  import ExUnit.Assertions
+  import ExUnit.Assertions
   use FlowAssertions.Ecto
 #  alias TransformerTestSupport.Impl.Get__2, as: Get
   alias FlowAssertions.Ecto.ChangesetA
@@ -12,6 +12,23 @@ defmodule TransformerTestSupport.Variants.Changeset__2 do
     }
 
     Map.merge(top_level, %{__sources: sources})
+  end
+
+  @categories [:valid, :invalid]
+
+  def assert_category(category) do
+    elaborate_assert(
+      category in @categories,
+      "The Changeset variant only allows these categories: #{inspect @categories}",
+      left: category
+    )
+  end
+      
+
+  def adjust_example(example, category) do
+    assert_category(category)
+    assertions = Map.get(example, :changeset, []) |> Enum.into([])
+    Map.put(example, :changeset, [:valid | assertions])
   end
   
   def validate_params(%{module_under_test: module}, params) do
