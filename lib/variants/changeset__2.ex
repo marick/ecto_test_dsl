@@ -4,7 +4,15 @@ defmodule TransformerTestSupport.Variants.Changeset__2 do
   use FlowAssertions.Ecto
 #  alias TransformerTestSupport.Impl.Get__2, as: Get
   alias FlowAssertions.Ecto.ChangesetA
-  
+
+  def adjust_top_level(top_level) do
+    sources = %{
+      validate_params: __MODULE__,
+      validation_assertions: __MODULE__,
+    }
+
+    Map.merge(top_level, %{__sources: sources})
+  end
   
   def validate_params(%{module_under_test: module}, params) do
     module.changeset(struct(module), params)

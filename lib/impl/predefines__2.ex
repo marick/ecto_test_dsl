@@ -13,6 +13,8 @@ defmodule TransformerTestSupport.Impl.Predefines__2 do
       def start(global_data), 
         do: Build.start(@name_of_test_data, global_data)
 
+      def test_data(), do: Get.test_data(@name_of_test_data)
+
       def category(category_name, examples),
           do: Build.category(@name_of_test_data, category_name, examples)
 
@@ -21,7 +23,6 @@ defmodule TransformerTestSupport.Impl.Predefines__2 do
 
       def validate(example_name),
         do: Validations.validate(@name_of_test_data, example_name)
-
     end
   end
 end

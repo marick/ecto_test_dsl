@@ -8,13 +8,22 @@ defmodule TransformerTestSupport.Impl.Build__2 do
   }
 
   def start(test_data_module, global_configuration \\ []) do
-    top_level =
-      Map.merge(
-        @starting_test_data,
-        valid_top_level(global_configuration))
+    top_level = valid_top_level(global_configuration)
+
+    all =
+      @starting_test_data
+      |> Map.merge(top_level)
+      |> adjust_top_level
     
-    TransformerTestSupport__2.add_test_data(test_data_module, top_level)
+    TransformerTestSupport__2.add_test_data(test_data_module, all)
   end
+
+  defp adjust_top_level(%{variant: variant} = top_level) do
+    variant.adjust_top_level(top_level)
+  end
+
+  defp adjust_top_level(top_level), do: top_level
+  
 
   def category(test_data_module, _category, examples) do
     map = %{

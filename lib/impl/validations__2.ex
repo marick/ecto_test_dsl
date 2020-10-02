@@ -23,9 +23,8 @@ defmodule TransformerTestSupport.Impl.Validations__2 do
     apply_variant(test_data, :validation_assertions, [result, example_name, example])
   end
 
-
   defp apply_variant(test_data, function_name, args) do
-    variant = test_data.variant
-    apply variant, function_name, args
+    module = test_data.__sources[function_name]
+    apply module, function_name, args
   end
 end
