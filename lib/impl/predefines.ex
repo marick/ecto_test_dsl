@@ -4,9 +4,9 @@ defmodule TransformerTestSupport.Impl.Predefines do
 
   defmacro __using__(_) do
     quote do
-      alias TransformerTestSupport.Impl.Build, as: Build
-      alias TransformerTestSupport.Impl.Get, as: Get
-      alias TransformerTestSupport.Impl.Validations, as: Validations
+      alias TransformerTestSupport.Impl.Build
+      alias TransformerTestSupport.Impl.Get
+      alias TransformerTestSupport.Impl.Validations
 
       # ----- Building test data ---------------------------------------------------
 
