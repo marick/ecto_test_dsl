@@ -1,6 +1,6 @@
 defmodule Variants.Changeset.CategoryAdjustmentTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Variants.Changeset__2, as: Changeset
+  alias TransformerTestSupport.Variants.Changeset
   import FlowAssertions.AssertionA
 #  import FlowAssertions.Define.Tabular
 

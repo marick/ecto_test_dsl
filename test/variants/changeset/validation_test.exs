@@ -1,6 +1,6 @@
 defmodule Variants.Changeset.ValidationTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Variants.Changeset__2, as: Changeset
+  alias TransformerTestSupport.Variants.Changeset
 #  import FlowAssertions.AssertionA
   import FlowAssertions.Define.Tabular
 
@@ -20,8 +20,8 @@ defmodule Variants.Changeset.ValidationTest do
   end
 
   defmodule Params do
-    use TransformerTestSupport.Impl.Predefines__2
-    alias TransformerTestSupport.Variants.Changeset__2, as: Changeset
+    use TransformerTestSupport.Impl.Predefines
+    alias TransformerTestSupport.Variants.Changeset
     
     def create_test_data do 
       start(

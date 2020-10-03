@@ -1,8 +1,8 @@
-defmodule TransformerTestSupport.Impl.Validations__2 do
+defmodule TransformerTestSupport.Impl.Validations do
   # import FlowAssertions.Define.{Defchain,BodyParts}
   # import ExUnit.Assertions
   use FlowAssertions.Ecto
-  alias TransformerTestSupport.Impl.Get__2, as: Get
+  alias TransformerTestSupport.Impl.Get
   
 
   @moduledoc """

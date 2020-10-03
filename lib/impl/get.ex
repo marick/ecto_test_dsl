@@ -1,5 +1,6 @@
-defmodule TransformerTestSupport.Impl.Get__2 do
-#  import FlowAssertions.Define.BodyParts
+defmodule TransformerTestSupport.Impl.Get do
+  #  import FlowAssertions.Define.BodyParts
+  alias TransformerTestSupport.Impl.Agent
     
   @moduledoc """
   """
@@ -8,7 +9,7 @@ defmodule TransformerTestSupport.Impl.Get__2 do
   All data access must go through here so that the module is initialized.
   """
   def test_data(test_data_module),
-    do: TransformerTestSupport__2.test_data(test_data_module)
+    do: Agent.test_data(test_data_module)
 
 
   def example(test_data, example_name) do

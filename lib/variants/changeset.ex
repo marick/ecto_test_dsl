@@ -1,8 +1,8 @@
-defmodule TransformerTestSupport.Variants.Changeset__2 do
+defmodule TransformerTestSupport.Variants.Changeset do
   import FlowAssertions.Define.{Defchain,BodyParts}
   import ExUnit.Assertions
   use FlowAssertions.Ecto
-#  alias TransformerTestSupport.Impl.Get__2, as: Get
+#  alias TransformerTestSupport.Impl.Get
   alias FlowAssertions.Ecto.ChangesetA
 
   def adjust_top_level(top_level) do

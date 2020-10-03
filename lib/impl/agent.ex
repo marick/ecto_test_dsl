@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport__2 do
+defmodule TransformerTestSupport.Impl.Agent do
   use Agent
   alias DeepMerge
 

@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Impl.Build__2 do
-#  import TransformerTestSupport.Impl.DidYouMean
+defmodule TransformerTestSupport.Impl.Build do
+  alias TransformerTestSupport.Impl.Agent
   @moduledoc """
   """
 
@@ -15,7 +15,7 @@ defmodule TransformerTestSupport.Impl.Build__2 do
       |> Map.merge(top_level)
       |> adjust_top_level
     
-    TransformerTestSupport__2.add_test_data(test_data_module, all)
+    Agent.add_test_data(test_data_module, all)
   end
 
   defp adjust_top_level(%{variant: variant} = top_level) do
@@ -29,7 +29,7 @@ defmodule TransformerTestSupport.Impl.Build__2 do
     map = %{
       examples: valid_examples(examples)
     }
-    TransformerTestSupport__2.deep_merge(test_data_module, map)
+    Agent.deep_merge(test_data_module, map)
   end
 
 

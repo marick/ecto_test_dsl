@@ -1,7 +1,7 @@
-defmodule Impl.GetTest__2 do
+defmodule Impl.GetTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.Get__2, as: Get
-  alias TransformerTestSupport.Impl.Build__2, as: Build
+  alias TransformerTestSupport.Impl.Get
+  alias TransformerTestSupport.Impl.Build
 #  import FlowAssertions.AssertionA
 
   defstruct age: nil, date: nil

@@ -1,12 +1,12 @@
-defmodule TransformerTestSupport.Impl.Predefines__2 do
+defmodule TransformerTestSupport.Impl.Predefines do
   @moduledoc """
   """
 
   defmacro __using__(_) do
     quote do
-      alias TransformerTestSupport.Impl.Build__2, as: Build
-      alias TransformerTestSupport.Impl.Get__2, as: Get
-      alias TransformerTestSupport.Impl.Validations__2, as: Validations
+      alias TransformerTestSupport.Impl.Build, as: Build
+      alias TransformerTestSupport.Impl.Get, as: Get
+      alias TransformerTestSupport.Impl.Validations, as: Validations
 
       # ----- Building test data ---------------------------------------------------
 
