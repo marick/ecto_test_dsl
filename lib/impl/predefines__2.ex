@@ -8,15 +8,22 @@ defmodule TransformerTestSupport.Impl.Predefines__2 do
       alias TransformerTestSupport.Impl.Get__2, as: Get
       alias TransformerTestSupport.Impl.Validations__2, as: Validations
 
+      # ----- Building test data ---------------------------------------------------
+
       @name_of_test_data __MODULE__
 
-      def start(global_data), 
+      def start(global_data),
         do: Build.start(@name_of_test_data, global_data)
 
       def test_data(), do: Get.test_data(@name_of_test_data)
 
       def category(category_name, examples),
           do: Build.category(@name_of_test_data, category_name, examples)
+
+      def params(opts), do: {:params, Enum.into(opts, %{})}
+      def changeset(opts), do: {:changeset, opts}
+
+      # ----- Using test data ------------------------------------------------------
 
       def get_params(example_name),
         do: Get.get_params(@name_of_test_data, example_name)
