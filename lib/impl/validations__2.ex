@@ -12,7 +12,7 @@ defmodule TransformerTestSupport.Impl.Validations__2 do
     do: validate_and_check(Get.test_data(test_data_module), example_name)
 
   def validation_result(test_data, example_name) do
-    params = Get.params(test_data, example_name)
+    params = Get.get_params(test_data, example_name)
     apply_variant(test_data, :validate_params, [test_data, params])
   end
 

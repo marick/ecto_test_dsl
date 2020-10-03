@@ -18,8 +18,8 @@ defmodule TransformerTestSupport.Impl.Predefines__2 do
       def category(category_name, examples),
           do: Build.category(@name_of_test_data, category_name, examples)
 
-      def params(example_name),
-        do: Get.params(@name_of_test_data, example_name)
+      def get_params(example_name),
+        do: Get.get_params(@name_of_test_data, example_name)
 
       def validate(example_name),
         do: Validations.validate(@name_of_test_data, example_name)

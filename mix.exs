@@ -42,8 +42,7 @@ defmodule TransformerTestSupport.MixProject do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test),
-    do: ["lib", "test/support", "test/examples_of_definitions",
-         "example_app"
+    do: ["lib", "test/support", "examples"
         ]
   defp elixirc_paths(_), do: ["lib"]
 

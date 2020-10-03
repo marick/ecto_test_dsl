@@ -21,10 +21,10 @@ defmodule TransformerTestSupport.Impl.Get__2 do
   end
   
   
-  def params(test_data_module, example_name) when is_atom(test_data_module),
-    do: params(test_data(test_data_module), example_name)
+  def get_params(test_data_module, example_name) when is_atom(test_data_module),
+    do: get_params(test_data(test_data_module), example_name)
 
-  def params(test_data, example_name) do
+  def get_params(test_data, example_name) do
     formatters = %{
       raw: &raw_params/2,
       phoenix: fn test_data, example_name ->
