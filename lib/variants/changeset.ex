@@ -1,6 +1,6 @@
 defmodule TransformerTestSupport.Variants.Changeset do
   import FlowAssertions.Define.{Defchain,BodyParts}
-  import ExUnit.Assertions
+#  import ExUnit.Assertions
   use FlowAssertions.Ecto
 #  alias TransformerTestSupport.Impl.Get
   alias FlowAssertions.Ecto.ChangesetA
@@ -63,4 +63,13 @@ defmodule TransformerTestSupport.Variants.Changeset do
 
   defp assert_name(check_type),
     do: "assert_#{to_string check_type}" |> String.to_atom
+
+
+  defmacro __using__(_) do
+    quote do
+      use TransformerTestSupport.Impl.Predefines
+      alias TransformerTestSupport.Variants.Changeset
+    end
+  end
+  
 end
