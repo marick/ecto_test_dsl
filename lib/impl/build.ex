@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport.Impl.Build do
-  import TransformerTestSupport.Impl.DidYouMean
+
   @moduledoc """
   """
 
@@ -12,24 +12,7 @@ defmodule TransformerTestSupport.Impl.Build do
     }
   end
 
-  def top_level_requires do
-    MapSet.union(
-      MapSet.new([:module_under_test, :examples, :accept_example
-                 ]),
-      keyset(build_defaults())
-    )
-  end
-
-  def top_level_optional do 
-    MapSet.new(
-      [
-      ])
-  end
-
-  def top_level_allowed do
-    MapSet.union(top_level_requires(), top_level_optional())
-  end
-        
+       
 
   def create_test_data(keywords) when is_list(keywords),
     do: keywords |> Enum.into(%{}) |> create_test_data
@@ -37,8 +20,6 @@ defmodule TransformerTestSupport.Impl.Build do
   def create_test_data(map) when is_map(map) do
     start =
       Map.merge(build_defaults(), map)
-      |> assert_required_fields
-      |> refute_extra_fields
 
     expanded_examples =
       Enum.reduce(start.examples, %{}, &add_real_example/2)
@@ -74,35 +55,6 @@ defmodule TransformerTestSupport.Impl.Build do
     Map.put(acc, new_name, expanded_data)
   end
 
-  # ----------------------------------------------------------------------------
-
-  def keyset(map), do: MapSet.new(Map.keys(map))
-
-  defp sorted_difference(first, second) do 
-    MapSet.difference(first, second)
-    |> Enum.into([])
-    |> Enum.sort
-  end  
-
-  defp assert_required_fields(map) do 
-    missing = sorted_difference(top_level_requires(), keyset(map))
-    if Enum.empty?(missing) do
-      map
-    else
-      raise "The following fields are required: #{inspect missing}"
-    end
-  end
-
-  defp refute_extra_fields(map) do
-    extras = sorted_difference(keyset(map), top_level_allowed())
-    if Enum.empty?(extras) do
-      map
-    else
-      per_extra = did_you_mean(extras, top_level_allowed())
-      message = Enum.join(["The following fields are unknown:\n" | per_extra], "")
-      raise message
-    end
-  end
 
   # ----------------------------------------------------------------------------
 
