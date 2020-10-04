@@ -16,46 +16,47 @@ defmodule TransformerTestSupport.Impl.Build do
     all =
       @starting_test_data
       |> Map.merge(data)
-      |> adjust_top_level
+      |> variant_adjustment(:start)
     
     Agent.add_test_data(test_data_module, all)
     :ok
   end
 
-  defp adjust_top_level(%{variant: variant} = top_level) do
-    variant.adjust_top_level(top_level)
+  # ----------------------------------------------------------------------------
+
+  def category(test_data_module, _category, raw_examples) do
+    adjust_example = fn {key, example} ->
+      better_example = 
+        example
+        |> Enum.into(%{})
+        |> adjust_params
+      {key, better_example}
+    end
+    
+    examples =
+      raw_examples
+      |> Enum.map(adjust_example)
+      |> Map.new
+    
+    Agent.deep_merge(test_data_module, %{examples: examples})
   end
 
-  defp adjust_top_level(top_level), do: top_level
-  
-
-  def category(test_data_module, _category, examples) do
-    map = %{
-      examples: valid_examples(examples)
-    }
-    Agent.deep_merge(test_data_module, map)
-  end
-
-
-
-  defp valid_examples(examples) do
-    examples
-    |> Enum.map(&valid_example/1)
-    |> Map.new
-  end
-
-  defp valid_example({key, example}) do
-    better_example = 
-      example
-      |> Enum.into(%{})
-      |> adjust_params
-    {key, better_example}
-  end
 
   defp adjust_params(%{params: params} = example) when is_list(params),
     do: Map.put(example, :params, Enum.into(params, %{}))
 
   defp adjust_params(example),
     do: example
+
+
+  # ----------------------------------------------------------------------------
+
+  
+  defp variant_adjustment(%{variant: variant} = top_level, :start) do
+    variant.adjust_top_level(top_level)
+  end
+
+  defp variant_adjustment(top_level, _), do: top_level
+  
   
 end
