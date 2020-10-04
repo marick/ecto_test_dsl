@@ -7,15 +7,19 @@ defmodule TransformerTestSupport.Impl.Build do
     format: :raw
   }
 
-  def start(test_data_module, global_configuration \\ []) do
-    top_level = valid_top_level(global_configuration)
+  def start(test_data_module, data \\ %{})
+  
+  def start(test_data_module, data) when is_list(data), 
+    do: start(test_data_module, Enum.into(data, %{}))
 
+  def start(test_data_module, data) do
     all =
       @starting_test_data
-      |> Map.merge(top_level)
+      |> Map.merge(data)
       |> adjust_top_level
     
     Agent.add_test_data(test_data_module, all)
+    :ok
   end
 
   defp adjust_top_level(%{variant: variant} = top_level) do
@@ -33,9 +37,6 @@ defmodule TransformerTestSupport.Impl.Build do
   end
 
 
-  defp valid_top_level(global_configuration) do
-    Enum.into(global_configuration, %{})    
-  end
 
   defp valid_examples(examples) do
     examples

@@ -18,7 +18,7 @@ defmodule TransformerTestSupport.Impl.Agent do
     end
   end
 
-  defp get(param_module), 
+  def get(param_module), 
     do: Agent.get(__MODULE__, &(Map.get(&1, param_module)))
 
   # Initial creation functions
