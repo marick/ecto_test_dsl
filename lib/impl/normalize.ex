@@ -1,10 +1,16 @@
 defmodule TransformerTestSupport.Impl.Normalize do
+  import  ExUnit.Assertions
+  
   @moduledoc """
   """
 
-  def as(:example_pairs, example_pairs) do
+  def as(:example_pairs, example_pairs) when is_list(example_pairs) do
     Enum.map(example_pairs, &(as :example_pair, &1))
     |> Map.new
+  end
+
+  def as(:example_pairs, _) do
+    flunk "Examples must be given in a keyword list (in order for `like/2` to work)"
   end
 
   def as(:example_pair, {name, example}),

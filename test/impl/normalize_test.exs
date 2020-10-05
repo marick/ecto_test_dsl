@@ -28,9 +28,12 @@ defmodule Impl.NormalizeTest do
     assert %{name: %{params: %{a: 1}, other: 2}} == actual
   end
 
-  test "example pairs can also be in a map" do
+  test "example pairs may *not* be in a map" do
     input = %{name: [params: [a: 1], other: 2]}
-    actual = Normalize.as(:example_pairs, input)
-    assert %{name: %{params: %{a: 1}, other: 2}} == actual
+    assertion_fails(
+      "Examples must be given in a keyword list (in order for `like/2` to work)",
+      fn -> 
+        Normalize.as(:example_pairs, input)
+      end)
   end
 end
