@@ -4,9 +4,7 @@ defmodule TransformerTestSupport.Impl.Predefines do
 
   defmacro __using__(_) do
     quote do
-      alias TransformerTestSupport.Impl.Build
-      alias TransformerTestSupport.Impl.Get
-      alias TransformerTestSupport.Impl.Validations
+      alias TransformerTestSupport.Impl.{Build,Get,Validations,Like}
 
       # ----- Building test data ---------------------------------------------------
 
@@ -17,11 +15,17 @@ defmodule TransformerTestSupport.Impl.Predefines do
 
       def test_data(), do: Get.test_data(@name_of_test_data)
 
+      def example(name), do: Keyword.get(test_data().examples, name)
+
       def category(category_name, examples),
           do: Build.category(@name_of_test_data, category_name, examples)
 
       def params(opts), do: {:params, Enum.into(opts, %{})}
       def changeset(opts), do: {:changeset, opts}
+
+      def like(example_name, overrides) do
+        Like.like(example_name, overrides)
+      end
 
       # ----- Using test data ------------------------------------------------------
 

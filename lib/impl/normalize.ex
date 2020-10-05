@@ -6,7 +6,6 @@ defmodule TransformerTestSupport.Impl.Normalize do
 
   def as(:example_pairs, example_pairs) when is_list(example_pairs) do
     Enum.map(example_pairs, &(as :example_pair, &1))
-    |> Map.new
   end
 
   def as(:example_pairs, _) do
@@ -32,5 +31,6 @@ defmodule TransformerTestSupport.Impl.Normalize do
     end
   end
 
+  def ensure_map({:__like, _, _} = x), do: x
   def ensure_map(x), do: Enum.into(x, %{})
 end

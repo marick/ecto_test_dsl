@@ -1,10 +1,11 @@
 defmodule TransformerTestSupport.Impl.Build do
-  alias TransformerTestSupport.Impl.{Agent,Normalize}
+  alias TransformerTestSupport.Impl.{Agent,Normalize,Like}
   @moduledoc """
   """
 
   @starting_test_data %{
-    format: :raw
+    format: :raw,
+    examples: []
   }
 
   def start(test_data_module, data \\ %{})
@@ -25,8 +26,17 @@ defmodule TransformerTestSupport.Impl.Build do
   # ----------------------------------------------------------------------------
 
   def category(test_data_module, _category, raw_examples) do
-    normalized = Normalize.as(:example_pairs, raw_examples)
-    Agent.deep_merge(test_data_module, %{examples: normalized})
+    reduce_step = fn {name, new_example}, acc ->
+      [{name, Like.expand_likes(acc, new_example)} | acc]
+    end
+
+    earlier_examples = Agent.test_data(test_data_module).examples
+
+    updated_examples =
+      Normalize.as(:example_pairs, raw_examples)
+      |> Enum.reduce(earlier_examples, reduce_step)
+    
+    Agent.deep_merge(test_data_module, %{examples: updated_examples})
   end
 
   # ----------------------------------------------------------------------------
