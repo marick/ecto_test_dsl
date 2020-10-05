@@ -17,9 +17,10 @@ defmodule Impl.BuildTest do
       %{format: :raw,
         module_under_test: Anything,
         variant: Variant,
+        examples: [],
         adjusted: true
        }
 
-    assert Impl.Agent.get(register_under) == expected
+    assert Impl.Agent.test_data(register_under) == expected
   end
 end
