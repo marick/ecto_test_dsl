@@ -36,7 +36,9 @@ defmodule TransformerTestSupport.Variants.Changeset do
     module.changeset(struct(module), params)
   end
 
-  defchain validation_assertions(changeset, example_name, example) do
+  defchain validation_assertions(changeset, test_data, example_name) do
+    example = Get.example(test_data, example_name)
+    
     adjust_assertion_message(
       fn ->
         try_assertions(changeset, example_name, example)        

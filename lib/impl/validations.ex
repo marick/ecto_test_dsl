@@ -16,10 +16,8 @@ defmodule TransformerTestSupport.Impl.Validations do
   end
 
   def validate_and_check(test_data, example_name) do
-    example = Get.example(test_data, example_name)
-
     result = validation_result(test_data, example_name)
-    apply_variant(test_data, :validation_assertions, [result, example_name, example])
+    apply_variant(test_data, :validation_assertions, [result, test_data, example_name])
   end
 
   defp apply_variant(test_data, function_name, args) do
