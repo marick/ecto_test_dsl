@@ -4,6 +4,7 @@ defmodule TransformerTestSupport.Case do
       use ExUnit.Case, async: true
       use FlowAssertions
       use FlowAssertions.Ecto
+      import FlowAssertions.AssertionA
     end
   end
 end

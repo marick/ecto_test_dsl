@@ -27,14 +27,7 @@ defmodule TransformerTestSupport.Impl.Build do
     Map.put(start, :examples, expanded_examples)
   end
 
-  def to_strings(map) when is_map(map), do: map_to_strings(map)
-  def to_strings(kws) when is_list(kws), do: Enum.into(kws, %{}) |> to_strings
 
-  def like(original, except: map) when is_map(map),
-    do: {:__like, original, to_strings(map)}
-  def like(original, except: kws) when is_list(kws), 
-    do: like(original, except: Enum.into(kws, %{}))
-  def like(original), do: like(original, except: [])
 
   # ----------------------------------------------------------------------------
 
