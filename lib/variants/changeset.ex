@@ -51,6 +51,14 @@ defmodule TransformerTestSupport.Variants.Changeset do
       end)
   end
 
+  def check_everything(test_data, example_name) do
+    changeset = validate_params(test_data, example_name)
+    validation_assertions(changeset, test_data, example_name)
+  end
+
+  # ----------------------------------------------------------------------------
+
+  
   defp try_assertions(changeset, _example_name, example) do
     if Map.has_key?(example, :changeset) do
       for check <- example.changeset,
