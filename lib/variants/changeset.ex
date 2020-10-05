@@ -28,7 +28,7 @@ defmodule TransformerTestSupport.Variants.Changeset do
   def adjust_example(example, category) do
     assert_category(category)
     assertions = Map.get(example, :changeset, []) |> Enum.into([])
-    Map.put(example, :changeset, [:valid | assertions])
+    Map.put(example, :changeset, [category | assertions])
   end
   
   def validate_params(%{module_under_test: module}, params) do

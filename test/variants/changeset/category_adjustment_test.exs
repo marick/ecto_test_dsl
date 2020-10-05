@@ -4,7 +4,7 @@ defmodule Variants.Changeset.CategoryAdjustmentTest do
   import FlowAssertions.AssertionA
 #  import FlowAssertions.Define.Tabular
 
-  describe "category :valid (stands in for :invalid as well)" do
+  describe "modifications" do
     test "prepend to existing changeset assertions" do
       example = %{changeset: [changes: [field: "value"]]}
       actual = Changeset.adjust_example(example, :valid)
@@ -14,9 +14,9 @@ defmodule Variants.Changeset.CategoryAdjustmentTest do
 
     test "create a validity assertion" do
       example = %{}
-      actual = Changeset.adjust_example(example, :valid)
+      actual = Changeset.adjust_example(example, :invalid)
 
-      assert actual == %{changeset: [:valid]}
+      assert actual == %{changeset: [:invalid]}
     end
 
     test "a map is acceptable" do 
