@@ -1,4 +1,4 @@
-defmodule Variants.Changeset.ValidationTest do
+defmodule Variants.Changeset.SingleExampleValidationTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.Variants.Changeset
 #  import FlowAssertions.AssertionA
@@ -19,32 +19,23 @@ defmodule Variants.Changeset.ValidationTest do
     end
   end
 
-  defmodule Params do
-    use TransformerTestSupport.Impl.Predefines
-    alias TransformerTestSupport.Variants.Changeset
-    
-    def create_test_data do 
-      start(
-        module_under_test: Schema,
-        format: :phoenix,
-        variant: Changeset
-      )
-    end
-  end
-
   def make_changeset(params) do
-    Changeset.validate_params(%{module_under_test: Schema}, params)
+    test_data = %{module_under_test: Schema,
+                  format: :phoenix,
+                  examples: [ok: %{params: Enum.into(params, %{})}]
+                 }
+    Changeset.validate_params(test_data, :ok)
   end
 
   describe " validating params produces a changeset" do
     test "valid" do
-      make_changeset(%{"date" => "2001-02-02"})
+      make_changeset(date: "2001-02-02")
       |> assert_valid
       |> assert_changes(date: ~D/2001-02-02/)
     end
 
     test "invalid" do
-      make_changeset(%{"date" => "2001-02-"})  
+      make_changeset(date: "2001-02-")  
       |> assert_invalid
       |> assert_no_changes(:date)
       |> assert_error(date: ~r/is invalid/)
@@ -61,7 +52,7 @@ defmodule Variants.Changeset.ValidationTest do
     end
 
     test "a valid changeset", %{a: a} do
-      changeset = make_changeset(%{"date" => "2001-02-02"})
+      changeset = make_changeset(date: "2001-02-02")
       
       [changeset, [:valid]]   |> a.pass.()
       [changeset, [:invalid]] |> a.fail.(
@@ -74,7 +65,7 @@ defmodule Variants.Changeset.ValidationTest do
     end
 
     test "an invalid changeset", %{a: a} do
-      changeset = make_changeset(%{"date" => "2001-02-2"})
+      changeset = make_changeset(date: "2001-02-2")
                                                     #^^   improper date field
       [changeset, [:invalid]] |> a.pass.()
       [changeset, [:valid]]   |> a.fail.(
@@ -88,7 +79,7 @@ defmodule Variants.Changeset.ValidationTest do
     end
 
     test "it's OK for there to be no assertions" do
-      changeset = make_changeset(%{"date" => "2001-02-2"})
+      changeset = make_changeset(date: "2001-02-2")
 
       Changeset.validation_assertions(changeset, :example_name, %{})      
       |> assert_equal(changeset)

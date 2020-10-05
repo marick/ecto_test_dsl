@@ -2,7 +2,7 @@ defmodule TransformerTestSupport.Variants.Changeset do
   import FlowAssertions.Define.{Defchain,BodyParts}
 #  import ExUnit.Assertions
   use FlowAssertions.Ecto
-#  alias TransformerTestSupport.Impl.Get
+  alias TransformerTestSupport.Impl.Get
   alias FlowAssertions.Ecto.ChangesetA
 
   def adjust_top_level(top_level) do
@@ -31,7 +31,8 @@ defmodule TransformerTestSupport.Variants.Changeset do
     Map.put(example, :changeset, [category | assertions])
   end
   
-  def validate_params(%{module_under_test: module}, params) do
+  def validate_params(%{module_under_test: module} = test_data, example_name) do
+    params = Get.get_params(test_data, example_name)
     module.changeset(struct(module), params)
   end
 
