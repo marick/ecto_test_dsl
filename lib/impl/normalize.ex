@@ -23,11 +23,14 @@ defmodule TransformerTestSupport.Impl.Normalize do
   def as(:params, args), do: ensure_map(args)
 
   def interior(map, key) do
-    case Map.get(map, key, :missing) do
-      :missing ->
+    value = Map.get(map, key, :missing)    
+    cond do
+      value == :missing -> 
         map
-      interior ->
-        Map.put(map, key, as(key, interior))
+      is_function(value) -> # Functions are expanded in a second pass. I is lazy.
+        map
+      true ->
+        Map.put(map, key, as(key, value))
     end
   end
 

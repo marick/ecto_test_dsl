@@ -1,13 +1,9 @@
 defmodule Impl.NormalizeTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.{Normalize,Like}
+  alias TransformerTestSupport.Impl.Normalize
 
   test "params become maps" do
     assert Normalize.as(:params, [a: 1, b: 2]) == %{a: 1, b: 2}
-  end
-
-  test "... except that expansions of `__like are left alone" do
-    assert Normalize.as(:params, Like.like(:ok)) == Like.like(:ok)
   end
 
   test "examples become maps of maps" do

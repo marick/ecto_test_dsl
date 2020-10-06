@@ -35,6 +35,18 @@ defmodule TransformerTestSupport.Impl.Build do
     Agent.deep_merge(test_data_module, %{examples: updated_examples})
   end
 
+  def params_like_function(previous_name),
+    do: params_like_function(previous_name, except: [])
+
+  def params_like_function(previous_name, except: override_kws) do 
+    overrides = Enum.into(override_kws, %{})
+    fn named_examples ->
+      Map.merge(
+        Keyword.get(named_examples, previous_name).params,
+        overrides)
+    end
+  end
+
   # ----------------------------------------------------------------------------
 
   

@@ -20,12 +20,13 @@ defmodule TransformerTestSupport.Impl.Predefines do
       def category(category_name, examples),
           do: Build.category(@name_of_test_data, category_name, examples)
 
-      def params(opts), do: {:params, Enum.into(opts, %{})}
-      def changeset(opts), do: {:changeset, opts}
+      def params(opts),
+        do: {:params, Enum.into(opts, %{})}
+      def params_like(example_name, opts),
+        do: {:params, Build.params_like_function(example_name, opts)}
 
-      def like(example_name, overrides) do
-        Like.like(example_name, overrides)
-      end
+
+      def changeset(opts), do: {:changeset, opts}
 
       # ----- Using test data ------------------------------------------------------
 
