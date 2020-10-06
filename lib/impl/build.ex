@@ -19,7 +19,7 @@ defmodule TransformerTestSupport.Impl.Build do
       |> Map.merge(data)
       |> variant_adjustment(:start)
     
-    Agent.add_test_data(test_data_module, all)
+    Agent.start_test_data(test_data_module, all)
     :ok
   end
 

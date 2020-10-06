@@ -26,7 +26,7 @@ defmodule TransformerTestSupport.Impl.Agent do
   @doc """
   Must be the first function called.
   """
-  def add_test_data(param_module, value),
+  def start_test_data(param_module, value),
     do: update_with &(Map.put(&1, param_module, value))
 
   def deep_merge(param_module, mergeable),
