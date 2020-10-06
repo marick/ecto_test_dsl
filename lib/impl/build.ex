@@ -26,15 +26,11 @@ defmodule TransformerTestSupport.Impl.Build do
   # ----------------------------------------------------------------------------
 
   def category(test_data_module, _category, raw_examples) do
-    reduce_step = fn {name, new_example}, acc ->
-      [{name, Like.expand_likes(acc, new_example)} | acc]
-    end
-
     earlier_examples = Agent.test_data(test_data_module).examples
 
     updated_examples =
       Normalize.as(:example_pairs, raw_examples)
-      |> Enum.reduce(earlier_examples, reduce_step)
+      |> Like.expand(:example_pairs, earlier_examples)
     
     Agent.deep_merge(test_data_module, %{examples: updated_examples})
   end

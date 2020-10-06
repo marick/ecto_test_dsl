@@ -13,6 +13,7 @@ defmodule Api.LikeTest do
     start(@minimal_start)
   end
 
+  @tag :skip
   test "like" do 
     category(:valid,
       [ok: %{params: %{a: 1, b: 2}}])
@@ -23,6 +24,7 @@ defmodule Api.LikeTest do
     assert example(:similar).params == %{a: 1, b: 4}
   end
 
+  @tag :skip
   test "using like to refer to values within the same category" do
     category(:valid,
       [ok: %{params: %{a: 1, b: 2}},

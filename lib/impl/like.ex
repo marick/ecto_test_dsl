@@ -11,9 +11,29 @@ defmodule TransformerTestSupport.Impl.Like do
   def like(earlier_name), do: like(earlier_name, except: %{})
 
 
+  def expand(new_pairs, :example_pairs, existing_pairs) do
+    for {new_name, new_example} <- new_pairs do
+      {new_name, expand(new_example, :example, existing_pairs)}
+    end
+  end
+
+  def expand(example, :example, existing_pairs) do
+    example
+    |> expand_interior(:params, existing_pairs)
+  end
+
+  def expand_interior(example, _field, _existing_pairs) do
+    example
+  end
+
+  
+
   def expand_likes(earlier_examples, candidate) do
     expand_likes_in(:params, earlier_examples, candidate)
   end
+
+
+  
 
 
   def expand_likes_in(field, earlier_examples, candidate) do
