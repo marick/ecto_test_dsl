@@ -32,7 +32,7 @@ defmodule TransformerTestSupport.Impl.Build do
       Normalize.as(:example_pairs, raw_examples)
       |> Like.expand(:example_pairs, earlier_examples)
     
-    Agent.deep_merge(test_data_module, %{examples: updated_examples})
+    Agent.replace_top_level_field(test_data_module, :examples, updated_examples)
   end
 
   def params_like_function(previous_name),

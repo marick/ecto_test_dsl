@@ -8,7 +8,8 @@ defmodule Impl.AgentTest do
       start()
     end
 
-    def start(), do: %{examples: [one: %{params: %{a: 1}}]}
+    def start(), do: %{examples: [one: %{params: %{a: 1}}],
+                       other_stuff: "other stuff"}
 
   end
 
@@ -32,5 +33,10 @@ defmodule Impl.AgentTest do
         examples: [one: _, two: "...stuff..."]
       } = Agent.test_data(__MODULE__)
     end
+  end
+
+  test "replace_top_level_field" do
+    Agent.replace_top_level_field(__MODULE__, :examples, 5)
+    assert %{examples: 5, other_stuff: "other stuff"} == Agent.test_data(__MODULE__)
   end
 end

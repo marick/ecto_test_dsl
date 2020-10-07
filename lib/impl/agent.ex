@@ -32,5 +32,8 @@ defmodule TransformerTestSupport.Impl.Agent do
   def deep_merge(param_module, mergeable),
     do: update_with &(DeepMerge.deep_merge(&1, %{param_module => mergeable}))
 
+  def replace_top_level_field(param_module, field, replacement),
+    do: update_with &(put_in(&1, [param_module, field], replacement))
+
   defp update_with(f), do: Agent.update(__MODULE__, f)
 end
