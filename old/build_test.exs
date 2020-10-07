@@ -20,13 +20,6 @@ defmodule Impl.BuildTest do
 
       assert %{"a" => "1", "name" => "different"} == params
     end
-
-    test "like can completely duplicate params", %{start: start}  do
-      example = %{params: Build.like(:first)}
-      actual = Build.add_real_example({:second, example}, start)
-
-      assert actual.first.params == actual.second.params
-    end
   end
 end
 
