@@ -22,9 +22,11 @@ defmodule TransformerTestSupport.Impl.Predefines do
 
       def params(opts),
         do: {:params, Enum.into(opts, %{})}
-      def params_like(example_name, opts),
-        do: {:params, Build.params_like_function(example_name, opts)}
 
+      def params_like(example_name, opts),
+        do: {:params, Build.make__params_like(example_name, opts)}
+      def params_like(example_name), 
+        do: params_like(example_name, except: [])
 
       def changeset(opts), do: {:changeset, opts}
 

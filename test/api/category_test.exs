@@ -42,5 +42,11 @@ defmodule Api.LikeTest do
     assert example(:similar).params ==   %{a: 1, b: 4}
     assert example(:different).params == %{a: 1, b: 2, c: 383}
   end
-  
+
+  test "like can copy everything" do 
+    category(:valid, ok: [params(a: 1, b: 2)])
+    category(:invalid, similar: [params_like(:ok)])
+
+    assert example(:similar).params == example(:similar).params
+  end
 end  

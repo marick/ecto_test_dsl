@@ -34,10 +34,7 @@ defmodule TransformerTestSupport.Impl.Build do
     Agent.replace_top_level_field(test_data_module, :examples, updated_examples)
   end
 
-  def params_like_function(previous_name),
-    do: params_like_function(previous_name, except: [])
-
-  def params_like_function(previous_name, except: override_kws) do 
+  def make__params_like(previous_name, except: override_kws) do 
     overrides = Enum.into(override_kws, %{})
     fn named_examples ->
       Map.merge(

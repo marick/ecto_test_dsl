@@ -27,7 +27,7 @@ defmodule Impl.BuildTest do
 
   test "params_like" do
     previous = [ok: %{params:                   %{a: 1, b: 2 }}]
-    f = Build.params_like_function(:ok, except:        [b: 22, c: 3])
+    f = Build.make__params_like(:ok, except:           [b: 22, c: 3])
     expected =      %{params:                   %{a: 1, b: 22, c: 3}}
 
     assert Impl.Like.expand(%{params: f}, :example, previous) == expected
