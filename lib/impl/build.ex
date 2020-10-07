@@ -27,10 +27,9 @@ defmodule TransformerTestSupport.Impl.Build do
 
   def category(test_data_module, _category, raw_examples) do
     earlier_examples = Agent.test_data(test_data_module).examples
-
     updated_examples =
       Normalize.as(:example_pairs, raw_examples)
-      |> Like.expand(:example_pairs, earlier_examples)
+      |> Like.add_new_pairs(earlier_examples)
     
     Agent.replace_top_level_field(test_data_module, :examples, updated_examples)
   end

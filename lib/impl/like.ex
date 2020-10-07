@@ -3,10 +3,11 @@ defmodule TransformerTestSupport.Impl.Like do
   This is a second pass of processing examples, following `Normalize`.
   The two passes could be consolidated. But let's hold off on that.
   """
-  def expand(new_pairs, :example_pairs, existing_pairs) do
-    for {new_name, new_example} <- new_pairs do
-      {new_name, expand(new_example, :example, existing_pairs)}
-    end
+  def add_new_pairs(new_pairs, existing_pairs) do
+    Enum.reduce(new_pairs, existing_pairs, fn {new_name, new_example}, acc ->
+      expanded = expand(new_example, :example, acc)
+      [{new_name, expanded} | acc]
+    end)
   end
 
   def expand(example, :example, existing_pairs) do
