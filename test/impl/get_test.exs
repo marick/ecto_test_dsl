@@ -13,7 +13,7 @@ defmodule Impl.GetTest do
       Build.start(__MODULE__)
       Build.category(__MODULE__, :valid, [ok: ok])
 
-      Get.get_params(__MODULE__, :ok)
+      Get.params(__MODULE__, :ok)
       |> assert_fields(ok.params)
     end
 
@@ -26,7 +26,7 @@ defmodule Impl.GetTest do
       Build.start(__MODULE__, format: :phoenix)
       Build.category(__MODULE__, :valid, [ok: ok])
 
-      Get.get_params(__MODULE__, :ok)
+      Get.params(__MODULE__, :ok)
       |> assert_fields(%{
             "age" => "1",
             "date" => "2011-02-03",
@@ -44,7 +44,7 @@ defmodule Impl.GetTest do
       Build.start(__MODULE__, format: :raw)
       Build.category(__MODULE__, :valid, [ok: ok])
 
-      Get.get_params(__MODULE__, :ok)
+      Get.params(__MODULE__, :ok)
       |> assert_fields(raw)
     end
   end

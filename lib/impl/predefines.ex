@@ -13,8 +13,14 @@ defmodule TransformerTestSupport.Impl.Predefines do
       def start(global_data),
         do: Build.start(@name_of_test_data, global_data)
 
+      @doc """
+      Potentially useful for debugging
+      """
       def test_data(), do: Get.test_data(@name_of_test_data)
 
+      @doc """
+      Potentially useful for debugging
+      """
       def example(name), do: Keyword.get(test_data().examples, name)
 
       def category(category_name, examples),
@@ -32,9 +38,6 @@ defmodule TransformerTestSupport.Impl.Predefines do
 
       # ----- Using test data ------------------------------------------------------
 
-      def get_params(example_name),
-        do: Get.get_params(@name_of_test_data, example_name)
-
       def validate(example_name),
         do: Validations.validate(@name_of_test_data, example_name)
 
@@ -46,6 +49,32 @@ defmodule TransformerTestSupport.Impl.Predefines do
       def check_everything(example_name) do 
         data = test_data()
         data.variant.check_everything(data, example_name)
+      end
+
+
+      defmodule Tester do
+        @name_of_test_data Module.split(__MODULE__) |> Enum.drop(-1) |> Module.safe_concat
+
+        def test_data(), do: Get.test_data(@name_of_test_data)
+        
+        def example(name), do: Keyword.get(test_data().examples, name)
+
+        def params(example_name),
+          do: Get.params(@name_of_test_data, example_name)
+        
+        def validate(example_name),
+          do: Validations.validate(@name_of_test_data, example_name)
+        
+        def check_everything do
+          for {example_name, _} <- test_data().examples,
+            do: check_everything(example_name)
+        end
+        
+        def check_everything(example_name) do 
+          data = test_data()
+          data.variant.check_everything(data, example_name)
+        end
+        
       end
     end
   end
