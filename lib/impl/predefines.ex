@@ -36,22 +36,6 @@ defmodule TransformerTestSupport.Impl.Predefines do
 
       def changeset(opts), do: {:changeset, opts}
 
-      # ----- Using test data ------------------------------------------------------
-
-      def validate(example_name),
-        do: Validations.validate(@name_of_test_data, example_name)
-
-      def check_everything do
-        for {example_name, _} <- test_data().examples,
-          do: check_everything(example_name)
-      end
-
-      def check_everything(example_name) do 
-        data = test_data()
-        data.variant.check_everything(data, example_name)
-      end
-
-
       defmodule Tester do
         @name_of_test_data Module.split(__MODULE__) |> Enum.drop(-1) |> Module.safe_concat
 
@@ -64,17 +48,6 @@ defmodule TransformerTestSupport.Impl.Predefines do
         
         def validate(example_name),
           do: Validations.validate(@name_of_test_data, example_name)
-        
-        def check_everything do
-          for {example_name, _} <- test_data().examples,
-            do: check_everything(example_name)
-        end
-        
-        def check_everything(example_name) do 
-          data = test_data()
-          data.variant.check_everything(data, example_name)
-        end
-        
       end
     end
   end
