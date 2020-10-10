@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport.Impl.Build do
-  alias TransformerTestSupport.Impl.{Agent,Normalize,Like}
+  alias TransformerTestSupport.Impl.{Normalize,Like}
   @moduledoc """
   """
 
@@ -8,32 +8,48 @@ defmodule TransformerTestSupport.Impl.Build do
     examples: []
   }
 
-  def start(test_data_module, data \\ %{})
+  def start(data \\ %{})
   
-  def start(test_data_module, data) when is_list(data), 
-    do: start(test_data_module, Enum.into(data, %{}))
+  def start(data) when is_list(data), 
+    do: start(Enum.into(data, %{}))
 
-  def start(test_data_module, data) do
-    all =
-      @starting_test_data
-      |> Map.merge(data)
-      |> variant_adjustment(:start)
-    
-    Agent.start_test_data(test_data_module, all)
-    :ok
+  def start(data) do
+    @starting_test_data
+    |> Map.merge(data)
+    |> variant_adjustment(:start)
   end
 
-  # ----------------------------------------------------------------------------
+  # # ----------------------------------------------------------------------------
 
-  def category(test_data_module, _category, raw_examples) do
-    earlier_examples = Agent.test_data(test_data_module).examples
+  def category(so_far, _category, raw_examples) do
+    earlier_examples = so_far.examples
+    
     updated_examples =
       Normalize.as(:example_pairs, raw_examples)
       |> Like.add_new_pairs(earlier_examples)
-    
-    Agent.replace_top_level_field(test_data_module, :examples, updated_examples)
+
+    Map.put(so_far, :examples, updated_examples)
   end
 
+  def params(opts),
+    do: {:params, Enum.into(opts, %{})}
+  
+  def params_like(example_name, opts),
+    do: {:params, make__params_like(example_name, opts)}
+  def params_like(example_name), 
+    do: params_like(example_name, except: [])
+    
+  def changeset(opts), do: {:changeset, opts}
+
+  @doc """
+  May be useful for debugging
+  """
+  def example(acc, example_name),
+    do: acc.examples |> Keyword.get(example_name)
+    
+
+  @doc false
+  # Exposed for testing.
   def make__params_like(previous_name, except: override_kws) do 
     overrides = Enum.into(override_kws, %{})
     fn named_examples ->

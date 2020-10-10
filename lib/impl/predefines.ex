@@ -4,37 +4,8 @@ defmodule TransformerTestSupport.Impl.Predefines do
 
   defmacro __using__(_) do
     quote do
-      alias TransformerTestSupport.Impl.{Build,Get,Validations,Like}
-
-      # ----- Building test data ---------------------------------------------------
-
-      @name_of_test_data __MODULE__
-
-      def start(global_data),
-        do: Build.start(@name_of_test_data, global_data)
-
-      @doc """
-      Potentially useful for debugging
-      """
-      def test_data(), do: Get.test_data(@name_of_test_data)
-
-      @doc """
-      Potentially useful for debugging
-      """
-      def example(name), do: Keyword.get(test_data().examples, name)
-
-      def category(category_name, examples),
-          do: Build.category(@name_of_test_data, category_name, examples)
-
-      def params(opts),
-        do: {:params, Enum.into(opts, %{})}
-
-      def params_like(example_name, opts),
-        do: {:params, Build.make__params_like(example_name, opts)}
-      def params_like(example_name), 
-        do: params_like(example_name, except: [])
-
-      def changeset(opts), do: {:changeset, opts}
+      import TransformerTestSupport.Impl.Build
+      alias TransformerTestSupport.Impl.{Get,Validations,Like}
 
       defmodule Tester do
         @name_of_test_data Module.split(__MODULE__) |> Enum.drop(-1) |> Module.safe_concat

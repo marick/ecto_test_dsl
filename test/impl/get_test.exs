@@ -1,30 +1,23 @@
 defmodule Impl.GetTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.Get
-  alias TransformerTestSupport.Impl.Build
-#  import FlowAssertions.AssertionA
+  alias TransformerTestSupport.Impl.{Get, TestDataServer}
+  import TransformerTestSupport.Impl.Build
 
-  defstruct age: nil, date: nil
+  # This avoids the rigamarole of having to set up a variant for callbacks.
+  def stash(f),
+    do: f.() |> TestDataServer.put_value_into(__MODULE__)
 
   describe "getting params" do
-    test "without interpretation" do
-      ok = %{params: %{age: 1, date: "2011-02-03"}}
-      
-      Build.start(__MODULE__)
-      Build.category(__MODULE__, :valid, [ok: ok])
-
-      Get.params(__MODULE__, :ok)
-      |> assert_fields(ok.params)
-    end
-
     test "phoenix format" do
       ok = %{params: %{age: 1,
                        date: "2011-02-03",
                        nested: %{a: 3},
                        list: [1, 2, 3]}}
-      
-      Build.start(__MODULE__, format: :phoenix)
-      Build.category(__MODULE__, :valid, [ok: ok])
+
+      stash(fn -> 
+        start(format: :phoenix)
+        |> category(:valid, [ok: ok])
+      end)
 
       Get.params(__MODULE__, :ok)
       |> assert_fields(%{
@@ -34,18 +27,32 @@ defmodule Impl.GetTest do
             "list" => ["1", "2", "3"]})
     end
     
-    test "raw format" do
+    test "explicit raw format" do
       raw = %{age: 1,
               date: "2011-02-03",
               nested: %{a: 3},
               list: [1, 2, 3]}
       ok = %{params: raw}
-      
-      Build.start(__MODULE__, format: :raw)
-      Build.category(__MODULE__, :valid, [ok: ok])
+
+      stash(fn -> 
+        start(format: :raw)
+        |> category(:valid, [ok: ok])
+      end)
 
       Get.params(__MODULE__, :ok)
       |> assert_fields(raw)
+    end
+
+    test "default format is raw" do
+      ok = %{params: %{age: 1, date: "2011-02-03"}}
+      
+      stash(fn ->
+        start(%{})
+        |> category(:valid, [ok: ok])
+      end)
+
+      Get.params(__MODULE__, :ok)
+      |> assert_fields(ok.params)
     end
   end
 end 

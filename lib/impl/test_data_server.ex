@@ -11,10 +11,20 @@ defmodule TransformerTestSupport.Impl.TestDataServer do
     GenServer.call(__MODULE__, {:test_data, param_module})
   end
 
+  def put_value_into(value, param_module) do
+    GenServer.call(__MODULE__, {:put, param_module, value})
+  end
+
   # ----------------------------------------------------------------------------
 
   @impl GenServer
   def init(init_arg), do: {:ok, init_arg}
+
+  @impl GenServer
+  def handle_call({:put, param_module, value}, _from, state) do
+    new_state = Map.put(state, param_module, value)
+    {:reply, new_state, new_state}
+  end
 
   @impl GenServer
   def handle_call({:test_data, param_module}, _from, state) do

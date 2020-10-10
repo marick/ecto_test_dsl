@@ -2,6 +2,7 @@ defmodule Impl.BuildTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.Impl
   alias TransformerTestSupport.Impl.Build
+  use TransformerTestSupport.Impl.Predefines
 
   defmodule Variant do
     def adjust_top_level(test_data),
@@ -11,9 +12,6 @@ defmodule Impl.BuildTest do
   @minimal_start [module_under_test: Anything, variant: Variant]
 
   test "minimal start" do
-    register_under = __MODULE__
-    
-    Build.start(register_under, @minimal_start)
     expected = 
       %{format: :raw,
         module_under_test: Anything,
@@ -21,8 +19,8 @@ defmodule Impl.BuildTest do
         examples: [],
         adjusted: true
        }
-
-    assert Impl.Agent.test_data(register_under) == expected
+    
+    assert Build.start(@minimal_start) == expected
   end
 
   test "params_like" do
@@ -32,5 +30,16 @@ defmodule Impl.BuildTest do
 
     assert Impl.Like.expand(%{params: f}, :example, previous) == expected
   end
-    
+
+
+  test "category" do
+    %{examples: [new: new, ok: ok]} =
+      Build.start(@minimal_start)
+      |> Build.category(:valid,
+           ok: [params(age: 1)],
+           new: [params_like(:ok, except: [age: 2])])
+
+      assert ok.params == %{age: 1}
+      assert new.params == %{age: 2}
+  end
 end
