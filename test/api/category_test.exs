@@ -2,7 +2,7 @@ defmodule Api.CategoryTest do
   use TransformerTestSupport.Case
 
   defmodule Variant do
-    def adjust_top_level(test_data), do: test_data
+    # Note this tests what happens (no-op) when a hook function is missing.
   end
 
   defmodule Repeat do

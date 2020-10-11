@@ -5,7 +5,7 @@ defmodule Impl.BuildTest do
   use TransformerTestSupport.Impl.Predefines
 
   defmodule Variant do
-    def adjust_top_level(test_data),
+    def run_start_hook(test_data),
       do: Map.put(test_data, :adjusted, true)
   end
 

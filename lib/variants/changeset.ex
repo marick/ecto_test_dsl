@@ -5,7 +5,9 @@ defmodule TransformerTestSupport.Variants.Changeset do
   alias TransformerTestSupport.Impl.Get
   alias FlowAssertions.Ecto.ChangesetA
 
-  def adjust_top_level(top_level) do
+  # ------------------- Hook functions -----------------------------------------
+
+  def run_start_hook(top_level) do
     sources = %{
       validate_params: __MODULE__,
       validation_assertions: __MODULE__,
@@ -23,14 +25,14 @@ defmodule TransformerTestSupport.Variants.Changeset do
       left: category
     )
   end
-      
+
 
   def adjust_example(example, category) do
     assert_category(category)
     assertions = Map.get(example, :changeset, []) |> Enum.into([])
     Map.put(example, :changeset, [category | assertions])
   end
-  
+
   def validate_params(%{module_under_test: module} = test_data, example_name) do
     params = Get.params(test_data, example_name)
     module.changeset(struct(module), params)
@@ -38,12 +40,12 @@ defmodule TransformerTestSupport.Variants.Changeset do
 
   defchain validation_assertions(changeset, test_data, example_name) do
     example = Get.example(test_data, example_name)
-    
+
     adjust_assertion_message(
       fn ->
-        try_assertions(changeset, example_name, example)        
+        try_assertions(changeset, example_name, example)
       end,
-      fn message -> 
+      fn message ->
          """
          Example `#{inspect example_name}`: #{message}
            Changeset: #{inspect changeset}
@@ -58,7 +60,7 @@ defmodule TransformerTestSupport.Variants.Changeset do
 
   # ----------------------------------------------------------------------------
 
-  
+
   defp try_assertions(changeset, _example_name, example) do
     if Map.has_key?(example, :changeset) do
       for check <- example.changeset,
@@ -82,5 +84,5 @@ defmodule TransformerTestSupport.Variants.Changeset do
       alias TransformerTestSupport.Variants.Changeset
     end
   end
-  
+
 end

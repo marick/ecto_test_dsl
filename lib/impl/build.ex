@@ -16,7 +16,7 @@ defmodule TransformerTestSupport.Impl.Build do
   def start(data) do
     @starting_test_data
     |> Map.merge(data)
-    |> variant_adjustment(:start)
+    |> run_variant_hook(:run_start_hook)
   end
 
   # # ----------------------------------------------------------------------------
@@ -62,11 +62,16 @@ defmodule TransformerTestSupport.Impl.Build do
   # ----------------------------------------------------------------------------
 
   
-  defp variant_adjustment(%{variant: variant} = top_level, :start) do
-    variant.adjust_top_level(top_level)
+  defp run_variant_hook(%{variant: variant} = test_data_so_far, hook_name) do
+    case {hook_name, 1} in variant.__info__(:functions) do
+      true ->
+        apply variant, hook_name, [test_data_so_far]
+      false ->
+        test_data_so_far
+    end
   end
 
-  defp variant_adjustment(top_level, _), do: top_level
+  defp run_variant_hook(top_level, _), do: top_level
   
   
 end
