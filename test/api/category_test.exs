@@ -9,7 +9,7 @@ defmodule Api.CategoryTest do
     use TransformerTestSupport.Impl.Predefines
     
     def create_test_data() do
-      start(module_under_test: Anything, variant: Variant)
+      start_with_variant(Variant, module_under_test: Anything)
       |> category(:valid, ok:    [params(a: 1,  b: 2)])
       |> category(:valid, other: [params(a: 11, b: 22)])
     end

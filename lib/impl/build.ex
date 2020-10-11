@@ -8,14 +8,14 @@ defmodule TransformerTestSupport.Impl.Build do
     examples: []
   }
 
-  def start(data \\ %{})
-  
-  def start(data) when is_list(data), 
-    do: start(Enum.into(data, %{}))
+  def start_with_variant(variant_name, data),
+    do: start([{:variant, variant_name} | data])
 
-  def start(data) do
+  def start(data \\ []) when is_list(data) do
+    map_data = Enum.into(data, %{})
+    
     @starting_test_data
-    |> Map.merge(data)
+    |> Map.merge(map_data)
     |> run_variant_hook(:run_start_hook)
   end
 

@@ -47,7 +47,7 @@ defmodule Impl.GetTest do
       ok = %{params: %{age: 1, date: "2011-02-03"}}
       
       stash(fn ->
-        start(%{})
+        start()
         |> category(:valid, [ok: ok])
       end)
 

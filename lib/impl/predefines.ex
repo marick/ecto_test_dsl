@@ -4,11 +4,13 @@ defmodule TransformerTestSupport.Impl.Predefines do
 
   defmacro __using__(_) do
     quote do
-      import TransformerTestSupport.Impl.Build
-      alias TransformerTestSupport.Impl.{Get,Validations,Like}
+      alias TransformerTestSupport.Impl
+      import Impl.Build, except: [start: 1]  # Variant must define `start`.
+      alias Impl.{Get,Validations,Like,Build}
 
       defmodule Tester do
-        @name_of_test_data Module.split(__MODULE__) |> Enum.drop(-1) |> Module.safe_concat
+        @name_of_test_data Module.split(__MODULE__)
+          |> Enum.drop(-1) |> Module.safe_concat
 
         def test_data(), do: Get.test_data(@name_of_test_data)
         

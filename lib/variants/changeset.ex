@@ -2,8 +2,11 @@ defmodule TransformerTestSupport.Variants.Changeset do
   import FlowAssertions.Define.{Defchain,BodyParts}
 #  import ExUnit.Assertions
   use FlowAssertions.Ecto
-  alias TransformerTestSupport.Impl.Get
+  alias TransformerTestSupport.Impl.{Build,Get}
   alias FlowAssertions.Ecto.ChangesetA
+
+
+  def start(opts), do: Build.start_with_variant(__MODULE__, opts)
 
   # ------------------- Hook functions -----------------------------------------
 
@@ -15,6 +18,12 @@ defmodule TransformerTestSupport.Variants.Changeset do
 
     Map.merge(top_level, %{__sources: sources})
   end
+
+  
+  
+  # ----------------------------------------------------------------------------
+
+  
 
   @categories [:valid, :invalid]
 
@@ -82,6 +91,8 @@ defmodule TransformerTestSupport.Variants.Changeset do
     quote do
       use TransformerTestSupport.Impl.Predefines
       alias TransformerTestSupport.Variants.Changeset
+
+      def start(opts), do: Changeset.start(opts)
     end
   end
 
