@@ -19,6 +19,14 @@ defmodule TransformerTestSupport.Variants.Changeset do
     Map.merge(top_level, %{__sources: sources})
   end
 
+  def run_example_hook(example, category) do
+    assert_category(category)
+    assertions = Map.get(example, :changeset, []) |> Enum.into([])
+    Map.put(example, :changeset, [category | assertions])
+  end
+
+  
+
   
   
   # ----------------------------------------------------------------------------
@@ -35,12 +43,6 @@ defmodule TransformerTestSupport.Variants.Changeset do
     )
   end
 
-
-  def adjust_example(example, category) do
-    assert_category(category)
-    assertions = Map.get(example, :changeset, []) |> Enum.into([])
-    Map.put(example, :changeset, [category | assertions])
-  end
 
   def validate_params(%{module_under_test: module} = test_data, example_name) do
     params = Get.params(test_data, example_name)
