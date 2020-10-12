@@ -19,7 +19,7 @@ defmodule TransformerTestSupport.Impl.Build do
     
     @starting_test_data
     |> Map.merge(map_data)
-    |> run_variant_hook(:run_start_hook)
+    |> run_start_hook
   end
 
   @doc """
@@ -30,11 +30,12 @@ defmodule TransformerTestSupport.Impl.Build do
 
   # # ----------------------------------------------------------------------------
 
-  def category(so_far, _category, raw_examples) do
+  def category(so_far, category, raw_examples) do
     earlier_examples = so_far.examples
     
     updated_examples =
       Normalize.as(:example_pairs, raw_examples)
+      |> run_example_hooks(variant(so_far), category)
       |> Like.add_new_pairs(earlier_examples)
 
     Map.put(so_far, :examples, updated_examples)
@@ -70,17 +71,34 @@ defmodule TransformerTestSupport.Impl.Build do
 
   # ----------------------------------------------------------------------------
 
+  defp variant(test_data), do: Map.get(test_data, :variant)
+
+  defp has_hook?(nil, _hook_tuple), do: false
   
-  defp run_variant_hook(%{variant: variant} = test_data_so_far, hook_name) do
-    case {hook_name, 1} in variant.__info__(:functions) do
+  defp has_hook?(variant, hook_tuple), 
+    do: hook_tuple in variant.__info__(:functions)
+
+
+  defp run_example_hooks(pairs, variant, category) do
+    case has_hook?(variant, {:run_example_hook, 2}) do
       true ->
-        apply variant, hook_name, [test_data_so_far]
+        for {example_name, example} <- pairs do
+          {example_name, variant.run_example_hook(example, category)}
+        end
+      false ->
+        pairs
+    end
+  end
+
+  defp run_start_hook(%{variant: variant} = test_data_so_far) do
+    case has_hook?(variant, {:run_start_hook, 1}) do
+      true ->
+        apply variant, :run_start_hook, [test_data_so_far]
       false ->
         test_data_so_far
     end
   end
-
-  defp run_variant_hook(top_level, _), do: top_level
+  defp run_start_hook(top_level), do: top_level
   
   
 end
