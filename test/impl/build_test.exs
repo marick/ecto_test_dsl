@@ -17,7 +17,8 @@ defmodule Impl.BuildTest do
         module_under_test: Anything,
         variant: Variant,
         examples: [],
-        adjusted: true
+        adjusted: true,
+        field_transformations: %{}
        }
     
     assert Build.start(@minimal_start) == expected
@@ -41,5 +42,13 @@ defmodule Impl.BuildTest do
 
       assert ok.params == %{age: 1}
       assert new.params == %{age: 2}
+  end
+
+
+  test "field_transformations" do
+    %{field_transformations: %{}}
+    |> Build.field_transformations(Anything, age: :as_cast)
+    |> assert_field(field_transformations: %{Anything => [age: :as_cast]})
+    # Note that field transformations are run in order.
   end
 end

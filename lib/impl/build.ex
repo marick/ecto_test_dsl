@@ -3,9 +3,12 @@ defmodule TransformerTestSupport.Impl.Build do
   @moduledoc """
   """
 
+  import DeepMerge, only: [deep_merge: 2]
+
   @starting_test_data %{
     format: :raw,
-    examples: []
+    examples: [],
+    field_transformations: %{}
   }
 
   def start_with_variant(variant_name, data),
@@ -19,6 +22,12 @@ defmodule TransformerTestSupport.Impl.Build do
     |> run_variant_hook(:run_start_hook)
   end
 
+  @doc """
+  May be useful for debugging
+  """
+  def example(acc, example_name),
+    do: acc.examples |> Keyword.get(example_name)
+
   # # ----------------------------------------------------------------------------
 
   def category(so_far, _category, raw_examples) do
@@ -31,6 +40,13 @@ defmodule TransformerTestSupport.Impl.Build do
     Map.put(so_far, :examples, updated_examples)
   end
 
+  def field_transformations(so_far, module_name, opts) do
+    deep_merge(so_far, %{field_transformations: %{module_name => opts}})
+  end
+
+
+  # ----------------------------------------------------------------------------
+
   def params(opts),
     do: {:params, Enum.into(opts, %{})}
   
@@ -40,13 +56,6 @@ defmodule TransformerTestSupport.Impl.Build do
     do: params_like(example_name, except: [])
     
   def changeset(opts), do: {:changeset, opts}
-
-  @doc """
-  May be useful for debugging
-  """
-  def example(acc, example_name),
-    do: acc.examples |> Keyword.get(example_name)
-    
 
   @doc false
   # Exposed for testing.
