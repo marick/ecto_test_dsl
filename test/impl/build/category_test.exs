@@ -1,5 +1,6 @@
 defmodule Api.CategoryTest do
   use TransformerTestSupport.Case
+  alias TransformerTestSupport.Impl.Get
 
   defmodule Variant do
     # Note this tests what happens (no-op) when a hook function is missing.
@@ -13,6 +14,10 @@ defmodule Api.CategoryTest do
       |> category(:valid, ok:    [params(a: 1,  b: 2)])
       |> category(:valid, other: [params(a: 11, b: 22)])
     end
+  end
+
+  test "categories are attached to examples" do
+    assert Get.example(Repeat, :ok).category == :valid
   end
 
   test "you can repeat a category" do
