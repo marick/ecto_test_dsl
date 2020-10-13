@@ -7,6 +7,7 @@ defmodule TransformerTestSupport.Impl.Predefines do
       alias TransformerTestSupport.Impl
       import Impl.Build, except: [start: 1]  # Variant must define `start`.
       alias Impl.{Get,Validations,Build}
+      alias Impl.SmartGet
       alias Impl.Build.Like
 
       defmodule Tester do
@@ -18,7 +19,7 @@ defmodule TransformerTestSupport.Impl.Predefines do
         def example(name), do: Keyword.get(test_data().examples, name)
 
         def params(example_name),
-          do: Get.params(@name_of_test_data, example_name)
+          do: SmartGet.params(@name_of_test_data, example_name)
         
         def validate(example_name),
           do: Validations.validate(@name_of_test_data, example_name)

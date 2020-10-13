@@ -1,6 +1,7 @@
-defmodule Impl.GetTest do
+defmodule Impl.SmartGet.ParamsTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.{Get, TestDataServer}
+  alias TransformerTestSupport.Impl.SmartGet
+  alias TransformerTestSupport.Impl.TestDataServer
   import TransformerTestSupport.Impl.Build
 
   # This avoids the rigamarole of having to set up a variant for callbacks.
@@ -19,7 +20,7 @@ defmodule Impl.GetTest do
         |> category(:valid, [ok: ok])
       end)
 
-      Get.params(__MODULE__, :ok)
+      SmartGet.params(__MODULE__, :ok)
       |> assert_fields(%{
             "age" => "1",
             "date" => "2011-02-03",
@@ -39,7 +40,7 @@ defmodule Impl.GetTest do
         |> category(:valid, [ok: ok])
       end)
 
-      Get.params(__MODULE__, :ok)
+      SmartGet.params(__MODULE__, :ok)
       |> assert_fields(raw)
     end
 
@@ -51,7 +52,7 @@ defmodule Impl.GetTest do
         |> category(:valid, [ok: ok])
       end)
 
-      Get.params(__MODULE__, :ok)
+      SmartGet.params(__MODULE__, :ok)
       |> assert_fields(ok.params)
     end
   end

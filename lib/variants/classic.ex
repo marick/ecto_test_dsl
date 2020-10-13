@@ -3,6 +3,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 #  import ExUnit.Assertions
   use FlowAssertions.Ecto
   alias TransformerTestSupport.Impl.{Build,Get}
+  alias TransformerTestSupport.Impl.SmartGet
   alias FlowAssertions.Ecto.ChangesetA
 
 
@@ -45,7 +46,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 
 
   def validate_params(%{module_under_test: module} = test_data, example_name) do
-    params = Get.params(test_data, example_name)
+    params = SmartGet.params(test_data, example_name)
     module.changeset(struct(module), params)
   end
 
