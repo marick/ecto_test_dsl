@@ -20,10 +20,10 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     Map.merge(top_level, %{__sources: sources})
   end
 
-  def run_example_hook(example, category) do
-    assert_category(category)
+  def run_example_hook(example) do
+    assert_category(example.category)
     assertions = Map.get(example, :changeset, []) |> Enum.into([])
-    Map.put(example, :changeset, [category | assertions])
+    Map.put(example, :changeset, [example.category | assertions])
   end
 
   
