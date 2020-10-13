@@ -33,11 +33,12 @@ defmodule TransformerTestSupport.Impl.Build do
 
   def category(so_far, category, raw_examples) do
     earlier_examples = so_far.examples
+
+    run_variant(so_far, :assert_category_hook, [category])
     
     updated_examples =
       Normalize.as(:example_pairs, raw_examples)
       |> attach_category(category)
-      |> run_example_hooks(variant(so_far))
       |> Like.add_new_pairs(earlier_examples)
 
     Map.put(so_far, :examples, updated_examples)
@@ -85,15 +86,14 @@ defmodule TransformerTestSupport.Impl.Build do
   defp has_hook?(variant, hook_tuple), 
     do: hook_tuple in variant.__info__(:functions)
 
-
-  defp run_example_hooks(pairs, variant) do
-    case has_hook?(variant, {:run_example_hook, 2}) do
+  defp run_variant(test_data, hook_name, rest_args) do
+    hook_tuple = {hook_name, 1 + length(rest_args)}
+    variant = Map.get(test_data, :variant)  
+    case has_hook?(variant, hook_tuple) do
       true ->
-        for {example_name, example} <- pairs do
-          {example_name, variant.run_example_hook(example)}
-        end
+        apply variant, hook_name, [test_data | rest_args]
       false ->
-        pairs
+        test_data
     end
   end
 

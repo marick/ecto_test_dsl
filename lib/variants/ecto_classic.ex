@@ -20,29 +20,19 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     Map.merge(top_level, %{__sources: sources})
   end
 
-  def run_example_hook(example) do
-    assert_category(example.category)
-    assertions = Map.get(example, :changeset, []) |> Enum.into([])
-    Map.put(example, :changeset, [example.category | assertions])
-  end
-
-  
-
-  
-  
-  # ----------------------------------------------------------------------------
-
-  
-
   @categories [:valid, :invalid]
 
-  def assert_category(category) do
+  def assert_category_hook(_, category) do
     elaborate_assert(
       category in @categories,
       "The EctoClassic variant only allows these categories: #{inspect @categories}",
       left: category
     )
   end
+  
+  # ----------------------------------------------------------------------------
+
+  
 
 
   def validate_params(%{module_under_test: module} = test_data, example_name) do
