@@ -18,7 +18,8 @@ defmodule Impl.BuildTest do
         variant: Variant,
         examples: [],
         adjusted: true,
-        field_transformations: %{}
+        field_transformations: %{},
+        workflow: :insert
        }
     
     assert Build.start(@minimal_start) == expected
@@ -29,7 +30,7 @@ defmodule Impl.BuildTest do
     f = Build.make__params_like(:ok, except:           [b: 22, c: 3])
     expected =      %{params:                   %{a: 1, b: 22, c: 3}}
 
-    assert Impl.Like.expand(%{params: f}, :example, previous) == expected
+    assert Impl.Build.Like.expand(%{params: f}, :example, previous) == expected
   end
 
 

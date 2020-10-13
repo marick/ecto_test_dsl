@@ -6,7 +6,8 @@ defmodule TransformerTestSupport.Impl.Predefines do
     quote do
       alias TransformerTestSupport.Impl
       import Impl.Build, except: [start: 1]  # Variant must define `start`.
-      alias Impl.{Get,Validations,Like,Build}
+      alias Impl.{Get,Validations,Build}
+      alias Impl.Build.Like
 
       defmodule Tester do
         @name_of_test_data Module.split(__MODULE__)

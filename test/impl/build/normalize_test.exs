@@ -1,6 +1,6 @@
-defmodule Impl.NormalizeTest do
+defmodule Impl.Build.NormalizeTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.Normalize
+  alias TransformerTestSupport.Impl.Build.Normalize
 
   test "params become maps" do
     assert Normalize.as(:params, [a: 1, b: 2]) == %{a: 1, b: 2}

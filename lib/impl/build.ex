@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport.Impl.Build do
-  alias TransformerTestSupport.Impl.{Normalize,Like}
+  alias TransformerTestSupport.Impl.Build.{Normalize,Like}
   @moduledoc """
   """
 
@@ -8,7 +8,8 @@ defmodule TransformerTestSupport.Impl.Build do
   @starting_test_data %{
     format: :raw,
     examples: [],
-    field_transformations: %{}
+    field_transformations: %{},
+    workflow: :insert
   }
 
   def start_with_variant(variant_name, data),
