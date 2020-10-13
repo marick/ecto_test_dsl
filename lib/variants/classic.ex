@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Variants.Changeset do
+defmodule TransformerTestSupport.Variants.EctoClassic do
   import FlowAssertions.Define.{Defchain,BodyParts}
 #  import ExUnit.Assertions
   use FlowAssertions.Ecto
@@ -38,7 +38,7 @@ defmodule TransformerTestSupport.Variants.Changeset do
   def assert_category(category) do
     elaborate_assert(
       category in @categories,
-      "The Changeset variant only allows these categories: #{inspect @categories}",
+      "The EctoClassic variant only allows these categories: #{inspect @categories}",
       left: category
     )
   end
@@ -92,9 +92,9 @@ defmodule TransformerTestSupport.Variants.Changeset do
   defmacro __using__(_) do
     quote do
       use TransformerTestSupport.Impl.Predefines
-      alias TransformerTestSupport.Variants.Changeset
+      alias TransformerTestSupport.Variants.EctoClassic
 
-      def start(opts), do: Changeset.start(opts)
+      def start(opts), do: EctoClassic.start(opts)
     end
   end
 

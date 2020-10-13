@@ -1,6 +1,6 @@
-defmodule Variants.Changeset.SingleExampleValidationTest do
+defmodule Variants.EctoClassic.SingleExampleValidationTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Variants.Changeset
+  alias TransformerTestSupport.Variants.EctoClassic
 #  import FlowAssertions.AssertionA
   import FlowAssertions.Define.Tabular
 
@@ -28,7 +28,7 @@ defmodule Variants.Changeset.SingleExampleValidationTest do
   end
 
   defp validate_params(params), 
-    do: Changeset.validate_params(test_data(params: params), :example)
+    do: EctoClassic.validate_params(test_data(params: params), :example)
 
   describe " validating params produces a changeset" do
     test "valid" do
@@ -49,7 +49,7 @@ defmodule Variants.Changeset.SingleExampleValidationTest do
     setup do
       asserter = fn changeset, checks ->
         test_data = test_data(changeset: checks)
-        Changeset.validation_assertions(changeset, test_data, :example)
+        EctoClassic.validation_assertions(changeset, test_data, :example)
       end
       [a: assertion_runners_for(asserter)]
     end
@@ -85,7 +85,7 @@ defmodule Variants.Changeset.SingleExampleValidationTest do
 
       [changeset, []] |> a.pass.()
 
-      Changeset.validation_assertions(changeset, test_data(), :example)
+      EctoClassic.validation_assertions(changeset, test_data(), :example)
       |> assert_equal(changeset)
     end
   end

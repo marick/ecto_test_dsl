@@ -1,6 +1,6 @@
-defmodule Variants.Changeset.CheckEverythingTest do
+defmodule Variants.EctoClassic.CheckEverythingTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Variants.Changeset
+  alias TransformerTestSupport.Variants.EctoClassic
   import FlowAssertions.AssertionA
 
   defmodule Schema do 
@@ -31,7 +31,7 @@ defmodule Variants.Changeset.CheckEverythingTest do
     # This demonstrates the assertion was called.
     assertion_fails(~R/changeset is invalid/,
       fn ->
-        Changeset.check_everything(test_data, :example)
+        EctoClassic.check_everything(test_data, :example)
       end)
   end
 end
