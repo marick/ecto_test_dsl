@@ -18,7 +18,7 @@ defmodule Impl.BuildTest do
         variant: Variant,
         examples: [],
         adjusted: true,
-        field_transformations: %{},
+        field_transformations: [],
         workflow: :insert
        }
     
@@ -48,8 +48,8 @@ defmodule Impl.BuildTest do
 
   test "field_transformations" do
     %{field_transformations: %{}}
-    |> Build.field_transformations(Anything, age: :as_cast)
-    |> assert_field(field_transformations: %{Anything => [age: :as_cast]})
+    |> Build.field_transformations(age: :as_cast)
+    |> assert_field(field_transformations: [age: :as_cast])
     # Note that field transformations are run in order.
   end
 end

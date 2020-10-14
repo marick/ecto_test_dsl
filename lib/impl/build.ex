@@ -8,7 +8,7 @@ defmodule TransformerTestSupport.Impl.Build do
   @starting_test_data %{
     format: :raw,
     examples: [],
-    field_transformations: %{},
+    field_transformations: [],
     workflow: :insert
   }
 
@@ -49,8 +49,8 @@ defmodule TransformerTestSupport.Impl.Build do
       do: {name, Map.put(example, :category, category)}
   end
 
-  def field_transformations(so_far, module_name, opts) do
-    deep_merge(so_far, %{field_transformations: %{module_name => opts}})
+  def field_transformations(so_far, opts) do
+    deep_merge(so_far, %{field_transformations: opts})
   end
 
 
@@ -79,7 +79,7 @@ defmodule TransformerTestSupport.Impl.Build do
 
   # ----------------------------------------------------------------------------
 
-  defp variant(test_data), do: Map.get(test_data, :variant)
+#  defp variant(test_data), do: Map.get(test_data, :variant)
 
   defp has_hook?(nil, _hook_tuple), do: false
   
