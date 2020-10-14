@@ -7,17 +7,21 @@ defmodule Impl.SmartGet.ParamsTest do
   def stash(f),
     do: f.() |> TestDataServer.put_value_into(__MODULE__)
 
+  @ok %{params: %{age: 1,
+                  date: "2011-02-03",
+                  nested: %{a: 3},
+                  list: [1, 2, 3]}}
+
+  def with_format(start_args) do 
+    stash(fn -> 
+      start(start_args)
+      |> category(:valid, [ok: @ok])
+    end)
+  end
+
   describe "getting params" do
     test "phoenix format" do
-      ok = %{params: %{age: 1,
-                       date: "2011-02-03",
-                       nested: %{a: 3},
-                       list: [1, 2, 3]}}
-
-      stash(fn -> 
-        start(format: :phoenix)
-        |> category(:valid, [ok: ok])
-      end)
+      with_format(format: :phoenix)   
 
       SmartGet.params(__MODULE__, :ok)
       |> assert_fields(%{
@@ -28,40 +32,21 @@ defmodule Impl.SmartGet.ParamsTest do
     end
     
     test "explicit raw format" do
-      raw = %{age: 1,
-              date: "2011-02-03",
-              nested: %{a: 3},
-              list: [1, 2, 3]}
-      ok = %{params: raw}
-
-      stash(fn -> 
-        start(format: :raw)
-        |> category(:valid, [ok: ok])
-      end)
+      with_format(format: :raw)
 
       SmartGet.params(__MODULE__, :ok)
-      |> assert_fields(raw)
+      |> assert_fields(@ok.params)
     end
 
     test "default format is raw" do
-      ok = %{params: %{age: 1, date: "2011-02-03"}}
-      
-      stash(fn ->
-        start()
-        |> category(:valid, [ok: ok])
-      end)
+      with_format([])
 
       SmartGet.params(__MODULE__, :ok)
-      |> assert_fields(ok.params)
+      |> assert_fields(@ok.params)
     end
 
     test "can smart-get from either a test data name or value" do
-      ok = %{params: %{age: 1, date: "2011-02-03"}}
-      
-      stash(fn ->
-        start()
-        |> category(:valid, [ok: ok])
-      end)
+      with_format([])
 
       from_name = __MODULE__ |> SmartGet.params(:ok)
       from_value = TestDataServer.test_data(__MODULE__) |> SmartGet.params(:ok)
