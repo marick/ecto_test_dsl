@@ -9,12 +9,13 @@ defmodule TransformerTestSupport.Impl.Predefines do
       alias Impl.{Get,Validations,Build}
       alias Impl.SmartGet
       alias Impl.Build.Like
+      
 
       defmodule Tester do
         @name_of_test_data Module.split(__MODULE__)
           |> Enum.drop(-1) |> Module.safe_concat
 
-        def test_data(), do: Get.test_data(@name_of_test_data)
+        def test_data(), do: SmartGet.test_data(@name_of_test_data)
         
         def example(name), do: Keyword.get(test_data().examples, name)
 

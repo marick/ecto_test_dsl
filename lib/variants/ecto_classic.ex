@@ -41,7 +41,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   end
 
   defchain validation_assertions(changeset, test_data, example_name) do
-    example = Get.example(test_data, example_name)
+    example = SmartGet.example(test_data, example_name)
 
     adjust_assertion_message(
       fn ->

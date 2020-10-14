@@ -1,17 +1,17 @@
 defmodule TransformerTestSupport.Impl.SmartGet.Params do
-  alias TransformerTestSupport.Impl.Get
+  alias TransformerTestSupport.Impl.{TestDataServer,SmartGet}
     
   @moduledoc """
   """
   
   def get(test_data_module, example_name) when is_atom(test_data_module),
-    do: get(Get.test_data(test_data_module), example_name)
+    do: get(SmartGet.test_data(test_data_module), example_name)
 
   def get(test_data, example_name) do
     formatters = %{
-      raw: &Get.raw_params/2,
+      raw: &raw_params/2,
       phoenix: fn test_data, example_name ->
-        Get.raw_params(test_data, example_name) |> phoenix_format
+        raw_params(test_data, example_name) |> phoenix_format
       end
     }
 
@@ -28,6 +28,9 @@ defmodule TransformerTestSupport.Impl.SmartGet.Params do
   end
 
   # ----------------------------------------------------------------------------
+
+  def raw_params(test_data, example_name),
+    do: SmartGet.example(test_data, example_name).params
   
   defp phoenix_format(map) do
     map

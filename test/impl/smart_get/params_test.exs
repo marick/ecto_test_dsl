@@ -1,7 +1,6 @@
 defmodule Impl.SmartGet.ParamsTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.SmartGet
-  alias TransformerTestSupport.Impl.TestDataServer
+  alias TransformerTestSupport.Impl.{SmartGet,TestDataServer}
   import TransformerTestSupport.Impl.Build
 
   # This avoids the rigamarole of having to set up a variant for callbacks.
@@ -54,6 +53,19 @@ defmodule Impl.SmartGet.ParamsTest do
 
       SmartGet.params(__MODULE__, :ok)
       |> assert_fields(ok.params)
+    end
+
+    test "can smart-get from either a test data name or value" do
+      ok = %{params: %{age: 1, date: "2011-02-03"}}
+      
+      stash(fn ->
+        start()
+        |> category(:valid, [ok: ok])
+      end)
+
+      from_name = __MODULE__ |> SmartGet.params(:ok)
+      from_value = TestDataServer.test_data(__MODULE__) |> SmartGet.params(:ok)
+      assert from_name == from_value
     end
   end
 end 

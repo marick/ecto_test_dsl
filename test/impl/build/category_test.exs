@@ -1,6 +1,6 @@
 defmodule Api.CategoryTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.Get
+  alias TransformerTestSupport.Impl.SmartGet
 
   defmodule Variant do
     # Note this tests what happens (no-op) when a hook function is missing.
@@ -17,7 +17,7 @@ defmodule Api.CategoryTest do
   end
 
   test "categories are attached to examples" do
-    assert Get.example(Repeat, :ok).category == :valid
+    assert SmartGet.example(Repeat, :ok).category == :valid
   end
 
   test "you can repeat a category" do

@@ -24,7 +24,7 @@ defmodule TransformerTestSupport.Impl.Validations do
   end
     
   def validate_changeset(changeset, example_name, test_data) do
-    example = Impl.Get.example(test_data, example_name)
+    example = SmartGet.example(test_data, example_name)
     validate_changeset_against_example(changeset, example_name, example)
   end
 
