@@ -26,4 +26,13 @@ defmodule Impl.SmartGet.ChangesetTest do
     |> assert_equal([:valid, {:no_changes, [:date]}])
   end
   
+  test "checks are added even if there's no changest" do
+    test_data =
+      start() |>
+      category(:success, ok: [])
+
+    SmartGet.changeset(test_data, :ok)
+    |> assert_equal([:valid])
+  end
+  
 end 

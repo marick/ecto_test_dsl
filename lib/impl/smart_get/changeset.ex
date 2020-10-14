@@ -10,7 +10,7 @@ defmodule TransformerTestSupport.Impl.SmartGet.Changeset do
   def get(test_data, example_name) do
     example = SmartGet.example(test_data, example_name)
 
-    Map.get(example, :changeset)
+    Map.get(example, :changeset, [])
     |> add_validity_check(example.category)
   end
 
