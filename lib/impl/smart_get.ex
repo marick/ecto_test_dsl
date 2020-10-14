@@ -4,7 +4,17 @@ defmodule TransformerTestSupport.Impl.SmartGet do
   def test_data(test_data_module),
     do: TestDataServer.test_data(test_data_module)
 
-  def example(global, example_name), do: SmartGet.Example.get(global, example_name)
-  def params(global, example_name), do: SmartGet.Params.get(global, example_name)
-  def changeset(global, example_name), do: SmartGet.Changeset.get(global, example_name)
+  @functions [
+    example: SmartGet.Example,
+    params: SmartGet.Params,
+    changeset: SmartGet.Changeset
+  ]
+
+  for {name, module} <- @functions do
+    def unquote(name)(test_data_module, example_name) when is_atom(test_data_module),
+      do: unquote(module).get(SmartGet.test_data(test_data_module), example_name)
+
+    def unquote(name)(global, example_name),
+      do: unquote(module).get(global, example_name)
+  end
 end

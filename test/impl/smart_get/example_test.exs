@@ -3,7 +3,9 @@ defmodule Impl.SmartGet.ExampleTest do
   alias TransformerTestSupport.Impl.{SmartGet,TestDataServer}
   import TransformerTestSupport.Impl.Build
 
-  # This avoids the rigamarole of having to set up a variant for callbacks.
+  # This makes this a test of test of how `SmartGet` generates
+  # two variant functions, but without the rigamarole of a whole
+  # Variant.
   def stash(f),
     do: f.() |> TestDataServer.put_value_into(__MODULE__)
 
@@ -27,6 +29,5 @@ defmodule Impl.SmartGet.ExampleTest do
       |> SmartGet.example(:ok)
       |> assert_field(category: :success)
     end
-    
   end
 end 

@@ -4,9 +4,6 @@ defmodule TransformerTestSupport.Impl.SmartGet.Params do
   @moduledoc """
   """
   
-  def get(test_data_module, example_name) when is_atom(test_data_module),
-    do: get(SmartGet.test_data(test_data_module), example_name)
-
   def get(test_data, example_name) do
     formatters = %{
       raw: &raw_params/2,
