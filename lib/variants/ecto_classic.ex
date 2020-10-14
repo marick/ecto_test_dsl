@@ -20,7 +20,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     Map.merge(top_level, %{__sources: sources})
   end
 
-  @categories [:valid, :invalid]
+  @categories [:success, :validation_failure]
 
   def assert_category_hook(_, category) do
     elaborate_assert(
