@@ -14,18 +14,34 @@ defmodule TransformerTestSupport.Impl.SmartGet.ChangesetAsCast do
     end) |> Enum.reverse
   end
 
-  def to_changeset_notation(changeset_assertions, interesting_fields, changeset) do
-    start = %{changes: []}
-    updated = 
-      Enum.reduce(interesting_fields, start, fn field, acc ->
-        cond do
-          field in Map.keys(changeset.changes) ->
-            Map.update!(acc, :changes, &([{field, changeset.changes[field]} | &1]))
-          true ->
-            acc
-        end
-      end)
-    
-    %{changes: Enum.reverse(updated.changes)}
+  def to_changeset_notation(changeset, interesting_fields) do
+    %{changes: make_changes(changeset, interesting_fields),
+      no_changes: make_no_changes(changeset, interesting_fields),
+      errors: make_errors(changeset, interesting_fields)
+    }
+  end
+
+  def make_changes(changeset, fields) do
+    Enum.flat_map(fields, fn field ->
+      if field in Map.keys(changeset.changes),
+      do: [{field, changeset.changes[field]}],
+      else: []
+    end)
+  end
+
+  def make_no_changes(changeset, fields) do
+    Enum.flat_map(fields, fn field ->
+      if field in Map.keys(changeset.changes),
+      do: [],
+      else: [field]
+    end)
+  end
+
+  def make_errors(changeset, fields) do
+    Enum.flat_map(fields, fn field ->
+      if field in Keyword.keys(changeset.errors),
+      do: [{field, Keyword.get(changeset.errors, field) |> elem(0)}],
+      else: []
+    end)
   end
 end

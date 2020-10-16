@@ -23,19 +23,18 @@ defmodule Impl.SmartGet.ChangesetAsCastTest do
       params = %{"name" => "Bossie", "date" => "2001-01-01"}
       changeset = cast(struct(__MODULE__), params, [:name, :date])
       
-      UnderTest.to_changeset_notation([], [:name, :date], changeset)
+      UnderTest.to_changeset_notation(changeset, [:name, :date])
       |> assert_field(changes: [name: "Bossie", date: ~D[2001-01-01]])
     end
 
-    @tag :skip
     test "a cast that fails" do
       params = %{"name" => "Bossie", "date" => "2001-01-0"}
       #                                                 ^^
       changeset = cast(struct(__MODULE__), params, [:name, :date]) |> IO.inspect
       
-      UnderTest.to_changeset_notation([], [:name, :date], changeset)
+      UnderTest.to_changeset_notation(changeset, [:name, :date])
       |> assert_fields(changes: [name: "Bossie"],
-                       unchanged: [:date],
+                       no_changes: [:date],
                        errors: [date: "is invalid"])
     end
   end
