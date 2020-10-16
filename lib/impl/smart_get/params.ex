@@ -3,13 +3,11 @@ defmodule TransformerTestSupport.Impl.SmartGet.Params do
     
   @moduledoc """
   """
-  
+
   def get(test_data, example_name) do
     formatters = %{
-      raw: &raw_params/2,
-      phoenix: fn test_data, example_name ->
-        raw_params(test_data, example_name) |> phoenix_format
-      end
+      raw: &raw_format/1,
+      phoenix: &phoenix_format/1
     }
 
     case Map.get(formatters, test_data.format) do
@@ -20,7 +18,7 @@ defmodule TransformerTestSupport.Impl.SmartGet.Params do
         """
 
       formatter ->
-        formatter.(test_data, example_name)
+        raw_params(test_data, example_name) |> formatter.()
     end
   end
 
@@ -28,6 +26,9 @@ defmodule TransformerTestSupport.Impl.SmartGet.Params do
 
   def raw_params(test_data, example_name),
     do: SmartGet.example(test_data, example_name).params
+
+  defp raw_format(map), do: map
+    
   
   defp phoenix_format(map) do
     map
