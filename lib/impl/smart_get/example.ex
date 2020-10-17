@@ -1,9 +1,13 @@
 defmodule TransformerTestSupport.Impl.SmartGet.Example do
   alias TransformerTestSupport.Impl.SmartGet
+  alias TransformerTestSupport.Impl.TestDataServer
   
   @moduledoc """
   """
 
+  def get(test_data_module, example_name) when is_atom(test_data_module),
+    do: get(TestDataServer.test_data(test_data_module), example_name)
+  
   def get(test_data, example_name) do
     case test_data.examples[example_name] do
       nil ->
@@ -12,4 +16,6 @@ defmodule TransformerTestSupport.Impl.SmartGet.Example do
         retval
     end
   end
+
+  def params(example), do: SmartGet.Params.get(example)
 end

@@ -36,12 +36,12 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 
 
   def validate_params(%{module_under_test: module} = test_data, example_name) do
-    params = SmartGet.params(test_data, example_name)
+    params = SmartGet.Params.get(test_data, example_name)
     module.changeset(struct(module), params)
   end
 
   defchain validation_assertions(changeset, test_data, example_name) do
-    example = SmartGet.example(test_data, example_name)
+    example = SmartGet.Example.get(test_data, example_name)
 
     adjust_assertion_message(
       fn ->

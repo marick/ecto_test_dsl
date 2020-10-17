@@ -2,14 +2,14 @@ defmodule TransformerTestSupport.Impl.Validations do
   # import FlowAssertions.Define.{Defchain,BodyParts}
   # import ExUnit.Assertions
   use FlowAssertions.Ecto
-  alias TransformerTestSupport.Impl.SmartGet
+  alias TransformerTestSupport.Impl.TestDataServer
   
 
   @moduledoc """
   """
 
   def validate(test_data_module, example_name) when is_atom(test_data_module),
-    do: validate_and_check(SmartGet.test_data(test_data_module), example_name)
+    do: validate_and_check(TestDataServer.test_data(test_data_module), example_name)
 
   def validation_result(test_data, example_name) do
     apply_variant(test_data, :validate_params, [test_data, example_name])

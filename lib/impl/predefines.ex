@@ -12,15 +12,17 @@ defmodule TransformerTestSupport.Impl.Predefines do
       
 
       defmodule Tester do
+        alias TransformerTestSupport.Impl.TestDataServer
+        
         @name_of_test_data Module.split(__MODULE__)
           |> Enum.drop(-1) |> Module.safe_concat
 
-        def test_data(), do: SmartGet.test_data(@name_of_test_data)
+        def test_data(), do: TestDataServer.test_data(@name_of_test_data)
         
         def example(name), do: Keyword.get(test_data().examples, name)
 
         def params(example_name),
-          do: SmartGet.params(@name_of_test_data, example_name)
+          do: SmartGet.Params.get(@name_of_test_data, example_name)
         
         def validate(example_name),
           do: Validations.validate(@name_of_test_data, example_name)

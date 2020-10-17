@@ -2,6 +2,7 @@ defmodule Variants.EctoClassic.CheckEverythingTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.Variants.EctoClassic
   import FlowAssertions.AssertionA
+  alias TransformerTestSupport.Impl.Build
 
   defmodule Schema do 
     use Ecto.Schema
@@ -26,7 +27,7 @@ defmodule Variants.EctoClassic.CheckEverythingTest do
         example: %{params: %{date: "2001-02-0"},
                    changeset: [:valid]}  # Provoke an assertion failurexs
       ]
-    }
+    } |> Build.propagate_metadata
     
     # This demonstrates the assertion was called.
     assertion_fails(~R/changeset is invalid/,

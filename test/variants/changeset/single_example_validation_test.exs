@@ -1,8 +1,8 @@
 defmodule Variants.EctoClassic.SingleExampleValidationTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.Variants.EctoClassic
-#  import FlowAssertions.AssertionA
   import FlowAssertions.Define.Tabular
+  alias TransformerTestSupport.Impl.Build
 
   defmodule Schema do 
     use Ecto.Schema
@@ -25,6 +25,7 @@ defmodule Variants.EctoClassic.SingleExampleValidationTest do
   defp test_data(opts \\ []) do
     example = Enum.into(opts, %{})
     Map.put(@base_test_data, :examples,  [example: example])
+    |> Build.propagate_metadata
   end
 
   defp validate_params(params), 

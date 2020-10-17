@@ -20,13 +20,12 @@ defmodule Impl.SmartGet.ExampleTest do
 
   describe "getting an example" do
     test "via module name" do
-      SmartGet.example(__MODULE__, :ok)
+      SmartGet.Example.get(__MODULE__, :ok)
       |> assert_field(category: :success)
     end
 
     test "via module data" do
-      SmartGet.test_data(__MODULE__)
-      |> SmartGet.example(:ok)
+      SmartGet.Example.get(__MODULE__, :ok)
       |> assert_field(category: :success)
     end
   end

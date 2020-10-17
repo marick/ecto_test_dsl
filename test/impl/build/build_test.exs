@@ -62,7 +62,7 @@ defmodule Impl.BuildTest do
     Build.start(@minimal_start)
     |> Build.category(:valid, ok: [params(age: 1)])
     |> Build.propagate_metadata
-    |> SmartGet.example(:ok)
+    |> SmartGet.Example.get(:ok)
     |> Map.get(:metadata)
     |> assert_fields(category_name: :valid,
                      name: :ok,
