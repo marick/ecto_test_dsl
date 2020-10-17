@@ -62,6 +62,7 @@ defmodule Impl.BuildTest do
     |> Build.propagate_metadata
     |> SmartGet.example(:ok)
     |> Map.get(:metadata)
-    |> assert_fields(category_name: :valid)
+    |> assert_fields(category_name: :valid,
+                     name: :ok)
   end
 end

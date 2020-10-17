@@ -44,15 +44,17 @@ defmodule TransformerTestSupport.Impl.Build do
     
     updated_examples =
       Normalize.as(:example_pairs, raw_examples)
-      |> attach_category(category)
+      |> attach_metadata(category)
       |> Like.add_new_pairs(earlier_examples)
 
     Map.put(so_far, :examples, updated_examples)
   end
 
-  defp attach_category(pairs, category) do
-    for {name, example} <- pairs,
-      do: {name, deep_merge(example, %{metadata: %{category_name: category}})}
+  defp attach_metadata(pairs, category) do
+    for {name, example} <- pairs do
+      metadata = %{metadata: %{category_name: category, name: name}}
+      {name, deep_merge(example, metadata)}
+    end
   end
 
   def field_transformations(so_far, opts) do
