@@ -37,7 +37,7 @@ defmodule TransformerTestSupport.Impl.Build do
       for {name, example} <- acc.examples do
         {name, deep_merge(example, %{metadata: metadata})}
       end
-    Map.put(acc, :examples, Map.new(new_examples))
+    Map.put(acc, :examples, new_examples)
   end
 
   # ----------------------------------------------------------------------------
