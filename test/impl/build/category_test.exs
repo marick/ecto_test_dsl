@@ -17,7 +17,7 @@ defmodule Api.CategoryTest do
   end
 
   test "categories are attached to examples" do
-    assert SmartGet.example(Repeat, :ok).category == :valid
+    assert SmartGet.example(Repeat, :ok).metadata.category_name == :valid
   end
 
   test "you can repeat a category" do

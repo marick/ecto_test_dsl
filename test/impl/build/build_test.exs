@@ -3,6 +3,7 @@ defmodule Impl.BuildTest do
   alias TransformerTestSupport.Impl
   alias TransformerTestSupport.Impl.Build
   use TransformerTestSupport.Impl.Predefines
+  alias TransformerTestSupport.Impl.SmartGet
 
   defmodule Variant do
     def run_start_hook(test_data),
@@ -43,13 +44,24 @@ defmodule Impl.BuildTest do
 
       assert ok.params == %{age: 1}
       assert new.params == %{age: 2}
-  end
 
+      assert ok.metadata.category_name == :valid
+      assert new.metadata.category_name == :valid
+  end
 
   test "field_transformations" do
     %{field_transformations: %{}}
     |> Build.field_transformations(age: :as_cast)
     |> assert_field(field_transformations: [age: :as_cast])
     # Note that field transformations are run in order.
+  end
+
+  test "metadata propagation" do
+    Build.start(@minimal_start)
+    |> Build.category(:valid, ok: [params(age: 1)])
+    |> Build.propagate_metadata
+    |> SmartGet.example(:ok)
+    |> Map.get(:metadata)
+    |> assert_fields(category_name: :valid)
   end
 end

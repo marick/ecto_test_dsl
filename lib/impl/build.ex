@@ -1,5 +1,6 @@
 defmodule TransformerTestSupport.Impl.Build do
   alias TransformerTestSupport.Impl.Build.{Normalize,Like}
+  import DeepMerge, only: [deep_merge: 2]
   @moduledoc """
   """
 
@@ -29,7 +30,12 @@ defmodule TransformerTestSupport.Impl.Build do
   def example(acc, example_name),
     do: acc.examples |> Keyword.get(example_name)
 
-  # # ----------------------------------------------------------------------------
+
+  def propagate_metadata(test_data) do
+    test_data
+  end
+
+  # ----------------------------------------------------------------------------
 
   def category(so_far, category, raw_examples) do
     earlier_examples = so_far.examples
@@ -46,7 +52,7 @@ defmodule TransformerTestSupport.Impl.Build do
 
   defp attach_category(pairs, category) do
     for {name, example} <- pairs,
-      do: {name, Map.put(example, :category, category)}
+      do: {name, deep_merge(example, %{metadata: %{category_name: category}})}
   end
 
   def field_transformations(so_far, opts) do
@@ -105,6 +111,8 @@ defmodule TransformerTestSupport.Impl.Build do
     end
   end
   defp run_start_hook(top_level), do: top_level
+
+
   
   
 end

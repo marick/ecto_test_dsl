@@ -9,7 +9,7 @@ defmodule TransformerTestSupport.Impl.SmartGet.Changeset do
     example = SmartGet.example(test_data, example_name)
 
     Map.get(example, :changeset, [])
-    |> add_validity_check(example.category)
+    |> add_validity_check(example.metadata.category_name)
     |> add_field_transformations(test_data, example_name)
   end
 

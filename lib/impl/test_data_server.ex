@@ -1,4 +1,5 @@
 defmodule TransformerTestSupport.Impl.TestDataServer do
+  alias TransformerTestSupport.Impl.Build
   use GenServer
 
   def start(),
@@ -30,7 +31,9 @@ defmodule TransformerTestSupport.Impl.TestDataServer do
   def handle_call({:test_data, param_module}, _from, state) do
     case Map.get(state, param_module) do
       nil ->
-        test_data = param_module.create_test_data()
+        test_data =
+          param_module.create_test_data()
+          |> Build.propagate_metadata 
         {:reply, test_data, Map.put(state, param_module, test_data)}
       test_data ->
         {:reply, test_data, state}
