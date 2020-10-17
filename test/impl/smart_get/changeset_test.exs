@@ -36,17 +36,4 @@ defmodule Impl.SmartGet.ChangesetTest do
       |> assert_equal([:valid])
     end
   end
-
-  describe "adding an automatic as_cast test" do
-    test "starting with nothing" do 
-      test_data =
-        start()
-        |> field_transformations(age: :as_cast)
-        |> category(:success, ok: [params(age: 1)])
-
-      SmartGet.changeset(test_data, :ok)
-      |> assert_equal([:valid, changes: [age: 1]])
-      
-    end
-  end
 end 

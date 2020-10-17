@@ -2,18 +2,6 @@ defmodule TransformerTestSupport.Impl.SmartGet.ChangesetAsCast do
   alias TransformerTestSupport.Impl.SmartGet
   alias Ecto.Changeset
 
-  def cast_only_changeset(module, fields, params) do
-    Changeset.cast(struct(module), params, fields)
-  end
-
-  def as_cast_fields(test_data) do
-    Enum.reduce(test_data.field_transformations, [], fn {field, descriptor}, acc ->
-      if descriptor == :as_cast,
-      do: [field | acc],
-      else: acc
-    end) |> Enum.reverse
-  end
-
   def to_changeset_notation(changeset, interesting_fields) do
     %{changes: make_changes(changeset, interesting_fields),
       no_changes: make_no_changes(changeset, interesting_fields),

@@ -53,7 +53,6 @@ defmodule TransformerTestSupport.Impl.Build do
     deep_merge(so_far, %{field_transformations: opts})
   end
 
-
   # ----------------------------------------------------------------------------
 
   def params(opts),
