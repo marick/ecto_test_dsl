@@ -31,8 +31,13 @@ defmodule TransformerTestSupport.Impl.Build do
     do: acc.examples |> Keyword.get(example_name)
 
 
-  def propagate_metadata(test_data) do
-    test_data
+  def propagate_metadata(acc) do
+    metadata = Map.delete(acc, :examples) # Let's not have a recursive structure.
+    new_examples = 
+      for {name, example} <- acc.examples do
+        {name, deep_merge(example, %{metadata: metadata})}
+      end
+    Map.put(acc, :examples, Map.new(new_examples))
   end
 
   # ----------------------------------------------------------------------------
@@ -44,13 +49,13 @@ defmodule TransformerTestSupport.Impl.Build do
     
     updated_examples =
       Normalize.as(:example_pairs, raw_examples)
-      |> attach_metadata(category)
+      |> attach_category_metadata(category)
       |> Like.add_new_pairs(earlier_examples)
 
     Map.put(so_far, :examples, updated_examples)
   end
 
-  defp attach_metadata(pairs, category) do
+  defp attach_category_metadata(pairs, category) do
     for {name, example} <- pairs do
       metadata = %{metadata: %{category_name: category, name: name}}
       {name, deep_merge(example, metadata)}

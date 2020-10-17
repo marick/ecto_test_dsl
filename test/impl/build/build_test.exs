@@ -46,7 +46,9 @@ defmodule Impl.BuildTest do
       assert new.params == %{age: 2}
 
       assert ok.metadata.category_name == :valid
+      assert ok.metadata.name == :ok
       assert new.metadata.category_name == :valid
+      assert new.metadata.name == :new
   end
 
   test "field_transformations" do
@@ -63,6 +65,9 @@ defmodule Impl.BuildTest do
     |> SmartGet.example(:ok)
     |> Map.get(:metadata)
     |> assert_fields(category_name: :valid,
-                     name: :ok)
+                     name: :ok,
+                     module_under_test: Anything,
+                     variant: Variant)
+    |> refute_field(:examples)
   end
 end

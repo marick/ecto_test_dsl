@@ -11,7 +11,11 @@ defmodule Impl.TestDataServerTest do
   end
 
   test "lazy initialization" do
-    assert TestDataServer.test_data(Examples) == Examples.create_test_data()    
-    assert TestDataServer.test_data(Examples) == Examples.create_test_data()    
+    TestDataServer.test_data(Examples)
+    |> assert_field(other_stuff: "other stuff")
+
+    # Idempotent
+    TestDataServer.test_data(Examples)
+    |> assert_field(other_stuff: "other stuff")
   end
 end
