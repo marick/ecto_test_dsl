@@ -7,7 +7,7 @@ defmodule TransformerTestSupport.Impl.SmartGet do
   @functions [
     example: SmartGet.Example,
     params: SmartGet.Params,
-    changeset: SmartGet.Changeset
+    changeset: SmartGet.ChangesetChecks
   ]
 
   for {name, module} <- @functions do

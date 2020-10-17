@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Impl.SmartGet.Changeset do
+defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks do
   alias TransformerTestSupport.Impl.SmartGet
   alias TransformerTestSupport.Impl.SmartGet.ChangesetAsCast, as: Cast
     

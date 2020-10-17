@@ -1,4 +1,4 @@
-defmodule Impl.SmartGet.ChangesetTest do
+defmodule Impl.SmartGet.ChangesetChecksTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.Impl.SmartGet
   import TransformerTestSupport.Impl.Build
