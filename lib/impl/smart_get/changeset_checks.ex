@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks do
-  alias TransformerTestSupport.Impl.SmartGet
+  alias TransformerTestSupport.Impl.SmartGet.Example
   alias Ecto.Changeset
     
   @moduledoc """
@@ -12,7 +12,7 @@ defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks do
   end
 
   def get(test_data, example_name) do
-    SmartGet.Example.get(test_data, example_name)
+    Example.get(test_data, example_name)
     |> get
   end
   
@@ -23,23 +23,24 @@ defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks do
       else: [  :valid | changeset_checks]
   end
 
+
+  defp insert_style_changeset(example, fields) do
+    struct(example.metadata.module_under_test)
+    |> Changeset.cast(Example.params(example), fields)
+  end
+
   defp add_field_transformations(changeset_checks, example) do
     case Keyword.get(example.metadata.field_transformations, :as_cast) do
       nil ->
         changeset_checks
       fields ->
-        changeset = 
-          struct(example.metadata.module_under_test)
-          |> Changeset.cast(SmartGet.Example.params(example), fields)
+        changeset = insert_style_changeset(example, fields)
         notation = to_changeset_notation(changeset, fields)
         changeset_checks
         |> combine(:changes, notation.changes)
         |> combine(:no_changes, notation.no_changes)
         |> combine(:errors, notation.errors)
     end
-  end
-  defp add_field_transformations(changeset_checks, _, _, _) do
-    changeset_checks
   end
 
   defp combine(so_far, _field, []), do: so_far

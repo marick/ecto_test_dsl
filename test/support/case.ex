@@ -5,6 +5,7 @@ defmodule TransformerTestSupport.Case do
       use FlowAssertions
       use FlowAssertions.Ecto
       import FlowAssertions.AssertionA
+      alias TransformerTestSupport.TestBuild
     end
   end
 end

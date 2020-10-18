@@ -1,32 +1,25 @@
 defmodule Impl.SmartGet.ExampleTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.{SmartGet,TestDataServer}
-  import TransformerTestSupport.Impl.Build
+  alias TransformerTestSupport.Impl.SmartGet.Example
+  alias TransformerTestSupport.Impl.TestDataServer
 
-  # This makes this a test of test of how `SmartGet` generates
-  # two variant functions, but without the rigamarole of a whole
-  # Variant.
-  def stash(f),
-    do: f.() |> TestDataServer.put_value_into(__MODULE__)
+  @params %{a: 1}
 
   setup do
-    ok = %{category: :success}
-    stash(fn -> 
-      start()
-      |> category(:success, [ok: ok])
-    end)
+    TestBuild.with_params(:ok, @params) |> TestBuild.stash(__MODULE__)
     :ok
   end    
 
-  describe "getting an example" do
-    test "via module name" do
-      SmartGet.Example.get(__MODULE__, :ok)
-      |> assert_field(category: :success)
-    end
+  test "getting an example can use either module name or data" do
+    finds_example = &(Example.get(&1, :ok) |> assert_field(params: @params))
 
-    test "via module data" do
-      SmartGet.Example.get(__MODULE__, :ok)
-      |> assert_field(category: :success)
-    end
+                             __MODULE__  |> finds_example.()
+    TestDataServer.test_data(__MODULE__) |> finds_example.()
+  end
+
+  test "pieces" do
+    example = Example.get(__MODULE__, :ok)
+    
+    assert Example.params(example) == @params
   end
 end 
