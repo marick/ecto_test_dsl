@@ -1,9 +1,10 @@
-defmodule Impl.BuildTest do
+defmodule BuildTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl
-  alias TransformerTestSupport.Impl.Build
-  use TransformerTestSupport.Impl.Predefines
-  alias TransformerTestSupport.Impl.SmartGet
+  alias TransformerTestSupport, as: T
+  alias T.Impl
+  alias T.Build
+  use T.Impl.Predefines
+  alias T.Impl.SmartGet
 
   defmodule Variant do
     def run_start_hook(test_data),
@@ -31,7 +32,7 @@ defmodule Impl.BuildTest do
     f = Build.make__params_like(:ok, except:           [b: 22, c: 3])
     expected =      %{params:                   %{a: 1, b: 22, c: 3}}
 
-    assert Impl.Build.Like.expand(%{params: f}, :example, previous) == expected
+    assert Build.Like.expand(%{params: f}, :example, previous) == expected
   end
 
 

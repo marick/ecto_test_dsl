@@ -2,7 +2,7 @@ defmodule Variants.EctoClassic.CheckEverythingTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.Variants.EctoClassic
   import FlowAssertions.AssertionA
-  alias TransformerTestSupport.Impl.Build
+  alias TransformerTestSupport.Build
 
   defmodule Schema do 
     use Ecto.Schema

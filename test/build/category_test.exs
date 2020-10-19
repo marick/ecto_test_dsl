@@ -1,4 +1,4 @@
-defmodule Api.CategoryTest do
+defmodule Build.CategoryTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.Impl.SmartGet
 

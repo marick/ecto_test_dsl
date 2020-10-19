@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Impl.Build.Like do
+defmodule TransformerTestSupport.Build.Like do
   @moduledoc """
   This is a second pass of processing examples, following `Normalize`.
   The two passes could be consolidated. But let's hold off on that.

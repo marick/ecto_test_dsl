@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Impl.Build do
-  alias TransformerTestSupport.Impl.Build.{Normalize,Like}
+defmodule TransformerTestSupport.Build do
+  alias TransformerTestSupport.Build.{Normalize,Like}
   import DeepMerge, only: [deep_merge: 2]
   @moduledoc """
   """

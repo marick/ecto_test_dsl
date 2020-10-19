@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport.Impl.TestDataServer do
-  alias TransformerTestSupport.Impl.Build
+  alias TransformerTestSupport.Build
   use GenServer
 
   def start(),

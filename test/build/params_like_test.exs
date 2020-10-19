@@ -1,4 +1,4 @@
-defmodule Impl.Build.ParamsLikeTest do
+defmodule Build.ParamsLikeTest do
   use TransformerTestSupport.Case
   use TransformerTestSupport.Impl.Predefines
 

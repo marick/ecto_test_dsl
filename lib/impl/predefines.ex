@@ -4,11 +4,13 @@ defmodule TransformerTestSupport.Impl.Predefines do
 
   defmacro __using__(_) do
     quote do
-      alias TransformerTestSupport.Impl
-      import Impl.Build, except: [start: 1]  # Variant must define `start`.
-      alias Impl.{Get,Validations,Build}
-      alias Impl.SmartGet
-      alias Impl.Build.Like
+      alias TransformerTestSupport, as: T
+      alias T.Impl
+      import T.Build, except: [start: 1]  # Variant must define `start`.
+      alias T.Build
+      alias T.Impl.{Get,Validations}
+      alias T.Impl.SmartGet
+      alias T.Build.Like
       
 
       defmodule Tester do

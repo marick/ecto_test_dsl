@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Impl.Build.Normalize do
+defmodule TransformerTestSupport.Build.Normalize do
   import  ExUnit.Assertions
   
   @moduledoc """

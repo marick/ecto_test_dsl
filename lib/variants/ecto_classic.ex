@@ -2,7 +2,8 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   import FlowAssertions.Define.{Defchain,BodyParts}
 #  import ExUnit.Assertions
   use FlowAssertions.Ecto
-  alias TransformerTestSupport.Impl.{Build,Get}
+  alias TransformerTestSupport.Impl.Get
+  alias TransformerTestSupport.Build
   alias TransformerTestSupport.Impl.SmartGet
   alias FlowAssertions.Ecto.ChangesetA
 

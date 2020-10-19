@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport.TestBuild do
-  import TransformerTestSupport.Impl.Build
+  import TransformerTestSupport.Build
   alias TransformerTestSupport.Impl.TestDataServer
 
   def one_category(category_opts), do: one_category([], category_opts)
