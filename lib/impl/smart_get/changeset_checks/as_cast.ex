@@ -28,42 +28,52 @@ defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks.AsCast do
     end
   end
 
-  def field({field, _value}), do: field
-  def field(field), do: field
-    
-
   defp combine(so_far, _field, []), do: so_far
 
   defp combine(so_far, field, values) do
     so_far ++ [{field, values}]
   end
 
+  defp flatmapper(relevant?, add_check) do 
+    fn changeset, fields -> 
+      Enum.flat_map(fields, fn field ->
+        if relevant?.(field, changeset),
+        do: [add_check.(field, changeset)],
+        else: []
+      end)
+    end
+  end
 
+  defp field_has_changed(field, changeset),
+    do: field in Map.keys(changeset.changes)
+  defp check_changed_field_value(field, changeset),
+    do: {field, changeset.changes[field]}
+
+  defp field_is_unchanged(field, changeset),
+    do: not field_has_changed(field, changeset)
+  defp check_field_unchanged(field, _changeset),
+      do: field
+
+  defp field_has_errors(field, changeset), 
+    do: field in Keyword.keys(changeset.errors)
+  defp expect_error(field, changeset),
+    do: {field, Keyword.get(changeset.errors, field) |> elem(0)}
 
   def make_changes(changeset, fields) do
-    Enum.flat_map(fields, fn field ->
-      if field in Map.keys(changeset.changes),
-      do: [{field, changeset.changes[field]}],
-      else: []
-    end)
+    flatmapper(
+      &field_has_changed/2,
+      &check_changed_field_value/2).(changeset, fields)
   end
 
   def make_no_changes(changeset, fields) do
-    Enum.flat_map(fields, fn field ->
-      if field in Map.keys(changeset.changes),
-      do: [],
-      else: [field]
-    end)
+    flatmapper(
+      &field_is_unchanged/2,
+      &check_field_unchanged/2).(changeset, fields)
   end
 
   def make_errors(changeset, fields) do
-    Enum.flat_map(fields, fn field ->
-      if field in Keyword.keys(changeset.errors),
-      do: [{field, Keyword.get(changeset.errors, field) |> elem(0)}],
-      else: []
-    end)
+    flatmapper(
+      &field_has_errors/2,
+      &expect_error/2).(changeset, fields)
   end
-
-
-  
 end
