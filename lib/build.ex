@@ -78,6 +78,11 @@ defmodule TransformerTestSupport.Build do
     
   def changeset(opts), do: {:changeset, opts}
 
+  def on_success(f, applied_to: fields) when is_list(fields),
+    do: {:__on_success, f, fields}
+  def on_success(f, applied_to: field),
+    do: on_success(f, applied_to: [field])
+
   @doc false
   # Exposed for testing.
   def make__params_like(previous_name, except: override_kws) do 
