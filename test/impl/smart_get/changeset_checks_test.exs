@@ -42,7 +42,6 @@ defmodule Impl.SmartGet.ChangesetChecksTest do
 
   # ----------------------------------------------------------------------------
   use Ecto.Schema
-  import Ecto.Changeset
 
   embedded_schema do
     field :name, :string
@@ -55,42 +54,93 @@ defmodule Impl.SmartGet.ChangesetChecksTest do
   describe "adding an automatic as_cast test" do
     test "starting with nothing" do 
       test_data =
-        start(module_under_test: __MODULE__)
-        |> field_transformations(as_cast: [:date])
-        |> category(:success, ok: [params(date: "2001-01-01")])
-        |> propagate_metadata
+        TestBuild.one_category(
+          [module_under_test: __MODULE__,
+           field_transformations: [as_cast: [:date]]
+          ],
+          ok: [params(date: "2001-01-01")])
 
       SmartGet.ChangesetChecks.get(test_data, :ok)
       |> assert_equal([:valid, changes: [date: ~D[2001-01-01]]])
-      
+    end
+
+    test "starting with something" do 
+      test_data =
+        TestBuild.one_category(
+          [module_under_test: __MODULE__,
+           field_transformations: [as_cast: [:date]]
+          ],
+          ok: [params(date: "2001-01-01"),
+               changeset(changes: [name: "Bossie"])
+              ])
+
+      SmartGet.ChangesetChecks.get(test_data, :ok)
+      |> assert_equal([:valid,
+                      changes: [name: "Bossie"],
+                      changes: [date: ~D[2001-01-01]]])
+    end
+
+
+    test "user values override" do 
+      test_data =
+        TestBuild.one_category(
+          [module_under_test: __MODULE__,
+           field_transformations: [as_cast: [:date]]
+          ],
+          ok: [params(date: "2001-01-01"),
+               changeset(no_changes: :date)
+              ])
+
+      SmartGet.ChangesetChecks.get(test_data, :ok)
+      |> assert_equal([:valid, no_changes: :date])
     end
   end
   
 
-  
-  
-
-  describe "mechanisms" do
-    test "collecting valid changes" do
-      params = %{"name" => "Bossie", "date" => "2001-01-01"}
-      changeset = cast(struct(__MODULE__), params, [:name, :date])
-      
-      SmartGet.ChangesetChecks.to_changeset_notation(changeset, [:name, :date])
-      |> assert_field(changes: [name: "Bossie", date: ~D[2001-01-01]])
+  test "unique_fields" do
+    expect = fn changeset_checks, expected ->
+      actual = SmartGet.ChangesetChecks.unique_fields(changeset_checks)
+      assert actual == expected
     end
 
-    test "a cast that fails" do
-      params = %{"name" => "Bossie", "date" => "2001-01-0"}
-      #                                                 ^^
-      changeset = cast(struct(__MODULE__), params, [:name, :date])
-      
-      SmartGet.ChangesetChecks.to_changeset_notation(changeset, [:name, :date])
-      |> assert_fields(changes: [name: "Bossie"],
-                       no_changes: [:date],
-                       errors: [date: "is invalid"])
-    end
+    # Handling of lone symbols
+    [change: :a            ] |> expect.([:a])
+    [change: :a, change: :b] |> expect.([:a, :b])
+    [change: :a, error:  :a] |> expect.([:a])
+
+
+    # Is not fooled by single-element (global) checks
+    [:valid, change: :a    ] |> expect.([:a])
+    
   end
 
 
+  test "removing fields described by user" do
+    expect = fn {fields, changeset_checks}, expected ->
+      actual = SmartGet.ChangesetChecks.remove_fields_named_by_user(fields, changeset_checks)
+      assert actual == expected
+    end
 
+    # Base cases.
+    {  [],   [              ] } |> expect.([  ])
+    {  [],   [some_check: :b] } |> expect.([  ])
+    {  [:a], [              ] } |> expect.([:a])
+
+    # singleton arguments
+    {  [:default], [some_check: :other]  } |> expect.([:default])
+    {  [:default], [some_check: :default]  } |> expect.([])
+
+    # List arguments
+    {  [:default], [some_check: [:other          ]]  } |> expect.([:default])
+    {  [:default], [some_check: [:other, :default]]  } |> expect.([])
+
+    # Keyword arguments
+    {  [:default], [changes: [other: 5            ]]  } |> expect.([:default])
+    {  [:default], [changes: [other: 5, default: 5]]  } |> expect.([])
+
+
+    # Keyword arguments
+    {  [:default], [changes: %{other: 5            }]  } |> expect.([:default])
+    {  [:default], [changes: %{other: 5, default: 5}]  } |> expect.([])
+  end
 end 

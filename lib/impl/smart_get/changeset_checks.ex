@@ -24,23 +24,44 @@ defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks do
   end
 
 
-  defp insert_style_changeset(example, fields) do
+  defp insertion_changeset(example, fields) do
     struct(example.metadata.module_under_test)
     |> Changeset.cast(Example.params(example), fields)
   end
 
   defp add_field_transformations(changeset_checks, example) do
-    case Keyword.get(example.metadata.field_transformations, :as_cast) do
-      nil ->
+    case Keyword.get_values(example.metadata.field_transformations, :as_cast) do
+      [] ->
         changeset_checks
-      fields ->
-        changeset = insert_style_changeset(example, fields)
-        notation = to_changeset_notation(changeset, fields)
+      lists ->
+        fields = Enum.concat(lists) |> remove_fields_named_by_user(changeset_checks)
+        changeset = insertion_changeset(example, fields)
         changeset_checks
-        |> combine(:changes, notation.changes)
-        |> combine(:no_changes, notation.no_changes)
-        |> combine(:errors, notation.errors)
+        |> combine(:changes, make_changes(changeset, fields))
+        |> combine(:no_changes, make_no_changes(changeset, fields))
+        |> combine(:errors, make_errors(changeset, fields))
     end
+  end
+
+  def unique_fields(changeset_checks) do
+    changeset_checks
+    |> Enum.filter(&is_tuple/1)
+    |> Keyword.values
+    |> Enum.flat_map(&from_check_args/1)
+    |> Enum.uniq
+  end
+
+  def from_check_args(field) when is_atom(field), do: [field]
+  def from_check_args(list) when is_list(list), do: Enum.map(list, &field/1)
+  def from_check_args(map)  when is_map(map), do: Enum.map(map,  &field/1)
+
+  def field({field, _value}), do: field
+  def field(field), do: field
+    
+
+  def remove_fields_named_by_user(default_fields, changeset_checks) do
+    reject_fields = unique_fields(changeset_checks)
+    Enum.reject(default_fields, &Enum.member?(reject_fields, &1))
   end
 
   defp combine(so_far, _field, []), do: so_far
@@ -50,12 +71,6 @@ defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks do
   end
 
 
-  def to_changeset_notation(changeset, interesting_fields) do
-    %{changes: make_changes(changeset, interesting_fields),
-      no_changes: make_no_changes(changeset, interesting_fields),
-      errors: make_errors(changeset, interesting_fields)
-    }
-  end
 
   def make_changes(changeset, fields) do
     Enum.flat_map(fields, fn field ->
@@ -80,5 +95,4 @@ defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks do
       else: []
     end)
   end
-  
 end
