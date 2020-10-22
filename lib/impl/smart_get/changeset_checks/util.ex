@@ -25,10 +25,12 @@ defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks.Util do
 
   # ----------------------------------------------------------------------------
 
-  def as_cast_fields(example) do
-    example.metadata.field_transformations
-    |> Keyword.get_values(:as_cast)
-    |> Enum.concat
+  def transformations(example) do
+    {as_cast_list, calculated_fields} =
+      example.metadata.field_transformations
+      |> Keyword.pop_values(:as_cast)
+    
+    [Enum.concat(as_cast_list), calculated_fields]
   end
   
 end

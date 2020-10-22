@@ -14,15 +14,10 @@ defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks.AsCast do
     |> Changeset.cast(Example.params(example), fields)
   end
 
-  def add(changeset_checks, example, user_mentioned) do
-    case Checks.Util.as_cast_fields(example) do 
-      [] ->
-        changeset_checks
-      all_fields ->
-        to_add_fields = Checks.Util.remove_fields_named_by_user(all_fields, user_mentioned)
-        changeset = insertion_changeset(example, to_add_fields)
-        add_checks(changeset_checks, to_add_fields, changeset)
-    end
+  def add(changeset_checks, _example, []), do: changeset_checks
+  def add(changeset_checks, example, fields) do
+    changeset = insertion_changeset(example, fields)
+    add_checks(changeset_checks, fields, changeset)
   end
 
 

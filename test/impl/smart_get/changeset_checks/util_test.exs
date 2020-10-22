@@ -49,13 +49,23 @@ defmodule Impl.SmartGet.ChangesetChecks.UtilTest do
     {  [:default], [changes: %{other: 5, default: 5}]  } |> expect.([])
   end
 
+  
+  defp with_transformations(xfer), do: %{metadata: %{field_transformations: xfer}}
 
-  test "as_cast_fields" do
-    example = %{metadata: %{field_transformations: [
-                               as_cast: [:a, :b],
-                               plain_variable: :some_value,
-                               as_cast: [:c]
-                             ]}}
-    assert Util.as_cast_fields(example) == [:a, :b, :c]
+  test "transformations" do
+    expect = fn kws, expected ->
+      actual = with_transformations(kws) |> Util.transformations
+      assert actual == expected
+    end
+    
+    complete = [
+      as_cast: [:a, :b],
+      field1: 1,
+      as_cast: [:c],
+      field2: 2
+    ]
+
+    [] |> expect.([[], []])
+    complete |> expect.([[:a, :b, :c], [field1: 1, field2: 2]])
   end
 end
