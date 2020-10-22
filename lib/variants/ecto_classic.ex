@@ -66,7 +66,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 
   defp try_assertions(changeset, _example_name, example) do
     for check <- SmartGet.ChangesetChecks.get(example),
-      do: apply_assertion(changeset, IO.inspect(check, label: "check"))
+      do: apply_assertion(changeset, check)
   end
 
   defp apply_assertion(changeset, {check_type, arg}),

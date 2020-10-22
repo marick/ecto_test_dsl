@@ -2,7 +2,6 @@ defmodule Variants.EctoClassic.ValidationErrorTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.Variants.EctoClassic
   import FlowAssertions.Define.Tabular
-  alias TransformerTestSupport.Build
 
   defmodule Schema do 
     use Ecto.Schema
