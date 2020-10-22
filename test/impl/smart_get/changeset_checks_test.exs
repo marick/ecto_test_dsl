@@ -7,10 +7,9 @@ defmodule Impl.SmartGet.ChangesetChecksTest do
   describe "valid/invalid additions" do 
     test "a :validation_failure category has an `invalid` check put at the front" do
       test_data =
-        start() |>
-        category(:validation_failure,
-          oops: [changeset(no_changes: [:date])]
-        ) |> propagate_metadata
+        TestBuild.one_category(:validation_failure,
+          [],
+          oops: [changeset(no_changes: [:date])])
       
       Checks.get(test_data, :oops)
       |> assert_equal([:invalid, {:no_changes, [:date]}])
@@ -19,11 +18,9 @@ defmodule Impl.SmartGet.ChangesetChecksTest do
     
     test "any other category gets a `valid` check" do
       test_data =
-        start() |>
-        category(:success,
-          ok: [changeset(no_changes: [:date])]
-        ) |> propagate_metadata
-      
+        TestBuild.one_category(:some_category_name,
+          [],
+          ok: [changeset(no_changes: [:date])])
       
       Checks.get(test_data, :ok)
       |> assert_equal([:valid, {:no_changes, [:date]}])
@@ -31,9 +28,9 @@ defmodule Impl.SmartGet.ChangesetChecksTest do
     
     test "checks are added even if there's no changest" do
       test_data =
-        start() |>
-        category(:success, ok: [])
-        |> propagate_metadata
+        TestBuild.one_category(
+          [],
+          ok: [])
       
       Checks.get(test_data, :ok)
       |> assert_equal([:valid])
