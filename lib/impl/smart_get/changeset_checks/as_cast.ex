@@ -21,59 +21,39 @@ defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks.AsCast do
       lists ->
         fields = Enum.concat(lists) |> Checks.Util.remove_fields_named_by_user(user_mentioned)
         changeset = insertion_changeset(example, fields)
-        changeset_checks
-        |> combine(:changes, make_changes(changeset, fields))
-        |> combine(:no_changes, make_no_changes(changeset, fields))
-        |> combine(:errors, make_errors(changeset, fields))
+        add_checks(changeset_checks, fields, changeset)
     end
   end
 
-  defp combine(so_far, _field, []), do: so_far
 
-  defp combine(so_far, field, values) do
-    so_far ++ [{field, values}]
+  defp add_checks(changeset_checks, all_fields, changeset) do
+    named_in_changes? = &(&1 in Map.    keys(changeset.changes))
+    named_in_errors?  = &(&1 in Keyword.keys(changeset.errors))
+
+    fields = %{
+      changes:    Enum.filter(all_fields, named_in_changes?),
+      no_changes: Enum.reject(all_fields, named_in_changes?),
+      errors:     Enum.filter(all_fields, named_in_errors?)
+    }
+
+    new_checks = %{
+      changes: (for f <- fields.changes, do: {f, changeset.changes[f]}),
+      no_changes: (for f <- fields.no_changes, do: f),
+      errors: (for f <- fields.errors do
+                {f, Keyword.get(changeset.errors, f) |> elem(0)}
+              end)
+    }
+    order_of_additions = [:changes, :no_changes, :errors]
+
+    # We don't mess with user's `changeset` checks. We just add
+    # new keywords.
+    Enum.reduce(order_of_additions, changeset_checks, fn check_type, acc ->
+      additions = new_checks[check_type]
+      case additions do 
+        [] -> acc
+        _ -> acc ++ [{check_type, additions}]
+      end
+    end)
   end
 
-  defp flatmapper(relevant?, add_check) do 
-    fn changeset, fields -> 
-      Enum.flat_map(fields, fn field ->
-        if relevant?.(field, changeset),
-        do: [add_check.(field, changeset)],
-        else: []
-      end)
-    end
-  end
-
-  defp field_has_changed(field, changeset),
-    do: field in Map.keys(changeset.changes)
-  defp check_changed_field_value(field, changeset),
-    do: {field, changeset.changes[field]}
-
-  defp field_is_unchanged(field, changeset),
-    do: not field_has_changed(field, changeset)
-  defp check_field_unchanged(field, _changeset),
-      do: field
-
-  defp field_has_errors(field, changeset), 
-    do: field in Keyword.keys(changeset.errors)
-  defp expect_error(field, changeset),
-    do: {field, Keyword.get(changeset.errors, field) |> elem(0)}
-
-  def make_changes(changeset, fields) do
-    flatmapper(
-      &field_has_changed/2,
-      &check_changed_field_value/2).(changeset, fields)
-  end
-
-  def make_no_changes(changeset, fields) do
-    flatmapper(
-      &field_is_unchanged/2,
-      &check_field_unchanged/2).(changeset, fields)
-  end
-
-  def make_errors(changeset, fields) do
-    flatmapper(
-      &field_has_errors/2,
-      &expect_error/2).(changeset, fields)
-  end
 end

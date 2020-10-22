@@ -4,9 +4,9 @@ defmodule TransformerTestSupport.TestBuild do
 
   def one_category(category_opts), do: one_category([], category_opts)
 
-  def one_category(start_opts, category_opts) do
+  def one_category(category_name \\ :category_name, start_opts, category_opts) do
     start(start_opts)
-    |> category(:category_name, category_opts)
+    |> category(category_name, category_opts)
     |> propagate_metadata
   end
 
