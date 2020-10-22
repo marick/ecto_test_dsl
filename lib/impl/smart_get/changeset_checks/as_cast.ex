@@ -15,13 +15,13 @@ defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks.AsCast do
   end
 
   def add(changeset_checks, example, user_mentioned) do
-    case Keyword.get_values(example.metadata.field_transformations, :as_cast) do
+    case Checks.Util.as_cast_fields(example) do 
       [] ->
         changeset_checks
-      lists ->
-        fields = Enum.concat(lists) |> Checks.Util.remove_fields_named_by_user(user_mentioned)
-        changeset = insertion_changeset(example, fields)
-        add_checks(changeset_checks, fields, changeset)
+      all_fields ->
+        to_add_fields = Checks.Util.remove_fields_named_by_user(all_fields, user_mentioned)
+        changeset = insertion_changeset(example, to_add_fields)
+        add_checks(changeset_checks, to_add_fields, changeset)
     end
   end
 

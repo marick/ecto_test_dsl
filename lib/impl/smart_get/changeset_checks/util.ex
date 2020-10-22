@@ -23,6 +23,12 @@ defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks.Util do
     Enum.reject(default_fields, &Enum.member?(reject_fields, &1))
   end
 
+  # ----------------------------------------------------------------------------
 
+  def as_cast_fields(example) do
+    example.metadata.field_transformations
+    |> Keyword.get_values(:as_cast)
+    |> Enum.concat
+  end
   
 end

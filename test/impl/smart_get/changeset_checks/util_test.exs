@@ -48,4 +48,14 @@ defmodule Impl.SmartGet.ChangesetChecks.UtilTest do
     {  [:default], [changes: %{other: 5            }]  } |> expect.([:default])
     {  [:default], [changes: %{other: 5, default: 5}]  } |> expect.([])
   end
+
+
+  test "as_cast_fields" do
+    example = %{metadata: %{field_transformations: [
+                               as_cast: [:a, :b],
+                               plain_variable: :some_value,
+                               as_cast: [:c]
+                             ]}}
+    assert Util.as_cast_fields(example) == [:a, :b, :c]
+  end
 end
