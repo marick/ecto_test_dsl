@@ -20,14 +20,13 @@ defmodule Variants.EctoClassic.CheckEverythingTest do
   end
 
   test "happens if changeset is valid" do
-    test_data = %{
-      module_under_test: Schema,
-      format: :phoenix,
-      examples: [
-        example: %{params: %{date: "2001-02-0"},
-                   changeset: [:valid]}  # Provoke an assertion failurexs
-      ]
-    } |> Build.propagate_metadata
+    test_data =
+      TestBuild.one_category(:success,
+        [module_under_test: Schema,
+         format: :phoenix
+        ],
+        example: %{params: %{date: "2001-02-0"}}
+      )
     
     # This demonstrates the assertion was called.
     assertion_fails(~R/changeset is invalid/,

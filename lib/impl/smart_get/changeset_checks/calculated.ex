@@ -9,9 +9,13 @@ defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks.Calculated do
 
   
 
-  def add(changeset_checks, _example, _user_mentioned) do
-    changeset_checks
+  def add(changeset_checks, example, fields) do
+    Enum.reduce(fields, changeset_checks, fn field, acc ->
+      add_one(acc, example, field)
+    end)
   end
 
-
+  defp add_one(changeset_checks, example, {field, {:__on_success, f, args}} = x) do
+    changeset_checks
+  end
 end

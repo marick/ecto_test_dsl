@@ -65,10 +65,8 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 
 
   defp try_assertions(changeset, _example_name, example) do
-    if Map.has_key?(example, :changeset) do
-      for check <- example.changeset,
-        do: apply_assertion(changeset, check)
-    end
+    for check <- SmartGet.ChangesetChecks.get(example),
+      do: apply_assertion(changeset, IO.inspect(check, label: "check"))
   end
 
   defp apply_assertion(changeset, {check_type, arg}),
