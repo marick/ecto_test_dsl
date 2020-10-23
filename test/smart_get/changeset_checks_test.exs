@@ -2,6 +2,7 @@ defmodule SmartGet.ChangesetChecksTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.SmartGet.ChangesetChecks, as: Checks
   import TransformerTestSupport.Build
+  alias Ecto.Changeset
 
   # ----------------------------------------------------------------------------
   describe "valid/invalid additions" do 
@@ -149,26 +150,37 @@ defmodule SmartGet.ChangesetChecksTest do
     end
   end
 
-  describe "adding an on_success conversion" do
-    @on_success_common_args [
-      module_under_test: OnSuccess,
-      field_transformations: [
-        as_cast: [:date_string],
-        date: on_success(&Date.from_iso8601!/1, applied_to: :date_string)
-      ]
-    ]
-
-    @tag :skip
-    test "starting with nothing" do 
+  describe "on_success is evaluated later" do 
+    test "in a success case" do 
       test_data =
-        TestBuild.one_category(@on_success_common_args,
+        TestBuild.one_category(:success,
+          [module_under_test: OnSuccess,
+           field_transformations: [
+             as_cast: [:date_string],
+             date: on_success(&Date.from_iso8601!/1, applied_to: :date_string)
+           ]
+          ],
           ok: [params(date_string: "2001-01-01")])
 
-      Checks.get(test_data, :ok)
-      |> assert_equal([
-        :valid,
-        changes: [date_string: "2001-01-01"],
-        changes: [date: ~D[2001-01-01]]])
+      [:valid, changes: [date_string: "2001-01-01"], custom_changeset_check: f] =
+        Checks.get(test_data, :ok)
+
+      success = %Changeset{
+        changes: %{date_string: "2001-01-01",
+                   date: ~D[2001-01-01]}}
+      assert f.(success) == :ok
+
+
+      failure = %Changeset{
+        changes: %{date_string: "2001-01-01",
+                   date: ~D[2001-01-02]}}
+      assertion_fails(
+        "Changeset field `:date` (left) does not match the value calculated from &Date.from_iso8601!/1[:date_string]",
+        [left: ~D[2001-01-02], right: ~D[2001-01-01]],
+        fn -> 
+          f.(failure)
+        end)
     end
+
   end
 end 
