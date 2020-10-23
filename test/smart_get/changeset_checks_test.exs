@@ -182,5 +182,23 @@ defmodule SmartGet.ChangesetChecksTest do
         end)
     end
 
+    test "no check added when a validation failure is expected" do 
+      test_data =
+        TestBuild.one_category(:validation_failure,
+          [module_under_test: OnSuccess,
+           field_transformations: [
+             as_cast: [:date_string],
+             date: on_success(&Date.from_iso8601!/1, applied_to: :date_string)
+           ]
+          ],
+          error: [params(date_string: "2001-01-0")])
+
+      actual = Checks.get(test_data, :error)
+      assert [:invalid, changes: [date_string: "2001-01-0"]] = actual
+    end
+
+    @tag :skip
+    test "more than one argument needed" 
+
   end
 end 

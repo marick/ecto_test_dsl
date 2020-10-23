@@ -13,11 +13,20 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
 
   def add(changeset_checks, example, fields) do
     Enum.reduce(fields, changeset_checks, fn field, acc ->
-      add_one(acc, example, field)
+      maybe_add_one(acc, example, field)
     end)
   end
 
-  defp add_one(changeset_checks, example, {field, {:__on_success, f, arg_template}}) do
+  defp maybe_add_one(changeset_checks, example, check_description) do
+    case example.metadata.category_name do
+      :validation_failure ->
+        changeset_checks
+      _ ->
+        add_one(changeset_checks, check_description)
+    end
+  end
+
+  defp add_one(changeset_checks, {field, {:__on_success, f, arg_template}}) do 
     checker = fn changeset ->
       args = [changeset.changes[:date_string]]
       expected = apply(f, args)
@@ -28,7 +37,6 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
         right: expected)
       :ok
     end
-
     changeset_checks ++ [{:custom_changeset_check, checker}]
   end
 end
