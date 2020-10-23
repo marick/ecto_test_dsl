@@ -1,6 +1,6 @@
-defmodule Impl.TestDataServerTest do
+defmodule TestDataServerTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.TestDataServer
+  alias TransformerTestSupport.TestDataServer
 
   
   defmodule Examples do

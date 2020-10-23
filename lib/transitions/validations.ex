@@ -1,8 +1,8 @@
-defmodule TransformerTestSupport.Impl.Validations do
+defmodule TransformerTestSupport.Validations do
   # import FlowAssertions.Define.{Defchain,BodyParts}
   # import ExUnit.Assertions
   use FlowAssertions.Ecto
-  alias TransformerTestSupport.Impl.TestDataServer
+  alias TransformerTestSupport.TestDataServer
   
 
   @moduledoc """

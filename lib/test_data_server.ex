@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Impl.TestDataServer do
+defmodule TransformerTestSupport.TestDataServer do
   alias TransformerTestSupport.Build
   use GenServer
 

@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks.Calculated do
-  alias TransformerTestSupport.Impl.SmartGet
+defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
+  alias TransformerTestSupport.SmartGet
   alias SmartGet.Example
   alias SmartGet.ChangesetChecks, as: Checks
   alias Ecto.Changeset

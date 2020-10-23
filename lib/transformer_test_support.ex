@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport do
   def start do
-    TransformerTestSupport.Impl.TestDataServer.start
+    TransformerTestSupport.TestDataServer.start
   end
 end

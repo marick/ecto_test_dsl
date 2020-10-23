@@ -1,6 +1,6 @@
-defmodule TransformerTestSupport.Impl.DidYouMeanTest do
+defmodule TransformerTestSupport.DidYouMeanTest do
   use TransformerTestSupport.Case
-  import TransformerTestSupport.Impl.DidYouMean
+  import TransformerTestSupport.DidYouMean
 
   test "find the closest" do
     assert {_, "foo"} = best_candidate("fo", ["oo", "foo", "bar"])

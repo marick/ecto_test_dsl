@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Impl.DidYouMean do
+defmodule TransformerTestSupport.DidYouMean do
   
   def did_you_mean(bad_atoms, candidates) when is_list(bad_atoms) do
     bad_strings = Enum.map(bad_atoms, &to_string/1)

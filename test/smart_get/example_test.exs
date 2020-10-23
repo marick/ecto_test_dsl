@@ -1,7 +1,7 @@
-defmodule Impl.SmartGet.ExampleTest do
+defmodule SmartGet.ExampleTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.SmartGet.Example
-  alias TransformerTestSupport.Impl.TestDataServer
+  alias TransformerTestSupport.SmartGet.Example
+  alias TransformerTestSupport.TestDataServer
 
   @params %{a: 1}
 

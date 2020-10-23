@@ -1,8 +1,7 @@
-defmodule TransformerTestSupport.Impl.Validations do
+defmodule TransformerTestSupport.Validations do
   import FlowAssertions.Define.{Defchain,BodyParts}
   import ExUnit.Assertions
   use FlowAssertions.Ecto
-  alias TransformerTestSupport.Impl
   
 
   @moduledoc """
@@ -34,11 +33,11 @@ defmodule TransformerTestSupport.Impl.Validations do
       cond do
         Enum.member?(example.categories, :valid) ->
           elaborate_assert(changeset.valid?,
-            Impl.Messages.should_be_valid(example_name),
+            Messages.should_be_valid(example_name),
             left: changeset)
         Enum.member?(example.categories, :invalid) ->
           elaborate_refute(changeset.valid?,
-            Impl.Messages.should_be_invalid(example_name),
+            Messages.should_be_invalid(example_name),
             left: changeset)
           
         :else ->
@@ -55,10 +54,10 @@ defmodule TransformerTestSupport.Impl.Validations do
   end
 
   def validate_categories(test_data, category_names, example_validator) do
-    example_names = Impl.Get.all_example_names(test_data)
+    example_names = Get.all_example_names(test_data)
 
     test_data
-    |> Impl.Get.filter_by_categories(example_names, category_names)
+    |> Get.filter_by_categories(example_names, category_names)
     |> Enum.map(example_validator)
   end
 

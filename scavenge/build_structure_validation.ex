@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Impl.BuildStructureValidation do
-  import TransformerTestSupport.Impl.DidYouMean
+defmodule TransformerTestSupport.BuildStructureValidation do
+  import TransformerTestSupport.DidYouMean
 
   @top_level_requires MapSet.new([:module_under_test, :format, :variant])
 

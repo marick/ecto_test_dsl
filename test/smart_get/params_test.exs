@@ -1,6 +1,6 @@
-defmodule Impl.SmartGet.ParamsTest do
+defmodule SmartGet.ParamsTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.SmartGet
+  alias TransformerTestSupport.SmartGet
 
   @ok %{params: %{age: 1,
                   date: "2011-02-03",

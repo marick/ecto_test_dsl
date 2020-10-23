@@ -1,6 +1,6 @@
-defmodule Impl.ChangesetValidationsTest do
+defmodule ChangesetValidationsTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.{Validations,Messages}
+  alias TransformerTestSupport.{Validations,Messages}
   import FlowAssertions.AssertionA
   import FlowAssertions.Define.Tabular
   alias Ecto.Changeset

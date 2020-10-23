@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Impl.Messages do
+defmodule TransformerTestSupport.Messages do
 
   def should_be_valid(name),
     do: ~s/#{example name} #{is_in_category(:valid)}, #{but_marked("invalid")}/

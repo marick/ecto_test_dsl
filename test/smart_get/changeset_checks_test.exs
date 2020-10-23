@@ -1,6 +1,6 @@
-defmodule Impl.SmartGet.ChangesetChecksTest do
+defmodule SmartGet.ChangesetChecksTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.SmartGet.ChangesetChecks, as: Checks
+  alias TransformerTestSupport.SmartGet.ChangesetChecks, as: Checks
   import TransformerTestSupport.Build
 
   # ----------------------------------------------------------------------------
@@ -75,6 +75,22 @@ defmodule Impl.SmartGet.ChangesetChecksTest do
       |> assert_equal([:valid,
                       changes: [name: "Bossie"],
                       changes: [date: ~D[2001-01-01]]])
+    end
+
+    test "it is OK for a parameter to be missing" do
+      test_data =
+        TestBuild.one_category(
+          [module_under_test: AsCast,
+           field_transformations: [as_cast: [:other]]
+          ],
+          ok: [params(date: "2001-01-01"),
+               changeset(changes: [name: "Bossie"])
+              ])
+
+      Checks.get(test_data, :ok)
+      |> assert_equal([:valid,
+                      changes: [name: "Bossie"],
+                      no_changes: [:other]])
     end
 
     test "errors" do

@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Impl.Predefines do
+defmodule TransformerTestSupport.Predefines do
   @moduledoc """
   """
 
@@ -8,14 +8,14 @@ defmodule TransformerTestSupport.Impl.Predefines do
       alias T.Impl
       import T.Build, except: [start: 1]  # Variant must define `start`.
       alias T.Build
-      alias T.Impl.{Get,Validations}
-      alias T.Impl.SmartGet
+      alias T.{Get,Validations}
+      alias T.SmartGet
       alias T.Build.Like
       
 
       defmodule Tester do
-        alias TransformerTestSupport.Impl.TestDataServer
-        alias TransformerTestSupport.Impl.SmartGet
+        alias TransformerTestSupport.TestDataServer
+        alias TransformerTestSupport.SmartGet
         
         @name_of_test_data Module.split(__MODULE__)
           |> Enum.drop(-1) |> Module.safe_concat

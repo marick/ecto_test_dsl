@@ -1,6 +1,6 @@
-defmodule Impl.SmartGet.ChangesetChecks.UtilTest do
+defmodule SmartGet.ChangesetChecks.UtilTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.SmartGet.ChangesetChecks.Util
+  alias TransformerTestSupport.SmartGet.ChangesetChecks.Util
 
   test "unique_fields" do
     expect = fn changeset_checks, expected ->

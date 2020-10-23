@@ -2,9 +2,9 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   import FlowAssertions.Define.{Defchain,BodyParts}
 #  import ExUnit.Assertions
   use FlowAssertions.Ecto
-  alias TransformerTestSupport.Impl.Get
+  alias TransformerTestSupport.Get
   alias TransformerTestSupport.Build
-  alias TransformerTestSupport.Impl.SmartGet
+  alias TransformerTestSupport.SmartGet
   alias FlowAssertions.Ecto.ChangesetA
 
 
@@ -81,7 +81,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 
   defmacro __using__(_) do
     quote do
-      use TransformerTestSupport.Impl.Predefines
+      use TransformerTestSupport.Predefines
       alias TransformerTestSupport.Variants.EctoClassic
 
       def start(opts), do: EctoClassic.start(opts)

@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Impl.SmartGet.ChangesetChecks.Util do
+defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Util do
     
   @moduledoc """
   """

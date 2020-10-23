@@ -1,6 +1,6 @@
-defmodule TransformerTestSupport.Impl.SmartGet.Example do
-  alias TransformerTestSupport.Impl.SmartGet
-  alias TransformerTestSupport.Impl.TestDataServer
+defmodule TransformerTestSupport.SmartGet.Example do
+  alias TransformerTestSupport.SmartGet
+  alias TransformerTestSupport.TestDataServer
   
   @moduledoc """
   """

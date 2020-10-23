@@ -1,6 +1,6 @@
-defmodule Impl.ValidationsTest do
+defmodule ValidationsTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.Validations
+  alias TransformerTestSupport.Validations
   import FlowAssertions.AssertionA
 
   test "validate_categories actually calls the validator" do

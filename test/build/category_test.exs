@@ -1,13 +1,13 @@
 defmodule Build.CategoryTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Impl.SmartGet
+  alias TransformerTestSupport.SmartGet
 
   defmodule Variant do
     # Note this tests what happens (no-op) when a hook function is missing.
   end
 
   defmodule Repeat do
-    use TransformerTestSupport.Impl.Predefines
+    use TransformerTestSupport.Predefines
     
     def create_test_data() do
       start_with_variant(Variant, module_under_test: Anything)

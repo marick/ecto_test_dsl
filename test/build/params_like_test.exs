@@ -1,6 +1,6 @@
 defmodule Build.ParamsLikeTest do
   use TransformerTestSupport.Case
-  use TransformerTestSupport.Impl.Predefines
+  use TransformerTestSupport.Predefines
 
   test "like" do
     start()

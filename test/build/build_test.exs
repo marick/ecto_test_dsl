@@ -1,10 +1,9 @@
 defmodule BuildTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport, as: T
-  alias T.Impl
   alias T.Build
-  use T.Impl.Predefines
-  alias T.Impl.SmartGet
+  use T.Predefines
+  alias T.SmartGet
 
   defmodule Variant do
     def run_start_hook(test_data),
@@ -35,7 +34,6 @@ defmodule BuildTest do
     assert Build.Like.expand(%{params: f}, :example, previous) == expected
   end
 
-
   test "category" do
     %{examples: [new: new, ok: ok]} =
       Build.start(@minimal_start)
@@ -52,13 +50,18 @@ defmodule BuildTest do
       assert new.metadata.name == :new
   end
 
-  test "field_transformations" do
+  test "field transformations" do
+    args = [
+      as_cast: [:date_string, :id],
+      date: on_success(&Date.from_iso8601!/1, applied_to: [:date_string])
+    ]
+    
     %{field_transformations: %{}}
-    |> Build.field_transformations(age: :as_cast)
-    |> assert_field(field_transformations: [age: :as_cast])
+    |> Build.field_transformations(args)
+    |> assert_field(field_transformations: args)
     # Note that field transformations are run in order.
   end
-
+    
   test "metadata propagation" do
     Build.start(@minimal_start)
     |> Build.category(:valid, ok: [params(age: 1)])
