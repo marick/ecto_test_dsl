@@ -37,7 +37,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
         right: expected)
       :ok
     end
-    changeset_checks ++ [{:custom_changeset_check, checker}]
+    changeset_checks ++ [{:__custom_changeset_check, checker}]
   end
 
   defp translate_arg(arg, changeset) when is_atom(arg), do: changeset.changes[arg]

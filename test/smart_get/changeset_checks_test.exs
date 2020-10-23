@@ -163,7 +163,7 @@ defmodule SmartGet.ChangesetChecksTest do
           ],
           ok: [params(date_string: "2001-01-01")])
 
-      [:valid, changes: [date_string: "2001-01-01"], custom_changeset_check: f] =
+      [:valid, changes: [date_string: "2001-01-01"], __custom_changeset_check: f] =
         Checks.get(test_data, :ok)
 
       success = %Changeset{
@@ -212,8 +212,8 @@ defmodule SmartGet.ChangesetChecksTest do
           ok: [params(date_string: "2000-01-04")])
 
       [:valid, changes: [date_string: "2000-01-04"],
-        custom_changeset_check: _date,
-        custom_changeset_check: days_since] =
+        __custom_changeset_check: _date,
+        __custom_changeset_check: days_since] =
           Checks.get(test_data, :ok)
 
       success = %Changeset{

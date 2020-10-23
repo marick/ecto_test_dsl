@@ -69,6 +69,10 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
       do: apply_assertion(changeset, check)
   end
 
+
+  defp apply_assertion(changeset, {:__custom_changeset_check, f}),
+    do: f.(changeset)
+
   defp apply_assertion(changeset, {check_type, arg}),
     do: apply ChangesetA, assert_name(check_type), [changeset, arg]
 
