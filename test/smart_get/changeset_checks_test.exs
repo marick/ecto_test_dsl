@@ -147,6 +147,7 @@ defmodule SmartGet.ChangesetChecksTest do
     embedded_schema do
       field :date_string, :string, virtual: true
       field :date, :date
+      field :days_since_2000, :integer
     end
   end
 
@@ -197,8 +198,41 @@ defmodule SmartGet.ChangesetChecksTest do
       assert [:invalid, changes: [date_string: "2001-01-0"]] = actual
     end
 
-    @tag :skip
-    test "more than one argument needed" 
+    test "more than one argument to checking function" do 
+      test_data =
+        TestBuild.one_category(:success,
+          [module_under_test: OnSuccess,
+           field_transformations: [
+             as_cast: [:date_string],
+             date: on_success(&Date.from_iso8601!/1, applied_to: :date_string),
+             days_since_2000:
+                on_success(&Date.diff/2, applied_to: [:date, ~D[2000-01-01]])
+           ]
+          ],
+          ok: [params(date_string: "2000-01-04")])
 
+      [:valid, changes: [date_string: "2000-01-04"],
+        custom_changeset_check: _date,
+        custom_changeset_check: days_since] =
+          Checks.get(test_data, :ok)
+
+      success = %Changeset{
+        changes: %{date_string: "2000-01-04",
+                   date: ~D[2000-01-04],
+                   days_since_2000: 3}}
+      assert days_since.(success) == :ok
+
+      failure = %Changeset{
+        changes: %{date_string: "2000-01-04",
+                   date: ~D[2000-01-04],
+                   days_since_2000: -3}}
+        
+      assertion_fails(
+        "Changeset field `:days_since_2000` (left) does not match the value calculated from &Date.diff/2[:date, ~D[2000-01-01]]",
+        [left: -3, right: 3],
+        fn -> 
+          days_since.(failure)
+        end)
+    end
   end
-end 
+end

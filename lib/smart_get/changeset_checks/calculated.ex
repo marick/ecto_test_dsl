@@ -28,7 +28,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
 
   defp add_one(changeset_checks, {field, {:__on_success, f, arg_template}}) do 
     checker = fn changeset ->
-      args = [changeset.changes[:date_string]]
+      args = Enum.map(arg_template, &(translate_arg &1, changeset))
       expected = apply(f, args)
       elaborate_assert(
         changeset.changes[field] == expected,
@@ -39,4 +39,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
     end
     changeset_checks ++ [{:custom_changeset_check, checker}]
   end
+
+  defp translate_arg(arg, changeset) when is_atom(arg), do: changeset.changes[arg]
+  defp translate_arg(arg, changeset),                   do:                   arg
 end
