@@ -12,12 +12,12 @@ defmodule TransformerTestSupport.Validations do
     do: validate_and_check(TestDataServer.test_data(test_data_module), example_name)
 
   def validation_result(test_data, example_name) do
-    apply_variant(test_data, :validate_params, [test_data, example_name])
+    apply_variant(test_data, :accept_params, [test_data, example_name])
   end
 
   def validate_and_check(test_data, example_name) do
     result = validation_result(test_data, example_name)
-    apply_variant(test_data, :validation_assertions, [result, test_data, example_name])
+    apply_variant(test_data, :check_validation_changeset, [result, test_data, example_name])
   end
 
   defp apply_variant(test_data, function_name, args) do

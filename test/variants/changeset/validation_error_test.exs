@@ -30,8 +30,8 @@ defmodule Variants.EctoClassic.ValidationErrorTest do
   setup do
     asserter = fn category_name, datestring, changeset_checks ->
       test_data = test_data(category_name, [date: datestring], changeset_checks)
-      changeset = EctoClassic.validate_params(test_data, :example)
-      EctoClassic.validation_assertions(changeset, test_data, :example)
+      changeset = EctoClassic.accept_params(test_data, :example)
+      EctoClassic.check_validation_changeset(changeset, test_data, :example)
       category_name  
     end
     [a: assertion_runners_for(asserter)]

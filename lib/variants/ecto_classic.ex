@@ -2,7 +2,6 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   import FlowAssertions.Define.{Defchain,BodyParts}
 #  import ExUnit.Assertions
   use FlowAssertions.Ecto
-  alias TransformerTestSupport.Get
   alias TransformerTestSupport.Build
   alias TransformerTestSupport.SmartGet
   alias FlowAssertions.Ecto.ChangesetA
@@ -14,8 +13,8 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 
   def run_start_hook(top_level) do
     sources = %{
-      validate_params: __MODULE__,
-      validation_assertions: __MODULE__,
+      accept_params: __MODULE__,
+      check_validation_changeset: __MODULE__,
     }
 
     Map.merge(top_level, %{__sources: sources})
@@ -36,12 +35,12 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   
 
 
-  def validate_params(%{module_under_test: module} = test_data, example_name) do
+  def accept_params(%{module_under_test: module} = test_data, example_name) do
     params = SmartGet.Params.get(test_data, example_name)
     module.changeset(struct(module), params)
   end
 
-  defchain validation_assertions(changeset, test_data, example_name) do
+  defchain check_validation_changeset(changeset, test_data, example_name) do
     example = SmartGet.Example.get(test_data, example_name)
 
     adjust_assertion_message(
@@ -57,8 +56,8 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   end
 
   def check_everything(test_data, example_name) do
-    changeset = validate_params(test_data, example_name)
-    validation_assertions(changeset, test_data, example_name)
+    changeset = accept_params(test_data, example_name)
+    check_validation_changeset(changeset, test_data, example_name)
   end
 
   # ----------------------------------------------------------------------------
