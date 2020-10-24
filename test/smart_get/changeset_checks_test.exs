@@ -158,7 +158,7 @@ defmodule SmartGet.ChangesetChecksTest do
           [module_under_test: OnSuccess,
            field_transformations: [
              as_cast: [:date_string],
-             date: on_success(&Date.from_iso8601!/1, applied_to: :date_string)
+             date: on_success(Date.from_iso8601!(:date_string))
            ]
           ],
           ok: [params(date_string: "2001-01-01")])
@@ -204,9 +204,9 @@ defmodule SmartGet.ChangesetChecksTest do
           [module_under_test: OnSuccess,
            field_transformations: [
              as_cast: [:date_string],
-             date: on_success(&Date.from_iso8601!/1, applied_to: :date_string),
+             date: on_success(Date.from_iso8601! :date_string),
              days_since_2000:
-                on_success(&Date.diff/2, applied_to: [:date, ~D[2000-01-01]])
+                on_success(Date.diff(:date, ~D[2000-01-01]))
            ]
           ],
           ok: [params(date_string: "2000-01-04")])

@@ -78,10 +78,36 @@ defmodule TransformerTestSupport.Build do
     
   def changeset(opts), do: {:changeset, opts}
 
+  defmacro on_success(funcall) do
+    case Macro.decompose_call(funcall) do
+      {{:__aliases__, _, aliases},  fun_atom, args} -> 
+        composed_module = Enum.reduce(aliases, :Elixir, fn alias, acc ->
+        Module.safe_concat(acc, alias)
+      end)
+        fun = Function.capture(composed_module, fun_atom, length(args))
+        quote do
+          {:__on_success, unquote(fun), unquote(args)}
+        end
+
+      {fun_atom, args} ->
+        quote do 
+          fun = Function.capture(__MODULE__, unquote(fun_atom), length(unquote(args)))
+          {:__on_success, fun, unquote(args)}
+        end
+
+      _ ->
+        raise """
+        The argument to `on_success/1` does not look like a function call.
+        You may want the `on_success(f, applied_to: args)` variant.
+        """
+    end
+  end
+
   def on_success(f, applied_to: fields) when is_list(fields),
     do: {:__on_success, f, fields}
   def on_success(f, applied_to: field),
     do: on_success(f, applied_to: [field])
+
 
   @doc false
   # Exposed for testing.

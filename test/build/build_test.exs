@@ -53,13 +53,33 @@ defmodule BuildTest do
   test "field transformations" do
     args = [
       as_cast: [:date_string, :id],
-      date: on_success(&Date.from_iso8601!/1, applied_to: [:date_string])
+      date: on_success(Date.from_iso8601!(:date_string))
     ]
     
     %{field_transformations: %{}}
     |> Build.field_transformations(args)
     |> assert_field(field_transformations: args)
     # Note that field transformations are run in order.
+  end
+
+  def function_in_module(x), do: x - 3
+  
+  test "on_success, specifically" do
+    assert {:__on_success, &Date.diff/2, [:date, ~D[2000-01-01]]} ==
+      on_success(Date.diff(:date, ~D[2000-01-01]))
+
+    assert {:__on_success, &List.Chars.to_charlist/1, [:date]} ==
+      on_success(List.Chars.to_charlist(:date))
+
+    assert {:__on_success, function, [:date]} =
+      on_success(function_in_module(:date))
+    assert function.(3) == 0
+
+
+    # The variant that accepts functions
+    f = &(&1 + 1)
+    assert {:__on_success, f, [:date]} ==
+      on_success(f, applied_to: :date)
   end
     
   test "metadata propagation" do
