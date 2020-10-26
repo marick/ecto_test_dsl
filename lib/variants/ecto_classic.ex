@@ -8,12 +8,12 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   # ------------------- Hook functions -----------------------------------------
 
   def run_start_hook(top_level) do
-    sources = %{
+    workflow_steps = %{
       accept_params: __MODULE__,
       check_validation_changeset: __MODULE__,
     }
 
-    Map.merge(top_level, %{__sources: sources})
+    Map.merge(top_level, %{__workflow_steps: workflow_steps})
   end
 
   @categories [:success, :validation_error]
@@ -25,7 +25,13 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
       left: category
     )
   end
-  
+
+
+  # ----------------------------------------------------------------------------
+
+  def run_workflow(example) do
+  end    
+
   # ----------------------------------------------------------------------------
 
 
@@ -35,6 +41,8 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
       alias TransformerTestSupport.Variants.EctoClassic
 
       def start(opts), do: EctoClassic.start(opts)
+
+
     end
   end
 end

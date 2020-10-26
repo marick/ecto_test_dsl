@@ -21,7 +21,7 @@ defmodule TransformerTestSupport.Validations do
   end
 
   defp apply_variant(test_data, function_name, args) do
-    module = test_data.__sources[function_name]
+    module = test_data.__workflow_steps[function_name]
     apply module, function_name, args
   end
 end
