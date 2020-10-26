@@ -6,9 +6,9 @@ defmodule SmartGet.ChangesetChecksTest do
 
   # ----------------------------------------------------------------------------
   describe "valid/invalid additions" do 
-    test "a :validation_failure category has an `invalid` check put at the front" do
+    test "a :validation_error category has an `invalid` check put at the front" do
       test_data =
-        TestBuild.one_category(:validation_failure,
+        TestBuild.one_category(:validation_error,
           [],
           oops: [changeset(no_changes: [:date])])
       
@@ -96,7 +96,7 @@ defmodule SmartGet.ChangesetChecksTest do
 
     test "errors" do
       test_data =
-        TestBuild.one_category(:validation_failure,
+        TestBuild.one_category(:validation_error,
           [module_under_test: AsCast,
            field_transformations: [as_cast: [:date, :name]]
           ],
@@ -185,7 +185,7 @@ defmodule SmartGet.ChangesetChecksTest do
 
     test "no check added when a validation failure is expected" do 
       test_data =
-        TestBuild.one_category(:validation_failure,
+        TestBuild.one_category(:validation_error,
           [module_under_test: OnSuccess,
            field_transformations: [
              as_cast: [:date_string],

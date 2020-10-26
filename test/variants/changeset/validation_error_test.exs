@@ -41,7 +41,7 @@ defmodule Variants.EctoClassic.ValidationErrorTest do
   @no_checks []
   test "auto_generated validity checks", %{a: a} do
     [:success,            @invalid_string, @no_checks]      |> a.fail.(~r/is invalid/)
-    [:validation_failure, @invalid_string, @no_checks]      |> a.pass.()
+    [:validation_error, @invalid_string, @no_checks]      |> a.pass.()
   end
 
 
@@ -55,11 +55,11 @@ defmodule Variants.EctoClassic.ValidationErrorTest do
   end
     
   test "checks applied when the params should be invalid", %{a: a} do
-    [:validation_failure, @valid_string,   @valid_actual]   |> a.fail.(
+    [:validation_error, @valid_string,   @valid_actual]   |> a.fail.(
        ~r/supposed to be invalid/)
-    [:validation_failure, @valid_string,   @invalid_actual] |> a.fail.(
+    [:validation_error, @valid_string,   @invalid_actual] |> a.fail.(
        ~r/supposed to be invalid/)
-    [:validation_failure, @invalid_string, @invalid_actual] |> a.fail.(
+    [:validation_error, @invalid_string, @invalid_actual] |> a.fail.(
        ~r/`:date` is missing/)
   end
 end
