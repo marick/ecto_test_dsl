@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Tester do
+defmodule TransformerTestSupport.Runner do
 
   defmacro check_examples_with(module) do
     quote bind_quoted: [module: module] do
