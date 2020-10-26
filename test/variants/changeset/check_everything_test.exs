@@ -1,7 +1,7 @@
 defmodule Variants.EctoClassic.CheckEverythingTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Variants.EctoClassic
   import FlowAssertions.AssertionA
+  use TransformerTestSupport.Variants.EctoClassic
 
   defmodule Schema do 
     use Ecto.Schema
@@ -18,19 +18,27 @@ defmodule Variants.EctoClassic.CheckEverythingTest do
     end
   end
 
-  test "happens if changeset is valid" do
-    test_data =
-      TestBuild.one_category(:success,
-        [module_under_test: Schema,
-         format: :phoenix
-        ],
-        example: %{params: %{date: "2001-02-0"}}
-      )
+  defmodule Variant do
+    use TransformerTestSupport.Variants.EctoClassic
     
+    def create_test_data do
+      start(
+        module_under_test: Schema,
+        format: :phoenix
+      ) |>
+
+      category(:success,
+        example: [
+          params(date: "2001-02-0")
+        ])
+    end
+  end
+
+  test "happens if changeset is valid" do
     # This demonstrates the assertion was called.
     assertion_fails(~R/changeset is invalid/,
       fn ->
-        EctoClassic.check_everything(test_data, :example)
+        Variant.Tester.validate(:example)
       end)
   end
 end
