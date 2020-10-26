@@ -30,7 +30,6 @@ defmodule TransformerTestSupport.Build do
   def example(acc, example_name),
     do: acc.examples |> Keyword.get(example_name)
 
-
   def propagate_metadata(acc) do
     metadata = Map.delete(acc, :examples) # Let's not have a recursive structure.
     new_examples = 
@@ -68,7 +67,7 @@ defmodule TransformerTestSupport.Build do
 
   # ----------------------------------------------------------------------------
 
-  def params(opts),
+  def params(opts \\ []),
     do: {:params, Enum.into(opts, %{})}
   
   def params_like(example_name, opts),
