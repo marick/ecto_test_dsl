@@ -1,19 +1,27 @@
 defmodule TransformerTestSupport.Variants.EctoClassic do
   alias TransformerTestSupport.Build
-  use TransformerTestSupport.VariantSupport.Changeset
-
-
+  alias TransformerTestSupport.VariantSupport.Changeset
+  import FlowAssertions.Define.BodyParts
+  
   def start(opts), do: Build.start_with_variant(__MODULE__, opts)
 
   # ------------------- Hook functions -----------------------------------------
 
-  def run_start_hook(top_level) do
-    workflow_steps = %{
-      accept_params: __MODULE__,
-      check_validation_changeset: __MODULE__,
-    }
+  def steps do
+    make_changeset = fn _history, example ->
+      Changeset.accept_params(example)
+    end
+    check_validation_changeset = fn [changeset | _], example ->
+      Changeset.check_validation_changeset(changeset, example)
+    end
+    
+    [make_changeset: make_changeset,
+     check_validation_changeset: check_validation_changeset,
+    ]
+  end     
 
-    Map.merge(top_level, %{__workflow_steps: workflow_steps})
+  def run_start_hook(top_level) do
+    Map.put(top_level, :workflow_steps, steps())
   end
 
   @categories [:success, :validation_error]
@@ -26,11 +34,16 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     )
   end
 
+  def run_steps(example) do
+    example.metadata.workflow_steps
+    |> run_steps([example], example)
+  end
 
-  # ----------------------------------------------------------------------------
-
-  def run_workflow(example) do
-  end    
+  def run_steps([], history, _example), do: history
+  def run_steps([{_step_name, function} | rest], history, example) do
+    value = function.(history, example)
+    run_steps(rest, [value | history], example)
+  end
 
   # ----------------------------------------------------------------------------
 
@@ -41,8 +54,6 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
       alias TransformerTestSupport.Variants.EctoClassic
 
       def start(opts), do: EctoClassic.start(opts)
-
-
     end
   end
 end

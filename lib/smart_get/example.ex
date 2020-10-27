@@ -9,7 +9,7 @@ defmodule TransformerTestSupport.SmartGet.Example do
     do: get(TestDataServer.test_data(test_data_module), example_name)
   
   def get(test_data, example_name) do
-    case test_data.examples[example_name] do
+    case Keyword.get(test_data.examples, example_name) do
       nil ->
         raise "There is no example named `#{inspect example_name}`"
       retval ->

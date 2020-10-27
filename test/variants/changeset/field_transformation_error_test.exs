@@ -60,11 +60,11 @@ defmodule Variants.EctoClassic.FieldTransformationErrorTest do
     assertion_fails(~r/`:days_since_2000`.*~D\[2001-01-01]/,
       [left: 3, right: -363],
       fn ->
-        Examples.Tester.validate(:ok)
+        Examples.Tester.check_workflow(:ok)
       end)
 
     assert_raise(ArgumentError, fn -> 
-      Examples.Tester.validate(:blow_up)
+      Examples.Tester.check_workflow(:blow_up)
     end)
   end
 end

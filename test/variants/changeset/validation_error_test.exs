@@ -1,7 +1,8 @@
 defmodule Variants.EctoClassic.ValidationErrorTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Variants.EctoClassic
   import FlowAssertions.Define.Tabular
+  alias TransformerTestSupport.VariantSupport.Changeset
+  alias TransformerTestSupport.SmartGet
 
   defmodule Schema do 
     use Ecto.Schema
@@ -30,8 +31,9 @@ defmodule Variants.EctoClassic.ValidationErrorTest do
   setup do
     asserter = fn category_name, datestring, changeset_checks ->
       test_data = test_data(category_name, [date: datestring], changeset_checks)
-      changeset = EctoClassic.accept_params(test_data, :example)
-      EctoClassic.check_validation_changeset(changeset, test_data, :example)
+      example = SmartGet.Example.get(test_data, :example)
+      changeset = Changeset.accept_params(example)
+      Changeset.check_validation_changeset(changeset, example)
       category_name  
     end
     [a: assertion_runners_for(asserter)]

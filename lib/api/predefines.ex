@@ -16,6 +16,7 @@ defmodule TransformerTestSupport.Predefines do
       defmodule Tester do
         alias TransformerTestSupport.TestDataServer
         alias TransformerTestSupport.SmartGet
+        alias TransformerTestSupport.VariantSupport.Changeset
         
         @name_of_test_data Module.split(__MODULE__)
           |> Enum.drop(-1) |> Module.safe_concat
@@ -28,8 +29,9 @@ defmodule TransformerTestSupport.Predefines do
         def params(example_name),
           do: SmartGet.Params.get(@name_of_test_data, example_name)
         
-        def validate(example_name),
-          do: Validations.validate(@name_of_test_data, example_name)
+        def check_workflow(example_name) do
+          test_data().variant.run_steps(example(example_name))
+        end
       end
     end
   end
