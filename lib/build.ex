@@ -27,16 +27,29 @@ defmodule TransformerTestSupport.Build do
   @doc """
   May be useful for debugging
   """
-  def example(acc, example_name),
-    do: acc.examples |> Keyword.get(example_name)
+  def example(test_data, example_name),
+    do: test_data.examples |> Keyword.get(example_name)
 
-  def propagate_metadata(acc) do
-    metadata = Map.delete(acc, :examples) # Let's not have a recursive structure.
+  def propagate_metadata(test_data) do
+    metadata = Map.delete(test_data, :examples) # Let's not have a recursive structure.
     new_examples = 
-      for {name, example} <- acc.examples do
+      for {name, example} <- test_data.examples do
         {name, deep_merge(example, %{metadata: metadata})}
       end
-    Map.put(acc, :examples, new_examples)
+    Map.put(test_data, :examples, new_examples)
+  end
+
+  def field_transformations(test_data, opts) do
+    deep_merge(test_data, %{field_transformations: opts})
+  end
+
+  def replace_steps(test_data, replacements) do
+    new_steps = 
+      Enum.reduce(replacements, test_data.workflow_steps,
+        fn {step_name, step}, acc ->
+          Keyword.replace!(acc, step_name, step)
+        end)
+    Map.put(test_data, :workflow_steps, new_steps)
   end
 
   # ----------------------------------------------------------------------------
@@ -59,10 +72,6 @@ defmodule TransformerTestSupport.Build do
       metadata = %{metadata: %{category_name: category, name: name}}
       {name, deep_merge(example, metadata)}
     end
-  end
-
-  def field_transformations(so_far, opts) do
-    deep_merge(so_far, %{field_transformations: opts})
   end
 
   # ----------------------------------------------------------------------------
@@ -148,8 +157,4 @@ defmodule TransformerTestSupport.Build do
     end
   end
   defp run_start_hook(top_level), do: top_level
-
-
-  
-  
 end
