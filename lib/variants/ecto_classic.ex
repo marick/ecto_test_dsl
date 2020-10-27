@@ -1,6 +1,8 @@
 defmodule TransformerTestSupport.Variants.EctoClassic do
-  alias TransformerTestSupport.Build
-  alias TransformerTestSupport.VariantSupport.Changeset
+  alias TransformerTestSupport, as: T
+  alias T.Build
+  alias T.VariantSupport.Changeset
+
   import FlowAssertions.Define.BodyParts
   
   def start(opts), do: Build.start_with_variant(__MODULE__, opts)
@@ -34,17 +36,6 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     )
   end
 
-  def run_steps(example) do
-    example.metadata.workflow_steps
-    |> run_steps([example], example)
-  end
-
-  def run_steps([], history, _example), do: history
-  def run_steps([{_step_name, function} | rest], history, example) do
-    value = function.(history, example)
-    run_steps(rest, [value | history], example)
-  end
-
   # ----------------------------------------------------------------------------
 
 
@@ -54,6 +45,10 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
       alias TransformerTestSupport.Variants.EctoClassic
 
       def start(opts), do: EctoClassic.start(opts)
+
+      defmodule Tester do
+        use TransformerTestSupport.Predefines.Tester
+      end
     end
   end
 end

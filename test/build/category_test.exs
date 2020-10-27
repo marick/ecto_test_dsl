@@ -2,15 +2,11 @@ defmodule Build.CategoryTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.SmartGet
 
-  defmodule Variant do
-    # Note this tests what happens (no-op) when a hook function is missing.
-  end
-
   defmodule Repeat do
-    use TransformerTestSupport.Predefines
+    use TransformerTestSupport.Variants.Trivial
     
     def create_test_data() do
-      start_with_variant(Variant, module_under_test: Anything)
+      start_with_variant(Trivial, module_under_test: Anything)
       |> category(:valid, ok:    [params(a: 1,  b: 2)])
       |> category(:valid, other: [params(a: 11, b: 22)])
     end
