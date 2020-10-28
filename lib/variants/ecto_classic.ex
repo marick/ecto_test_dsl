@@ -13,7 +13,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     make_changeset = fn _history, example ->
       Changeset.accept_params(example)
     end
-    check_validation_changeset = fn [changeset | _], example ->
+    check_validation_changeset = fn [{_name, changeset} | _], example ->
       Changeset.check_validation_changeset(changeset, example)
     end
     

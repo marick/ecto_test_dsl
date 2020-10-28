@@ -1,6 +1,6 @@
 defmodule TransformerTestSupport.VariantSupport.Changeset do
   alias TransformerTestSupport.SmartGet
-  import FlowAssertions.Define.BodyParts
+  import FlowAssertions.Define.{Defchain, BodyParts}
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
 
@@ -15,7 +15,7 @@ defmodule TransformerTestSupport.VariantSupport.Changeset do
     example_name = example.metadata.name
     adjust_assertion_message(
       fn ->
-        try_assertions(changeset, example)
+        assert_all_assertions(changeset, example)
       end,
       fn message ->
         """
@@ -25,7 +25,7 @@ defmodule TransformerTestSupport.VariantSupport.Changeset do
       end)
   end
 
-  defp try_assertions(changeset, example) do
+  defchain assert_all_assertions(changeset, example) do
     for check <- SmartGet.ChangesetChecks.get(example),
       do: apply_assertion(changeset, check)
   end

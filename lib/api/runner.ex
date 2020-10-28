@@ -36,14 +36,17 @@ defmodule TransformerTestSupport.Runner do
 
   # ----------------------------------------------------------------------------
 
-  def run_steps(example) do
+  def run_steps(example, opts \\ []) do
+    stop = Keyword.get(opts, :stop_after)
+    
     example.metadata.workflow_steps
-    |> run_steps([example], example)
+    |> EnumX.take_until(fn {name, _f} -> name == stop end)
+    |> run_steps([example: example], example)
   end
 
   def run_steps([], history, _example), do: history
-  def run_steps([{_step_name, function} | rest], history, example) do
+  def run_steps([{step_name, function} | rest], history, example) do
     value = function.(history, example)
-    run_steps(rest, [value | history], example)
+    run_steps(rest, [{step_name, value} | history], example)
   end
 end
