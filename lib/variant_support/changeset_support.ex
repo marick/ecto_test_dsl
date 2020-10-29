@@ -10,8 +10,11 @@ defmodule TransformerTestSupport.VariantSupport.Changeset do
     empty = struct(module)
     module.changeset(empty, params)
   end
-     
+
+  # ----------------------------------------------------------------------------
+  
   def check_validation_changeset(changeset, example) do
+    # IO.inspect {changeset, example}
     example_name = example.metadata.name
     adjust_assertion_message(
       fn ->
@@ -41,4 +44,7 @@ defmodule TransformerTestSupport.VariantSupport.Changeset do
   
   defp assert_name(check_type),
     do: "assert_#{to_string check_type}" |> String.to_atom
+
+  # ----------------------------------------------------------------------------
+  
 end

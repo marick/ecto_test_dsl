@@ -31,8 +31,8 @@ defmodule Variants.EctoClassic.ValidationErrorTest do
   setup do
     asserter = fn category_name, datestring, changeset_checks ->
       test_data = test_data(category_name, [date: datestring], changeset_checks)
-      example = SmartGet.Example.get(test_data, :example)
-      changeset = Changeset.accept_params(example)
+      example = SmartGet.Example.get(test_data, :example) # |> IO.inspect(label: "example")
+      changeset = Changeset.accept_params(example)  # |> IO.inspect(label: "changeset")
       Changeset.check_validation_changeset(changeset, example)
       category_name  
     end
@@ -42,7 +42,7 @@ defmodule Variants.EctoClassic.ValidationErrorTest do
   @invalid_string "2001-01-0"
   @no_checks []
   test "auto_generated validity checks", %{a: a} do
-    [:success,            @invalid_string, @no_checks]      |> a.fail.(~r/is invalid/)
+    [:success,          @invalid_string, @no_checks]      |> a.fail.(~r/is invalid/)
     [:validation_error, @invalid_string, @no_checks]      |> a.pass.()
   end
 

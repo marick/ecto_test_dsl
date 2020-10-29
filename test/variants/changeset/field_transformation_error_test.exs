@@ -56,7 +56,7 @@ defmodule Variants.EctoClassic.FieldTransformationErrorTest do
     end
   end
 
-  test "foo" do
+  test "workflows" do
     assertion_fails(~r/`:days_since_2000`.*~D\[2001-01-01]/,
       [left: 3, right: -363],
       fn ->
