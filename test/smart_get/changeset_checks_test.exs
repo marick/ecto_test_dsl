@@ -139,6 +139,9 @@ defmodule SmartGet.ChangesetChecksTest do
       # However, the inappropriate check is obeyed.
     end
     
+    @tag :skip
+    test "no check is made if the field wasn't changed" do
+    end
   end
 
   # ----------------------------------------------------------------------------
@@ -233,6 +236,10 @@ defmodule SmartGet.ChangesetChecksTest do
         fn -> 
           days_since.(failure)
         end)
+    end
+
+    @tag :skip
+    test "no check is made if the field wasn't changed" do
     end
   end
 end
