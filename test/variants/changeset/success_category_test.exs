@@ -1,6 +1,6 @@
 defmodule Variants.EctoClassic.SuccessCategoryTest do
   use TransformerTestSupport.Case
-#  import FlowAssertions.AssertionA
+  import FlowAssertions.AssertionA
   
   use TransformerTestSupport.Variants.EctoClassic
   alias TransformerTestSupport.SmartGet
@@ -39,10 +39,21 @@ defmodule Variants.EctoClassic.SuccessCategoryTest do
       |> count_the_days
     end
 
-    def calculate_date(changeset) do 
-      put_change(changeset, :date, Date.from_iso8601!(changeset.changes.date_string))
+    def calculate_date(changeset) do
+      with(
+        date_string <- Map.get(changeset.changes, :date_string),
+        {:ok, date} <- Date.from_iso8601(date_string)
+      ) do
+        put_change(changeset, :date, date)
+      else
+        nil ->
+          changeset
+        {:error, _} ->
+          add_error(changeset, :date_string, "has an invalid format")
+      end     
     end
 
+    def count_the_days(%{valid?: false} = changeset), do: changeset
     def count_the_days(changeset) do
       days = Date.diff(changeset.changes.date, ~D[2000-01-01])
       put_change(changeset, :days_since_2000, days)
@@ -72,7 +83,10 @@ defmodule Variants.EctoClassic.SuccessCategoryTest do
           params_like(:only_required, except: [
                 optional_comment: "optional comment",
                 defaulted_comment: "defaulted comment override"
-        ])]
+        ])],
+        unexpected_syntax_errors: [
+          params_like(:complete, except: [age: "1d", date_string: "2001-01-"])
+        ]
       )
     end
   end
@@ -122,11 +136,25 @@ defmodule Variants.EctoClassic.SuccessCategoryTest do
       complete_changeset
       |> assert_valid
       |> assert_changes(complete_changes)
+
+      Examples.Tester.validation_changeset(:unexpected_syntax_errors)
+      |> assert_invalid
+      |> assert_no_changes([:age, :date, :days_since_2000])
+      |> assert_errors(age: "is invalid",
+                       date_string: "has an invalid format")
     end
     
     test "happens if changeset is valid" do
       Examples.Tester.check_workflow(:complete)
       Examples.Tester.check_workflow(:only_required)
+
+      assertion_fails(~r/:unexpected_syntax_errors.*The changeset is invalid/,
+        fn -> 
+          Examples.Tester.check_workflow(:unexpected_syntax_errors)
+        end)
+    end
+
+    test "check validations" do
     end
   end
 end
