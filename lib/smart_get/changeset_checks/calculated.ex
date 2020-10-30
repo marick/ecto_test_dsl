@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
-  alias TransformerTestSupport.SmartGet
+#  alias TransformerTestSupport.SmartGet
   import FlowAssertions.Define.BodyParts
   
   @moduledoc """
