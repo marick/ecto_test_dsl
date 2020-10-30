@@ -5,8 +5,6 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
   @moduledoc """
   """
 
-  
-
   def add(changeset_checks, example, fields) do
     Enum.reduce(fields, changeset_checks, fn field, acc ->
       maybe_add_one(acc, example, field)
