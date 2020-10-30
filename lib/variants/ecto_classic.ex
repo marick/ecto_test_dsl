@@ -48,6 +48,11 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 
       defmodule Tester do
         use TransformerTestSupport.Predefines.Tester
+
+        def validation_changeset(example_name) do
+          check_workflow(example_name, stop_after: :make_changeset)
+          |> Keyword.get(:make_changeset)
+        end
       end
     end
   end
