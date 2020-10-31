@@ -13,12 +13,22 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     make_changeset = fn _history, example ->
       Changeset.accept_params(example)
     end
-    check_validation_changeset = fn [{_name, changeset} | _], example ->
+    check_validation_changeset = fn [{:make_changeset, changeset} | _], example ->
       Changeset.check_validation_changeset(changeset, example)
     end
-    
+
+    insert_changeset = fn [{_name, changeset} | _], example ->
+      example.metadata.repo.insert(changeset)
+    end
+
+    check_insertion = fn [{:insert_changeset, tuple} | _], example ->
+      Changeset.check_insertion_result(tuple, example)
+    end
+
     [make_changeset: make_changeset,
      check_validation_changeset: check_validation_changeset,
+     insert_changeset: insert_changeset,
+     check_insertion: check_insertion
     ]
   end     
 
@@ -53,6 +63,14 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
           check_workflow(example_name, stop_after: :make_changeset)
           |> Keyword.get(:make_changeset)
         end
+
+        def inserted(example_name) do
+          {:ok, value} = 
+            check_workflow(example_name, stop_after: :check_insertion)
+            |> Keyword.get(:insert_changeset)
+          value
+        end
+        
       end
     end
   end

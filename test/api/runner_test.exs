@@ -30,22 +30,9 @@ defmodule Api.RunnerTest do
         format: :phoenix
       ) |>
       
-        category(                                         :success,
-          ok: [params(age: 1)])
+      category(                                         :success,
+        ok: [params(age: 1)])
     end
-  end
-
-  test "running to completion" do
-    assert [check_validation_changeset: validated,
-            make_changeset: made,
-            example: example] = 
-      Examples.Tester.example(:ok) |> Runner.run_steps
-
-    validated
-    |> assert_shape(%Changeset{})
-    |> assert_same_map(made)
-
-    assert example == Examples.Tester.example(:ok)
   end
 
   test "stopping early after a step" do

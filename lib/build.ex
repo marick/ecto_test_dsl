@@ -52,6 +52,12 @@ defmodule TransformerTestSupport.Build do
     Map.put(test_data, :workflow_steps, new_steps)
   end
 
+  def step(f) do
+    fn [{_name, previous} | _], _example ->
+      f.(previous)
+    end
+  end
+
   # ----------------------------------------------------------------------------
 
   def category(so_far, category, raw_examples) do

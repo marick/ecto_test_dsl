@@ -62,12 +62,29 @@ defmodule Variants.EctoClassic.SuccessCategoryTest do
 
   defmodule Examples do
     use TransformerTestSupport.Variants.EctoClassic
-    
+
+    @failure_instruction "Please fail insertion" 
+
+    def fake_insert(changeset) do
+      alias Ecto.Changeset
+      if Map.get(changeset.changes, :optional_comment) == @failure_instruction do
+        changeset =
+          %Changeset{valid?: false} |>
+          Changeset.add_error(:date, @failure_instruction)
+        {:error, changeset}
+      else
+        {:ok, {:inserted, changeset}}
+      end
+    end
+
     def create_test_data do
       start(
         module_under_test: Schema,
-        format: :phoenix
+        format: :phoenix,
+        workflow: :insert
       ) |>
+
+      replace_steps(insert_changeset: step(&fake_insert/1)) |> 
 
       field_transformations(
         as_cast: Schema.fields_to_cast(),
@@ -86,9 +103,17 @@ defmodule Variants.EctoClassic.SuccessCategoryTest do
         ])],
         unexpected_syntax_errors: [
           params_like(:complete, except: [age: "1d", date_string: "2001-01-"])
+        ],
+        override_incorrectly: [
+          params_like(:complete),
+          changeset(changes: [days_since_2000: 5])
+        ],
+        insertion_will_unexpectedly_fail: [
+          params_like(:complete, except: [optional_comment: @failure_instruction])
         ]
       )
     end
+
   end
 
   @tag :skip
@@ -144,17 +169,35 @@ defmodule Variants.EctoClassic.SuccessCategoryTest do
                        date_string: "has an invalid format")
     end
     
-    test "happens if changeset is valid" do
-      Examples.Tester.check_workflow(:complete)
-      Examples.Tester.check_workflow(:only_required)
-
+    test "mistakes in test data" do 
       assertion_fails(~r/:unexpected_syntax_errors.*The changeset is invalid/,
         fn -> 
           Examples.Tester.check_workflow(:unexpected_syntax_errors)
         end)
+
+      assertion_fails(~r/:override_incorrectly.*has the wrong value/,
+        fn -> 
+          Examples.Tester.check_workflow(:override_incorrectly)
+        end)
+
+    end
+  end
+
+  describe "insertions" do
+    test "retrieving inserted value" do
+      assert {:inserted, _} = Examples.Tester.inserted(:complete)
     end
 
-    test "check validations" do
+    test "unexpected failure" do
+      assertion_fails(~r/Unexpected insertion failure/,
+        fn -> 
+          Examples.Tester.check_workflow(:insertion_will_unexpectedly_fail)
+        end)
     end
+  end
+
+  test "end-to-end success" do
+    Examples.Tester.check_workflow(:complete)
+    Examples.Tester.check_workflow(:only_required)
   end
 end

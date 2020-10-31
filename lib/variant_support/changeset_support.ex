@@ -14,17 +14,12 @@ defmodule TransformerTestSupport.VariantSupport.Changeset do
   # ----------------------------------------------------------------------------
   
   def check_validation_changeset(changeset, example) do
-    # IO.inspect {changeset, example}
-    example_name = example.metadata.name
     adjust_assertion_message(
       fn ->
         assert_all_assertions(changeset, example)
       end,
       fn message ->
-        """
-        Example `#{inspect example_name}`: #{message}
-        Changeset: #{inspect changeset}
-        """
+        error_message(example, changeset, message)
       end)
   end
 
@@ -46,5 +41,24 @@ defmodule TransformerTestSupport.VariantSupport.Changeset do
     do: "assert_#{to_string check_type}" |> String.to_atom
 
   # ----------------------------------------------------------------------------
-  
+
+  defchain check_insertion_result(insertion_result, example) do 
+    case insertion_result do
+      {:ok, result} ->
+        result
+      {:error, changeset} ->
+        elaborate_flunk(
+          error_message(example, changeset, "Unexpected insertion failure"),
+          left: changeset.errors)
+    end
+  end
+
+  # ----------------------------------------------------------------------------
+
+  def error_message(example, changeset, message) do
+    """
+    Example `#{inspect example.metadata.name}`: #{message}.
+    Changeset: #{inspect changeset}
+    """
+  end
 end
