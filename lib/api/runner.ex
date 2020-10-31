@@ -38,9 +38,13 @@ defmodule TransformerTestSupport.Runner do
 
   def run_steps(example, opts \\ []) do
     stop = Keyword.get(opts, :stop_after)
-    
-    example.metadata.workflow_steps
-    |> EnumX.take_until(fn {name, _f} -> name == stop end)
+
+    steps = example.metadata.steps
+
+    example.metadata.category_workflows    
+    |> Map.get(example.metadata.category_name)
+    |> EnumX.take_until(&(&1 == stop))
+    |> Enum.map(fn step -> {step, steps[step]} end)
     |> run_steps([example: example], example)
   end
 

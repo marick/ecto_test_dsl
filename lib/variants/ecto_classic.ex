@@ -18,16 +18,33 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   defp check_insertion([{:insert_changeset, tuple} | _], example), 
     do: Changeset.check_insertion_result(tuple, example)
   
-  def steps do
-    [make_changeset: &make_changeset/2,
-     check_validation_changeset: &check_validation_changeset/2,
-     insert_changeset: &insert_changeset/2,
-     check_insertion: &check_insertion/2
-    ]
+  def initial_step_definitions() do
+    %{
+      make_changeset: &make_changeset/2,
+      check_validation_changeset: &check_validation_changeset/2,
+      insert_changeset: &insert_changeset/2,
+      check_insertion: &check_insertion/2
+    }
   end
 
+  @category_workflows %{
+    success: [
+      :make_changeset, 
+      :check_validation_changeset, 
+      :insert_changeset, 
+      :check_insertion
+    ],
+    validation_error: [
+      :make_changeset, 
+      :check_validation_changeset, 
+    ]
+  }
+
+
   def run_start_hook(top_level) do
-    Map.put(top_level, :workflow_steps, steps())
+    top_level
+    |> Map.put(:steps, initial_step_definitions())
+    |> Map.put(:category_workflows, @category_workflows)
   end
 
   @categories [:success, :validation_error]

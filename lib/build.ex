@@ -44,12 +44,8 @@ defmodule TransformerTestSupport.Build do
   end
 
   def replace_steps(test_data, replacements) do
-    new_steps = 
-      Enum.reduce(replacements, test_data.workflow_steps,
-        fn {step_name, step}, acc ->
-          Keyword.replace!(acc, step_name, step)
-        end)
-    Map.put(test_data, :workflow_steps, new_steps)
+    replacements = Enum.into(replacements, %{})
+    DeepMerge.deep_merge(test_data, %{steps: replacements})
   end
 
   def step(f) do

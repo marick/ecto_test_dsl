@@ -10,7 +10,9 @@ defmodule TransformerTestSupport.Variants.Trivial do
   end     
 
   def run_start_hook(top_level) do
-    Map.put(top_level, :workflow_steps, steps())
+    top_level
+    |> Map.put(:steps, %{})
+    |> Map.put(:category_workflows, [])
   end
 
   # Anything is valid
