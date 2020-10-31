@@ -47,12 +47,11 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     |> Map.put(:category_workflows, @category_workflows)
   end
 
-  @categories [:success, :validation_error]
-
   def assert_category_hook(_, category) do
+    categories = Map.keys(@category_workflows)
     elaborate_assert(
-      category in @categories,
-      "The EctoClassic variant only allows these categories: #{inspect @categories}",
+      category in categories,
+      "The EctoClassic variant only allows these categories: #{inspect categories}",
       left: category
     )
   end
