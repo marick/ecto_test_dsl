@@ -37,6 +37,10 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     validation_error: [
       :make_changeset, 
       :check_validation_changeset, 
+    ],
+    validation_success: [
+      :make_changeset, 
+      :check_validation_changeset, 
     ]
   }
 
