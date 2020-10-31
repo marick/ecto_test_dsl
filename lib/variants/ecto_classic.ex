@@ -9,28 +9,22 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 
   # ------------------- Hook functions -----------------------------------------
 
+  defp make_changeset(_history, example),
+    do: Changeset.accept_params(example)
+  defp check_validation_changeset([{:make_changeset, changeset} | _], example),
+    do: Changeset.check_validation_changeset(changeset, example)
+  defp insert_changeset([{_name, changeset} | _], example),
+    do: example.metadata.repo.insert(changeset)
+  defp check_insertion([{:insert_changeset, tuple} | _], example), 
+    do: Changeset.check_insertion_result(tuple, example)
+  
   def steps do
-    make_changeset = fn _history, example ->
-      Changeset.accept_params(example)
-    end
-    check_validation_changeset = fn [{:make_changeset, changeset} | _], example ->
-      Changeset.check_validation_changeset(changeset, example)
-    end
-
-    insert_changeset = fn [{_name, changeset} | _], example ->
-      example.metadata.repo.insert(changeset)
-    end
-
-    check_insertion = fn [{:insert_changeset, tuple} | _], example ->
-      Changeset.check_insertion_result(tuple, example)
-    end
-
-    [make_changeset: make_changeset,
-     check_validation_changeset: check_validation_changeset,
-     insert_changeset: insert_changeset,
-     check_insertion: check_insertion
+    [make_changeset: &make_changeset/2,
+     check_validation_changeset: &check_validation_changeset/2,
+     insert_changeset: &insert_changeset/2,
+     check_insertion: &check_insertion/2
     ]
-  end     
+  end
 
   def run_start_hook(top_level) do
     Map.put(top_level, :workflow_steps, steps())
