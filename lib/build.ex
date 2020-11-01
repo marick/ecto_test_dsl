@@ -86,7 +86,8 @@ defmodule TransformerTestSupport.Build do
   def params_like(example_name), 
     do: params_like(example_name, except: [])
     
-  def changeset(opts), do: {:changeset, opts}
+  def changeset(opts), do: {:changeset_for_validation_step, opts}
+  def constraint_changeset(opts), do: {:changeset_for_constraint_step, opts}
 
   defmacro on_success(funcall) do
     case Macro.decompose_call(funcall) do

@@ -6,8 +6,8 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
   @moduledoc """
   """
 
-  def get(example, :changeset_for_validation_step) do
-    changeset_checks = Map.get(example, :changeset, [])
+  def get(example, purpose) do
+    changeset_checks = Map.get(example, purpose, [])
     user_mentioned = Checks.Util.unique_fields(changeset_checks)
 
     [as_cast_fields, calculated_fields] =
