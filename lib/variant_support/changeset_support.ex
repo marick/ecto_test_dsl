@@ -16,18 +16,15 @@ defmodule TransformerTestSupport.VariantSupport.Changeset do
   def check_validation_changeset(changeset, example) do
     adjust_assertion_message(
       fn ->
-        assert_all_assertions(changeset, example)
+        for check <- SmartGet.ChangesetChecks.get(example, :validation),
+          do: apply_assertion(changeset, check)
+        changeset
       end,
       fn message ->
         error_message(example, changeset, message)
       end)
   end
 
-  defchain assert_all_assertions(changeset, example) do
-    for check <- SmartGet.ChangesetChecks.get(example),
-      do: apply_assertion(changeset, check)
-  end
-  
   defp apply_assertion(changeset, {:__custom_changeset_check, f}),
     do: f.(changeset)
   
