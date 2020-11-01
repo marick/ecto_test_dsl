@@ -18,7 +18,6 @@ defmodule VariantSupport.Changeset.CheckInsertionResultTest do
       %Changeset{valid?: false} |>
       Changeset.add_error(:date, "error message")
 
-
     assertion_fails(~r/Example `:name`: Unexpected insertion failure/,
       [left: [date: {"error message", []}]],
       fn ->
