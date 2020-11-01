@@ -12,7 +12,7 @@ defmodule SmartGet.ChangesetChecksTest do
           [],
           oops: [changeset(no_changes: [:date])])
       
-      Checks.get(test_data, :oops, :validation)
+      Checks.get(test_data, :oops, :changeset_for_validation_step)
       |> assert_equal([:invalid, {:no_changes, [:date]}])
     end
     
@@ -23,7 +23,7 @@ defmodule SmartGet.ChangesetChecksTest do
           [],
           ok: [changeset(no_changes: [:date])])
       
-      Checks.get(test_data, :ok, :validation)
+      Checks.get(test_data, :ok, :changeset_for_validation_step)
       |> assert_equal([:valid, {:no_changes, [:date]}])
     end
     
@@ -33,7 +33,7 @@ defmodule SmartGet.ChangesetChecksTest do
           [],
           ok: [])
       
-      Checks.get(test_data, :ok, :validation)
+      Checks.get(test_data, :ok, :changeset_for_validation_step)
       |> assert_equal([:valid])
     end
   end
@@ -58,7 +58,7 @@ defmodule SmartGet.ChangesetChecksTest do
           ],
           ok: [params(date: "2001-01-01")])
 
-      Checks.get(test_data, :ok, :validation)
+      Checks.get(test_data, :ok, :changeset_for_validation_step)
       |> assert_equal([:valid, changes: [date: ~D[2001-01-01]]])
     end
 
@@ -72,7 +72,7 @@ defmodule SmartGet.ChangesetChecksTest do
                changeset(changes: [name: "Bossie"])
               ])
 
-      Checks.get(test_data, :ok, :validation)
+      Checks.get(test_data, :ok, :changeset_for_validation_step)
       |> assert_equal([:valid,
                       changes: [name: "Bossie"],
                       changes: [date: ~D[2001-01-01]]])
@@ -88,7 +88,7 @@ defmodule SmartGet.ChangesetChecksTest do
                changeset(changes: [name: "Bossie"])
               ])
 
-      Checks.get(test_data, :ok, :validation)
+      Checks.get(test_data, :ok, :changeset_for_validation_step)
       |> assert_equal([:valid,
                       changes: [name: "Bossie"],
                       no_changes: [:other]])
@@ -102,7 +102,7 @@ defmodule SmartGet.ChangesetChecksTest do
           ],
           bad_date: [params(date: "2001-01-0", name: "Bossie")])
 
-      Checks.get(test_data, :bad_date, :validation)
+      Checks.get(test_data, :bad_date, :changeset_for_validation_step)
       |> assert_equal([:invalid,
                       changes: [name: "Bossie"],
                       no_changes: [:date],
@@ -119,7 +119,7 @@ defmodule SmartGet.ChangesetChecksTest do
                changeset(no_changes: :date)
               ])
 
-      Checks.get(test_data, :ok, :validation)
+      Checks.get(test_data, :ok, :changeset_for_validation_step)
       |> assert_equal([:valid, no_changes: :date])
     end
 
@@ -134,7 +134,7 @@ defmodule SmartGet.ChangesetChecksTest do
                      changeset(changes: [date: ~D[2001-01-01]]) # so this is inappropriate
                     ])
 
-      Checks.get(test_data, :bad_date, :validation)
+      Checks.get(test_data, :bad_date, :changeset_for_validation_step)
       |> assert_equal([:valid, changes: [date: ~D[2001-01-01]]])
       # However, the inappropriate check is obeyed.
     end
@@ -167,7 +167,7 @@ defmodule SmartGet.ChangesetChecksTest do
           ok: [params(date_string: "2001-01-01")])
 
       [:valid, changes: [date_string: "2001-01-01"], __custom_changeset_check: f] =
-        Checks.get(test_data, :ok, :validation)
+        Checks.get(test_data, :ok, :changeset_for_validation_step)
 
       success = %Changeset{
         changes: %{date_string: "2001-01-01",
@@ -197,7 +197,7 @@ defmodule SmartGet.ChangesetChecksTest do
           ],
           error: [params(date_string: "2001-01-0")])
 
-      actual = Checks.get(test_data, :error, :validation)
+      actual = Checks.get(test_data, :error, :changeset_for_validation_step)
       assert [:invalid, changes: [date_string: "2001-01-0"]] = actual
     end
 
@@ -217,7 +217,7 @@ defmodule SmartGet.ChangesetChecksTest do
       [:valid, changes: [date_string: "2000-01-04"],
         __custom_changeset_check: _date,
         __custom_changeset_check: days_since] =
-          Checks.get(test_data, :ok, :validation)
+          Checks.get(test_data, :ok, :changeset_for_validation_step)
 
       success = %Changeset{
         changes: %{date_string: "2000-01-04",

@@ -16,7 +16,7 @@ defmodule TransformerTestSupport.VariantSupport.Changeset do
   def check_validation_changeset(changeset, example) do
     adjust_assertion_message(
       fn ->
-        for check <- SmartGet.ChangesetChecks.get(example, :validation),
+        for check <- SmartGet.ChangesetChecks.get(example, :changeset_for_validation_step),
           do: apply_assertion(changeset, check)
         changeset
       end,
