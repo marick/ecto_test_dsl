@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport.SmartGet.Params do
-  alias TransformerTestSupport.{TestDataServer,SmartGet}
+  alias TransformerTestSupport.SmartGet
     
   @moduledoc """
   """

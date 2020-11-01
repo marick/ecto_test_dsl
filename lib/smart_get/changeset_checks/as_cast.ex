@@ -1,7 +1,6 @@
 defmodule TransformerTestSupport.SmartGet.ChangesetChecks.AsCast do
   alias TransformerTestSupport.SmartGet
   alias SmartGet.Example
-  alias SmartGet.ChangesetChecks, as: Checks
   alias Ecto.Changeset
     
   @moduledoc """
