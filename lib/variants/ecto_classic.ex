@@ -13,8 +13,12 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     do: Changeset.accept_params(example)
   defp check_validation_changeset([{:make_changeset, changeset} | _], example),
     do: Changeset.check_validation_changeset(changeset, example)
-  defp insert_changeset([{_name, changeset} | _], example),
-    do: example.metadata.repo.insert(changeset)
+  defp insert_changeset([{_name, changeset} | _], example) do
+    alias Ecto.Adapters.SQL.Sandbox
+    repo = example.metadata.repo
+    :ok = Sandbox.checkout(repo)
+    repo.insert(changeset)
+  end
   defp check_insertion([{:insert_changeset, tuple} | _], example), 
     do: Changeset.check_insertion_result(tuple, example)
   
