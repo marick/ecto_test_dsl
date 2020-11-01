@@ -13,7 +13,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     do: Changeset.accept_params(example)
   defp check_validation_changeset([{:make_changeset, changeset} | _], example),
     do: Changeset.check_validation_changeset(changeset, example)
-  defp insert_changeset([{_name, changeset} | _], example) do
+  defp insert_changeset([{:check_validation_changeset, changeset} | _], example) do
     alias Ecto.Adapters.SQL.Sandbox
     repo = example.metadata.repo
     :ok = Sandbox.checkout(repo)
@@ -21,6 +21,8 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   end
   defp check_insertion([{:insert_changeset, tuple} | _], example), 
     do: Changeset.check_insertion_result(tuple, example)
+  defp check_constraint_changeset([{:insert_changeset, tuple} | _], example),
+    do: Changeset.check_constraint_changeset(tuple, example)
   
   def initial_step_definitions() do
     %{
@@ -45,7 +47,13 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     validation_success: [
       :make_changeset, 
       :check_validation_changeset, 
-    ]
+    ],
+    constraint_error: [
+      :make_changeset, 
+      :check_validation_changeset, 
+      :insert_changeset, 
+      :check_constraint_changeset
+    ],
   }
 
 

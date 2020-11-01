@@ -42,22 +42,33 @@ defmodule TransformerTestSupport.VariantSupport.Changeset do
 
   # ----------------------------------------------------------------------------
 
-  defchain check_insertion_result(insertion_result, example) do 
-    case insertion_result do
-      {:ok, result} ->
-        result
-      {:error, changeset} ->
-        elaborate_flunk(
-          error_message(example, changeset, "Unexpected insertion failure"),
-          left: changeset.errors)
-    end
+  def check_insertion_result({:ok, _result}, _example),
+    do: :ok
+
+  def check_insertion_result({:error, changeset}, example) do 
+    elaborate_flunk(
+      error_message(example, changeset, "Unexpected insertion failure"),
+      left: changeset.errors)
+  end
+
+  def check_constraint_changeset({:error, _result}, _example) do
+    
+  end
+
+  def check_constraint_changeset(result, example) do 
+    elaborate_flunk(
+      context(example, "Expected an error tuple containing a changeset"),
+      left: result)
   end
 
   # ----------------------------------------------------------------------------
 
+  def context(example, message),
+    do: "Example `#{inspect example.metadata.name}`: #{message}."
+
   def error_message(example, changeset, message) do
     """
-    Example `#{inspect example.metadata.name}`: #{message}.
+    #{context(example, message)}
     Changeset: #{inspect changeset}
     """
   end
