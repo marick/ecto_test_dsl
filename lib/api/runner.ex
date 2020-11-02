@@ -1,4 +1,5 @@
 defmodule TransformerTestSupport.Runner do
+  alias TransformerTestSupport.SmartGet.Example
 
   # ----------------------------------------------------------------------------
   defmacro check_examples_with(module) do
@@ -39,12 +40,15 @@ defmodule TransformerTestSupport.Runner do
   def run_steps(example, opts \\ []) do
     stop = Keyword.get(opts, :stop_after)
 
-    steps = example.metadata.steps
+    attach_functions = fn step_names ->
+      step_functions = Example.step_functions(example)
+      for name <- step_names, do: {name, step_functions[name]}
+    end
 
-    example.metadata.category_workflows    
-    |> Map.get(example.metadata.category_name)
+    example
+    |> Example.step_list
     |> EnumX.take_until(&(&1 == stop))
-    |> Enum.map(fn step -> {step, steps[step]} end)
+    |> attach_functions.()
     |> run_steps([example: example], example)
   end
 

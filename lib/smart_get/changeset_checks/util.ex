@@ -1,4 +1,5 @@
 defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Util do
+  alias TransformerTestSupport.SmartGet.Example
     
   @moduledoc """
   """
@@ -27,7 +28,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Util do
 
   def transformations(example) do
     {as_cast_list, calculated_fields} =
-      example.metadata.field_transformations
+      Example.field_transformations(example)
       |> Keyword.pop_values(:as_cast)
     
     [Enum.concat(as_cast_list), calculated_fields]

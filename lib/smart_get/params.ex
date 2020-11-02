@@ -11,7 +11,7 @@ defmodule TransformerTestSupport.SmartGet.Params do
       phoenix: &phoenix_format/1
     }
 
-    case Map.get(formatters, example.metadata.format) do
+    case Map.get(formatters, SmartGet.Example.format(example)) do
       nil -> 
         raise """
         `#{inspect example.format}` is not a valid format for test data params.

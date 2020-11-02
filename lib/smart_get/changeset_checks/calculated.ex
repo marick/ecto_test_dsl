@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
-#  alias TransformerTestSupport.SmartGet
+  alias TransformerTestSupport.SmartGet.Example
   import FlowAssertions.Define.BodyParts
   
   @moduledoc """
@@ -12,7 +12,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
   end
 
   defp maybe_add_one(changeset_checks, example, check_description) do
-    case example.metadata.category_name do
+    case Example.category_name(example) do
       :validation_error ->
         changeset_checks
       _ ->

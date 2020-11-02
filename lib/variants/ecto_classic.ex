@@ -1,6 +1,7 @@
 defmodule TransformerTestSupport.Variants.EctoClassic do
   alias TransformerTestSupport, as: T
   alias T.Build
+  alias T.SmartGet.Example
   alias T.VariantSupport.Changeset
 
   import FlowAssertions.Define.BodyParts
@@ -15,7 +16,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     do: Changeset.check_validation_changeset(changeset, example)
   defp insert_changeset([{:check_validation_changeset, changeset} | _], example) do
     alias Ecto.Adapters.SQL.Sandbox
-    repo = example.metadata.repo
+    repo = Example.repo(example)
     :ok = Sandbox.checkout(repo)
     repo.insert(changeset)
   end

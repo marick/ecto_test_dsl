@@ -9,7 +9,9 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.AsCast do
   
 
   defp insertion_changeset(example, fields) do
-    struct(example.metadata.module_under_test)
+    example
+    |> Example.module_under_test
+    |> struct
     |> Changeset.cast(Example.params(example), fields)
   end
 

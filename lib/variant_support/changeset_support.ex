@@ -1,12 +1,12 @@
 defmodule TransformerTestSupport.VariantSupport.Changeset do
-  alias TransformerTestSupport.SmartGet
+  alias TransformerTestSupport.SmartGet.{Example,ChangesetChecks}
   import FlowAssertions.Define.{Defchain, BodyParts}
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
 
   def accept_params(example) do
-    params = SmartGet.Params.get(example)
-    module = example.metadata.module_under_test
+    params = Example.params(example)
+    module = Example.module_under_test(example)
     empty = struct(module)
     module.changeset(empty, params)
   end
@@ -39,7 +39,7 @@ defmodule TransformerTestSupport.VariantSupport.Changeset do
   defchain check_changeset(changeset, example, purpose) do
     adjust_assertion_message(
       fn ->
-        for check <- SmartGet.ChangesetChecks.get(example, purpose),
+        for check <- ChangesetChecks.get(example, purpose),
           do: apply_assertion(changeset, check)
       end,
       fn message ->
@@ -62,7 +62,7 @@ defmodule TransformerTestSupport.VariantSupport.Changeset do
   # ----------------------------------------------------------------------------
   
   defp context(example, message),
-    do: "Example `#{inspect example.metadata.name}`: #{message}."
+    do: "Example `#{inspect Example.name(example)}`: #{message}."
 
   defp error_message(example, changeset, message) do
     """

@@ -17,5 +17,21 @@ defmodule TransformerTestSupport.SmartGet.Example do
     end
   end
 
+  def metadata(example, field),
+    do: Map.fetch!(example.metadata, field)
+
+  def step_functions(example), do: metadata(example, :steps)
+  def module_under_test(example), do: metadata(example, :module_under_test)
+  def format(example), do: metadata(example, :format)
+  def name(example), do: metadata(example, :name)
+  def category_name(example), do: metadata(example, :category_name)
+  def field_transformations(example), do: metadata(example, :field_transformations)
+  def repo(example), do: metadata(example, :repo)
+
+  def step_list(example) do
+    example.metadata.category_workflows
+    |> Map.get(example.metadata.category_name)
+  end
+
   def params(example), do: SmartGet.Params.get(example)
 end
