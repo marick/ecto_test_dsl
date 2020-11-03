@@ -2,34 +2,57 @@ defmodule Build.StepTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport, as: T
   alias T.Build
+  alias T.SmartGet.Example
   alias T.Variants.EctoClassic
 
+  defmodule Schema do 
+    use Ecto.Schema
+    import Ecto.Changeset
+
+    embedded_schema do
+      field :age, :integer
+    end
+
+    def changeset(struct, params) do
+      struct
+      |> cast(params, [:age])
+    end
+  end
   
 
-  defmodule Examples do
+  defmodule PreviousResultStep do
     use EctoClassic
+
+    def fake_make(example), do: [fake_changeset: example]
     
-    def create_without_step_change do 
-      start_with_variant(EctoClassic, module_under_test: Anything)
+    def create_test_data() do
+      start_with_variant(EctoClassic, module_under_test: Schema)
+      |> replace_steps(make_changeset: step(&fake_make/1))
+      |> category(:validation_success, ok: [params(age: 1)])
     end
+  end
+
+  test "steps can be overridden with a function that takes the previous value" do
+    actual = PreviousResultStep.Tester.validation_changeset(:ok)[:fake_changeset]
+    assert Example.name(actual) == :ok
+  end
+
+  defmodule ChosenResultStep do
+    use EctoClassic
+
+    def fake_validate(_changeset), do: "substitute result"
 
     def create_test_data() do
-      create_without_step_change()
-      |> replace_steps(check_validation_changeset: &(&1 + 1)) # bogus value
+      new_step = step(&fake_validate/1, :example) # instead of changeset
+
+      start_with_variant(EctoClassic, module_under_test: Schema)
+      |> replace_steps(check_validation_changeset: new_step)
+      |> category(:validation_success, ok: [params(age: 1)])
     end
   end
-
-  @tag :skip
-  test "Describe the behavior without replacement" do
-    # steps = Examples.create_without_step_change.workflow_steps
-    # assert steps == EctoClassic.steps
-    # assert Keyword.get(steps, :check_validation_changeset)
+  
+  test "steps can pick the value to use" do
+    actual = ChosenResultStep.Tester.check_workflow(:ok)
+    assert Keyword.get(actual, :check_validation_changeset) == "substitute result"
   end
-
-  @tag :skip
-  test "steps can be overridden" do
-    # steps = Examples.create_test_data.workflow_steps
-    # assert Keyword.get(steps, :check_validation_changeset).(1) == 2
-  end    
-
 end

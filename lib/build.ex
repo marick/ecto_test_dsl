@@ -54,6 +54,13 @@ defmodule TransformerTestSupport.Build do
     end
   end
 
+  def step(f, key) do
+    fn history, _example ->
+      Keyword.fetch!(history, key) |> f.()
+    end
+  end
+  
+
   # ----------------------------------------------------------------------------
 
   def category(so_far, category, raw_examples) do
