@@ -65,7 +65,6 @@ defmodule TransformerTestSupport.Build do
       Normalize.as(:example_pairs, raw_examples)
       |> attach_category_metadata(category)
       |> Like.add_new_pairs(earlier_examples)
-
     Map.put(so_far, :examples, updated_examples)
   end
 
@@ -85,6 +84,13 @@ defmodule TransformerTestSupport.Build do
     do: {:params, make__params_like(example_name, opts)}
   def params_like(example_name), 
     do: params_like(example_name, except: [])
+
+  def setup(opts) do
+    {:setup, opts}
+  end
+
+  def duplicate(example_name),
+    do: {:__flatten, [setup(insert: example_name), params_like(example_name)]}
     
   def changeset(opts), do: {:changeset_for_validation_step, opts}
   def constraint_changeset(opts), do: {:changeset_for_constraint_step, opts}

@@ -3,6 +3,7 @@ defmodule TransformerTestSupport.VariantSupport.Changeset do
   import FlowAssertions.Define.{Defchain, BodyParts}
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
+  alias Ecto.Changeset
 
   def accept_params(example) do
     params = Example.params(example)
@@ -15,6 +16,18 @@ defmodule TransformerTestSupport.VariantSupport.Changeset do
     do: check_changeset(changeset, example, :changeset_for_validation_step)
   
   # ----------------------------------------------------------------------------
+
+  def setup(example) do
+    alias Ecto.Adapters.SQL.Sandbox
+    repo = Example.repo(example)
+    :ok = Sandbox.checkout(repo)
+  end
+
+  def insert(%Changeset{} = changeset, example) do
+    repo = Example.repo(example)
+    repo.insert(changeset)
+  end
+    
 
   def check_insertion_result({:ok, _result}, _example),
     do: :ok
