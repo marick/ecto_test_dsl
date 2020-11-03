@@ -17,10 +17,11 @@ defmodule TransformerTestSupport.VariantSupport.Changeset do
   
   # ----------------------------------------------------------------------------
 
-  def setup(example) do
+  def setup(%Changeset{} = changeset, example) do
     alias Ecto.Adapters.SQL.Sandbox
     repo = Example.repo(example)
     :ok = Sandbox.checkout(repo)
+    changeset
   end
 
   def insert(%Changeset{} = changeset, example) do

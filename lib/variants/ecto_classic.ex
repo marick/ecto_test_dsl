@@ -13,8 +13,12 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     do: Changeset.accept_params(example)
   defp check_validation_changeset([{:make_changeset, changeset} | _], example),
     do: Changeset.check_validation_changeset(changeset, example)
-  defp insert_changeset([{:check_validation_changeset, changeset} | _], example) do
-    Changeset.setup(example)
+
+  defp repo_setup(_history, example),
+    do: Changeset.setup(example)
+
+  defp insert_changeset(history, example) do
+    changeset = Keyword.get(history, :make_changeset) 
     Changeset.insert(changeset, example)
   end
   
@@ -27,6 +31,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     %{
       make_changeset: &make_changeset/2,
       check_validation_changeset: &check_validation_changeset/2,
+      repo_setup: &repo_setup/2,
       insert_changeset: &insert_changeset/2,
       check_insertion: &check_insertion/2
     }
@@ -35,7 +40,8 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   @category_workflows %{
     success: [
       :make_changeset, 
-      :check_validation_changeset, 
+      :check_validation_changeset,
+      :repo_setup,
       :insert_changeset, 
       :check_insertion
     ],
@@ -50,6 +56,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     constraint_error: [
       :make_changeset, 
       :check_validation_changeset, 
+      :repo_setup,
       :insert_changeset, 
       :check_constraint_changeset
     ],

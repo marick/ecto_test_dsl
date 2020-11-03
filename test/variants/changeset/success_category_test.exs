@@ -63,7 +63,11 @@ defmodule Variants.EctoClassic.SuccessCategoryTest do
   defmodule Examples do
     use TransformerTestSupport.Variants.EctoClassic
 
-    @failure_instruction "Please fail insertion" 
+    @failure_instruction "Please fail insertion"
+
+    def fake_setup([{_, changeset} | _], example) do
+      changeset
+    end
 
     def fake_insert(changeset) do
       alias Ecto.Changeset
@@ -84,7 +88,9 @@ defmodule Variants.EctoClassic.SuccessCategoryTest do
         workflow: :insert
       ) |>
 
-      replace_steps(insert_changeset: step(&fake_insert/1)) |> 
+      replace_steps(
+        repo_setup: &fake_setup/2,
+        insert_changeset: step(&fake_insert/1)) |> 
 
       field_transformations(
         as_cast: Schema.fields_to_cast(),
