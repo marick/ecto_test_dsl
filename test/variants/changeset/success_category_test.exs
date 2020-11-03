@@ -65,7 +65,7 @@ defmodule Variants.EctoClassic.SuccessCategoryTest do
 
     @failure_instruction "Please fail insertion"
 
-    def fake_setup([{_, changeset} | _], example) do
+    def fake_setup([{_, changeset} | _], _example) do
       changeset
     end
 
