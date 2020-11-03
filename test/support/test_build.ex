@@ -11,7 +11,7 @@ defmodule TransformerTestSupport.TestBuild do
   end
 
   def with_params(example_name, params) do
-    one_category([{example_name, %{params: params}}])
+    one_category([{example_name, [params: params]}])
   end
 
 

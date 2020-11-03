@@ -2,16 +2,18 @@ defmodule SmartGet.ParamsTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.SmartGet
 
-  @ok %{params: %{age: 1,
-                  date: "2011-02-03",
-                  nested: %{a: 3},
-                  list: [1, 2, 3]}}
+  @ok [params: [age: 1,
+                date: "2011-02-03",
+                nested: %{a: 3},
+                list: [1, 2, 3]]]
 
   @phoenix_params %{
     "age" => "1",
     "date" => "2011-02-03",
     "nested" => %{"a" => "3"},
     "list" => ["1", "2", "3"]}
+
+  @raw_params Keyword.get(@ok, :params) |> Enum.into(%{})
 
   def with_format(start_args),
     do: TestBuild.one_category(start_args, [ok: @ok])
@@ -24,8 +26,8 @@ defmodule SmartGet.ParamsTest do
     end
 
     [format: :phoenix] |> expect.(@phoenix_params)
-    [format: :raw    ] |> expect.(@ok.params)
-    [                ] |> expect.(@ok.params)
+    [format: :raw    ] |> expect.(@raw_params)
+    [                ] |> expect.(@raw_params)
   end
     
   test "different routes to params" do
