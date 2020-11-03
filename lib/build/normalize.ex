@@ -34,6 +34,5 @@ defmodule TransformerTestSupport.Build.Normalize do
     end
   end
 
-  def ensure_map({:__like, _, _} = x), do: x
   def ensure_map(x), do: Enum.into(x, %{})
 end
