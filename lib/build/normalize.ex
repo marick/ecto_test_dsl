@@ -16,7 +16,9 @@ defmodule TransformerTestSupport.Build.Normalize do
     do: {name, as(:example, example)}
 
   def as(:example, example) do
-    ensure_map(example)
+    example
+    |> flatten_keywords
+    |> ensure_map
     |> interior(:params)
   end
 
@@ -32,6 +34,18 @@ defmodule TransformerTestSupport.Build.Normalize do
       true ->
         Map.put(map, key, as(key, value))
     end
+  end
+
+  # N^2 baby!
+  def flatten_keywords(kws) do
+    Enum.reduce(kws, [], fn current, acc ->
+      case current do
+        {:__flatten, list} ->
+          acc ++ list
+        current ->
+          acc ++ [current]
+      end
+    end)
   end
 
   def ensure_map(x), do: Enum.into(x, %{})

@@ -16,6 +16,17 @@ defmodule Build.NormalizeTest do
     assert Normalize.as(:example, input) == %{other: 2}
   end
 
+  test "a flatten list is obeyed" do
+    input = [__flatten: [a: 1, b: 2], c: 3, __flatten: [d: 4]]
+    assert Normalize.as(:example, input) == %{a: 1, b: 2, c: 3, d: 4}
+  end
+
+  test "note that flattening preserves order for intermediate processing" do
+    # Some keywords are repeated and so handled specially.
+    input = [__flatten: [a: 1, b: 2], c: 3, __flatten: [d: 4]]
+    assert Normalize.flatten_keywords(input) == [a: 1, b: 2, c: 3, d: 4]
+  end
+
   test "example pair" do
     input = {:name, [params: [a: 1], other: 2]}
     actual = Normalize.as(:example_pair, input)
