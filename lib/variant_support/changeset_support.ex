@@ -19,8 +19,11 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
 
   def setup(example) do
     alias Ecto.Adapters.SQL.Sandbox
-    repo = Example.repo(example)
-    :ok = Sandbox.checkout(repo)
+    repo = Map.get(example, :repo)
+    if repo do
+      :ok = Sandbox.checkout(repo)
+    end
+    %{a: 1}
   end
 
   def insert(%Changeset{} = changeset, example) do
