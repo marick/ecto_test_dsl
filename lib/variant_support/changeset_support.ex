@@ -49,10 +49,10 @@ defmodule TransformerTestSupport.VariantSupport.Changeset do
 
   # ----------------------------------------------------------------------------
 
-  defchain check_changeset(changeset, example, purpose) do
+  defchain check_changeset(changeset, example, step) do
     adjust_assertion_message(
       fn ->
-        for check <- ChangesetChecks.get(example, purpose),
+        for check <- ChangesetChecks.get(example, step),
           do: apply_assertion(changeset, check)
       end,
       fn message ->

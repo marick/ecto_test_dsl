@@ -4,9 +4,15 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Validity do
   @moduledoc """
   """
 
-  def add(changeset_checks, example) do
-    if Example.category_name(example) in [:validation_error, :constraint_error],
+  def add(changeset_checks, example, step) do
+    if expect_invalid?(step, Example.category_name(example)),
       do:   [:invalid | changeset_checks],
       else: [  :valid | changeset_checks]
   end
+
+
+  defp expect_invalid?(:changeset_for_validation_step, category_name),
+    do: category_name == :validation_error
+  defp expect_invalid?(:changeset_for_constraint_step, category_name),
+    do: category_name == :constraint_error
 end

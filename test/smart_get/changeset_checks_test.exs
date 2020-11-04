@@ -5,36 +5,30 @@ defmodule SmartGet.ChangesetChecksTest do
   alias Ecto.Changeset
 
   # ----------------------------------------------------------------------------
-  describe "valid/invalid additions" do 
-    test "a :validation_error category has an `invalid` check put at the front" do
-      test_data =
-        TestBuild.one_category(:validation_error,
-          [],
-          oops: [changeset(no_changes: [:date])])
-      
-      Checks.get(test_data, :oops, :changeset_for_validation_step)
-      |> assert_equal([:invalid, {:no_changes, [:date]}])
+  describe "valid/invalid additions" do
+
+
+    test "dependencies on step and category" do 
+      expect = fn [step, category_name], expected ->
+        TestBuild.one_category(category_name, [], example: [])
+        |> Checks.get(:example, step)
+        |> assert_equal([expected])
+      end
+
+      [:changeset_for_validation_step, :validation_error]   |> expect.(:invalid)
+      [:changeset_for_validation_step, :validation_success] |> expect.(  :valid)
+      [:changeset_for_validation_step, :constraint_error]   |> expect.(  :valid)
+
+      [:changeset_for_constraint_step, :validation_success] |> expect.(  :valid)
+      [:changeset_for_constraint_step, :constraint_error]   |> expect.(:invalid)
     end
     
-    
-    test "any other category gets a `valid` check" do
-      test_data =
-        TestBuild.one_category(:some_category_name,
-          [],
-          ok: [changeset(no_changes: [:date])])
-      
-      Checks.get(test_data, :ok, :changeset_for_validation_step)
+    test "checks are added to the beginning" do
+      TestBuild.one_category(
+        [],
+        ok: [changeset(no_changes: [:date])])
+      |> Checks.get(:ok, :changeset_for_validation_step)
       |> assert_equal([:valid, {:no_changes, [:date]}])
-    end
-    
-    test "checks are added even if there's no changest" do
-      test_data =
-        TestBuild.one_category(
-          [],
-          ok: [])
-      
-      Checks.get(test_data, :ok, :changeset_for_validation_step)
-      |> assert_equal([:valid])
     end
   end
 

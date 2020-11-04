@@ -6,8 +6,8 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
   @moduledoc """
   """
 
-  def get(example, purpose) do
-    changeset_checks = Map.get(example, purpose, [])
+  def get(example, step) do
+    changeset_checks = Map.get(example, step, [])
     user_mentioned = Checks.Util.unique_fields(changeset_checks)
 
     [as_cast_fields, calculated_fields] =
@@ -15,13 +15,13 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
       |> Enum.map(&(Checks.Util.remove_fields_named_by_user(&1, user_mentioned)))
 
     changeset_checks
-    |> Checks.Validity.add(example)
+    |> Checks.Validity.add(example, step)
     |> Checks.AsCast.add(example, as_cast_fields)
     |> Checks.Calculated.add(example, calculated_fields)
   end
 
-  def get(test_data, example_name, purpose) do
+  def get(test_data, example_name, step) do
     Example.get(test_data, example_name)
-    |> get(purpose)
+    |> get(step)
   end
 end
