@@ -1,8 +1,6 @@
 defmodule VariantSupport.Changeset.AcceptParamsTest do
   use TransformerTestSupport.Case
-  # import FlowAssertions.Define.Tabular
   alias TransformerTestSupport.VariantSupport.ChangesetSupport
-  # alias TransformerTestSupport.SmartGet
 
   defstruct age: nil
 
