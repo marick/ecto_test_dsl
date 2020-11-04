@@ -1,7 +1,7 @@
 defmodule VariantSupport.Changeset.AcceptParamsTest do
   use TransformerTestSupport.Case
   # import FlowAssertions.Define.Tabular
-  alias TransformerTestSupport.VariantSupport.Changeset, as: ChangesetS
+  alias TransformerTestSupport.VariantSupport.ChangesetSupport
   # alias TransformerTestSupport.SmartGet
 
   defstruct age: nil
@@ -19,7 +19,7 @@ defmodule VariantSupport.Changeset.AcceptParamsTest do
                 metadata: %{module_under_test: __MODULE__,
                             format: :phoenix}}
 
-    assert ChangesetS.accept_params(example) == :changeset_result
+    assert ChangesetSupport.accept_params(example) == :changeset_result
   end
   
 end

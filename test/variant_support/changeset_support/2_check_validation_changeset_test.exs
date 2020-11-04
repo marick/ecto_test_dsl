@@ -2,12 +2,12 @@ defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
   alias TransformerTestSupport, as: T
   use T.Case
   import FlowAssertions.Define.Tabular
-  alias T.VariantSupport.Changeset, as: ChangesetS
+  alias T.VariantSupport.ChangesetSupport
   import T.Build
   alias T.Sketch
 
   def run(example, changeset),
-    do: ChangesetS.check_validation_changeset(changeset, example)
+    do: ChangesetSupport.check_validation_changeset(changeset, example)
 
   # ----------------------------------------------------------------------------
   test "handling of auto-generated valid/invalid checks" do

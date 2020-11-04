@@ -1,7 +1,7 @@
 defmodule TransformerTestSupport.Variants.EctoClassic do
   alias TransformerTestSupport, as: T
   alias T.Build
-  alias T.VariantSupport.Changeset
+  alias T.VariantSupport.ChangesetSupport
 
   import FlowAssertions.Define.BodyParts
   
@@ -10,22 +10,22 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   # ------------------- Hook functions -----------------------------------------
 
   defp make_changeset(_history, example),
-    do: Changeset.accept_params(example)
+    do: ChangesetSupport.accept_params(example)
   defp check_validation_changeset([{:make_changeset, changeset} | _], example),
-    do: Changeset.check_validation_changeset(changeset, example)
+    do: ChangesetSupport.check_validation_changeset(changeset, example)
 
   defp repo_setup(_history, example),
-    do: Changeset.setup(example)
+    do: ChangesetSupport.setup(example)
 
   defp insert_changeset(history, example) do
     changeset = Keyword.get(history, :make_changeset) 
-    Changeset.insert(changeset, example)
+    ChangesetSupport.insert(changeset, example)
   end
   
   defp check_insertion([{:insert_changeset, tuple} | _], example), 
-    do: Changeset.check_insertion_result(tuple, example)
+    do: ChangesetSupport.check_insertion_result(tuple, example)
   defp check_constraint_changeset([{:insert_changeset, tuple} | _], example),
-    do: Changeset.check_constraint_changeset(tuple, example)
+    do: ChangesetSupport.check_constraint_changeset(tuple, example)
   
   def initial_step_definitions() do
     %{

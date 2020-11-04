@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.VariantSupport.Changeset do
+defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   alias TransformerTestSupport.SmartGet.{Example,ChangesetChecks}
   import FlowAssertions.Define.{Defchain, BodyParts}
   use FlowAssertions.Ecto

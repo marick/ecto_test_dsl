@@ -1,12 +1,12 @@
 defmodule VariantSupport.Changeset.CheckInsertionResultTest do
   alias TransformerTestSupport, as: T
   use T.Case
-  alias T.VariantSupport.Changeset, as: ChangesetS
+  alias T.VariantSupport.ChangesetSupport
   alias T.Sketch
   alias Ecto.Changeset
 
   def run(example, result),
-    do: ChangesetS.check_insertion_result(result, example)
+    do: ChangesetSupport.check_insertion_result(result, example)
 
   # ----------------------------------------------------------------------------
   test "handling of ok/error" do

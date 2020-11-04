@@ -2,7 +2,7 @@ defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
   alias TransformerTestSupport, as: T
   use T.Case
   alias T.Build
-  alias T.VariantSupport.Changeset, as: ChangesetS
+  alias T.VariantSupport.ChangesetSupport
   alias T.Sketch
   alias Ecto.Changeset
 
@@ -17,7 +17,7 @@ defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
   end
 
   def run(example, result),
-    do: ChangesetS.check_constraint_changeset(result, example)
+    do: ChangesetSupport.check_constraint_changeset(result, example)
 
   # ----------------------------------------------------------------------------
 
