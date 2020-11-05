@@ -65,10 +65,6 @@ defmodule Variants.EctoClassic.SuccessCategoryTest do
 
     @failure_instruction "Please fail insertion"
 
-    def fake_setup([{_, changeset} | _], _example) do
-      changeset
-    end
-
     def fake_insert(changeset) do
       alias Ecto.Changeset
       if Map.get(changeset.changes, :optional_comment) == @failure_instruction do
@@ -89,8 +85,7 @@ defmodule Variants.EctoClassic.SuccessCategoryTest do
       ) |>
 
       replace_steps(
-        repo_setup: &fake_setup/2,
-        insert_changeset: step(&fake_insert/1)) |> 
+        insert_changeset: step(&fake_insert/1, :make_changeset)) |> 
 
       field_transformations(
         as_cast: Schema.fields_to_cast(),
