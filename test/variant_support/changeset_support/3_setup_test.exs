@@ -20,14 +20,11 @@ defmodule VariantSupport.Changeset.SetupTest do
   defmodule Examples do
     use EctoClassic
 
-    def fake_insert(changeset) do
-      name = changeset.changes.name
+    def named(name),
+      do: %Schema{name: name, id: "#{name}_id"}
 
-      case name do
-        "ok" -> {:ok, %Schema{name: name, id: 1}}
-        "dependent" -> {:ok, %Schema{name: name, id: 2}}
-      end
-    end
+    def fake_insert(changeset),
+      do: {:ok, named(changeset.changes.name)}
 
     def create_test_data do 
       start(
@@ -38,37 +35,32 @@ defmodule VariantSupport.Changeset.SetupTest do
       replace_steps(insert_changeset: step(&fake_insert/1, :make_changeset)) |> 
       
       category(                                         :success,
-        ok: [params(name: "ok")],
-        dependent: [params(name: "dependent"), setup(insert: :ok)]
+        source: [params(name: "source")],
+        source2: [params(name: "source2")],
+        dependent: [params(name: "dependent"), setup(insert: :source)],
+        dependent2: [params(name: "dependent2"), setup(insert: [:source, :source2])]
       )
     end
   end
 
   defmodule ActualTests do
     use T.Case
-    alias T.VariantSupport.ChangesetSupport
-    alias T.SmartGet.Example
+#    alias T.VariantSupport.ChangesetSupport
+#    alias T.SmartGet.Example
     
-    def run(example),
-      do: ChangesetSupport.setup(example)
+    def run(example_name) do
+      Examples.Tester.check_workflow(example_name)
+      |> Keyword.get(:repo_setup)
+    end
     
     # ----------------------------------------------------------------------------
-    test "handling of ok/error" do
-      Examples.Tester.check_workflow(:dependent)
-      |> Keyword.get(:repo_setup)
-      |> assert_equal(%{a: 1})
-      
-      # run(example, {:ok, :ignored}) # no assertion failure
-      
-      # changeset =
-      #   %Changeset{valid?: false} |>
-      #   Changeset.add_error(:date, "error message")
-      
-      # assertion_fails(~r/Example `:name`: Unexpected insertion failure/,
-      #   [left: [date: {"error message", []}]],
-      #   fn ->
-      #     run(example, {:error, changeset})
-      #   end)
+
+    test "if no specific setup, none done" do
+      assert run(:source) == %{}
+    end
+    
+    test "single stereotyped insertion" do
+      assert run(:dependent) == %{source: Examples.named("source")}
     end
   end
 end

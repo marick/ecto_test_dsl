@@ -2,10 +2,11 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   alias TransformerTestSupport, as: T
   alias T.Build
   alias T.VariantSupport.ChangesetSupport
+  alias T.Variants.EctoClassic, as: ThisVariant
 
   import FlowAssertions.Define.BodyParts
   
-  def start(opts), do: Build.start_with_variant(__MODULE__, opts)
+  def start(opts), do: Build.start_with_variant(ThisVariant, opts)
 
   # ------------------- Hook functions -----------------------------------------
 
@@ -14,11 +15,11 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   defp check_validation_changeset([{:make_changeset, changeset} | _], example),
     do: ChangesetSupport.check_validation_changeset(changeset, example)
 
-  defp repo_setup(_history, example),
-    do: ChangesetSupport.setup(example)
+  defp repo_setup(history, example),
+    do: ChangesetSupport.setup(history, example)
 
   defp insert_changeset(history, example) do
-    changeset = Keyword.get(history, :make_changeset) 
+    changeset = Keyword.get(history, :make_changeset)
     ChangesetSupport.insert(changeset, example)
   end
   
@@ -33,7 +34,8 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
       check_validation_changeset: &check_validation_changeset/2,
       repo_setup: &repo_setup/2,
       insert_changeset: &insert_changeset/2,
-      check_insertion: &check_insertion/2
+      check_insertion: &check_insertion/2,
+      check_constraint_changeset: &check_constraint_changeset/2
     }
   end
 
@@ -85,8 +87,11 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     quote do
       use TransformerTestSupport.Predefines
       alias TransformerTestSupport.Variants.EctoClassic
+      alias __MODULE__, as: ExamplesModule
 
-      def start(opts), do: EctoClassic.start(opts)
+      def start(opts) do
+        EctoClassic.start([{:examples_module, ExamplesModule} | opts])
+      end
 
       defmodule Tester do
         use TransformerTestSupport.Predefines.Tester

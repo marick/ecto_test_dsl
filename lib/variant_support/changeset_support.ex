@@ -4,6 +4,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
   alias Ecto.Changeset
+  alias TransformerTestSupport.Runner
 
   def accept_params(example) do
     params = Example.params(example)
@@ -17,13 +18,27 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   
   # ----------------------------------------------------------------------------
 
-  def setup(example) do
+  def setup(_history, example) do
     alias Ecto.Adapters.SQL.Sandbox
     repo = Map.get(example, :repo)
-    if repo do
+    if repo do  # Convenient for testing, where we might be faking the repo functions.
       :ok = Sandbox.checkout(repo)
     end
-    %{a: 1}
+
+    Map.get(example, :setup, [])
+    |> Enum.reduce(%{}, &(Map.merge(&2, setup_one(&1, example))))
+  end
+
+  defp setup_one({:insert, what}, to_help_example) do
+    needed =
+      Example.examples_module(to_help_example)
+      |> Example.get(what)
+    
+    {:ok, insert_result} = 
+      Runner.run_steps(needed)
+      |> Keyword.get(:insert_changeset)
+    
+    %{Example.name(needed) => insert_result}
   end
 
   def insert(%Changeset{} = changeset, example) do
