@@ -15,16 +15,16 @@ defmodule VariantSupport.Changeset.SetupTest do
       |> cast(params, [:name])
       |> validate_required([:name])
     end
+
+    def named(name),
+      do: %Schema{name: name, id: "#{name}_id"}
   end
 
   defmodule Examples do
     use EctoClassic
 
-    def named(name),
-      do: %Schema{name: name, id: "#{name}_id"}
-
     def fake_insert(changeset),
-      do: {:ok, named(changeset.changes.name)}
+      do: {:ok, Schema.named(changeset.changes.name)}
 
     def create_test_data do 
       start(
@@ -38,7 +38,12 @@ defmodule VariantSupport.Changeset.SetupTest do
         source: [params(name: "source")],
         source2: [params(name: "source2")],
         dependent: [params(name: "dependent"), setup(insert: :source)],
-        dependent2: [params(name: "dependent2"), setup(insert: [:source, :source2])]
+        dependent2: [params(name: "dependent2"), setup(insert: [:source, :source2])],
+
+        chained: [params(name: "chained"), setup(insert: :dependent)],
+        multiple: [params(name: "multiple"),
+                     setup(insert: :chained,
+                           insert: :source2)]
       )
     end
   end
@@ -60,14 +65,32 @@ defmodule VariantSupport.Changeset.SetupTest do
     end
     
     test "single stereotyped insertion" do
-      assert run(:dependent) == %{source: Examples.named("source")}
+      assert run(:dependent) == %{source: Schema.named("source")}
     end
 
     test "double insertion" do
       actual = run(:dependent2)
       expected = %{
-        source: Examples.named("source"),
-        source2: Examples.named("source2")}
+        source: Schema.named("source"),
+        source2: Schema.named("source2")}
+      assert actual == expected
+    end
+    
+    test "chained insertion" do
+      actual = run(:chained)
+      expected = %{
+        source: Schema.named("source"),
+        dependent: Schema.named("dependent")}
+      assert actual == expected
+    end
+
+    test "multiple" do
+      actual = run(:multiple)
+      expected = %{
+        chained: Schema.named("chained"),
+        dependent: Schema.named("dependent"),
+        source: Schema.named("source"),
+        source2: Schema.named("source2")}
       assert actual == expected
     end
   end

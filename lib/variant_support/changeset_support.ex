@@ -19,6 +19,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   # ----------------------------------------------------------------------------
 
   def setup(_history, example) do
+#    Keyword.get(history, :repo_setup, :NOTHING) |> IO.inspect
     alias Ecto.Adapters.SQL.Sandbox
     repo = Map.get(example, :repo)
     if repo do  # Convenient for testing, where we might be faking the repo functions.
@@ -41,12 +42,12 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
     needed =
       Example.examples_module(to_help_example)
       |> Example.get(what)
-    
-    {:ok, insert_result} = 
-      Runner.run_steps(needed)
-      |> Keyword.get(:insert_changeset)
-    
-    %{Example.name(needed) => insert_result}
+
+    step_results = Runner.run_steps(needed)
+    dependently_created = Keyword.get(step_results, :repo_setup)
+    {:ok, insert_result} = Keyword.get(step_results, :insert_changeset)
+
+    Map.put(dependently_created, Example.name(needed), insert_result)
   end
 
   def insert(%Changeset{} = changeset, example) do
