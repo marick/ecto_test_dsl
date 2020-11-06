@@ -26,10 +26,18 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
     end
 
     Map.get(example, :setup, [])
-    |> Enum.reduce(%{}, &(Map.merge(&2, setup_one(&1, example))))
+    |> Enum.reduce(%{}, &(Map.merge(&2, setup_helper(&1, example))))
   end
 
-  defp setup_one({:insert, what}, to_help_example) do
+  defp setup_helper({:insert, what_list}, to_help_example) when is_list(what_list) do
+    what_list
+    |> Enum.reduce(%{}, fn what, acc ->
+      one = setup_helper({:insert, what}, to_help_example)
+      Map.merge(acc, one)
+    end)
+  end
+
+  defp setup_helper({:insert, what}, to_help_example) do
     needed =
       Example.examples_module(to_help_example)
       |> Example.get(what)

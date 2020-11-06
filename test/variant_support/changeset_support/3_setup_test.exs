@@ -62,5 +62,13 @@ defmodule VariantSupport.Changeset.SetupTest do
     test "single stereotyped insertion" do
       assert run(:dependent) == %{source: Examples.named("source")}
     end
+
+    test "double insertion" do
+      actual = run(:dependent2)
+      expected = %{
+        source: Examples.named("source"),
+        source2: Examples.named("source2")}
+      assert actual == expected
+    end
   end
 end
