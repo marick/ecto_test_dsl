@@ -96,7 +96,7 @@ defmodule TransformerTestSupport.Build do
     {:setup, opts}
   end
 
-  def duplicate(example_name),
+  def insert_twice(example_name),
     do: {:__flatten, [setup(insert: example_name), params_like(example_name)]}
     
   def changeset(opts), do: {:changeset_for_validation_step, opts}
