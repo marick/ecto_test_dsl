@@ -19,11 +19,10 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   # ----------------------------------------------------------------------------
 
   def setup(_history, example) do
-#    Keyword.get(history, :repo_setup, :NOTHING) |> IO.inspect
     alias Ecto.Adapters.SQL.Sandbox
-    repo = Map.get(example, :repo)
+    repo = Example.repo(example)
     if repo do  # Convenient for testing, where we might be faking the repo functions.
-      :ok = Sandbox.checkout(repo)
+      Sandbox.checkout(repo) # it's OK if it's already checked out.
     end
 
     Map.get(example, :setup, [])
