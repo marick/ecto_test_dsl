@@ -18,35 +18,52 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   
   # ----------------------------------------------------------------------------
 
-  def setup(_history, example) do
+  # I can't offhand think of any case where one `setup` might need to
+  # use the results of another that isn't part of the same dependency tree.
+  # That might change if I add a category-wide or test-data-wide setup.
+
+  # If that is done, the history must be passed in by `Runner.run_steps`
+
+  def start_sandbox(example) do
     alias Ecto.Adapters.SQL.Sandbox
+
     repo = Example.repo(example)
     if repo do  # Convenient for testing, where we might be faking the repo functions.
       Sandbox.checkout(repo) # it's OK if it's already checked out.
     end
-
+  end
+  
+  def setup(_history, example) do
+    start_sandbox(example)
     Map.get(example, :setup, [])
-    |> Enum.reduce(%{}, &(Map.merge(&2, setup_helper(&1, example))))
+    |> Enum.reduce(%{}, &(Map.merge(&2, setup_helper(&1, example, &2))))
   end
 
-  defp setup_helper({:insert, what_list}, to_help_example) when is_list(what_list) do
+  defp setup_helper({:insert, what_list}, to_help_example, so_far)
+  when is_list(what_list) do
     what_list
     |> Enum.reduce(%{}, fn what, acc ->
-      one = setup_helper({:insert, what}, to_help_example)
-      Map.merge(acc, one)
+         one = setup_helper({:insert, what}, to_help_example, so_far)
+         Map.merge(acc, one)
+       end)
+  end
+
+  defp setup_helper({:insert, what}, to_help_example, so_far) do
+    unless_already_present(what, so_far, fn -> 
+      needed =
+        Example.examples_module(to_help_example)
+        |> Example.get(what)
+      
+      step_results = Runner.run_steps(needed)
+      dependently_created = Keyword.get(step_results, :repo_setup)
+      {:ok, insert_result} = Keyword.get(step_results, :insert_changeset)
+      
+      Map.put(dependently_created, Example.name(needed), insert_result)
     end)
   end
 
-  defp setup_helper({:insert, what}, to_help_example) do
-    needed =
-      Example.examples_module(to_help_example)
-      |> Example.get(what)
-
-    step_results = Runner.run_steps(needed)
-    dependently_created = Keyword.get(step_results, :repo_setup)
-    {:ok, insert_result} = Keyword.get(step_results, :insert_changeset)
-
-    Map.put(dependently_created, Example.name(needed), insert_result)
+  defp unless_already_present(what, so_far, f) do 
+    if Map.has_key?(so_far, what), do: so_far, else: f.()
   end
 
   def insert(%Changeset{} = changeset, example) do

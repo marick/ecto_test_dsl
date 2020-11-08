@@ -17,7 +17,7 @@ defmodule VariantSupport.Changeset.SetupTest do
     end
 
     def named(name),
-      do: %Schema{name: name, id: "#{name}_id"}
+      do: %Schema{name: Test.Factory.unique(name), id: "#{name}_id"}
   end
 
   defmodule Examples do
@@ -45,7 +45,10 @@ defmodule VariantSupport.Changeset.SetupTest do
         make(:dependent,  setup(insert:  :source)),
         make(:dependent2, setup(insert: [:source, :source2])),
         make(:chained,    setup(insert: :dependent)),
-        make(:multiple,   setup(insert: :chained, insert: :source2))
+        make(:multiple,   setup(insert: :chained, insert: :source2)),
+
+        make(:duplicates,   setup(insert: :chained, insert: :dependent))
+        
       ])
     end
   end
@@ -54,11 +57,18 @@ defmodule VariantSupport.Changeset.SetupTest do
     use T.Case
     
     def setup_for(example_name) do
+      ExMachina.Sequence.reset
       Examples.Tester.check_workflow(example_name)
       |> Keyword.get(:repo_setup)
     end
 
+    # Note: `setup_for` and `expect` are a bit tricksy. Each example is
+    # supposed to only be created once. By resettting ExMachina.Sequence
+    # before running the test and checking the actual result,
+    # a duplicate creation will produce a different final name in the two.
+
     def expect(actual, names) do
+      ExMachina.Sequence.reset
       expected = 
         names
         |> Enum.map(fn name -> {name, Schema.named(to_string name)} end)
@@ -74,6 +84,7 @@ defmodule VariantSupport.Changeset.SetupTest do
       setup_for(:dependent2) |> expect([:source, :source2])  # depends on two
       setup_for(:chained)    |> expect([:source, :dependent]) # recurses
       setup_for(:multiple)   |> expect([:chained, :dependent, :source, :source2])
+      setup_for(:duplicates) |> expect([:chained, :source, :dependent])
     end
   end
 end

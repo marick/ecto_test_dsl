@@ -38,7 +38,9 @@ defmodule TransformerTestSupport.Runner do
   # ----------------------------------------------------------------------------
 
   def run_steps(example, opts \\ []) do
-    stop = Keyword.get(opts, :stop_after)
+    opts = Enum.into(opts, %{})
+    stop = Map.get(opts, :stop_after, :"this should not ever be a step name")
+    starting_history = [example: example]
 
     attach_functions = fn step_names ->
       step_functions = Example.step_functions(example)
@@ -49,7 +51,7 @@ defmodule TransformerTestSupport.Runner do
     |> Example.step_list
     |> EnumX.take_until(&(&1 == stop))
     |> attach_functions.()
-    |> run_steps([example: example], example)
+    |> run_steps(starting_history, example)
   end
 
   def run_steps([], history, _example), do: history
