@@ -41,24 +41,26 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 
   @category_workflows %{
     success: [
+      :repo_setup,
       :make_changeset, 
       :check_validation_changeset,
-      :repo_setup,
       :insert_changeset, 
       :check_insertion
     ],
     validation_error: [
+      :repo_setup,
       :make_changeset, 
       :check_validation_changeset, 
     ],
     validation_success: [
+      :repo_setup,
       :make_changeset, 
       :check_validation_changeset, 
     ],
     constraint_error: [
+      :repo_setup,
       :make_changeset, 
       :check_validation_changeset, 
-      :repo_setup,
       :insert_changeset, 
       :check_constraint_changeset
     ],

@@ -36,13 +36,12 @@ defmodule Api.RunnerTest do
   end
 
   test "stopping early after a step" do
-    assert [make_changeset: made, example: _] = 
+    assert [make_changeset: made, repo_setup: %{}, example: _] = 
       Examples.Tester.example(:ok) |> Runner.run_steps(stop_after: :make_changeset)
 
     made
     |> assert_shape(%Changeset{})
   end
-  
 end
 
   
