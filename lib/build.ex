@@ -48,12 +48,6 @@ defmodule TransformerTestSupport.Build do
     DeepMerge.deep_merge(test_data, %{steps: replacements})
   end
 
-  def step(f) do
-    fn [{_name, previous} | _], _example ->
-      f.(previous)
-    end
-  end
-
   def step(f, key) do
     fn history, _example ->
       Keyword.fetch!(history, key) |> f.()

@@ -2,7 +2,6 @@ defmodule Build.StepTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport, as: T
   alias T.Build
-  alias T.SmartGet.Example
   alias T.Variants.EctoClassic
 
   defmodule Schema do 
@@ -17,24 +16,6 @@ defmodule Build.StepTest do
       struct
       |> cast(params, [:age])
     end
-  end
-  
-
-  defmodule PreviousResultStep do
-    use EctoClassic
-
-    def fake_make(example), do: [fake_changeset: example]
-    
-    def create_test_data() do
-      start_with_variant(EctoClassic, module_under_test: Schema)
-      |> replace_steps(make_changeset: step(&fake_make/1))
-      |> category(:validation_success, ok: [params(age: 1)])
-    end
-  end
-
-  test "steps can be overridden with a function that takes the previous value" do
-    actual = PreviousResultStep.Tester.validation_changeset(:ok)[:fake_changeset]
-    assert Example.name(actual) == :ok
   end
 
   defmodule ChosenResultStep do
