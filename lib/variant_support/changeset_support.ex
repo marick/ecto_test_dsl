@@ -34,7 +34,6 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   end
   
   def setup(_history, example) do
-    start_sandbox(example)
     Map.get(example, :setup, [])
     |> Enum.reduce(%{}, &(Map.merge(&2, setup_helper(&1, example, &2))))
   end

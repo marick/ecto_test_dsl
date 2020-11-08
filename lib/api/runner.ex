@@ -7,7 +7,10 @@ defmodule TransformerTestSupport.Runner do
       Enum.each(module.test_data().examples |> Keyword.keys, fn example_name ->
         message = "#{inspect example_name} in #{inspect module}"
         name = ExUnit.Case.register_test(__ENV__, :example, message, [])
-        def unquote(name)(_), do: unquote(module).check_workflow(unquote(example_name))
+        def unquote(name)(_) do
+          unquote(module).allow_asynchronous_tests(unquote(example_name))
+          unquote(module).check_workflow(unquote(example_name))
+        end
       end)
     end
   end

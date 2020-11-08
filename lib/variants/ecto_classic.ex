@@ -95,6 +95,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 
       defmodule Tester do
         use TransformerTestSupport.Predefines.Tester
+        alias T.VariantSupport.ChangesetSupport
 
         def validation_changeset(example_name) do
           check_workflow(example_name, stop_after: :make_changeset)
@@ -107,6 +108,9 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
             |> Keyword.get(:insert_changeset)
           value
         end
+
+        def allow_asynchronous_tests(example_name),
+          do: example(example_name) |> ChangesetSupport.start_sandbox
         
       end
     end
