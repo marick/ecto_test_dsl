@@ -22,7 +22,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   # use the results of another that isn't part of the same dependency tree.
   # That might change if I add a category-wide or test-data-wide setup.
 
-  # If that is done, the history must be passed in by `Runner.run_steps`
+  # If that is done, the history must be passed in by `Runner.run_example_steps`
 
   def start_sandbox(example) do
     alias Ecto.Adapters.SQL.Sandbox
@@ -32,10 +32,12 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
       Sandbox.checkout(repo) # it's OK if it's already checked out.
     end
   end
-  
-  def setup(_history, example) do
+
+  def setup(history, example) do
+    repo_examples = Keyword.get(history, :repo_setup, %{})
+    
     Map.get(example, :setup, [])
-    |> Enum.reduce(%{}, &(Map.merge(&2, setup_helper(&1, example, &2))))
+    |> Enum.reduce(repo_examples, &(Map.merge(&2, setup_helper(&1, example, &2))))
   end
 
   defp setup_helper({:insert, what_list}, to_help_example, so_far)
@@ -53,7 +55,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
         Example.examples_module(to_help_example)
         |> Example.get(what)
       
-      step_results = Runner.run_steps(needed)
+      step_results = Runner.run_example_steps(needed)
       dependently_created = Keyword.get(step_results, :repo_setup)
       {:ok, insert_result} = Keyword.get(step_results, :insert_changeset)
       

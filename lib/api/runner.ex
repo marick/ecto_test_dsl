@@ -40,7 +40,7 @@ defmodule TransformerTestSupport.Runner do
 
   # ----------------------------------------------------------------------------
 
-  def run_steps(example, opts \\ []) do
+  def run_example_steps(example, opts \\ []) do
     opts = Enum.into(opts, %{})
     stop = Map.get(opts, :stop_after, :"this should not ever be a step name")
     starting_history = [example: example]

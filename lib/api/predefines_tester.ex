@@ -22,7 +22,7 @@ defmodule TransformerTestSupport.Predefines.Tester do
         do: SmartGet.Params.get(@name_of_test_data, example_name)
       
       def check_workflow(example_name, opts \\ []),
-        do: Runner.run_steps(example(example_name), opts)
+        do: Runner.run_example_steps(example(example_name), opts)
     end
   end
 end
