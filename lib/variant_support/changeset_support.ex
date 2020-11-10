@@ -55,7 +55,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
         Example.examples_module(to_help_example)
         |> Example.get(what)
       
-      step_results = Runner.run_example_steps(needed)
+      step_results = Runner.run_example_steps(needed, previously: so_far)
       dependently_created = Keyword.get(step_results, :repo_setup)
       {:ok, insert_result} = Keyword.get(step_results, :insert_changeset)
       
