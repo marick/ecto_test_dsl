@@ -61,13 +61,15 @@ defmodule Api.RunnerTest do
         actual =  
           Examples.Tester.example(example_name)
           |> Runner.run_example_steps(previously:
-                %{young: "presupplied, not created"})
+                %{{Examples, :young} => "presupplied, not created"})
         assert Keyword.get(actual, :repo_setup) == expected
       end
 
-      :dependent |> expect.(%{young: @presupplied})
+      :dependent |> expect.(%{{Examples, :young} => @presupplied})
       # There is a recursive call
-      :two_level |> expect.(%{young: @presupplied, dependent: "created `dependent`"})
+      :two_level |> expect.(%{
+            {Examples, :young} => @presupplied,
+            {Examples, :dependent} => "created `dependent`"})
     end
   end
 end

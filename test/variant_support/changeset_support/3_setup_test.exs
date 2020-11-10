@@ -1,6 +1,7 @@
 defmodule VariantSupport.Changeset.SetupTest do
   alias TransformerTestSupport, as: T
   alias T.Variants.EctoClassic
+  alias T.VariantSupport.ChangesetSupport
 
   defmodule Schema do
     use Ecto.Schema
@@ -40,15 +41,16 @@ defmodule VariantSupport.Changeset.SetupTest do
       replace_steps(insert_changeset: step(&fake_insert/1, :make_changeset)) |> 
       
       category(                                         :success, [
-        make(:source),
-        make(:source2),
-        make(:dependent,  setup(insert:  :source)),
-        make(:dependent2, setup(insert: [:source, :source2])),
-        make(:chained,    setup(insert: :dependent)),
-        make(:multiple,   setup(insert: :chained, insert: :source2)),
+        make(:leaf),
+        make(:leaf2),
+        make(:dependent, setup(insert:  {__MODULE__, :leaf})),
+        make(:depth_3,   setup(insert:               :dependent)), # Shorthand
 
-        make(:duplicates,   setup(insert: :chained, insert: :dependent))
-        
+        make(:breadth_2, setup(insert:               [:leaf, :leaf2])), 
+        make(:insert_then_insert, setup(      insert: :depth_3,
+                                              insert: :leaf2)),
+
+        make(:has_duplicates, setup(insert: :depth_3, insert: :dependent))
       ])
     end
   end
@@ -69,9 +71,10 @@ defmodule VariantSupport.Changeset.SetupTest do
 
     def expect(actual, names) do
       ExMachina.Sequence.reset
+      
       expected = 
         names
-        |> Enum.map(fn name -> {name, Schema.named(to_string name)} end)
+        |> Enum.map(fn name -> {{Examples, name}, Schema.named(to_string name)} end)
         |> Map.new
       assert actual == expected
     end
@@ -79,12 +82,14 @@ defmodule VariantSupport.Changeset.SetupTest do
     # ----------------------------------------------------------------------------
 
     test "insertions" do
-      setup_for(:source)     |> expect([])  # no setup clause
-      setup_for(:dependent)  |> expect([:source]) # depends on one other value
-      setup_for(:dependent2) |> expect([:source, :source2])  # depends on two
-      setup_for(:chained)    |> expect([:source, :dependent]) # recurses
-      setup_for(:multiple)   |> expect([:chained, :dependent, :source, :source2])
-      setup_for(:duplicates) |> expect([:chained, :source, :dependent])
+      setup_for(:leaf)      |> expect([])  # no setup clause
+      setup_for(:dependent) |> expect([:leaf]) # depends on one other value
+      setup_for(:breadth_2) |> expect([:leaf, :leaf2])  # depends on two
+      setup_for(:depth_3)   |> expect([:leaf, :dependent]) # recurses
+      setup_for(:insert_then_insert) |> expect([:depth_3, :dependent, :leaf, :leaf2])
+      setup_for(:has_duplicates)     |> expect([:depth_3, :dependent, :leaf])
+
+      IO.puts("Fix ExMachina.Sequence.reset")
     end
   end
 end

@@ -49,19 +49,33 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
        end)
   end
 
-  defp setup_helper({:insert, extended_example_name}, to_help_example, so_far) do
+  defp setup_helper(
+    {:insert, {example_module, example_name}},
+    _to_help_example, so_far) do
+
+    extended_example_name = {example_module, example_name}
+    
     unless_already_present(extended_example_name, so_far, fn ->
       workflow_results = 
-        Example.examples_module(to_help_example)
-        |> Example.get(extended_example_name)
+        example_module
+        |> Example.get(example_name)
         |> Runner.run_example_steps(previously: so_far)
 
       dependently_created = Keyword.get(workflow_results, :repo_setup)
       {:ok, insert_result} = Keyword.get(workflow_results, :insert_changeset)
       
-      Map.put(dependently_created, extended_example_name, insert_result)
+      Map.put(dependently_created, {example_module, example_name}, insert_result)
     end)
   end
+
+  defp setup_helper(            {:insert, example_name},
+    to_help_example, so_far) when is_atom(example_name) do
+
+    example_module = Example.examples_module(to_help_example)
+    setup_helper({:insert, {example_module, example_name}}, to_help_example, so_far)
+  end
+
+  
 
   defp unless_already_present(extended_example_name, so_far, f) do 
     if Map.has_key?(so_far, extended_example_name), do: so_far, else: f.()
