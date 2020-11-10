@@ -24,7 +24,7 @@ defmodule Api.RunnerTest do
     use EctoClassic
 
     def fake_insert(changeset),
-      do: {:ok, "fake insertion of #{changeset.changes.name}"}
+      do: {:ok, "created `#{changeset.changes.name}`"}
 
     def create_test_data do 
       start(
@@ -54,24 +54,21 @@ defmodule Api.RunnerTest do
       |> assert_shape(%Changeset{})
     end
 
+    @presupplied "presupplied, not created"
 
     test "A starting setup-state can be passed in" do
-      actual = 
-        Examples.Tester.example(:dependent)
-        |> Runner.run_example_steps(previously: %{young: "presupplied"})
-      assert Keyword.get(actual, :repo_setup) == %{young: "presupplied"}
-    end
+      expect = fn example_name, expected ->
+        actual =  
+          Examples.Tester.example(example_name)
+          |> Runner.run_example_steps(previously:
+                %{young: "presupplied, not created"})
+        assert Keyword.get(actual, :repo_setup) == expected
+      end
 
-    test "works for recursive call" do
-      actual = 
-        Examples.Tester.example(:two_level)
-        |> Runner.run_example_steps(previously: %{young: "presupplied"})
-      assert Keyword.get(actual, :repo_setup) == %{
-        young: "presupplied",
-        dependent: "fake insertion of dependent"
-      }
+      :dependent |> expect.(%{young: @presupplied})
+      # There is a recursive call
+      :two_level |> expect.(%{young: @presupplied, dependent: "created `dependent`"})
     end
-    
   end
 end
 
