@@ -34,18 +34,20 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   end
 
   def setup(history, example) do
-    repo_examples = Keyword.get(history, :repo_setup, %{})
+    inserted_examples = Keyword.get(history, :repo_setup, %{})
     
     Map.get(example, :setup, [])
-    |> Enum.reduce(repo_examples, &(Map.merge(&2, setup_helper(&1, example, &2))))
+    |> Enum.reduce(inserted_examples, &(setup_helper(&1, example, &2)))
   end
 
-  defp setup_helper({:insert, extended_example_name_list}, to_help_example, so_far)
+  defp setup_helper(
+    {:insert, extended_example_name_list},
+    to_help_example, prior_work)
   when is_list(extended_example_name_list) do
+
     extended_example_name_list
-    |> Enum.reduce(%{}, fn extended_example_name, acc ->
-         one = setup_helper({:insert, extended_example_name}, to_help_example, so_far)
-         Map.merge(acc, one)
+    |> Enum.reduce(prior_work, fn extended_example_name, acc ->
+         setup_helper({:insert, extended_example_name}, to_help_example, acc)
        end)
   end
 
