@@ -40,31 +40,31 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
     |> Enum.reduce(repo_examples, &(Map.merge(&2, setup_helper(&1, example, &2))))
   end
 
-  defp setup_helper({:insert, what_list}, to_help_example, so_far)
-  when is_list(what_list) do
-    what_list
-    |> Enum.reduce(%{}, fn what, acc ->
-         one = setup_helper({:insert, what}, to_help_example, so_far)
+  defp setup_helper({:insert, extended_example_name_list}, to_help_example, so_far)
+  when is_list(extended_example_name_list) do
+    extended_example_name_list
+    |> Enum.reduce(%{}, fn extended_example_name, acc ->
+         one = setup_helper({:insert, extended_example_name}, to_help_example, so_far)
          Map.merge(acc, one)
        end)
   end
 
-  defp setup_helper({:insert, what}, to_help_example, so_far) do
-    unless_already_present(what, so_far, fn -> 
-      needed =
+  defp setup_helper({:insert, extended_example_name}, to_help_example, so_far) do
+    unless_already_present(extended_example_name, so_far, fn ->
+      workflow_results = 
         Example.examples_module(to_help_example)
-        |> Example.get(what)
+        |> Example.get(extended_example_name)
+        |> Runner.run_example_steps(previously: so_far)
+
+      dependently_created = Keyword.get(workflow_results, :repo_setup)
+      {:ok, insert_result} = Keyword.get(workflow_results, :insert_changeset)
       
-      step_results = Runner.run_example_steps(needed, previously: so_far)
-      dependently_created = Keyword.get(step_results, :repo_setup)
-      {:ok, insert_result} = Keyword.get(step_results, :insert_changeset)
-      
-      Map.put(dependently_created, Example.name(needed), insert_result)
+      Map.put(dependently_created, extended_example_name, insert_result)
     end)
   end
 
-  defp unless_already_present(what, so_far, f) do 
-    if Map.has_key?(so_far, what), do: so_far, else: f.()
+  defp unless_already_present(extended_example_name, so_far, f) do 
+    if Map.has_key?(so_far, extended_example_name), do: so_far, else: f.()
   end
 
   def insert(%Changeset{} = changeset, example) do
