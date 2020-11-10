@@ -43,12 +43,13 @@ defmodule VariantSupport.Changeset.SetupTest do
       category(                                         :success, [
         make(:leaf),
         make(:leaf2),
-        make(:dependent, setup(insert:  {__MODULE__, :leaf})),
-        make(:depth_3,   setup(insert:               :dependent)), # Shorthand
+        make(:dependent, setup(insert:  {:leaf, __MODULE__})),
+        make(:depth_3,   setup(insert:   :dependent)),
 
-        make(:breadth_2, setup(insert:               [:leaf, :leaf2])), 
-        make(:insert_then_insert, setup(      insert: :depth_3,
-                                              insert: :leaf2)),
+        make(:breadth_2, setup(insert:          [:leaf,   # one insert, two examples
+                                                 :leaf2])), 
+        make(:insert_then_insert, setup(insert: :depth_3, # two inserts
+                                        insert: :leaf2)),
 
         make(:has_duplicates, setup(insert: :depth_3, insert: :dependent))
       ])
@@ -74,7 +75,7 @@ defmodule VariantSupport.Changeset.SetupTest do
       
       expected = 
         names
-        |> Enum.map(fn name -> {{Examples, name}, Schema.named(to_string name)} end)
+        |> Enum.map(fn name -> {{name, Examples}, Schema.named(to_string name)} end)
         |> Map.new
       assert actual == expected
     end

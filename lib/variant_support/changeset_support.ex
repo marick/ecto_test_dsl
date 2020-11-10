@@ -50,10 +50,10 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   end
 
   defp setup_helper(
-    {:insert, {example_module, example_name}},
+    {:insert, {example_name, example_module}},
     _to_help_example, so_far) do
 
-    extended_example_name = {example_module, example_name}
+    extended_example_name = {example_name, example_module}
     
     unless_already_present(extended_example_name, so_far, fn ->
       workflow_results = 
@@ -64,7 +64,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
       dependently_created = Keyword.get(workflow_results, :repo_setup)
       {:ok, insert_result} = Keyword.get(workflow_results, :insert_changeset)
       
-      Map.put(dependently_created, {example_module, example_name}, insert_result)
+      Map.put(dependently_created, {example_name, example_module}, insert_result)
     end)
   end
 
@@ -72,7 +72,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
     to_help_example, so_far) when is_atom(example_name) do
 
     example_module = Example.examples_module(to_help_example)
-    setup_helper({:insert, {example_module, example_name}}, to_help_example, so_far)
+    setup_helper({:insert, {example_name, example_module}}, to_help_example, so_far)
   end
 
   
