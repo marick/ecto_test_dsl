@@ -1,10 +1,11 @@
 defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
-  alias TransformerTestSupport.SmartGet.{Example,ChangesetChecks}
+  alias TransformerTestSupport, as: T
+  alias T.SmartGet.{Example,ChangesetChecks}
+  alias T.VariantSupport.ChangesetSupport.Setup
   import FlowAssertions.Define.{Defchain, BodyParts}
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
   alias Ecto.Changeset
-  alias TransformerTestSupport.Runner
 
   def accept_params(example) do
     params = Example.params(example)
@@ -33,58 +34,13 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
     end
   end
 
-  defp add_on(sources, to: prior_work, using: f) do 
-    Enum.reduce(sources, prior_work, f)
-  end
-
-  def setup(history, to_help_example) do
-    sources = Map.get(to_help_example, :setup, [])
+  def setup(history, example) do
+    sources = Map.get(example, :setup, [])
     prior_work = Keyword.get(history, :repo_setup, %{})
-    add_on(sources,
-      to: prior_work,
-      using: fn source, acc -> setup_helper(source, to_help_example, acc) end)
+    Setup.from_a_list(sources, example, prior_work)
   end
 
-  defp setup_helper(
-    {:insert, extended_example_name_list},
-    to_help_example, prior_work)
-  when is_list(extended_example_name_list) do
-    add_on(extended_example_name_list,
-      to: prior_work,
-      using: fn source, acc -> setup_helper({:insert, source}, to_help_example, acc) end)
-  end
-
-  defp setup_helper(
-    {:insert, {example_name, example_module}},
-    _to_help_example, so_far) do
-
-    extended_example_name = {example_name, example_module}
-    
-    unless_already_present(extended_example_name, so_far, fn ->
-      workflow_results = 
-        example_module
-        |> Example.get(example_name)
-        |> Runner.run_example_steps(previously: so_far)
-
-      dependently_created = Keyword.get(workflow_results, :repo_setup)
-      {:ok, insert_result} = Keyword.get(workflow_results, :insert_changeset)
-      
-      Map.put(dependently_created, {example_name, example_module}, insert_result)
-    end)
-  end
-
-  defp setup_helper(            {:insert, example_name},
-    to_help_example, so_far) when is_atom(example_name) do
-
-    example_module = Example.examples_module(to_help_example)
-    setup_helper({:insert, {example_name, example_module}}, to_help_example, so_far)
-  end
-
-  
-
-  defp unless_already_present(extended_example_name, so_far, f) do 
-    if Map.has_key?(so_far, extended_example_name), do: so_far, else: f.()
-  end
+  # ----------------------------------------------------------------------------
 
   def insert(%Changeset{} = changeset, example) do
     repo = Example.repo(example)
