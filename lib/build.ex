@@ -86,10 +86,17 @@ defmodule TransformerTestSupport.Build do
   def params_like(example_name), 
     do: params_like(example_name, except: [])
 
-  def id_of([pair]) when is_tuple(pair),
-      do: {:__id_of, pair}
+  defmacro id_of([extended_example_name]) when is_tuple(extended_example_name) do
+    quote do
+        ParamShorthand.setup_reference(unquote(extended_example_name), :primary_key)
+      end
+    end
+  defmacro id_of(example_name) when is_atom(example_name) do
+    quote do
+      ParamShorthand.setup_reference({unquote(example_name), __MODULE__}, :primary_key)
+    end
+  end
 
-  def id_of(example_name), do: {:__id_of, example_name}
 
   # ----------------------------------------------------------------------------
 

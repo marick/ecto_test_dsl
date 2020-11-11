@@ -36,8 +36,10 @@ defmodule BuildTest do
     end
 
     test "id_of" do
-      assert id_of(animal: Examples) == {:__id_of, {:animal, Examples}}
-      assert id_of(:animal) == {:__id_of, :animal}
+      assert id_of(animal: Examples) ==
+         {:__setup_reference, {:animal, Examples}, :primary_key}
+      assert id_of(:animal) == 
+         {:__setup_reference, {:animal, __MODULE__}, :primary_key}
     end
     
     test "id_of works within params_like as well" do
@@ -49,7 +51,7 @@ defmodule BuildTest do
         except: [b: id_of(:setup), c: 3])
 
       %{params: %{b: b}} = Build.ParamShorthand.expand(%{params: f}, :example, previous)
-      assert b == {:__id_of, :setup}
+      assert b == {:__setup_reference, {:setup, __MODULE__}, :primary_key}
     end
   end
 
