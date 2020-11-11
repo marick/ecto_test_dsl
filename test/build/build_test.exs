@@ -26,12 +26,28 @@ defmodule BuildTest do
     assert Build.start(@minimal_start) == expected
   end
 
-  test "params_like" do
-    previous = [ok: %{params:                   %{a: 1, b: 2 }}]
-    f = Build.make__params_like(:ok, except:           [b: 22, c: 3])
-    expected =      %{params:                   %{a: 1, b: 22, c: 3}}
+  describe "params" do 
+    test "params_like" do
+      previous = [ok: %{params:                   %{a: 1, b: 2 }}]
+      f = Build.make__params_like(:ok, except:           [b: 22, c: 3])
+      expected =      %{params:                   %{a: 1, b: 22, c: 3}}
+      
+      assert Build.Like.expand(%{params: f}, :example, previous) == expected
+    end
 
-    assert Build.Like.expand(%{params: f}, :example, previous) == expected
+    test "id_of" do
+      assert id_of(animal: Examples) == {:__id_of, {:animal, Examples}}
+      assert id_of(:animal) == {:__id_of, :animal}
+    end
+    
+    # test "id_of works within params_like as well" do
+    #   previous = [
+    #     template: [params: %{a: 1, b: 2 }]
+    #     setup:    []
+    #   ]
+    #   f = Build.make__params_like(:template,
+    #     except: [b: id_of(setup, c: 3])
+    # end
   end
 
   test "category" do

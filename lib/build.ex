@@ -86,6 +86,13 @@ defmodule TransformerTestSupport.Build do
   def params_like(example_name), 
     do: params_like(example_name, except: [])
 
+  def id_of([pair]) when is_tuple(pair),
+      do: {:__id_of, pair}
+
+  def id_of(example_name), do: {:__id_of, example_name}
+
+  # ----------------------------------------------------------------------------
+
   def setup(opts) do
     {:setup, opts}
   end
@@ -139,8 +146,6 @@ defmodule TransformerTestSupport.Build do
   end
 
   # ----------------------------------------------------------------------------
-
-#  defp variant(test_data), do: Map.get(test_data, :variant)
 
   defp has_hook?(nil, _hook_tuple), do: false
   
