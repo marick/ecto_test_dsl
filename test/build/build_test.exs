@@ -32,7 +32,7 @@ defmodule BuildTest do
       f = Build.make__params_like(:ok, except:           [b: 22, c: 3])
       expected =      %{params:                   %{a: 1, b: 22, c: 3}}
       
-      assert Build.Like.expand(%{params: f}, :example, previous) == expected
+      assert Build.ParamShorthand.expand(%{params: f}, :example, previous) == expected
     end
 
     test "id_of" do
@@ -48,7 +48,7 @@ defmodule BuildTest do
       f = Build.make__params_like(:template,
         except: [b: id_of(:setup), c: 3])
 
-      %{params: %{b: b}} = Build.Like.expand(%{params: f}, :example, previous)
+      %{params: %{b: b}} = Build.ParamShorthand.expand(%{params: f}, :example, previous)
       assert b == {:__id_of, :setup}
     end
   end

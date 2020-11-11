@@ -10,7 +10,6 @@ defmodule TransformerTestSupport.Predefines do
       alias T.Build
       alias T.{Get,Validations}
       alias T.SmartGet
-      alias T.Build.Like
     end
   end
 end

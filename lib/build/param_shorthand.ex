@@ -1,9 +1,9 @@
-defmodule TransformerTestSupport.Build.Like do
+defmodule TransformerTestSupport.Build.ParamShorthand do
   @moduledoc """
   This is a second pass of processing examples, following `Normalize`.
   The two passes could be consolidated. But let's hold off on that.
   """
-  def add_new_pairs(new_pairs, existing_pairs) do
+  def build_time_expansion(new_pairs, existing_pairs) do
     Enum.reduce(new_pairs, existing_pairs, fn {new_name, new_example}, acc ->
       expanded = expand(new_example, :example, acc)
       [{new_name, expanded} | acc]

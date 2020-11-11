@@ -1,4 +1,4 @@
-defmodule Build.ParamsLikeTest do
+defmodule Build.ParamsShorthandTest do
   use TransformerTestSupport.Case
   use TransformerTestSupport.Predefines
 

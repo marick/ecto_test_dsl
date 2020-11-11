@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport.Build do
-  alias TransformerTestSupport.Build.{Normalize,Like}
+  alias TransformerTestSupport.Build.{Normalize,ParamShorthand}
   import DeepMerge, only: [deep_merge: 2]
   @moduledoc """
   """
@@ -65,7 +65,7 @@ defmodule TransformerTestSupport.Build do
     updated_examples =
       Normalize.as(:example_pairs, raw_examples)
       |> attach_category_metadata(category)
-      |> Like.add_new_pairs(earlier_examples)
+      |> ParamShorthand.build_time_expansion(earlier_examples)
     Map.put(so_far, :examples, updated_examples)
   end
 
