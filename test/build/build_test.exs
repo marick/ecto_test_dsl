@@ -40,14 +40,17 @@ defmodule BuildTest do
       assert id_of(:animal) == {:__id_of, :animal}
     end
     
-    # test "id_of works within params_like as well" do
-    #   previous = [
-    #     template: [params: %{a: 1, b: 2 }]
-    #     setup:    []
-    #   ]
-    #   f = Build.make__params_like(:template,
-    #     except: [b: id_of(setup, c: 3])
-    # end
+    test "id_of works within params_like as well" do
+      previous = [
+        template: %{params: %{a: 1, b: 2 }},
+        setup:    %{}
+      ]
+      f = Build.make__params_like(:template,
+        except: [b: id_of(:setup), c: 3])
+
+      %{params: %{b: b}} = Build.Like.expand(%{params: f}, :example, previous)
+      assert b == {:__id_of, :setup}
+    end
   end
 
   test "category" do
