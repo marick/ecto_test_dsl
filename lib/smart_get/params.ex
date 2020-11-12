@@ -5,7 +5,7 @@ defmodule TransformerTestSupport.SmartGet.Params do
   """
 
 
-  def get(example) do
+  def get(example, previously: previously) do
     formatters = %{
       raw: &raw_format/1,
       phoenix: &phoenix_format/1
@@ -19,16 +19,24 @@ defmodule TransformerTestSupport.SmartGet.Params do
         """
 
       formatter ->
-        example.params |> formatter.()
+        example.params
+        |> substitute_previous_values(previously)
+        |> formatter.()
     end
-  end    
-    
-
-  def get(test_data, example_name) do
-    SmartGet.Example.get(test_data, example_name)
-    |> get
   end
 
+  defp substitute_previous_values(params, previously) do
+    for {name, value} <- params do
+      case value do
+        {:__setup_reference, extended_example_name, :primary_key} ->
+          {name, Map.get(previously, extended_example_name).id}
+        _ ->
+          {name, value}
+      end
+    end |> Map.new
+  end
+  
+    
   # ----------------------------------------------------------------------------
 
   def raw_params(test_data, example_name),

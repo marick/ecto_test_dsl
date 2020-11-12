@@ -18,8 +18,10 @@ defmodule TransformerTestSupport.Predefines.Tester do
       def example(name),
         do: SmartGet.Example.get(@name_of_test_data, name)
       
-      def params(example_name),
-        do: SmartGet.Params.get(@name_of_test_data, example_name)
+      def params(example_name) do 
+        SmartGet.Example.get(@name_of_test_data, example_name)
+        |> SmartGet.Example.params
+      end
       
       def check_workflow(example_name, opts \\ []),
         do: Runner.run_example_steps(example(example_name), opts)

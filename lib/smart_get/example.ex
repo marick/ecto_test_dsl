@@ -43,5 +43,5 @@ defmodule TransformerTestSupport.SmartGet.Example do
     |> Map.get(example.metadata.category_name)
   end
 
-  def params(example), do: SmartGet.Params.get(example)
+  def params(example), do: SmartGet.Params.get(example, previously: %{})
 end
