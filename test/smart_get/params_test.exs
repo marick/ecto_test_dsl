@@ -1,6 +1,8 @@
 defmodule SmartGet.ParamsTest do
-  use TransformerTestSupport.Case
-  alias TransformerTestSupport.SmartGet
+  alias TransformerTestSupport, as: T
+  use T.Case
+  alias T.SmartGet
+  import T.Build, except: [setup: 1]
 
   @ok [params: [age: 1,
                 date: "2011-02-03",
@@ -21,7 +23,8 @@ defmodule SmartGet.ParamsTest do
   test "different formats" do
     expect = fn format, expected ->
       with_format(format)
-      |> SmartGet.Params.get(:ok)
+      |> SmartGet.Example.get(:ok)
+      |> SmartGet.Params.get(previously: %{})
       |> assert_fields(expected)
     end
 
@@ -30,12 +33,14 @@ defmodule SmartGet.ParamsTest do
     [                ] |> expect.(@raw_params)
   end
     
-  test "different routes to params" do
-    test_data = with_format(format: :phoenix)
-
-    via_test_data =  test_data |> SmartGet.Params. get(:ok)
-    via_example =    test_data |> SmartGet.Example.get(:ok) |> SmartGet.Params.get
-
-    assert via_test_data == via_example
+  test "getting the id of a previously-created value" do
+    TestBuild.one_category(
+      species: [params(name: "bovine")],
+      animal:  [params(name: "bossie", species_id: id_of(:species))]
+    )
+    |> SmartGet.Example.get(:animal)
+    |> SmartGet.Params.get(previously: %{{:species, __MODULE__} => %{id: 112, name: "bovine"}})
+    |> assert_fields(name: "bossie", species_id: 112)
   end
+
 end 

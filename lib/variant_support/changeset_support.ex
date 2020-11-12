@@ -34,9 +34,8 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
     end
   end
 
-  def setup(history, example) do
+  def setup(example, prior_work) do
     sources = Map.get(example, :setup, [])
-    prior_work = Keyword.get(history, :repo_setup, %{})
     Setup.from_a_list(sources, example, prior_work)
   end
 

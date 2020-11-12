@@ -15,8 +15,10 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   defp check_validation_changeset([{:make_changeset, changeset} | _], example),
     do: ChangesetSupport.check_validation_changeset(changeset, example)
 
-  defp repo_setup(history, example),
-    do: ChangesetSupport.setup(history, example)
+  defp repo_setup(history, example) do
+    prior_work = Keyword.get(history, :repo_setup, %{})
+    ChangesetSupport.setup(example, prior_work)
+  end
 
   defp insert_changeset(history, example) do
     changeset = Keyword.get(history, :make_changeset)
