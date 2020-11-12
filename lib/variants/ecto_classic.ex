@@ -10,8 +10,11 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 
   # ------------------- Hook functions -----------------------------------------
 
-  defp make_changeset(_history, example),
-    do: ChangesetSupport.accept_params(example)
+  defp make_changeset(history, example) do 
+    prior_work = Keyword.get(history, :repo_setup, %{})
+    ChangesetSupport.accept_params(example, prior_work)
+  end
+  
   defp check_validation_changeset([{:make_changeset, changeset} | _], example),
     do: ChangesetSupport.check_validation_changeset(changeset, example)
 

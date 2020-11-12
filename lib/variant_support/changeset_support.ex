@@ -7,8 +7,8 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   alias FlowAssertions.Ecto.ChangesetA
   alias Ecto.Changeset
 
-  def accept_params(example) do
-    params = Example.params(example)
+  def accept_params(example, prior_work) do
+    params = Example.params(example, previously: prior_work)
     module = Example.module_under_test(example)
     empty = struct(module)
     module.changeset(empty, params)

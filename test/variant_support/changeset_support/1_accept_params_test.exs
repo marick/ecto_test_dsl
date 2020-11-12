@@ -9,15 +9,16 @@ defmodule VariantSupport.Changeset.AcceptParamsTest do
     assert attrs == %{"age" => "1"}
     :changeset_result
   end
-    
-  
 
   test "the only result" do
     example = %{params: %{age: 1},
                 metadata: %{module_under_test: __MODULE__,
                             format: :phoenix}}
 
-    assert ChangesetSupport.accept_params(example) == :changeset_result
+    assert ChangesetSupport.accept_params(example, %{}) == :changeset_result
   end
+
+  @tag :skip
+  test "should have a 'with setup case"
   
 end
