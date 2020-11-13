@@ -10,37 +10,44 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 
   # ------------------- Hook functions -----------------------------------------
 
-  defp make_changeset(history, example) do 
-    prior_work = Keyword.get(history, :repo_setup, %{})
-    ChangesetSupport.accept_params(example, prior_work)
+  defp make_changeset(running) do 
+    prior_work = Keyword.get(running.history, :repo_setup, %{})
+    ChangesetSupport.accept_params(running.example, prior_work)
   end
   
-  defp check_validation_changeset([{:make_changeset, changeset} | _], example),
-    do: ChangesetSupport.check_validation_changeset(changeset, example)
-
-  defp repo_setup(history, example) do
-    prior_work = Keyword.get(history, :repo_setup, %{})
-    ChangesetSupport.setup(example, prior_work)
+  defp check_validation_changeset(running) do 
+    [{:make_changeset, changeset} | _] = running.history
+    ChangesetSupport.check_validation_changeset(changeset, running.example)
   end
 
-  defp insert_changeset(history, example) do
-    changeset = Keyword.get(history, :make_changeset)
-    ChangesetSupport.insert(changeset, example)
+  defp repo_setup(running) do
+    prior_work = Keyword.get(running.history, :repo_setup, %{})
+    ChangesetSupport.setup(running.example, prior_work)
+  end
+
+  defp insert_changeset(running) do
+    changeset = Keyword.get(running.history, :make_changeset)
+    ChangesetSupport.insert(changeset, running.example)
   end
   
-  defp check_insertion([{:insert_changeset, tuple} | _], example), 
-    do: ChangesetSupport.check_insertion_result(tuple, example)
-  defp check_constraint_changeset([{:insert_changeset, tuple} | _], example),
-    do: ChangesetSupport.check_constraint_changeset(tuple, example)
+  defp check_insertion(running) do
+    [{:insert_changeset, tuple} | _] = running.history
+    ChangesetSupport.check_insertion_result(tuple, running.example)
+  end
+  
+  defp check_constraint_changeset(running) do
+    [{:insert_changeset, tuple} | _] = running.history
+    ChangesetSupport.check_constraint_changeset(tuple, running.example)
+  end
   
   def initial_step_definitions() do
     %{
-      make_changeset: &make_changeset/2,
-      check_validation_changeset: &check_validation_changeset/2,
-      repo_setup: &repo_setup/2,
-      insert_changeset: &insert_changeset/2,
-      check_insertion: &check_insertion/2,
-      check_constraint_changeset: &check_constraint_changeset/2
+      make_changeset: &make_changeset/1,
+      check_validation_changeset: &check_validation_changeset/1,
+      repo_setup: &repo_setup/1,
+      insert_changeset: &insert_changeset/1,
+      check_insertion: &check_insertion/1,
+      check_constraint_changeset: &check_constraint_changeset/1
     }
   end
 

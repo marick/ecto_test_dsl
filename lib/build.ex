@@ -49,8 +49,8 @@ defmodule TransformerTestSupport.Build do
   end
 
   def step(f, key) do
-    fn history, _example ->
-      Keyword.fetch!(history, key) |> f.()
+    fn running ->
+      Keyword.fetch!(running.history, key) |> f.()
     end
   end
   

@@ -27,7 +27,7 @@ defmodule TransformerTestSupport.RunningExample do
       [] ->
         running.history
       [{step_name, function} | rest] ->
-        value = function.(running.history, running.example)
+        value = function.(running)
 
         running
         |> Map.update!(:history, &(RunningExample.History.add(&1, step_name, value)))
