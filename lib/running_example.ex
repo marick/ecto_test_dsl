@@ -3,25 +3,36 @@ defmodule TransformerTestSupport.RunningExample do
   alias T.RunningExample
   alias T.SmartGet.Example
 
-  @enforce_keys [:example, :history]
-  defstruct [:example, :history, trace: :none]
+  @enforce_keys [:example, :script, :history]
+  defstruct [:example, :script, :history, tracer: :none]
 
-  def new(example, history) do
+  def new(example, script, history) do
     %RunningExample{
       example: example,
+      script: script,
       history: history}
   end
 
   def run(example, opts \\ []) do
-    starting_history = RunningExample.History.new(example, opts)
+    r = new(
+      example,
+      Example.workflow_script(example, opts),
+      RunningExample.History.new(example, opts))
 
-    Example.workflow_script(example, opts)
-    |> run_steps(starting_history.data, example)
+    run_steps(r)
   end
 
-  defp run_steps([], history, _example), do: history
-  defp run_steps([{step_name, function} | rest], history, example) do
-    value = function.(history, example)
-    run_steps(rest, [{step_name, value} | history], example)
+  defp run_steps(running) do
+    case running.script do
+      [] ->
+        running.history
+      [{step_name, function} | rest] ->
+        value = function.(running.history, running.example)
+
+        running
+        |> Map.update!(:history, &(RunningExample.History.add(&1, step_name, value)))
+        |> Map.put(:script, rest)
+        |> run_steps
+    end
   end
 end
