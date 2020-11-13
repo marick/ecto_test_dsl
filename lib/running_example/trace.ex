@@ -1,0 +1,2 @@
+defmodule TransformerTestSupport.RunningExample.Trace do
+end

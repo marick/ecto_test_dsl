@@ -1,5 +1,7 @@
 defmodule TransformerTestSupport.Runner do
-  alias TransformerTestSupport.SmartGet.Example
+  alias TransformerTestSupport, as: T
+  alias T.SmartGet.Example
+  alias T.RunningExample
 
   # ----------------------------------------------------------------------------
   defmacro check_examples_with(module) do
@@ -40,27 +42,6 @@ defmodule TransformerTestSupport.Runner do
 
   # ----------------------------------------------------------------------------
 
-  def run_example_steps(example, opts \\ []) do
-    stop = Keyword.get(opts, :stop_after, :"this should not ever be a step name")
-    starting_history =
-      [repo_setup: Keyword.get(opts, :previously, %{}),
-       example: example]
-
-    attach_functions = fn step_names ->
-      step_functions = Example.step_functions(example)
-      for name <- step_names, do: {name, step_functions[name]}
-    end
-
-    example
-    |> Example.step_list
-    |> EnumX.take_until(&(&1 == stop))
-    |> attach_functions.()
-    |> run_steps(starting_history, example)
-  end
-
-  def run_steps([], history, _example), do: history
-  def run_steps([{step_name, function} | rest], history, example) do
-    value = function.(history, example)
-    run_steps(rest, [{step_name, value} | history], example)
-  end
+  def run_example_steps(example, opts \\ []),
+    do: RunningExample.run(example, opts)
 end

@@ -23,6 +23,21 @@ defmodule TransformerTestSupport.SmartGet.Example do
   def metadata(example, field),
     do: Map.get(example.metadata, field)
 
+
+  def workflow_script(example, opts) do
+    stop = Keyword.get(opts, :stop_after, :"this should not ever be a step name")
+
+    attach_functions = fn step_names ->
+      step_functions = step_functions(example)
+      for name <- step_names, do: {name, step_functions[name]}
+    end
+
+    example
+    |> step_list
+    |> EnumX.take_until(&(&1 == stop))
+    |> attach_functions.()
+  end
+
   
 
   def step_functions(example), do: metadata!(example, :steps)
