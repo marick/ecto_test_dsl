@@ -6,7 +6,6 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   alias T.RunningExample
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
-  alias Ecto.Changeset
 
   def accept_params(running) do
     prior_work = Keyword.get(running.history, :repo_setup, %{})
@@ -38,9 +37,10 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
     end
   end
 
-  def setup(example, prior_work) do
-    sources = Map.get(example, :setup, [])
-    Setup.from_a_list(sources, example, prior_work)
+  def setup(running) do
+    prior_work = Keyword.get(running.history, :repo_setup, %{})
+    sources = Map.get(running.example, :setup, [])
+    Setup.from_a_list(sources, running.example, prior_work)
   end
 
   # ----------------------------------------------------------------------------

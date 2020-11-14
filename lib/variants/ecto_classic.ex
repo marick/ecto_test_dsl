@@ -11,8 +11,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   # ------------------- Hook functions -----------------------------------------
 
   defp repo_setup(running) do
-    prior_work = Keyword.get(running.history, :repo_setup, %{})
-    ChangesetSupport.setup(running.example, prior_work)
+    ChangesetSupport.setup(running)
   end
 
   defp make_changeset(running) do 
