@@ -5,10 +5,13 @@ defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
   alias T.VariantSupport.ChangesetSupport
   import T.Build
   alias T.Sketch
+  alias T.RunningExample
+  alias T.RunningExample.History
 
-  def run(example, changeset),
-    do: ChangesetSupport.check_validation_changeset(changeset, example)
-
+  def run(example, changeset) do 
+    %RunningExample{example: example, history: History.trivial(step: changeset)}
+    |> ChangesetSupport.check_validation_changeset(:step)
+  end
   # ----------------------------------------------------------------------------
   test "handling of auto-generated valid/invalid checks" do
     a = nonflow_assertion_runners_for(&(run Sketch.success_example(), &1))
@@ -51,7 +54,7 @@ defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
           field_transformations: [
             as_cast: [:date_string, :age],
             date: on_success(Date.from_iso8601!(:date_string))])
-      
+
       run(example, Sketch.valid_changeset(changes: changeset_changes))
     end)
 

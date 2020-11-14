@@ -10,7 +10,7 @@ defmodule TransformerTestSupport.RunningExample.History do
     [{step_name, value} | history]    
   end
 
-  def trivial(step_value_list), do: step_value_list
+  def trivial(step_value_list \\ []), do: step_value_list
 
 
   def step_value!(history, step_name),

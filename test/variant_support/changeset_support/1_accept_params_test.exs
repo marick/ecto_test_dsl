@@ -1,6 +1,9 @@
 defmodule VariantSupport.Changeset.AcceptParamsTest do
-  use TransformerTestSupport.Case
-  alias TransformerTestSupport.VariantSupport.ChangesetSupport
+  alias TransformerTestSupport, as: T
+  use T.Case
+  alias T.VariantSupport.ChangesetSupport
+  alias T.RunningExample
+  alias T.RunningExample.History
 
   defstruct age: nil
 
@@ -15,7 +18,9 @@ defmodule VariantSupport.Changeset.AcceptParamsTest do
                 metadata: %{module_under_test: __MODULE__,
                             format: :phoenix}}
 
-    assert ChangesetSupport.accept_params(example, %{}) == :changeset_result
+    running = 
+      %RunningExample{example: example, history: History.trivial}
+    assert ChangesetSupport.accept_params(running) == :changeset_result
   end
 
   @tag :skip

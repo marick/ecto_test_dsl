@@ -8,15 +8,18 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   alias FlowAssertions.Ecto.ChangesetA
   alias Ecto.Changeset
 
-  def accept_params(example, prior_work) do
-    params = Example.params(example, previously: prior_work)
-    module = Example.module_under_test(example)
+  def accept_params(running) do
+    prior_work = Keyword.get(running.history, :repo_setup, %{})
+    params = Example.params(running.example, previously: prior_work)
+    module = Example.module_under_test(running.example)
     empty = struct(module)
     module.changeset(empty, params)
   end
 
-  def check_validation_changeset(changeset, example),
-    do: check_changeset(changeset, example, :changeset_for_validation_step)
+  def check_validation_changeset(running, changeset_step) do 
+    changeset = RunningExample.step_value!(running, changeset_step)
+    check_changeset(changeset, running.example, :changeset_for_validation_step)
+  end
   
   # ----------------------------------------------------------------------------
 
@@ -42,11 +45,11 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
 
   # ----------------------------------------------------------------------------
 
-  def insert(%Changeset{} = changeset, example) do
-    repo = Example.repo(example)
+  def insert(running, changeset_step) do
+    changeset = RunningExample.step_value!(running, changeset_step)
+    repo = Example.repo(running.example)
     repo.insert(changeset)
   end
-    
 
   def check_insertion_result(running, insertion_step) do
     case RunningExample.step_value!(running, insertion_step) do
