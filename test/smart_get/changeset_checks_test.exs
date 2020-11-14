@@ -1,14 +1,13 @@
 defmodule SmartGet.ChangesetChecksTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.SmartGet.ChangesetChecks, as: Checks
+  alias TransformerTestSupport.SmartGet.Example
   import TransformerTestSupport.Build
   alias Ecto.Changeset
 
   # ----------------------------------------------------------------------------
-  describe "valid/invalid additions" do
-
-
-    test "dependencies on step and category" do 
+  describe "dependencies on step and category" do
+    test "a list" do 
       expect = fn [step, category_name], expected ->
         TestBuild.one_category(category_name, [], example: [])
         |> Checks.get(:example, step)
@@ -24,10 +23,10 @@ defmodule SmartGet.ChangesetChecksTest do
     end
     
     test "checks are added to the beginning" do
-      TestBuild.one_category(
+      TestBuild.one_category(:validation_success,
         [],
-        ok: [changeset(no_changes: [:date])])
-      |> Checks.get(:ok, :changeset_for_validation_step)
+        example: [changeset(no_changes: [:date])])
+      |> Checks.get(:example, :changeset_for_validation_step)
       |> assert_equal([:valid, {:no_changes, [:date]}])
     end
   end
@@ -44,97 +43,78 @@ defmodule SmartGet.ChangesetChecksTest do
   end
 
   describe "adding an automatic as_cast test" do
-    test "starting with nothing" do 
-      test_data =
-        TestBuild.one_category(
-          [module_under_test: AsCast,
-           field_transformations: [as_cast: [:date]]
-          ],
-          ok: [params(date: "2001-01-01")])
 
-      Checks.get(test_data, :ok, :changeset_for_validation_step)
-      |> assert_equal([:valid, changes: [date: ~D[2001-01-01]]])
+    defp as_cast_data(fields, example_descriptions, category_opts) do 
+      TestBuild.one_category(
+        Keyword.get(category_opts, :category),
+        [module_under_test: AsCast,
+         field_transformations: [as_cast: fields]
+          ],
+        example_descriptions)
     end
 
-    test "starting with something" do 
-      test_data =
-        TestBuild.one_category(
-          [module_under_test: AsCast,
-           field_transformations: [as_cast: [:date]]
-          ],
-          ok: [params(date: "2001-01-01"),
-               changeset(changes: [name: "Bossie"])
-              ])
+    # Assumes example to be tested is `:example`
+    defp run_example(fields, example_opts,
+      category_opts \\ [category: :validation_success]) do
+        
+      as_cast_data(fields, [example: example_opts], category_opts)
+      |> Example.get(:example)
+      |> Checks.get(:changeset_for_validation_step, previously: %{})
+    end
 
-      Checks.get(test_data, :ok, :changeset_for_validation_step)
+    test "starting with no existing checks" do
+      run_example([:date], [params(         date:   "2001-01-01")])
+      |> assert_equal([:valid, changes:    [date: ~D[2001-01-01]]])
+    end
+
+    test "starting with existing checks" do
+      run_example([:date], [params(date: "2001-01-01"),
+                            changeset(changes: [name: "Bossie"])]) # existing
       |> assert_equal([:valid,
                       changes: [name: "Bossie"],
                       changes: [date: ~D[2001-01-01]]])
     end
 
     test "it is OK for a parameter to be missing" do
-      test_data =
-        TestBuild.one_category(
-          [module_under_test: AsCast,
-           field_transformations: [as_cast: [:other]]
-          ],
-          ok: [params(date: "2001-01-01"),
-               changeset(changes: [name: "Bossie"])
-              ])
-
-      Checks.get(test_data, :ok, :changeset_for_validation_step)
+      run_example([:other], [params(date: "2001-01-01"),
+                             changeset(changes: [name: "Bossie"])])
       |> assert_equal([:valid,
                       changes: [name: "Bossie"],
                       no_changes: [:other]])
     end
 
-    test "errors" do
-      test_data =
-        TestBuild.one_category(:validation_error,
-          [module_under_test: AsCast,
-           field_transformations: [as_cast: [:date, :name]]
-          ],
-          bad_date: [params(date: "2001-01-0", name: "Bossie")])
-
-      Checks.get(test_data, :bad_date, :changeset_for_validation_step)
+    test "validation errors appear in result" do
+      run_example([:date, :name], [params(date: "2001-01-0", name: "Bossie")],
+                  category: :validation_error)
       |> assert_equal([:invalid,
                       changes: [name: "Bossie"],
-                      no_changes: [:date],
-                      errors: [date: "is invalid"]])
+                      no_changes: [:date],             ## <<<
+                      errors: [date: "is invalid"]])   ## <<<
     end
 
-    test "user values override" do 
-      test_data =
-        TestBuild.one_category(
-          [module_under_test: AsCast,
-           field_transformations: [as_cast: [:date]]
-          ],
-          ok: [params(date: "2001-01-01"),
-               changeset(no_changes: :date)
-              ])
-
-      Checks.get(test_data, :ok, :changeset_for_validation_step)
+    test "a field named in the `changeset` arg overrides auto-generated ones" do 
+      run_example([:date], [params(date: "2001-01-01"),
+                            changeset(no_changes: :date)]) # Note date mentioned.
       |> assert_equal([:valid, no_changes: :date])
     end
 
 
-    test "overriding just one of the check types prevents all additions" do 
-      test_data =
-        TestBuild.one_category(
-          [module_under_test: AsCast,
-           field_transformations: [as_cast: [:date]]
-          ],
-          bad_date: [params(date: "2001-01-0"), # note this is in error.
-                     changeset(changes: [date: ~D[2001-01-01]]) # so this is inappropriate
-                    ])
-
-      Checks.get(test_data, :bad_date, :changeset_for_validation_step)
-      |> assert_equal([:valid, changes: [date: ~D[2001-01-01]]])
-      # However, the inappropriate check is obeyed.
+    test "overriding a field's changeset prevents `as_cast` calculation" do
+      run_example([:date], [params(date: "2001-01-0"),
+                                         # ^^^^^^^^ note this is in error.
+                            changeset(changes: [date: ~D[2001-01-01]])])
+      |> assert_equal([:valid,        changes: [date: ~D[2001-01-01]]])
+      # The actual `cast` value of the `date` parameter is never calculated.
     end
     
     @tag :skip
     test "no check is made if the field wasn't changed" do
+      # This would be relevant to update
+      #    The data part of the changeset contains a bogus value.
+      #    The params contains the same bogus value.
+      #    This does not cause a changeset check, just as it would
+      #    not cause a changeset value because those only apply to
+      #    
     end
   end
 
@@ -234,6 +214,12 @@ defmodule SmartGet.ChangesetChecksTest do
 
     @tag :skip
     test "no check is made if the field wasn't changed" do
+      # This would be relevant to update
+      #    The data part of the changeset contains a bogus value.
+      #    The params contains the same bogus value.
+      #    This does not cause a changeset check, just as it would
+      #    not cause a changeset value because those only apply to
+      #    
     end
   end
 end
