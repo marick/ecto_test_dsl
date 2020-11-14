@@ -4,6 +4,8 @@ defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
   alias T.Build
   alias T.VariantSupport.ChangesetSupport
   alias T.Sketch
+  alias T.RunningExample
+  alias T.RunningExample.History
   alias Ecto.Changeset
 
   defmodule Schema do
@@ -16,8 +18,10 @@ defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
     end
   end
 
-  def run(example, result),
-    do: ChangesetSupport.check_constraint_changeset(result, example)
+  def run(example, result) do
+    %RunningExample{example: example, history: History.trivial(step: result)}
+    |> ChangesetSupport.check_constraint_changeset(:step)
+  end
 
   # ----------------------------------------------------------------------------
 

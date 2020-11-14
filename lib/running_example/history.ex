@@ -1,6 +1,5 @@
 defmodule TransformerTestSupport.RunningExample.History do
   alias TransformerTestSupport, as: T
-  alias T.RunningExample.History
   
   def new(example, opts) do 
     [repo_setup: Keyword.get(opts, :previously, %{}),
@@ -10,4 +9,10 @@ defmodule TransformerTestSupport.RunningExample.History do
   def add(history, step_name, value) do
     [{step_name, value} | history]    
   end
+
+  def trivial(step_value_list), do: step_value_list
+
+
+  def step_value!(history, step_name),
+    do: Keyword.fetch!(history, step_name)
 end

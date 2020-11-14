@@ -3,6 +3,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   alias T.SmartGet.{Example,ChangesetChecks}
   alias T.VariantSupport.ChangesetSupport.Setup
   import FlowAssertions.Define.{Defchain, BodyParts}
+  alias T.RunningExample
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
   alias Ecto.Changeset
@@ -56,14 +57,17 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
       left: changeset.errors)
   end
 
-  def check_constraint_changeset({:error, changeset}, example),
-    do: check_changeset(changeset, example, :changeset_for_constraint_step)
-
-  def check_constraint_changeset(result, example) do 
-    elaborate_flunk(
-      context(example, "Expected an error tuple containing a changeset"),
-      left: result)
+  def check_constraint_changeset(running, changeset_step) do
+    case RunningExample.step_value!(running, changeset_step) do
+      {:error, changeset} -> 
+        check_changeset(changeset, running.example, :changeset_for_constraint_step)
+      tuple -> 
+        elaborate_flunk(
+          context(running.example, "Expected an error tuple containing a changeset"),
+          left: tuple)
+    end
   end
+
 
   # ----------------------------------------------------------------------------
 

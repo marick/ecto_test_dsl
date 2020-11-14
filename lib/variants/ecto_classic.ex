@@ -36,8 +36,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   end
   
   defp check_constraint_changeset(running) do
-    [{:insert_changeset, tuple} | _] = running.history
-    ChangesetSupport.check_constraint_changeset(tuple, running.example)
+    ChangesetSupport.check_constraint_changeset(running, :insert_changeset)
   end
   
   def initial_step_definitions() do
