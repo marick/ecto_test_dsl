@@ -3,10 +3,14 @@ defmodule VariantSupport.Changeset.CheckInsertionResultTest do
   use T.Case
   alias T.VariantSupport.ChangesetSupport
   alias T.Sketch
+  alias T.RunningExample
+  alias T.RunningExample.History
   alias Ecto.Changeset
 
-  def run(example, result),
-    do: ChangesetSupport.check_insertion_result(result, example)
+  def run(example, result) do 
+    %RunningExample{example: example, history: History.trivial(step: result)}
+    |> ChangesetSupport.check_insertion_result(:step)
+  end
 
   # ----------------------------------------------------------------------------
   test "handling of ok/error" do

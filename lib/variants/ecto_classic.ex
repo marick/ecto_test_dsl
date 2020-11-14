@@ -31,8 +31,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   end
   
   defp check_insertion(running) do
-    [{:insert_changeset, tuple} | _] = running.history
-    ChangesetSupport.check_insertion_result(tuple, running.example)
+    ChangesetSupport.check_insertion_result(running, :insert_changeset)
   end
   
   defp check_constraint_changeset(running) do

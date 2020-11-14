@@ -48,15 +48,17 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   end
     
 
-  def check_insertion_result({:ok, _result}, _example),
-    do: :ok
-
-  def check_insertion_result({:error, changeset}, example) do 
-    elaborate_flunk(
-      error_message(example, changeset, "Unexpected insertion failure"),
-      left: changeset.errors)
+  def check_insertion_result(running, insertion_step) do
+    case RunningExample.step_value!(running, insertion_step) do
+      {:ok, _result} -> 
+        :ok
+      {:error, changeset} -> 
+        elaborate_flunk(
+          error_message(running.example, changeset, "Unexpected insertion failure"),
+          left: changeset.errors)
+    end
   end
-
+  
   def check_constraint_changeset(running, changeset_step) do
     case RunningExample.step_value!(running, changeset_step) do
       {:error, changeset} -> 
