@@ -17,7 +17,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
 
   def check_validation_changeset(running, changeset_step) do 
     changeset = RunningExample.step_value!(running, changeset_step)
-    check_changeset(changeset, running.example, :changeset_for_validation_step)
+    check_changeset(changeset, running, :changeset_for_validation_step)
   end
   
   # ----------------------------------------------------------------------------
@@ -65,7 +65,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   def check_constraint_changeset(running, changeset_step) do
     case RunningExample.step_value!(running, changeset_step) do
       {:error, changeset} -> 
-        check_changeset(changeset, running.example, :changeset_for_constraint_step)
+        check_changeset(changeset, running, :changeset_for_constraint_step)
       tuple -> 
         elaborate_flunk(
           context(running.example, "Expected an error tuple containing a changeset"),
@@ -76,14 +76,15 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
 
   # ----------------------------------------------------------------------------
 
-  defchain check_changeset(changeset, example, step) do
+  defchain check_changeset(changeset, running, step) do
+    prior_work = Keyword.get(running.history, :repo_setup, %{})
     adjust_assertion_message(
       fn ->
-        for check <- ChangesetChecks.get(example, step),
+        for check <- ChangesetChecks.get(running.example, step, previously: prior_work),
           do: apply_assertion(changeset, check)
       end,
       fn message ->
-        error_message(example, changeset, message)
+        error_message(running.example, changeset, message)
       end)
   end
 

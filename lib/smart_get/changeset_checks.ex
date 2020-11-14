@@ -6,7 +6,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
   @moduledoc """
   """
 
-  def get(example, step) do
+  def get(example, step, previously: previously) do
     changeset_checks = Map.get(example, step, [])
     user_mentioned = Checks.Util.unique_fields(changeset_checks)
 
@@ -22,6 +22,6 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
 
   def get(test_data, example_name, step) do
     Example.get(test_data, example_name)
-    |> get(step)
+    |> get(step, previously: %{})
   end
 end
