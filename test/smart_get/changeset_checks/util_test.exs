@@ -54,7 +54,7 @@ defmodule SmartGet.ChangesetChecks.UtilTest do
 
   test "transformations" do
     expect = fn kws, expected ->
-      actual = with_transformations(kws) |> Util.transformations
+      actual = with_transformations(kws) |> Util.separate_types_of_transformed_fields
       assert actual == expected
     end
     

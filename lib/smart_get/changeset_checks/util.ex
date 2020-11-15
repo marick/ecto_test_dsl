@@ -26,7 +26,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Util do
 
   # ----------------------------------------------------------------------------
 
-  def transformations(example) do
+  def separate_types_of_transformed_fields(example) do
     {as_cast_list, calculated_fields} =
       Example.field_transformations(example)
       |> Keyword.pop_values(:as_cast)

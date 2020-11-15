@@ -1,30 +1,29 @@
 defmodule TransformerTestSupport.SmartGet.ChangesetChecks.AsCast do
   alias TransformerTestSupport.SmartGet
-  alias SmartGet.Example
+  alias SmartGet.{Example,Params}
   alias Ecto.Changeset
     
   @moduledoc """
   """
 
-  
+  defp insertion_changeset(example, previously, fields) do
+    module = Example.module_under_test(example)
+    empty = struct(module)
+    params = Params.get(example, previously: previously)
 
-  defp insertion_changeset(example, fields) do
-    example
-    |> Example.module_under_test
-    |> struct
-    |> Changeset.cast(Example.params(example), fields)
+    Changeset.cast(empty, Params.get(example, previously: previously), fields)
   end
 
-  def add(changeset_checks, _example, []), do: changeset_checks
-  def add(changeset_checks, example, fields) do
-    changeset = insertion_changeset(example, fields)
-    add_checks(changeset_checks, fields, changeset)
+  def add(changeset_checks, _example, _previously, []), do: changeset_checks
+  def add(changeset_checks, example, previously, fields) do
+    changeset_from_cast = insertion_changeset(example, previously, fields)
+    add_checks(changeset_checks, fields, changeset_from_cast)
   end
 
 
-  defp add_checks(changeset_checks, all_fields, changeset) do
-    named_in_changes? = &(&1 in Map.    keys(changeset.changes))
-    named_in_errors?  = &(&1 in Keyword.keys(changeset.errors))
+  defp add_checks(changeset_checks, all_fields, from_cast) do
+    named_in_changes? = &(&1 in Map.    keys(from_cast.changes))
+    named_in_errors?  = &(&1 in Keyword.keys(from_cast.errors))
 
     fields = %{
       changes:    Enum.filter(all_fields, named_in_changes?),
@@ -33,10 +32,10 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.AsCast do
     }
 
     new_checks = %{
-      changes: (for f <- fields.changes, do: {f, changeset.changes[f]}),
+      changes: (for f <- fields.changes, do: {f, from_cast.changes[f]}),
       no_changes: (for f <- fields.no_changes, do: f),
       errors: (for f <- fields.errors do
-                {f, Keyword.get(changeset.errors, f) |> elem(0)}
+                {f, Keyword.get(from_cast.errors, f) |> elem(0)}
               end)
     }
     order_of_additions = [:changes, :no_changes, :errors]

@@ -34,17 +34,21 @@ defmodule SmartGet.ChangesetChecksTest do
   # ----------------------------------------------------------------------------
   defmodule AsCast do 
     use Ecto.Schema
-    embedded_schema do
+    schema "table" do
       field :name, :string
       field :date, :date
       field :other, :string
       field :other2, :string
+
+      field :species_id, :integer   # Faking a `belongs_to`
     end
   end
 
   describe "adding an automatic as_cast test" do
 
-    defp as_cast_data(fields, example_descriptions, category_opts) do 
+    defp as_cast_data(fields, example_descriptions,
+      category_opts \\ [category: :validation_success]) do
+
       TestBuild.one_category(
         Keyword.get(category_opts, :category),
         [module_under_test: AsCast,
@@ -115,6 +119,15 @@ defmodule SmartGet.ChangesetChecksTest do
       #    This does not cause a changeset check, just as it would
       #    not cause a changeset value because those only apply to
       #    
+    end
+
+    test "`setup` values are obeyed" do
+      as_cast_data([:species_id],
+        example: [params(species_id: id_of(:prerequisite))])
+      |> Example.get(:example)
+      |> Checks.get(:changeset_for_validation_step,
+                    previously: %{ {:prerequisite, __MODULE__} => %{id: 383}})
+      # |> assert_equal([:valid,        changes: [species_id: 383]])
     end
   end
 
