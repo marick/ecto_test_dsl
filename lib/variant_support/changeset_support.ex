@@ -92,7 +92,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
     prior_work = Keyword.get(running.history, :repo_setup, %{})
     adjust_assertion_message(
       fn ->
-        for check <- ChangesetChecks.get(running.example, :changeset_for_constraint_step, previously: prior_work),
+        for check <- ChangesetChecks.get_constraint_checks(running.example, previously: prior_work),
           do: apply_assertion(changeset, check)
       end,
       fn message ->

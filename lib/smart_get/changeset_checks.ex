@@ -32,25 +32,18 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
       else: [  :valid | checks_so_far]
   end
 
+
   # ----------------------------------------------------------------------------
 
 
-  def get(example, step, previously: previously) do
-    changeset_checks = Map.get(example, step, [])
-    user_mentioned = Checks.Util.unique_fields(changeset_checks)
-
-    [as_cast_fields, calculated_fields] =
-      Checks.Util.separate_types_of_transformed_fields(example)
-      |> Enum.map(&(Checks.Util.remove_fields_named_by_user(&1, user_mentioned)))
+  def get_constraint_checks(example, previously: _previously) do
+    changeset_checks = Map.get(example, :changeset_for_constraint_step, [])
 
     changeset_checks
-    |> Checks.Validity.add(example, step)
-    |> Checks.AsCast.add(example, previously, as_cast_fields)
-    |> Checks.Calculated.add(example, calculated_fields)
   end
 
-  def get(test_data, example_name, step) do
+  def get_constraint_checks(test_data, example_name, step) do
     Example.get(test_data, example_name)
-    |> get(step, previously: %{})
+    |> get_constraint_checks(step, previously: %{})
   end
 end

@@ -12,7 +12,7 @@ defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
     use Ecto.Schema
 
     embedded_schema do
-      field :date_string, :string
+      field :date_string, :string, default: "today"
       field :date, :date
       field :lock_uuid, Ecto.UUID
     end
@@ -26,8 +26,7 @@ defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
   # ----------------------------------------------------------------------------
 
   @example Sketch.example(:name, :constraint_error, [
-        Build.constraint_changeset(error: [name: ~r/duplicate/])
-      ])
+        Build.constraint_changeset(error: [name: ~r/duplicate/])])
   
   test "unexpected :ok" do
     assertion_fails(~r/Example `:name`: Expected an error tuple/,
@@ -48,18 +47,28 @@ defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
   test "a missing error" do
     changeset =
       Changeset.change(%Schema{})
-      |> Changeset.add_error(:lock_uuid, "is stolen")
-
+    
     assertion_fails(~r/There are no errors for field `:name`/,
       fn ->
         run(@example, {:error, changeset})
       end)
   end
 
-  test "there is an auto-validity check" do
-    assertion_fails(~r/The changeset is supposed to be invalid/,
+  @tag :skip
+  test "an additional error" do
+    changeset =
+      Changeset.change(%Schema{})
+      |> Changeset.add_error(:name, "is a duplicate")
+      |> Changeset.add_error(:lock_uuid, "is stolen")
+
+    assertion_fails(~r/There is an unexpected error for field `:lock_uuid`/,
       fn ->
-        run(@example, {:error, Sketch.valid_changeset})
+        run(@example, {:error, changeset})
       end)
   end
+
+  @tag :skip
+  test "can use a reference to a previously-added example" do
+  end
+
 end
