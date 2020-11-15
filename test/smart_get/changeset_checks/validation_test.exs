@@ -1,4 +1,4 @@
-defmodule SmartGet.ChangesetChecksTest do
+defmodule SmartGet.ChangesetChecks.ValidationTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.SmartGet.ChangesetChecks, as: Checks
   alias TransformerTestSupport.SmartGet.Example
