@@ -4,6 +4,8 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Validity do
   @moduledoc """
   """
 
+  IO.inspect "DELETE THIS"
+
   def add(changeset_checks, example, step) do
     if expect_invalid?(step, Example.category_name(example)),
       do:   [:invalid | changeset_checks],

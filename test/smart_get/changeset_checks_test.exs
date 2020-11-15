@@ -6,27 +6,24 @@ defmodule SmartGet.ChangesetChecksTest do
   alias Ecto.Changeset
 
   # ----------------------------------------------------------------------------
-  describe "dependencies on step and category" do
+  describe "dependencies on category" do
     test "a list" do 
-      expect = fn [step, category_name], expected ->
+      expect = fn category_name, expected ->
         TestBuild.one_category(category_name, [], example: [])
-        |> Checks.get(:example, step)
+        |> Checks.get_validation_checks(:example)
         |> assert_equal([expected])
       end
 
-      [:changeset_for_validation_step, :validation_error]   |> expect.(:invalid)
-      [:changeset_for_validation_step, :validation_success] |> expect.(  :valid)
-      [:changeset_for_validation_step, :constraint_error]   |> expect.(  :valid)
-
-      [:changeset_for_constraint_step, :validation_success] |> expect.(  :valid)
-      [:changeset_for_constraint_step, :constraint_error]   |> expect.(:invalid)
+      :validation_error   |> expect.(:invalid)
+      :validation_success |> expect.(  :valid)
+      :constraint_error   |> expect.(  :valid)
     end
     
     test "checks are added to the beginning" do
       TestBuild.one_category(:validation_success,
         [],
         example: [changeset(no_changes: [:date])])
-      |> Checks.get(:example, :changeset_for_validation_step)
+      |> Checks.get_validation_checks(:example)
       |> assert_equal([:valid, {:no_changes, [:date]}])
     end
   end
@@ -63,7 +60,7 @@ defmodule SmartGet.ChangesetChecksTest do
         
       as_cast_data(fields, [example: example_opts], category_opts)
       |> Example.get(:example)
-      |> Checks.get(:changeset_for_validation_step, previously: %{})
+      |> Checks.get_validation_checks(previously: %{})
     end
 
     test "starting with no existing checks" do
@@ -125,9 +122,9 @@ defmodule SmartGet.ChangesetChecksTest do
       as_cast_data([:species_id],
         example: [params(species_id: id_of(:prerequisite))])
       |> Example.get(:example)
-      |> Checks.get(:changeset_for_validation_step,
+      |> Checks.get_validation_checks(
                     previously: %{ {:prerequisite, __MODULE__} => %{id: 383}})
-      # |> assert_equal([:valid,        changes: [species_id: 383]])
+      |> assert_equal([:valid,        changes: [species_id: 383]])
     end
   end
 
@@ -154,7 +151,7 @@ defmodule SmartGet.ChangesetChecksTest do
           ok: [params(date_string: "2001-01-01")])
 
       [:valid, changes: [date_string: "2001-01-01"], __custom_changeset_check: f] =
-        Checks.get(test_data, :ok, :changeset_for_validation_step)
+        Checks.get_validation_checks(test_data, :ok)
 
       success = %Changeset{
         changes: %{date_string: "2001-01-01",
@@ -184,7 +181,7 @@ defmodule SmartGet.ChangesetChecksTest do
           ],
           error: [params(date_string: "2001-01-0")])
 
-      actual = Checks.get(test_data, :error, :changeset_for_validation_step)
+      actual = Checks.get_validation_checks(test_data, :error)
       assert [:invalid, changes: [date_string: "2001-01-0"]] = actual
     end
 
@@ -204,7 +201,7 @@ defmodule SmartGet.ChangesetChecksTest do
       [:valid, changes: [date_string: "2000-01-04"],
         __custom_changeset_check: _date,
         __custom_changeset_check: days_since] =
-          Checks.get(test_data, :ok, :changeset_for_validation_step)
+        Checks.get_validation_checks(test_data, :ok)
 
       success = %Changeset{
         changes: %{date_string: "2000-01-04",
