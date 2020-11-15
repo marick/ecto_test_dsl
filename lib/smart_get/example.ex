@@ -58,6 +58,8 @@ defmodule TransformerTestSupport.SmartGet.Example do
     |> Map.get(example.metadata.category_name)
   end
 
+  IO.inspect "This is too error prone"
+  # Because too easy to use it instead of SmartGet.Params
   def params(example, opts \\ [previously: %{}]),
     do: SmartGet.Params.get(example, opts)
 end
