@@ -53,14 +53,24 @@ defmodule VariantSupport.Changeset.SetupTest do
 
         make(:has_duplicates, setup(insert: :depth_3, insert: :dependent))
       ])
-    end
+      end
   end
 
   defmodule ActualTests do
     use T.Case
-    
+
+    # Note: this won't necessarily prevent races if any other tests
+    # use these names.
+    def start_names_with_zero() do
+      Examples.Tester.test_data.examples
+      |> Keyword.keys
+      |> Enum.map(&to_string/1)
+      |> ExMachina.Sequence.reset
+    end
+      
+
     def setup_for(example_name) do
-      ExMachina.Sequence.reset
+      start_names_with_zero()
       Examples.Tester.check_workflow(example_name)
       |> Keyword.get(:repo_setup)
     end
@@ -71,7 +81,7 @@ defmodule VariantSupport.Changeset.SetupTest do
     # a duplicate creation will produce a different final name in the two.
 
     def expect(actual, names) do
-      ExMachina.Sequence.reset
+      start_names_with_zero()
       
       expected = 
         names
@@ -89,8 +99,6 @@ defmodule VariantSupport.Changeset.SetupTest do
       setup_for(:depth_3)   |> expect([:leaf, :dependent]) # recurses
       setup_for(:insert_then_insert) |> expect([:depth_3, :dependent, :leaf, :leaf2])
       setup_for(:has_duplicates)     |> expect([:depth_3, :dependent, :leaf])
-
-      IO.puts("Fix ExMachina.Sequence.reset")
     end
   end
 end
