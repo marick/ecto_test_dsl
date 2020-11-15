@@ -10,7 +10,8 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
     test "a list" do 
       expect = fn category_name, expected ->
         TestBuild.one_category(category_name, [], example: [])
-        |> Checks.get_validation_checks(:example)
+        |> Example.get(:example)
+        |> Checks.get_validation_checks(previously: %{})
         |> assert_equal([expected])
       end
 
@@ -23,7 +24,8 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       TestBuild.one_category(:validation_success,
         [],
         example: [changeset(no_changes: [:date])])
-      |> Checks.get_validation_checks(:example)
+      |> Example.get(:example)
+      |> Checks.get_validation_checks(previously: %{})
       |> assert_equal([:valid, {:no_changes, [:date]}])
     end
   end
@@ -151,7 +153,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
           ok: [params(date_string: "2001-01-01")])
 
       [:valid, changes: [date_string: "2001-01-01"], __custom_changeset_check: f] =
-        Checks.get_validation_checks(test_data, :ok)
+        Example.get(test_data, :ok) |> Checks.get_validation_checks(previously: %{})
 
       success = %Changeset{
         changes: %{date_string: "2001-01-01",
@@ -171,7 +173,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
     end
 
     test "no check added when a validation failure is expected" do 
-      test_data =
+      actual =
         TestBuild.one_category(:validation_error,
           [module_under_test: OnSuccess,
            field_transformations: [
@@ -180,8 +182,8 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
            ]
           ],
           error: [params(date_string: "2001-01-0")])
-
-      actual = Checks.get_validation_checks(test_data, :error)
+      |> Example.get(:error)
+      |> Checks.get_validation_checks(previously: %{})
       assert [:invalid, changes: [date_string: "2001-01-0"]] = actual
     end
 
@@ -201,7 +203,9 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       [:valid, changes: [date_string: "2000-01-04"],
         __custom_changeset_check: _date,
         __custom_changeset_check: days_since] =
-        Checks.get_validation_checks(test_data, :ok)
+        test_data
+        |> Example.get(:ok)
+        |> Checks.get_validation_checks(previously: %{})
 
       success = %Changeset{
         changes: %{date_string: "2000-01-04",

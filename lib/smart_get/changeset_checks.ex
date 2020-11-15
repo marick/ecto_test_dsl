@@ -20,12 +20,6 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
     |> Checks.Calculated.add(example, calculated_fields)
   end
 
-  IO.inspect "DELETE THIS"
-  def get_validation_checks(test_data, example_name) do
-    Example.get(test_data, example_name)
-    |> get_validation_checks(previously: %{})
-  end
-
   defp add_whole_changeset_check(checks_so_far, example) do
     if Example.category_name(example) == :validation_error,
       do:   [:invalid | checks_so_far],
