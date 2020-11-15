@@ -35,9 +35,4 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
 
     changeset_checks
   end
-
-  def get_constraint_checks(test_data, example_name, step) do
-    Example.get(test_data, example_name)
-    |> get_constraint_checks(step, previously: %{})
-  end
 end
