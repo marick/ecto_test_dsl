@@ -1,6 +1,6 @@
 defmodule TransformerTestSupport.Runner do
   alias TransformerTestSupport, as: T
-  alias T.SmartGet.Example
+  # alias T.SmartGet.Example
   alias T.RunningExample
 
   # ----------------------------------------------------------------------------

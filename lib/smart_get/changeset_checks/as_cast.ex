@@ -9,7 +9,6 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.AsCast do
   defp insertion_changeset(example, previously, fields) do
     module = Example.module_under_test(example)
     empty = struct(module)
-    params = Params.get(example, previously: previously)
 
     Changeset.cast(empty, Params.get(example, previously: previously), fields)
   end
