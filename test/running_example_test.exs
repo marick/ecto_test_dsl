@@ -1,7 +1,77 @@
-defmodule RunningExampleTest do
-  # alias TransformerTestSupport, as: T
-  # alias T.Build
-  # alias T.Runner
-  # alias T.Variants.EctoClassic
-  # alias Ecto.Changeset
+defmodule TransformerTestSupport.RunningExampleTest do
+  alias TransformerTestSupport, as: T
+  alias T.Build
+  alias T.RunningExample
+  alias T.Variants.EctoClassic
+  alias Ecto.Changeset
+
+  defmodule Schema do 
+    use Ecto.Schema
+    import Ecto.Changeset
+
+    embedded_schema do
+      field :name, :string
+    end
+
+    def changeset(struct, params) do
+      struct
+      |> cast(params, [:name])
+      |> validate_required([:name])
+    end
+  end
+
+  defmodule Examples do
+    use EctoClassic
+
+    def fake_insert(changeset),
+      do: {:ok, "created `#{changeset.changes.name}`"}
+
+    def create_test_data do 
+      start(
+        module_under_test: Schema,
+        format: :phoenix,
+        repo: :unused
+      ) |>
+      
+      replace_steps(insert_changeset: step(&fake_insert/1, :make_changeset)) |>
+      
+      category(                                         :success,
+        young: [params(name: "young")],
+        dependent: [params(name: "dependent"), setup(insert: :young)],
+        two_level: [params(name: "dependent"), setup(insert: :dependent)]
+      )
+    end
+  end
+
+  defmodule Tests do
+    use TransformerTestSupport.Case
+
+    test "stopping early after a step" do
+      assert [make_changeset: made, repo_setup: %{}, repo_setup: %{}, example: _] = 
+        Examples.Tester.example(:young) |> RunningExample.run(stop_after: :make_changeset)
+      
+      made
+      |> assert_shape(%Changeset{})
+    end
+
+    @presupplied "presupplied, not created"
+
+    test "A starting setup-state can be passed in" do
+      expect = fn example_name, expected ->
+        actual =  
+          Examples.Tester.example(example_name)
+          |> RunningExample.run(previously:
+                %{{:young, Examples} => "presupplied, not created"})
+        assert Keyword.get(actual, :repo_setup) == expected
+      end
+
+      :dependent |> expect.(%{{:young, Examples} => @presupplied})
+      # There is a recursive call
+      :two_level |> expect.(%{
+            {:young, Examples} => @presupplied,
+            {:dependent, Examples} => "created `dependent`"})
+    end
+  end
 end
+
+  

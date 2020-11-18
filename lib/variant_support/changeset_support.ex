@@ -6,10 +6,11 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   alias T.RunningExample
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
+  alias T.RunningExample.Trace
 
   def accept_params(running) do
     prior_work = Keyword.get(running.history, :repo_setup, %{})
-    params = Example.params(running.example, previously: prior_work)
+    params = Example.params(running.example, previously: prior_work)# |> Trace.say
     module = Example.module_under_test(running.example)
     empty = struct(module)
     module.changeset(empty, params)
@@ -26,7 +27,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   # use the results of another that isn't part of the same dependency tree.
   # That might change if I add a category-wide or test-data-wide setup.
 
-  # If that is done, the history must be passed in by `Runner.run_example_steps`
+  # If that is done, the history must be passed in by `RunningExample.run`
 
   def start_sandbox(example) do
     alias Ecto.Adapters.SQL.Sandbox

@@ -8,7 +8,7 @@ defmodule TransformerTestSupport.Predefines.Tester do
 
       alias T.TestDataServer
       alias T.SmartGet
-      alias T.Runner
+      alias T.RunningExample
         
       @name_of_test_data Module.split(__MODULE__)
       |> Enum.drop(-1) |> Module.safe_concat
@@ -23,8 +23,10 @@ defmodule TransformerTestSupport.Predefines.Tester do
         |> SmartGet.Example.params
       end
       
-      def check_workflow(example_name, opts \\ []),
-        do: Runner.run_example_steps(example(example_name), opts)
+      def check_workflow(example_name, opts \\ []) do
+        example(example_name)
+        |> RunningExample.run(opts)
+      end
     end
   end
 end

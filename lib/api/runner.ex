@@ -1,7 +1,5 @@
 defmodule TransformerTestSupport.Runner do
   alias TransformerTestSupport, as: T
-  # alias T.SmartGet.Example
-  alias T.RunningExample
 
   # ----------------------------------------------------------------------------
   defmacro check_examples_with(module) do
@@ -39,9 +37,4 @@ defmodule TransformerTestSupport.Runner do
       end
     end
   end
-
-  # ----------------------------------------------------------------------------
-
-  def run_example_steps(example, opts \\ []),
-    do: RunningExample.run(example, opts)
 end

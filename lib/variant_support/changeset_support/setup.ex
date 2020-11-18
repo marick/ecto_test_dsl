@@ -1,7 +1,7 @@
 defmodule TransformerTestSupport.VariantSupport.ChangesetSupport.Setup do
   alias TransformerTestSupport.SmartGet.Example
   use FlowAssertions.Ecto
-  alias TransformerTestSupport.Runner
+  alias TransformerTestSupport.RunningExample
 
   # ----------------------------------------------------------------------------
   # Working with a container of one or more example sources
@@ -43,7 +43,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport.Setup do
       workflow_results = 
         example_module
         |> Example.get(example_name)
-        |> Runner.run_example_steps(previously: so_far)
+        |> RunningExample.run(previously: so_far)
 
       dependently_created = Keyword.get(workflow_results, :repo_setup)
       {:ok, insert_result} = Keyword.get(workflow_results, :insert_changeset)
