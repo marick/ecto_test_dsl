@@ -2,6 +2,7 @@ defmodule TransformerTestSupport.RunningExample do
   alias TransformerTestSupport, as: T
   alias T.RunningExample
   alias T.RunningExample.History
+  import T.RunningExample.Trace
   alias T.SmartGet.Example
 
   @enforce_keys [:example, :history]
@@ -13,8 +14,9 @@ defmodule TransformerTestSupport.RunningExample do
     %RunningExample{
       example: example,
       script: Example.workflow_script(example, opts),
-      history: History.new(example, opts)}
-    |> run_steps
+      history: History.new(example, opts)
+    }
+    |> ti__(run_steps)
   end
 
   defp run_steps(running) do
@@ -22,7 +24,7 @@ defmodule TransformerTestSupport.RunningExample do
       [] ->
         running.history
       [{step_name, function} | rest] ->
-        value = function.(running)
+        value = ti__(running, function.()       , step_name)
 
         running
         |> Map.update!(:history, &(History.add(&1, step_name, value)))
