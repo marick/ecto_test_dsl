@@ -17,7 +17,12 @@ defmodule TransformerTestSupport.RunningExample.Trace do
         result
       rescue
         ex in ExUnit.AssertionError ->
-          TraceServer.accept(["!! assertion error: ", ex.message])
+          if TraceServer.at_top_level? do 
+            TraceServer.accept("!! assertion error !!")
+            TraceServer.nested(fn ->
+              TraceServer.accept(ex.message)
+            end)
+          end
           reraise ex, __STACKTRACE__
       end
     end   

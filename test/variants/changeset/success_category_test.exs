@@ -180,7 +180,6 @@ defmodule Variants.EctoClassic.SuccessCategoryTest do
         fn -> 
           Examples.Tester.check_workflow(:override_incorrectly)
         end)
-
     end
   end
 

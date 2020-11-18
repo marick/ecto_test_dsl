@@ -9,26 +9,42 @@ defmodule TransformerTestSupport.RunningExample.TraceServer do
   end
 
   def nested(f) do
-    push_indent
-    result = f.()
-    pop_indent
-    result
+    push_indent()
+    try do
+      result = f.()
+      pop_indent()
+      result
+    rescue
+      ex in ExUnit.AssertionError ->
+        pop_indent()
+        reraise ex, __STACKTRACE__
+    end
   end
 
   def push_indent, do: GenServer.call(__MODULE__, :push_indent)
   def pop_indent, do: GenServer.call(__MODULE__, :pop_indent)
 
   def separate do
-    if at_top_level?, do: IO.puts ""
+    if at_top_level?(), do: IO.puts ""
   end
 
+  defp indent(report) when is_list(report) do 
+    for part <- report, do: indent(part)
+  end
+  
   defp indent(report) do
-    [leader(), report]
+    if String.contains?(report, "\n") do 
+      for part <- String.split(report, "\n") do 
+        [leader(), part, "\n"]
+      end
+    else
+      [leader(), report]
+    end
   end
 
-  defp at_top_level?, do: leader() == []
+  def at_top_level?, do: leader() == []
 
-  defp leader, do: GenServer.call(__MODULE__, :leader)
+  def leader, do: GenServer.call(__MODULE__, :leader)
 
   # ----------------------------------------------------------------------------
 
