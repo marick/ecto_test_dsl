@@ -1,8 +1,13 @@
 defmodule TransformerTestSupport.RunningExample.TraceServer do
   use GenServer
 
+  @init %{
+    leader: [],
+    tracing: false
+  }
+
   def start(),
-    do: GenServer.start_link(__MODULE__, %{leader: []}, name: __MODULE__)
+    do: GenServer.start_link(__MODULE__, @init, name: __MODULE__)
 
   def accept(report) do
     indent(report) |> IO.puts
@@ -28,19 +33,30 @@ defmodule TransformerTestSupport.RunningExample.TraceServer do
     if at_top_level?(), do: IO.puts ""
   end
 
-  defp indent(report) when is_list(report) do 
-    for part <- report, do: indent(part)
+  def indent(report) when is_binary(report) do
+    [leader(), 
+     String.split(report, "\n")
+     |> Enum.intersperse(["\n", leader()])
+    ]
   end
+
+  def indent(report) when is_list(report) do
+    [leader(), report]
+  end
+
+  # def indent(report) when is_list(report) do
+  #   for part <- report, do: [leader(), indent(part)]
+  # end
   
-  defp indent(report) do
-    if String.contains?(report, "\n") do 
-      for part <- String.split(report, "\n") do 
-        [leader(), part, "\n"]
-      end
-    else
-      [leader(), report]
-    end
-  end
+  # def indent(report) do
+  #   if String.contains?(report, "\n") do 
+  #     for part <- String.split(report, "\n") do 
+  #       [leader(), part, "\n"]
+  #     end
+  #   else
+  #     [leader(), report]
+  #   end
+  # end
 
   def at_top_level?, do: leader() == []
 

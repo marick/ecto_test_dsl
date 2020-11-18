@@ -10,15 +10,19 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
 
   def accept_params(running) do
     prior_work = Keyword.get(running.history, :repo_setup, %{})
-    params = Example.params(running.example, previously: prior_work)# |> Trace.say
+    params = Example.params(running.example, previously: prior_work)
     module = Example.module_under_test(running.example)
     empty = struct(module)
+
+    Trace.say(params, :params)
+    
     module.changeset(empty, params)
   end
 
   def check_validation_changeset(running, changeset_step) do 
     changeset = RunningExample.step_value!(running, changeset_step)
     check_validation_changeset_(changeset, running)
+    :uninteresting_result
   end
   
   # ----------------------------------------------------------------------------
@@ -55,7 +59,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   def check_insertion_result(running, insertion_step) do
     case RunningExample.step_value!(running, insertion_step) do
       {:ok, _result} -> 
-        :ok
+        :uninteresting_result
       {:error, changeset} -> 
         elaborate_flunk(
           error_message(running.example, changeset, "Unexpected insertion failure"),

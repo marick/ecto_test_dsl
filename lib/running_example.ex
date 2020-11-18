@@ -16,7 +16,7 @@ defmodule TransformerTestSupport.RunningExample do
       script: Example.workflow_script(example, opts),
       history: History.new(example, opts)
     }
-    |> ti__(run_steps)
+    |> tio__(run_steps)
   end
 
   defp run_steps(running) do
@@ -24,7 +24,7 @@ defmodule TransformerTestSupport.RunningExample do
       [] ->
         running.history
       [{step_name, function} | rest] ->
-        value = ti__(running, function.()       , step_name)
+        value = tli__(running, function.()       , step_name)
 
         running
         |> Map.update!(:history, &(History.add(&1, step_name, value)))
