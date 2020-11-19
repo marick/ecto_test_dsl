@@ -1,18 +1,16 @@
 defmodule TransformerTestSupport.RunningExample.Trace do
   alias TransformerTestSupport, as: T
-  alias T.RunningExample.Trace
   alias T.RunningExample.TraceServer
   alias T.SmartGet.Example
-  alias T.RunningExample
 
-
-  # -----------Wrappers around blocks-------------------------------------------
+  # -----------Wrappers around functions--------------------------------------
+  # Note that these return the values of the wrapped functions.
 
   def tio__(running, f) do
-    stash = Trace.tio_enter(running)
-    Trace.capture_assertion_failure(fn ->
+    stash = tio_enter(running)
+    capture_assertion_failure(fn ->
       result = TraceServer.nested(fn -> f.(running) end)
-      Trace.tio_exit(stash)
+      tio_exit(stash)
       result
     end)
   end
@@ -24,18 +22,19 @@ defmodule TransformerTestSupport.RunningExample.Trace do
     %{name: example_name}
   end
 
-  def tio_exit(stash) do
+  defp tio_exit(stash) do
     TraceServer.accept(["< Run ", cyan(stash.name)])
-    TraceServer.separate
+    TraceServer.add_vertical_separation
   end
     
   def tli__(running, f, label) do
-    Trace.say(label)
+    say(label)
     TraceServer.nested(fn ->
       result = f.(running)
       unless result == :uninteresting_result,
-        do: Trace.say(result, :result)
-      end)
+        do: say(result, :result)
+      result
+    end)
   end
   
   def capture_assertion_failure(f) do
@@ -54,16 +53,17 @@ defmodule TransformerTestSupport.RunningExample.Trace do
   end
 
   # -----Functions that can be called anywhere----------------------------------
+  # Note that these do not return values.
 
   def say(value) do
     TraceServer.accept(inspect(value))
-    value
+    :no_meaningful_value
   end
 
   def say(value, label) do
     colorized = [IO.ANSI.green(), to_string(label), ": ", IO.ANSI.reset()]
     TraceServer.accept([colorized, inspect(value)])
-    value
+    :no_meaningful_value
   end
 
   # ----------------------------------------------------------------------------
@@ -74,10 +74,4 @@ defmodule TransformerTestSupport.RunningExample.Trace do
 
   defp example_name(running), do: inspect Example.name(running.example)
   defp example_workflow(running), do: inspect Example.category_name(running.example)
-
-  defp selector(caller_context) do
-    [module | _] = caller_context.context_modules
-    {fun, _} = caller_context.function
-    quote do: {unquote(module), unquote(fun)}
-  end
 end

@@ -3,15 +3,11 @@ defmodule TransformerTestSupport.RunningExample.TraceServer do
 
   @init %{
     leader: [],
-    tracing: false
+    emitting?: false
   }
 
   def start(),
     do: GenServer.start_link(__MODULE__, @init, name: __MODULE__)
-
-  def accept(report) do
-    indent(report) |> IO.puts
-  end
 
   def nested(f) do
     push_indent()
@@ -26,42 +22,43 @@ defmodule TransformerTestSupport.RunningExample.TraceServer do
     end
   end
 
-  def push_indent, do: GenServer.call(__MODULE__, :push_indent)
-  def pop_indent, do: GenServer.call(__MODULE__, :pop_indent)
-
-  def separate do
-    if at_top_level?(), do: IO.puts ""
+  def accept(report) do
+    indented(report) |> emit
   end
 
-  def indent(report) when is_binary(report) do
-    [leader(), 
+  def add_vertical_separation do
+    if at_top_level?(), do: emit ""
+  end
+
+  def at_top_level?, do: leader() == []
+
+  def emit(iodata) do
+    if emitting?(), do: IO.puts(iodata)
+  end
+
+  # ----------------------------------------------------------------------------
+
+  # Public for testing
+  def indented(report) when is_binary(report) do
+    [leader(),
      String.split(report, "\n")
      |> Enum.intersperse(["\n", leader()])
     ]
   end
 
-  def indent(report) when is_list(report) do
+  def indented(report) when is_list(report) do
     [leader(), report]
   end
 
-  # def indent(report) when is_list(report) do
-  #   for part <- report, do: [leader(), indent(part)]
-  # end
+  # ----------------------------------------------------------------------------
+
+  defp push_indent, do: GenServer.call(__MODULE__, :push_indent)
+  defp pop_indent, do: GenServer.call(__MODULE__, :pop_indent)
+  defp leader, do: GenServer.call(__MODULE__, :leader)
+  defp emitting?, do: GenServer.call(__MODULE__, :emitting?)
+
   
-  # def indent(report) do
-  #   if String.contains?(report, "\n") do 
-  #     for part <- String.split(report, "\n") do 
-  #       [leader(), part, "\n"]
-  #     end
-  #   else
-  #     [leader(), report]
-  #   end
-  # end
-
-  def at_top_level?, do: leader() == []
-
-  def leader, do: GenServer.call(__MODULE__, :leader)
-
+  # ---------------------------SERVER SIDE--------------------------------------
   # ----------------------------------------------------------------------------
 
   @indent "  "
@@ -72,6 +69,11 @@ defmodule TransformerTestSupport.RunningExample.TraceServer do
   @impl GenServer
   def handle_call(:leader, _from, state) do
     {:reply, state.leader, state}
+  end
+
+  @impl GenServer
+  def handle_call(:emitting?, _from, state) do
+    {:reply, state.emitting?, state}
   end
 
   @impl GenServer

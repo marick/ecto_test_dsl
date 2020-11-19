@@ -6,7 +6,7 @@ defmodule RunningExample.TraceServerTest do
   test "indentation leaders" do
     pass = fn arg, expected -> 
       TraceServer.nested(fn ->
-        actual = TraceServer.indent(arg) |> IO.iodata_to_binary
+        actual = TraceServer.indented(arg) |> IO.iodata_to_binary
         assert actual == expected
       end)
     end
