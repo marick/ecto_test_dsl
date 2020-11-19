@@ -72,7 +72,7 @@ defmodule VariantSupport.Changeset.SetupTest do
     def setup_for(example_name) do
       start_names_with_zero()
       Examples.Tester.check_workflow(example_name)
-      |> Keyword.get(:repo_setup)
+      |> Keyword.get(:previously)
     end
 
     # Note: `setup_for` and `expect` are a bit tricksy. Each example is

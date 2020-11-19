@@ -10,7 +10,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 
   # ------------------- Hook functions -----------------------------------------
 
-  defp repo_setup(running) do
+  defp previously(running) do
     ChangesetSupport.setup(running)
   end
 
@@ -38,7 +38,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     %{
       make_changeset: &make_changeset/1,
       check_validation_changeset: &check_validation_changeset/1,
-      repo_setup: &repo_setup/1,
+      previously: &previously/1,
       insert_changeset: &insert_changeset/1,
       check_insertion: &check_insertion/1,
       check_constraint_changeset: &check_constraint_changeset/1
@@ -47,24 +47,24 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 
   @category_workflows %{
     success: [
-      :repo_setup,
+      :previously,
       :make_changeset, 
       :check_validation_changeset,
       :insert_changeset, 
       :check_insertion
     ],
     validation_error: [
-      :repo_setup,
+      :previously,
       :make_changeset, 
       :check_validation_changeset, 
     ],
     validation_success: [
-      :repo_setup,
+      :previously,
       :make_changeset, 
       :check_validation_changeset, 
     ],
     constraint_error: [
-      :repo_setup,
+      :previously,
       :make_changeset, 
       :check_validation_changeset, 
       :insert_changeset, 

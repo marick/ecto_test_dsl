@@ -9,7 +9,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   alias T.RunningExample.Trace
 
   def accept_params(running) do
-    prior_work = Keyword.get(running.history, :repo_setup, %{})
+    prior_work = Keyword.get(running.history, :previously, %{})
     params = Example.params(running.example, previously: prior_work)
     module = Example.module_under_test(running.example)
     empty = struct(module)
@@ -43,7 +43,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   end
 
   def setup(running) do
-    prior_work = Keyword.get(running.history, :repo_setup, %{})
+    prior_work = Keyword.get(running.history, :previously, %{})
     sources = Map.get(running.example, :setup, [])
     Setup.from_a_list(sources, running.example, prior_work)
   end
@@ -82,7 +82,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   # ----------------------------------------------------------------------------
 
   defchain check_validation_changeset_(changeset, running) do
-    prior_work = Keyword.get(running.history, :repo_setup, %{})
+    prior_work = Keyword.get(running.history, :previously, %{})
     adjust_assertion_message(
       fn ->
         for check <- ChangesetChecks.get_validation_checks(running.example, previously: prior_work),
@@ -94,7 +94,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   end
 
   defchain check_constraint_changeset_(changeset, running) do
-    prior_work = Keyword.get(running.history, :repo_setup, %{})
+    prior_work = Keyword.get(running.history, :previously, %{})
     adjust_assertion_message(
       fn ->
         for check <- ChangesetChecks.get_constraint_checks(running.example, previously: prior_work),

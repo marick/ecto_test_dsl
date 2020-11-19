@@ -45,7 +45,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport.Setup do
         |> Example.get(example_name)
         |> RunningExample.run(previously: so_far)
 
-      dependently_created = Keyword.get(workflow_results, :repo_setup)
+      dependently_created = Keyword.get(workflow_results, :previously)
       {:ok, insert_result} = Keyword.get(workflow_results, :insert_changeset)
       
       Map.put(dependently_created, {example_name, example_module}, insert_result)

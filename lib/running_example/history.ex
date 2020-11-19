@@ -2,7 +2,7 @@ defmodule TransformerTestSupport.RunningExample.History do
   # alias TransformerTestSupport, as: T
   
   def new(example, opts) do 
-    [repo_setup: Keyword.get(opts, :previously, %{}),
+    [previously: Keyword.get(opts, :previously, %{}),
      example: example]
   end
 
