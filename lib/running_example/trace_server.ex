@@ -36,6 +36,9 @@ defmodule TransformerTestSupport.RunningExample.TraceServer do
     if emitting?(), do: IO.puts(iodata)
   end
 
+  def set_emitting(v), do: GenServer.call(__MODULE__, {:set_emitting, v})
+  
+
   # ----------------------------------------------------------------------------
 
   # Public for testing
@@ -74,6 +77,12 @@ defmodule TransformerTestSupport.RunningExample.TraceServer do
   @impl GenServer
   def handle_call(:emitting?, _from, state) do
     {:reply, state.emitting?, state}
+  end
+
+  @impl GenServer
+  def handle_call({:set_emitting, v}, _from, state) do
+    new_state = Map.put(state, :emitting?, v)
+    {:reply, :ok, new_state}
   end
 
   @impl GenServer

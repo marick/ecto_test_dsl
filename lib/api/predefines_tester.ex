@@ -9,6 +9,7 @@ defmodule TransformerTestSupport.Predefines.Tester do
       alias T.TestDataServer
       alias T.SmartGet
       alias T.RunningExample
+      alias T.RunningExample.TraceServer
         
       @name_of_test_data Module.split(__MODULE__)
       |> Enum.drop(-1) |> Module.safe_concat
@@ -24,8 +25,13 @@ defmodule TransformerTestSupport.Predefines.Tester do
       end
       
       def check_workflow(example_name, opts \\ []) do
-        example(example_name)
-        |> RunningExample.run(opts)
+        Keyword.get(opts, :trace, false) |> TraceServer.set_emitting
+        try do 
+          example(example_name)
+          |> RunningExample.run(opts)
+        after
+          TraceServer.set_emitting(false)
+        end
       end
     end
   end
