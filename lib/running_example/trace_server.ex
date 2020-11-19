@@ -99,7 +99,12 @@ defmodule TransformerTestSupport.RunningExample.TraceServer do
 
   @impl GenServer
   def handle_call(:pop_indent, _from, state) do
-    new_state = Map.update!(state, :prefix, fn [_ | rest] -> rest end)
+    new_state = Map.update!(state, :prefix, fn prefix ->
+      case prefix do
+        [_ | rest] -> rest
+        [] -> []  # This indicates than an assertion error popped us out of nesting.
+      end
+    end)
     {:reply, :ok, new_state}
   end
 end
