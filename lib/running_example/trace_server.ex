@@ -2,8 +2,9 @@ defmodule TransformerTestSupport.RunningExample.TraceServer do
   use GenServer
 
   @init %{
-    leader: [],
-    emitting?: false
+    prefix: [],
+    emitting?: false,
+    max_level: 9999,
   }
 
   def start(),
@@ -30,35 +31,46 @@ defmodule TransformerTestSupport.RunningExample.TraceServer do
     if at_top_level?(), do: emit ""
   end
 
-  def at_top_level?, do: leader() == []
+  def at_top_level?, do: get().prefix == []
 
   def emit(iodata) do
     if emitting?(), do: IO.puts(iodata)
   end
 
-  def set_emitting(v), do: GenServer.call(__MODULE__, {:set_emitting, v})
-  
+  defp emitting?() do
+    control = get()
+    control.emitting? && length(control.prefix) < control.max_level
+  end
+
+  def update(opts) do
+    new_val = Enum.into(opts, @init)
+    GenServer.call(__MODULE__, {:set, new_val})
+  end
+
+  def reset,
+    do: GenServer.call(__MODULE__, {:set, @init})
 
   # ----------------------------------------------------------------------------
 
   # Public for testing
   def indented(report) when is_binary(report) do
-    [leader(),
+    [prefix(),
      String.split(report, "\n")
-     |> Enum.intersperse(["\n", leader()])
+     |> Enum.intersperse(["\n", prefix()])
     ]
   end
 
   def indented(report) when is_list(report) do
-    [leader(), report]
+    [prefix(), report]
   end
 
   # ----------------------------------------------------------------------------
 
   defp push_indent, do: GenServer.call(__MODULE__, :push_indent)
   defp pop_indent, do: GenServer.call(__MODULE__, :pop_indent)
-  defp leader, do: GenServer.call(__MODULE__, :leader)
-  defp emitting?, do: GenServer.call(__MODULE__, :emitting?)
+  defp get, do: GenServer.call(__MODULE__, :get)
+
+  defp prefix, do: get().prefix
 
   
   # ---------------------------SERVER SIDE--------------------------------------
@@ -70,30 +82,24 @@ defmodule TransformerTestSupport.RunningExample.TraceServer do
   def init(init_arg), do: {:ok, init_arg}
 
   @impl GenServer
-  def handle_call(:leader, _from, state) do
-    {:reply, state.leader, state}
+  def handle_call(:get, _from, state) do
+    {:reply, state, state}
   end
 
   @impl GenServer
-  def handle_call(:emitting?, _from, state) do
-    {:reply, state.emitting?, state}
-  end
-
-  @impl GenServer
-  def handle_call({:set_emitting, v}, _from, state) do
-    new_state = Map.put(state, :emitting?, v)
+  def handle_call({:set, new_state}, _from, _state) do
     {:reply, :ok, new_state}
   end
 
   @impl GenServer
   def handle_call(:push_indent, _from, state) do
-    new_state = Map.update!(state, :leader, &([@indent | &1]))
+    new_state = Map.update!(state, :prefix, &([@indent | &1]))
     {:reply, :ok, new_state}
   end
 
   @impl GenServer
   def handle_call(:pop_indent, _from, state) do
-    new_state = Map.update!(state, :leader, fn [_ | rest] -> rest end)
+    new_state = Map.update!(state, :prefix, fn [_ | rest] -> rest end)
     {:reply, :ok, new_state}
   end
 end

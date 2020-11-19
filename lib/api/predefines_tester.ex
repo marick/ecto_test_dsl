@@ -23,14 +23,22 @@ defmodule TransformerTestSupport.Predefines.Tester do
         SmartGet.Example.get(@name_of_test_data, example_name)
         |> SmartGet.Example.params
       end
+
+      @trace_server_translations %{
+        prefix: :prefix,
+        trace: :emitting?,
+        max_level: :max_level
+      }
       
       def check_workflow(example_name, opts \\ []) do
-        Keyword.get(opts, :trace, false) |> TraceServer.set_emitting
-        try do 
+        {trace_server_opts, other_opts} =
+          KeywordX.split_and_translate(opts, @trace_server_translations)
+        try do
+          TraceServer.update(trace_server_opts)
           example(example_name)
-          |> RunningExample.run(opts)
+          |> RunningExample.run(other_opts)
         after
-          TraceServer.set_emitting(false)
+          TraceServer.reset
         end
       end
     end
