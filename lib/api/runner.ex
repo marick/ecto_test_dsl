@@ -2,12 +2,14 @@ defmodule TransformerTestSupport.Runner do
   # alias TransformerTestSupport, as: T
 
   # ----------------------------------------------------------------------------
-  defmacro check_examples_with(module) do
-    quote bind_quoted: [module: module] do
+  defmacro check_examples_with(module, opts \\ []) do
+    show_names = Keyword.get(opts, :show_names, false)
+    quote bind_quoted: [module: module, show_names: show_names] do
       Enum.each(module.test_data().examples |> Keyword.keys, fn example_name ->
         message = "#{inspect example_name} in #{inspect module}"
         name = ExUnit.Case.register_test(__ENV__, :example, message, [])
         def unquote(name)(_) do
+          if unquote(show_names), do: IO.inspect(unquote(message))
           unquote(module).allow_asynchronous_tests(unquote(example_name))
           unquote(module).check_workflow(unquote(example_name))
         end
@@ -15,10 +17,12 @@ defmodule TransformerTestSupport.Runner do
     end
   end
 
-  defmacro check_examples_in_files(file_pattern) do
+  defmacro check_examples_in_files(file_pattern, opts \\ []) do
     quote do 
-      for module <- tester_modules(unquote(file_pattern)),
-        do: check_examples_with(module)
+      for module <- tester_modules(unquote(file_pattern)) do
+        check_examples_with(module, unquote(opts))
+        if Keyword.get(unquote(opts), :show_names, false), do: IO.puts("\n")
+      end
     end
   end
   
