@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport.Runner do
-  alias TransformerTestSupport, as: T
+  # alias TransformerTestSupport, as: T
 
   # ----------------------------------------------------------------------------
   defmacro check_examples_with(module) do
