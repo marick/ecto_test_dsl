@@ -1,6 +1,8 @@
 defmodule TransformerTestSupport.Build do
   alias TransformerTestSupport.Build.{Normalize,ParamShorthand}
   import DeepMerge, only: [deep_merge: 2]
+  import FlowAssertions.Define.BodyParts
+
   @moduledoc """
   """
 
@@ -146,9 +148,14 @@ defmodule TransformerTestSupport.Build do
   def make__params_like(previous_name, except: override_kws) do 
     overrides = Enum.into(override_kws, %{})
     fn named_examples ->
-      Map.merge(
-        Keyword.get(named_examples, previous_name).params,
-        overrides)
+      case Keyword.get(named_examples, previous_name) do
+        nil ->
+          ex = inspect previous_name
+          elaborate_flunk("There is no previous example `#{ex}`",
+            right: Keyword.keys(override_kws))
+        previous -> 
+          Map.merge(previous.params, overrides)
+      end
     end
   end
 
