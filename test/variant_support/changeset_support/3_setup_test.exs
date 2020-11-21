@@ -1,4 +1,4 @@
-defmodule VariantSupport.Changeset.SetupTest do
+defmodule VariantSupport.Changeset.PreviouslyTest do
   alias TransformerTestSupport, as: T
   alias T.Variants.EctoClassic
   alias T.VariantSupport.ChangesetSupport
@@ -29,8 +29,8 @@ defmodule VariantSupport.Changeset.SetupTest do
 
     def make(name),
       do: {name, [params(name: to_string(name))]}
-    def make(name, one_setup),
-      do: {name, [params(name: to_string(name)), one_setup]}
+    def make(name, one_previously),
+      do: {name, [params(name: to_string(name)), one_previously]}
 
     def create_test_data do 
       start(
@@ -43,15 +43,15 @@ defmodule VariantSupport.Changeset.SetupTest do
       category(                                         :success, [
         make(:leaf),
         make(:leaf2),
-        make(:dependent, setup(insert:  {:leaf, __MODULE__})),
-        make(:depth_3,   setup(insert:   :dependent)),
+        make(:dependent, previously(insert:  {:leaf, __MODULE__})),
+        make(:depth_3,   previously(insert:   :dependent)),
 
-        make(:breadth_2, setup(insert:          [:leaf,   # one insert, two examples
+        make(:breadth_2, previously(insert:          [:leaf,   # one insert, two examples
                                                  :leaf2])), 
-        make(:insert_then_insert, setup(insert: :depth_3, # two inserts
+        make(:insert_then_insert, previously(insert: :depth_3, # two inserts
                                         insert: :leaf2)),
 
-        make(:has_duplicates, setup(insert: :depth_3, insert: :dependent))
+        make(:has_duplicates, previously(insert: :depth_3, insert: :dependent))
       ])
       end
   end

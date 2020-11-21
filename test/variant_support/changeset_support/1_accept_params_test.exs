@@ -24,6 +24,6 @@ defmodule VariantSupport.Changeset.AcceptParamsTest do
   end
 
   @tag :skip
-  test "should have a 'with setup case"
+  test "should have a 'with previously case"
   
 end

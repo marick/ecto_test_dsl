@@ -13,7 +13,7 @@ defmodule TransformerTestSupport.Build.ParamShorthand do
   def expand(example, :example, existing_pairs) do
     example
     |> expand_like(existing_pairs)
-    |> add_setup
+    |> add_previously
   end
 
   def expand_like(example, existing_pairs) do
@@ -26,36 +26,36 @@ defmodule TransformerTestSupport.Build.ParamShorthand do
     end
   end
 
-  def add_setup(example) do
+  def add_previously(example) do
     params = Map.get(example, :params, [])
-    old_setups = Map.get(example, :setup, [])
+    old = Map.get(example, :previously, [])
 
-    new_setups =
+    new =
       params
       |> Enum.filter(&example_reference?/1)
       |> Enum.map(fn {_, {_, extended_example_name, _}} ->
           {:insert, extended_example_name}
          end)
 
-    case {old_setups, new_setups} do
+    case {old, new} do
       {_, []} ->
         example
       {[], _} -> 
-        Map.put(example, :setup, new_setups)
+        Map.put(example, :previously, new)
       {_, _} ->
-        Map.put(example, :setup, old_setups ++ new_setups)
+        Map.put(example, :previously, old ++ new)
     end
   end
 
-  @setup_reference :__setup_reference
+  @previously_reference :__previously_reference
 
   def example_reference?({_key, value}) do
-    is_tuple(value) && elem(value, 0) == @setup_reference
+    is_tuple(value) && elem(value, 0) == @previously_reference
   end
   def example_reference?(_), do: false
 
-  def setup_reference(extended_example_name, use_type),
-    do: {@setup_reference, extended_example_name, use_type}
+  def previously_reference(extended_example_name, use_type),
+    do: {@previously_reference, extended_example_name, use_type}
     
   
     

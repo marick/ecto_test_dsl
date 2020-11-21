@@ -2,7 +2,7 @@ defmodule SmartGet.ParamsTest do
   alias TransformerTestSupport, as: T
   use T.Case
   alias T.SmartGet
-  import T.Build, except: [setup: 1]
+  import T.Build
 
   @ok [params: [age: 1,
                 date: "2011-02-03",

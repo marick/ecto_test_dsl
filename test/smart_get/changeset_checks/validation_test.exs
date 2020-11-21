@@ -120,7 +120,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       #    
     end
 
-    test "`setup` values are obeyed" do
+    test "`previously` values are obeyed" do
       as_cast_data([:species_id],
         example: [params(species_id: id_of(:prerequisite))])
       |> Example.get(:example)

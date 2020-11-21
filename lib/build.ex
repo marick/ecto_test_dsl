@@ -90,24 +90,26 @@ defmodule TransformerTestSupport.Build do
 
   defmacro id_of([extended_example_name]) when is_tuple(extended_example_name) do
     quote do
-        ParamShorthand.setup_reference(unquote(extended_example_name), :primary_key)
+        ParamShorthand.previously_reference(
+          unquote(extended_example_name), :primary_key)
       end
     end
   defmacro id_of(example_name) when is_atom(example_name) do
     quote do
-      ParamShorthand.setup_reference({unquote(example_name), __MODULE__}, :primary_key)
+      ParamShorthand.previously_reference({
+        unquote(example_name), __MODULE__}, :primary_key)
     end
   end
 
 
   # ----------------------------------------------------------------------------
 
-  def setup(opts) do
-    {:setup, opts}
+  def previously(opts) do
+    {:previously, opts}
   end
 
   def insert_twice(example_name),
-    do: {:__flatten, [setup(insert: example_name), params_like(example_name)]}
+    do: {:__flatten, [previously(insert: example_name), params_like(example_name)]}
     
   def changeset(opts), do: {:changeset_for_validation_step, opts}
   def constraint_changeset(opts), do: {:changeset_for_constraint_step, opts}

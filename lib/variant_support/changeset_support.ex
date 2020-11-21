@@ -1,7 +1,7 @@
 defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   alias TransformerTestSupport, as: T
   alias T.SmartGet.{Example,ChangesetChecks}
-  alias T.VariantSupport.ChangesetSupport.Setup
+  alias T.VariantSupport.ChangesetSupport.Previously
   import FlowAssertions.Define.{Defchain, BodyParts}
   alias T.RunningExample
   use FlowAssertions.Ecto
@@ -27,7 +27,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   
   # ----------------------------------------------------------------------------
 
-  # I can't offhand think of any case where one `setup` might need to
+  # I can't offhand think of any case where one `previously` might need to
   # use the results of another that isn't part of the same dependency tree.
   # That might change if I add a category-wide or test-data-wide setup.
 
@@ -42,10 +42,10 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
     end
   end
 
-  def setup(running) do
+  def previously(running) do
     prior_work = Keyword.get(running.history, :previously, %{})
-    sources = Map.get(running.example, :setup, [])
-    Setup.from_a_list(sources, running.example, prior_work)
+    sources = Map.get(running.example, :previously, [])
+    Previously.from_a_list(sources, running.example, prior_work)
   end
 
   # ----------------------------------------------------------------------------

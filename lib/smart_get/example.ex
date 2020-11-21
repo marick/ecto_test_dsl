@@ -46,7 +46,7 @@ defmodule TransformerTestSupport.SmartGet.Example do
   def name(example), do: metadata!(example, :name)
   def category_name(example), do: metadata!(example, :category_name)
   def field_transformations(example), do: metadata!(example, :field_transformations)
-  def setup(example), do: metadata!(example, :setup)
+  def previously(example), do: metadata!(example, :previously)
   def examples_module(example), do: metadata!(example, :examples_module)
 
 

@@ -37,8 +37,8 @@ defmodule TransformerTestSupport.RunningExampleTest do
       
       category(                                         :success,
         young: [params(name: "young")],
-        dependent: [params(name: "dependent"), setup(insert: :young)],
-        two_level: [params(name: "dependent"), setup(insert: :dependent)]
+        dependent: [params(name: "dependent"), previously(insert: :young)],
+        two_level: [params(name: "dependent"), previously(insert: :dependent)]
       )
     end
   end
@@ -56,7 +56,7 @@ defmodule TransformerTestSupport.RunningExampleTest do
 
     @presupplied "presupplied, not created"
 
-    test "A starting setup-state can be passed in" do
+    test "A starting previously-state can be passed in" do
       expect = fn example_name, expected ->
         actual =  
           Examples.Tester.example(example_name)

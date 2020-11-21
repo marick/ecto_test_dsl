@@ -28,7 +28,7 @@ defmodule TransformerTestSupport.SmartGet.Params do
   defp substitute_previous_values(params, previously) do
     for {name, value} <- params do
       case value do
-        {:__setup_reference, extended_example_name, :primary_key} ->
+        {:__previously_reference, extended_example_name, :primary_key} ->
           {name, Map.get(previously, extended_example_name).id}
         _ ->
           {name, value}

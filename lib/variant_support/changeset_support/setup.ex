@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.VariantSupport.ChangesetSupport.Setup do
+defmodule TransformerTestSupport.VariantSupport.ChangesetSupport.Previously do
   alias TransformerTestSupport.SmartGet.Example
   use FlowAssertions.Ecto
   alias TransformerTestSupport.RunningExample
@@ -7,11 +7,11 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport.Setup do
   # Working with a container of one or more example sources
 
 
-  # setup(...), setup(...)
+  # previously(...), previously(...)
   def from_a_list(sources, example, prior_work),
     do: from_a_list(sources, example, prior_work, &(&1))
 
-  # setup(insert: ..., insert: ...)
+  # previously(insert: ..., insert: ...)
   def from_a_list(sources, example, prior_work, transform) do
     Enum.reduce(sources, prior_work,
       fn source, acc -> from_a_tuple(transform.(source), example, acc) end)
@@ -20,18 +20,18 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport.Setup do
   # ----------------------------------------------------------------------------
   # Working with an {:insert, ...} tuple.
 
-  # setup(..., insert: [<ex1>, <ex2>], ...)
+  # previously(..., insert: [<ex1>, <ex2>], ...)
   def from_a_tuple({:insert, sources}, example, prior_work) when is_list(sources) do
     from_a_list(sources, example, prior_work, &({:insert, &1}))
   end
 
-  # setup(..., insert: <ex1>, ...)
+  # previously(..., insert: <ex1>, ...)
   def from_a_tuple({:insert, source}, example, prior_work) when is_atom(source) do
     example_module = Example.examples_module(example)
     from_a_leaf({source, example_module}, prior_work)
   end
 
-  # setup(..., insert: {name, module}, ...)
+  # previously(..., insert: {name, module}, ...)
   def from_a_tuple({:insert, extended_example_name}, _to_help_example, so_far),
     do: from_a_leaf(extended_example_name, so_far)
 

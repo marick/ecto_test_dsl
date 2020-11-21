@@ -60,7 +60,7 @@ defmodule Build.ParamsShorthandTest do
   end
     
   describe "id_of" do 
-    test "instances of `id_of` generate a setup" do
+    test "instances of `id_of` generate a previously" do
       actual = 
       start()
       |> category(:valid, ok: [params(a: 1, b: 2)])
@@ -68,19 +68,19 @@ defmodule Build.ParamsShorthandTest do
             params_like(:ok, except: [a: id_of(species: ExampleModule)])
          ])
 
-      assert example(actual, :similar).setup == [insert: {:species, ExampleModule}]
+      assert example(actual, :similar).previously == [insert: {:species, ExampleModule}]
     end
 
-    test "adds on to existing setup" do
+    test "adds on to existing previously" do
       actual = 
         start()
         |> category(:invalid, name: [
              params(a: id_of(species: ExampleModule),
                     b: id_of(:thing)),
-             Build.setup(insert: :noog)
+             previously(insert: :noog)
         ])
 
-      assert example(actual, :name).setup ==
+      assert example(actual, :name).previously ==
           [insert: :noog,
            insert: {:species, ExampleModule},
            insert: {:thing, __MODULE__}]

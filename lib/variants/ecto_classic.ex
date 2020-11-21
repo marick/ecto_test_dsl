@@ -11,7 +11,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   # ------------------- Hook functions -----------------------------------------
 
   defp previously(running) do
-    ChangesetSupport.setup(running)
+    ChangesetSupport.previously(running)
   end
 
   defp make_changeset(running) do 
