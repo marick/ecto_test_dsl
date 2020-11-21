@@ -12,7 +12,7 @@ defmodule TransformerTestSupport.Build do
     format: :raw,
     examples: [],
     field_transformations: [],
-    workflow: :insert
+    action: :insert
   }
 
   def start_with_variant(variant_name, data),

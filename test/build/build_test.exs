@@ -20,7 +20,7 @@ defmodule BuildTest do
         examples: [],
         adjusted: true,
         field_transformations: [],
-        workflow: :insert
+        action: :insert
        }
     
     assert Build.start(@minimal_start) == expected

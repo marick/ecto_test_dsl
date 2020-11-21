@@ -81,7 +81,7 @@ defmodule Variants.EctoClassic.SuccessCategoryTest do
       start(
         module_under_test: Schema,
         format: :phoenix,
-        workflow: :insert
+        action: :insert
       ) |>
 
       replace_steps(
