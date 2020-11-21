@@ -18,7 +18,7 @@ defmodule SmartGet.ParamsTest do
   @raw_params Keyword.get(@ok, :params) |> Enum.into(%{})
 
   def with_format(start_args),
-    do: TestBuild.one_category(start_args, [ok: @ok])
+    do: TestBuild.one_workflow(start_args, [ok: @ok])
 
   test "different formats" do
     expect = fn format, expected ->
@@ -34,7 +34,7 @@ defmodule SmartGet.ParamsTest do
   end
     
   test "getting the id of a previously-created value" do
-    TestBuild.one_category(
+    TestBuild.one_workflow(
       species: [params(name: "bovine")],
       animal:  [params(name: "bossie", species_id: id_of(:species))]
     )

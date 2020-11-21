@@ -40,7 +40,7 @@ defmodule VariantSupport.Changeset.PreviouslyTest do
 
       replace_steps(insert_changeset: step(&fake_insert/1, :make_changeset)) |> 
       
-      category(                                         :success, [
+      workflow(                                         :success, [
         make(:leaf),
         make(:leaf2),
         make(:dependent, previously(insert:  {:leaf, __MODULE__})),

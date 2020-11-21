@@ -12,11 +12,11 @@ defmodule TransformerTestSupport.Variants.Trivial do
   def run_start_hook(top_level) do
     top_level
     |> Map.put(:steps, %{})
-    |> Map.put(:category_workflows, [])
+    |> Map.put(:workflows, [])
   end
 
   # Anything is valid
-  def assert_category_hook(_, _category) do
+  def assert_workflow_hook(_, _workflow) do
   end
 
   # ----------------------------------------------------------------------------

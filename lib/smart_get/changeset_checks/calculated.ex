@@ -12,7 +12,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
   end
 
   defp maybe_add_one(changeset_checks, example, check_description) do
-    case Example.category_name(example) do
+    case Example.workflow_name(example) do
       :validation_error ->
         changeset_checks
       _ ->

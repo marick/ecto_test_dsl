@@ -2,16 +2,16 @@ defmodule TransformerTestSupport.TestBuild do
   import TransformerTestSupport.Build
   alias TransformerTestSupport.TestDataServer
 
-  def one_category(category_opts), do: one_category([], category_opts)
+  def one_workflow(workflow_opts), do: one_workflow([], workflow_opts)
 
-  def one_category(category_name \\ :category_name, start_opts, category_opts) do
+  def one_workflow(workflow_name \\ :workflow_name, start_opts, workflow_opts) do
     start(start_opts)
-    |> category(category_name, category_opts)
+    |> workflow(workflow_name, workflow_opts)
     |> propagate_metadata
   end
 
   def with_params(example_name, params) do
-    one_category([{example_name, [params: params]}])
+    one_workflow([{example_name, [params: params]}])
   end
 
 

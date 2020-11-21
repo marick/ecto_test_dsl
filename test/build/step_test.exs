@@ -28,7 +28,7 @@ defmodule Build.StepTest do
 
       start_with_variant(EctoClassic, module_under_test: Schema)
       |> replace_steps(check_validation_changeset: new_step)
-      |> category(:validation_success, ok: [params(age: 1)])
+      |> workflow(:validation_success, ok: [params(age: 1)])
     end
   end
   

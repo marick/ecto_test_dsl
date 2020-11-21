@@ -17,9 +17,9 @@ defmodule SmartGet.ChangesetChecks.ConstraintTest do
   end
 
   describe "has no effect" do
-    defp as_cast_data(fields, example_descriptions, category_opts) do 
-      TestBuild.one_category(
-        Keyword.get(category_opts, :category),
+    defp as_cast_data(fields, example_descriptions, workflow_opts) do 
+      TestBuild.one_workflow(
+        Keyword.get(workflow_opts, :workflow),
         [module_under_test: AsCast,
          field_transformations: [as_cast: fields]
           ],
@@ -28,9 +28,9 @@ defmodule SmartGet.ChangesetChecks.ConstraintTest do
 
     # Assumes example to be tested is `:example`
     defp run_example(fields, example_opts,
-      category_opts \\ [category: :validation_success]) do
+      workflow_opts \\ [workflow: :validation_success]) do
         
-      as_cast_data(fields, [example: example_opts], category_opts)
+      as_cast_data(fields, [example: example_opts], workflow_opts)
       |> Example.get(:example)
       |> Checks.get_constraint_checks(previously: %{})
     end

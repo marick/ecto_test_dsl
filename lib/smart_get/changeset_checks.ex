@@ -21,7 +21,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
   end
 
   defp add_whole_changeset_check(checks_so_far, example) do
-    if Example.category_name(example) == :validation_error,
+    if Example.workflow_name(example) == :validation_error,
       do:   [:invalid | checks_so_far],
       else: [  :valid | checks_so_far]
   end

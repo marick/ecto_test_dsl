@@ -35,7 +35,7 @@ defmodule TransformerTestSupport.RunningExampleTest do
       
       replace_steps(insert_changeset: step(&fake_insert/1, :make_changeset)) |>
       
-      category(                                         :success,
+      workflow(                                         :success,
         young: [params(name: "young")],
         dependent: [params(name: "dependent"), previously(insert: :young)],
         two_level: [params(name: "dependent"), previously(insert: :dependent)]

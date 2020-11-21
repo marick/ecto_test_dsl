@@ -44,7 +44,7 @@ defmodule TransformerTestSupport.SmartGet.Example do
   def module_under_test(example), do: metadata!(example, :module_under_test)
   def format(example), do: metadata!(example, :format)
   def name(example), do: metadata!(example, :name)
-  def category_name(example), do: metadata!(example, :category_name)
+  def workflow_name(example), do: metadata!(example, :workflow_name)
   def field_transformations(example), do: metadata!(example, :field_transformations)
   def previously(example), do: metadata!(example, :previously)
   def examples_module(example), do: metadata!(example, :examples_module)
@@ -54,8 +54,8 @@ defmodule TransformerTestSupport.SmartGet.Example do
   
 
   def step_list(example) do
-    example.metadata.category_workflows
-    |> Map.get(example.metadata.category_name)
+    example.metadata.workflows
+    |> Map.get(example.metadata.workflow_name)
   end
 
   IO.inspect "This is too error prone"

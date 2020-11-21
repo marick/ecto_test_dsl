@@ -7,15 +7,15 @@ defmodule Build.ParamsShorthandTest do
   describe "params_like" do 
     test "basic use" do
       start()
-      |> category(:valid, ok: [                    params(a: 1, b: 2)])
-      |> category(:invalid, similar: [params_like(:ok, except: [b: 4])])
+      |> workflow(:valid, ok: [                    params(a: 1, b: 2)])
+      |> workflow(:invalid, similar: [params_like(:ok, except: [b: 4])])
       |> example(:similar)
       |> assert_field(params: %{a: 1, b: 4})
     end
     
-    test "using params_like to refer to values within the same category" do
+    test "using params_like to refer to values within the same workflow" do
       start()
-      |> category(:valid, [
+      |> workflow(:valid, [
             ok: [params: %{a: 1, b: 2}],
             similar: [params_like(:ok, except: [b: 4])]
       ])
@@ -23,16 +23,16 @@ defmodule Build.ParamsShorthandTest do
       |> assert_field(params: %{a: 1, b: 4})
     end
     
-    test "multiple categories" do
+    test "multiple workflows" do
       actual = 
         start() |> 
 
-        category(:valid, [
+        workflow(:valid, [
               ok: [params: %{a: 1, b: 2}],
               similar: [params_like(:ok, except: [b: 4])]
            ]) |> 
 
-        category(:invalid, [
+        workflow(:invalid, [
               different: [params_like(:ok, except: [c: 383])]
         ])
           
@@ -44,8 +44,8 @@ defmodule Build.ParamsShorthandTest do
     test "params_like can copy everything" do
       actual = 
         start()
-        |> category(:valid, ok: [params(a: 1, b: 2)])
-        |> category(:invalid, similar: [params_like(:ok)])
+        |> workflow(:valid, ok: [params(a: 1, b: 2)])
+        |> workflow(:invalid, similar: [params_like(:ok)])
       
       assert example(actual, :ok).params == example(actual, :similar).params
     end
@@ -54,7 +54,7 @@ defmodule Build.ParamsShorthandTest do
       assertion_fails("There is no previous example `:ok`",
         fn ->
           Build.start(module_under_test: ModuleUnderTest)
-          |> category(:invalid, similar: [params_like(:ok)])
+          |> workflow(:invalid, similar: [params_like(:ok)])
         end)
     end
   end
@@ -63,8 +63,8 @@ defmodule Build.ParamsShorthandTest do
     test "instances of `id_of` generate a previously" do
       actual = 
       start()
-      |> category(:valid, ok: [params(a: 1, b: 2)])
-      |> category(:invalid, similar: [
+      |> workflow(:valid, ok: [params(a: 1, b: 2)])
+      |> workflow(:invalid, similar: [
             params_like(:ok, except: [a: id_of(species: ExampleModule)])
          ])
 
@@ -74,7 +74,7 @@ defmodule Build.ParamsShorthandTest do
     test "adds on to existing previously" do
       actual = 
         start()
-        |> category(:invalid, name: [
+        |> workflow(:invalid, name: [
              params(a: id_of(species: ExampleModule),
                     b: id_of(:thing)),
              previously(insert: :noog)

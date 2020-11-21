@@ -1,4 +1,4 @@
-defmodule Variants.EctoClassic.SuccessCategoryTest do
+defmodule Variants.EctoClassic.SuccessWorkflowTest do
   use TransformerTestSupport.Case
   import FlowAssertions.AssertionA
   
@@ -93,7 +93,7 @@ defmodule Variants.EctoClassic.SuccessCategoryTest do
         days_since_2000: on_success(Date.diff(:date, ~D[2000-01-01]))
       ) |>
 
-      category(:success,
+      workflow(:success,
         only_required: [
           params(age: 55, date_string: "2000-01-02", species_id: 1)
         ], 

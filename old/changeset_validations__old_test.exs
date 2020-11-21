@@ -22,25 +22,25 @@ defmodule ChangesetValidationsTest do
 
   test "valid? field" do
     valid = &(%Changeset{valid?: &1})
-    category = &(%{categories: [&1]}) # Produces an example.
+    workflow = &(%{categories: [&1]}) # Produces an example.
 
     a = assertion_runners_for(fn changeset, example ->
       Validations.assert_validity(changeset, :some_example_name, example)
     end)
 
-    [valid.( true  ), category.(  :valid   )] |> a.pass.()
-    [valid.( false ), category.(  :valid   )] |> a.fail.(
+    [valid.( true  ), workflow.(  :valid   )] |> a.pass.()
+    [valid.( false ), workflow.(  :valid   )] |> a.fail.(
       message: Messages.should_be_valid(:some_example_name), 
       left: valid.(false))
 
-    [valid.( true  ), category.(  :invalid )] |> a.fail.(
+    [valid.( true  ), workflow.(  :invalid )] |> a.fail.(
       message: Messages.should_be_invalid(:some_example_name),
       left: valid.(true))
-    [valid.( false ), category.(  :invalid )] |> a.pass.()
+    [valid.( false ), workflow.(  :invalid )] |> a.pass.()
 
     # If there is neither valid nor invalid, no check is done.
-    [valid.( true  ), category.(  :other   )] |> a.pass.()
-    [valid.( false ), category.(  :other   )] |> a.pass.()
+    [valid.( true  ), workflow.(  :other   )] |> a.pass.()
+    [valid.( false ), workflow.(  :other   )] |> a.pass.()
   end
   
   describe "changeset" do

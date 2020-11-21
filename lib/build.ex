@@ -59,21 +59,21 @@ defmodule TransformerTestSupport.Build do
 
   # ----------------------------------------------------------------------------
 
-  def category(so_far, category, raw_examples) do
+  def workflow(so_far, workflow, raw_examples) do
     earlier_examples = so_far.examples
 
-    run_variant(so_far, :assert_category_hook, [category])
+    run_variant(so_far, :assert_workflow_hook, [workflow])
     
     updated_examples =
       Normalize.as(:example_pairs, raw_examples)
-      |> attach_category_metadata(category)
+      |> attach_workflow_metadata(workflow)
       |> ParamShorthand.build_time_expansion(earlier_examples)
     Map.put(so_far, :examples, updated_examples)
   end
 
-  defp attach_category_metadata(pairs, category) do
+  defp attach_workflow_metadata(pairs, workflow) do
     for {name, example} <- pairs do
-      metadata = %{metadata: %{category_name: category, name: name}}
+      metadata = %{metadata: %{workflow_name: workflow, name: name}}
       {name, deep_merge(example, metadata)}
     end
   end

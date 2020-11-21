@@ -55,19 +55,19 @@ defmodule BuildTest do
     end
   end
 
-  test "category" do
+  test "workflow" do
     %{examples: [new: new, ok: ok]} =
       Build.start(@minimal_start)
-      |> Build.category(:valid,
+      |> Build.workflow(:valid,
            ok: [params(age: 1)],
            new: [params_like(:ok, except: [age: 2])])
 
       assert ok.params == %{age: 1}
       assert new.params == %{age: 2}
 
-      assert ok.metadata.category_name == :valid
+      assert ok.metadata.workflow_name == :valid
       assert ok.metadata.name == :ok
-      assert new.metadata.category_name == :valid
+      assert new.metadata.workflow_name == :valid
       assert new.metadata.name == :new
   end
 
@@ -105,11 +105,11 @@ defmodule BuildTest do
     
   test "metadata propagation" do
     Build.start(@minimal_start)
-    |> Build.category(:valid, ok: [params(age: 1)])
+    |> Build.workflow(:valid, ok: [params(age: 1)])
     |> Build.propagate_metadata
     |> SmartGet.Example.get(:ok)
     |> Map.get(:metadata)
-    |> assert_fields(category_name: :valid,
+    |> assert_fields(workflow_name: :valid,
                      name: :ok,
                      module_under_test: Anything,
                      variant: Variant)

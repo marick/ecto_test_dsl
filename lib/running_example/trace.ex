@@ -73,5 +73,5 @@ defmodule TransformerTestSupport.RunningExample.Trace do
   defp color(color, string), do: color <> string <> IO.ANSI.reset()
 
   defp example_name(running), do: inspect Example.name(running.example)
-  defp example_workflow(running), do: inspect Example.category_name(running.example)
+  defp example_workflow(running), do: inspect Example.workflow_name(running.example)
 end

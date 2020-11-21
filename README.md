@@ -9,9 +9,9 @@ You get terse tests:
 
 
 ```elixir
-  test "categories" do
-    Params.check_form_validation(categories: [:valid])
-    Params.check_form_validation(categories: [:invalid])
+  test "workflows" do
+    Params.check_form_validation(workflows: [:valid])
+    Params.check_form_validation(workflows: [:invalid])
   end
   
   test "schema structure production" do
@@ -64,12 +64,12 @@ somewhat-rethought notation.)
                                     in_service_datestring: @iso_date_1,
                                     out_of_service_datestring: @iso_date_2}),
                lowering_adds: %{span: Datespan.customary(@date_1, @date_2)},
-               categories: [:valid],
+               workflows: [:valid],
               },
 
       # The front end should not ever send back blank datestrings, but
       # it's worth documenting the behavior if the impossible happens.
-      blank_datestrings: %{categories: [:valid],
+      blank_datestrings: %{workflows: [:valid],
                            params: like(:valid,
                              except: %{in_service_datestring: "",
                                        out_of_service_datestring: ""}),
@@ -85,7 +85,7 @@ somewhat-rethought notation.)
         shows_delegation: {FieldValidators, :namelist},
         params: like(:valid, except: %{names: "  ,"}),
         errors: [names: @no_valid_names_message],
-        categories: [:invalid],
+        workflows: [:invalid],
       },
       
       out_of_order: %{
@@ -94,7 +94,7 @@ somewhat-rethought notation.)
           except: %{in_service_datestring: @iso_date_4,
                     out_of_service_datestring: @iso_date_3}),
         errors: [out_of_service_datestring: @date_misorder_message],
-        categories: [:invalid],
+        workflows: [:invalid],
       }
     ])
 ```

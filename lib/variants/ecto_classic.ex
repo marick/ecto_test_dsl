@@ -45,7 +45,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     }
   end
 
-  @category_workflows %{
+  @workflows %{
     success: [
       :previously,
       :make_changeset, 
@@ -76,15 +76,15 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
   def run_start_hook(top_level) do
     top_level
     |> Map.put(:steps, initial_step_definitions())
-    |> Map.put(:category_workflows, @category_workflows)
+    |> Map.put(:workflows, @workflows)
   end
 
-  def assert_category_hook(_, category) do
-    categories = Map.keys(@category_workflows)
+  def assert_workflow_hook(_, workflow) do
+    workflows = Map.keys(@workflows)
     elaborate_assert(
-      category in categories,
-      "The EctoClassic variant only allows these categories: #{inspect categories}",
-      left: category
+      workflow in workflows,
+      "The EctoClassic variant only allows these workflows: #{inspect workflows}",
+      left: workflow
     )
   end
 

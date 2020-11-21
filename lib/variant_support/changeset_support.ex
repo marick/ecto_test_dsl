@@ -29,7 +29,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
 
   # I can't offhand think of any case where one `previously` might need to
   # use the results of another that isn't part of the same dependency tree.
-  # That might change if I add a category-wide or test-data-wide setup.
+  # That might change if I add a workflowy-wide or test-data-wide setup.
 
   # If that is done, the history must be passed in by `RunningExample.run`
 

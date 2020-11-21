@@ -1,9 +1,9 @@
 defmodule TransformerTestSupport.Sketch do
   alias Ecto.Changeset
   
-  def example(name, category, example_fields \\ []) do
+  def example(name, workflow, example_fields \\ []) do
     default_metadata = %{field_transformations: [], format: :phoenix}
-    given_metadata = %{name: name, category_name: category}
+    given_metadata = %{name: name, workflow_name: workflow}
 
     Enum.into(example_fields, %{})
     |> Map.put(:metadata, Map.merge(default_metadata, given_metadata))

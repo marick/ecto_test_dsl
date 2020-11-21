@@ -6,10 +6,10 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
   alias Ecto.Changeset
 
   # ----------------------------------------------------------------------------
-  describe "dependencies on category" do
+  describe "dependencies on workflow" do
     test "a list" do 
-      expect = fn category_name, expected ->
-        TestBuild.one_category(category_name, [], example: [])
+      expect = fn workflow_name, expected ->
+        TestBuild.one_workflow(workflow_name, [], example: [])
         |> Example.get(:example)
         |> Checks.get_validation_checks(previously: %{})
         |> assert_equal([expected])
@@ -21,7 +21,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
     end
     
     test "checks are added to the beginning" do
-      TestBuild.one_category(:validation_success,
+      TestBuild.one_workflow(:validation_success,
         [],
         example: [changeset(no_changes: [:date])])
       |> Example.get(:example)
@@ -46,10 +46,10 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
   describe "adding an automatic as_cast test" do
 
     defp as_cast_data(fields, example_descriptions,
-      category_opts \\ [category: :validation_success]) do
+      workflow_opts \\ [workflow: :validation_success]) do
 
-      TestBuild.one_category(
-        Keyword.get(category_opts, :category),
+      TestBuild.one_workflow(
+        Keyword.get(workflow_opts, :workflow),
         [module_under_test: AsCast,
          field_transformations: [as_cast: fields]
           ],
@@ -58,9 +58,9 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
 
     # Assumes example to be tested is `:example`
     defp run_example(fields, example_opts,
-      category_opts \\ [category: :validation_success]) do
+      workflow_opts \\ [workflow: :validation_success]) do
         
-      as_cast_data(fields, [example: example_opts], category_opts)
+      as_cast_data(fields, [example: example_opts], workflow_opts)
       |> Example.get(:example)
       |> Checks.get_validation_checks(previously: %{})
     end
@@ -88,7 +88,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
 
     test "validation errors appear in result" do
       run_example([:date, :name], [params(date: "2001-01-0", name: "Bossie")],
-                  category: :validation_error)
+                  workflow: :validation_error)
       |> assert_equal([:invalid,
                       changes: [name: "Bossie"],
                       no_changes: [:date],             ## <<<
@@ -143,7 +143,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
   describe "on_success is evaluated later" do 
     test "in a success case" do 
       test_data =
-        TestBuild.one_category(:success,
+        TestBuild.one_workflow(:success,
           [module_under_test: OnSuccess,
            field_transformations: [
              as_cast: [:date_string],
@@ -174,7 +174,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
 
     test "no check added when a validation failure is expected" do 
       actual =
-        TestBuild.one_category(:validation_error,
+        TestBuild.one_workflow(:validation_error,
           [module_under_test: OnSuccess,
            field_transformations: [
              as_cast: [:date_string],
@@ -189,7 +189,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
 
     test "more than one argument to checking function" do 
       test_data =
-        TestBuild.one_category(:success,
+        TestBuild.one_workflow(:success,
           [module_under_test: OnSuccess,
            field_transformations: [
              as_cast: [:date_string],
