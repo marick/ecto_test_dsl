@@ -2,6 +2,7 @@ defmodule TransformerTestSupport.Build do
   alias TransformerTestSupport.Build.{Normalize,ParamShorthand}
   import DeepMerge, only: [deep_merge: 2]
   import FlowAssertions.Define.BodyParts
+  import ExUnit.Assertions
 
   @moduledoc """
   """
@@ -12,8 +13,9 @@ defmodule TransformerTestSupport.Build do
     format: :raw,
     examples: [],
     field_transformations: [],
-    action: :insert
   }
+
+  @required_keys [:action, :module_under_test]
 
   def start_with_variant(variant_name, data),
     do: start([{:variant, variant_name} | data])
@@ -23,7 +25,17 @@ defmodule TransformerTestSupport.Build do
     
     @starting_test_data
     |> Map.merge(map_data)
+    |> validate_start
     |> run_start_hook
+  end
+
+  def validate_start(test_data) do
+    given_keys = Map.keys(test_data)
+    for key <- @required_keys do
+      unless key in given_keys,
+        do: flunk("`start` requires the `#{inspect key}` option")
+    end
+    test_data
   end
 
   @doc """

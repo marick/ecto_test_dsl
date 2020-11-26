@@ -10,22 +10,37 @@ defmodule BuildTest do
       do: Map.put(test_data, :adjusted, true)
   end
 
-  @minimal_start [module_under_test: Anything, variant: Variant]
+  describe "start" do 
 
-  test "minimal start" do
-    expected = 
-      %{format: :raw,
-        module_under_test: Anything,
-        variant: Variant,
-        examples: [],
-        adjusted: true,
-        field_transformations: [],
-        action: :insert
-       }
+    @minimal_start [
+      module_under_test: Anything,
+      variant: Variant,
+      action: :insert
+    ]
     
-    assert Build.start(@minimal_start) == expected
+    test "minimal start" do
+      expected = 
+        %{format: :raw,
+          module_under_test: Anything,
+          variant: Variant,
+          examples: [],
+          adjusted: true,
+          field_transformations: [],
+          action: :insert,
+         }
+      
+      assert Build.start(@minimal_start) == expected
+    end
+    
+    test "leave out `:action` (and, by implication, other required fields)" do
+        assertion_fails("`start` requires the `:action` option",
+        fn ->
+          Build.start(module_under_test: Anything) 
+        end)
+    end
   end
-
+        
+        
   describe "params" do 
     test "params_like" do
       previous = [ok: %{params:                   %{a: 1, b: 2 }}]
