@@ -1,12 +1,12 @@
-defmodule Template.TrivialExamples do
+defmodule Template.EctoClassic do
   defmacro __using__(_) do
-    quote do 
-      use TransformerTestSupport.Variants.Trivial
+    quote do
+      use TransformerTestSupport.Variants.EctoClassic
       
       def started() do
-        start(
+        EctoClassic.start(
           module_under_test: __MODULE__,
-          format: :phoenix,
+          format: :raw,
           repo: :no_actual_repo
         )
       end
@@ -17,5 +17,3 @@ defmodule Template.TrivialExamples do
     end
   end
 end
-
-  

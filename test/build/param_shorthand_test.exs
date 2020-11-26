@@ -5,7 +5,7 @@ defmodule Build.ParamsShorthandTest do
   alias T.Build
 
   defmodule Examples do 
-    use Template.TrivialExamples
+    use Template.Trivial
   end
 
   describe "params_like" do 
