@@ -4,9 +4,13 @@ defmodule Build.ParamsShorthandTest do
   use T.Predefines
   alias T.Build
 
+  defmodule Examples do 
+    use Template.TrivialExamples
+  end
+
   describe "params_like" do 
     test "basic use" do
-      start()
+      Examples.started()
       |> workflow(:valid, ok: [                    params(a: 1, b: 2)])
       |> workflow(:invalid, similar: [params_like(:ok, except: [b: 4])])
       |> example(:similar)
@@ -14,7 +18,7 @@ defmodule Build.ParamsShorthandTest do
     end
     
     test "using params_like to refer to values within the same workflow" do
-      start()
+      Examples.started()
       |> workflow(:valid, [
             ok: [params: %{a: 1, b: 2}],
             similar: [params_like(:ok, except: [b: 4])]
@@ -25,7 +29,7 @@ defmodule Build.ParamsShorthandTest do
     
     test "multiple workflows" do
       actual = 
-        start() |> 
+        Examples.started() |> 
 
         workflow(:valid, [
               ok: [params: %{a: 1, b: 2}],
@@ -43,7 +47,7 @@ defmodule Build.ParamsShorthandTest do
     
     test "params_like can copy everything" do
       actual = 
-        start()
+        Examples.started()
         |> workflow(:valid, ok: [params(a: 1, b: 2)])
         |> workflow(:invalid, similar: [params_like(:ok)])
       
@@ -53,7 +57,7 @@ defmodule Build.ParamsShorthandTest do
     test "referring to a nonexistent example fails gracefully" do
       assertion_fails("There is no previous example `:ok`",
         fn ->
-          Build.start(module_under_test: ModuleUnderTest)
+          Examples.started()
           |> workflow(:invalid, similar: [params_like(:ok)])
         end)
     end
@@ -62,18 +66,18 @@ defmodule Build.ParamsShorthandTest do
   describe "id_of" do 
     test "instances of `id_of` generate a previously" do
       actual = 
-      start()
-      |> workflow(:valid, ok: [params(a: 1, b: 2)])
-      |> workflow(:invalid, similar: [
-            params_like(:ok, except: [a: id_of(species: ExampleModule)])
-         ])
+        Examples.started()
+        |> workflow(:valid, ok: [params(a: 1, b: 2)])
+        |> workflow(:invalid, similar: [
+              params_like(:ok, except: [a: id_of(species: ExampleModule)])
+           ])
 
       assert example(actual, :similar).previously == [insert: {:species, ExampleModule}]
     end
 
     test "adds on to existing previously" do
       actual = 
-        start()
+        Examples.started()
         |> workflow(:invalid, name: [
              params(a: id_of(species: ExampleModule),
                     b: id_of(:thing)),
