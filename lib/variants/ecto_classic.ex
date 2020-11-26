@@ -6,7 +6,10 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
 
   import FlowAssertions.Define.BodyParts
   
-  def start(opts), do: Build.start_with_variant(ThisVariant, opts)
+  def start(opts) do
+    opts = [action: :insert] ++ opts
+    Build.start_with_variant(ThisVariant, opts)
+  end
 
   # ------------------- Hook functions -----------------------------------------
 

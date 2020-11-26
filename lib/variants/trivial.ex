@@ -1,7 +1,12 @@
 defmodule TransformerTestSupport.Variants.Trivial do
-  alias TransformerTestSupport.Build
+  alias TransformerTestSupport, as: T
+  alias T.Build
+  alias T.Variants.Trivial, as: ThisVariant
   
-  def start(opts), do: Build.start_with_variant(__MODULE__, opts)
+  def start(opts \\ []) do
+    opts = [action: :irrelevant] ++ opts
+    Build.start_with_variant(ThisVariant, opts)
+  end
 
   # ------------------- Hook functions -----------------------------------------
 
