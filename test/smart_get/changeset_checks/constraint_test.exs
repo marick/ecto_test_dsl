@@ -35,11 +35,13 @@ defmodule SmartGet.ChangesetChecks.ConstraintTest do
       |> Checks.get_constraint_checks(previously: %{})
     end
 
+    @tag :skip # current
     test "starting with no existing checks" do
       run_example([:date], [params(         date:   "2001-01-01")])
       |> assert_equal([])
     end
 
+    @tag :skip # current
     test "starting with existing checks" do
       run_example([:date], [params(date: "2001-01-01"),
                             constraint_changeset(changes: [name: "Bossie"])])

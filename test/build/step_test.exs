@@ -32,6 +32,7 @@ defmodule Build.StepTest do
     end
   end
   
+  @tag :skip # current
   test "steps can pick the value to use" do
     actual = ChosenResultStep.Tester.check_workflow(:ok)
     assert Keyword.get(actual, :check_validation_changeset) == "substitute result"

@@ -7,6 +7,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
 
   # ----------------------------------------------------------------------------
   describe "dependencies on workflow" do
+    @tag :skip # current
     test "a list" do 
       expect = fn workflow_name, expected ->
         TestBuild.one_workflow(workflow_name, [], example: [])
@@ -20,6 +21,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       :constraint_error   |> expect.(  :valid)
     end
     
+    @tag :skip # current
     test "checks are added to the beginning" do
       TestBuild.one_workflow(:validation_success,
         [],
@@ -64,12 +66,14 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       |> Example.get(:example)
       |> Checks.get_validation_checks(previously: %{})
     end
-
+    
+    @tag :skip # current
     test "starting with no existing checks" do
       run_example([:date], [params(         date:   "2001-01-01")])
       |> assert_equal([:valid, changes:    [date: ~D[2001-01-01]]])
     end
 
+    @tag :skip # current
     test "starting with existing checks" do
       run_example([:date], [params(date: "2001-01-01"),
                             changeset(changes: [name: "Bossie"])]) # existing
@@ -78,6 +82,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
                       changes: [date: ~D[2001-01-01]]])
     end
 
+    @tag :skip # current
     test "it is OK for a parameter to be missing" do
       run_example([:other], [params(date: "2001-01-01"),
                              changeset(changes: [name: "Bossie"])])
@@ -86,6 +91,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
                       no_changes: [:other]])
     end
 
+    @tag :skip # current
     test "validation errors appear in result" do
       run_example([:date, :name], [params(date: "2001-01-0", name: "Bossie")],
                   workflow: :validation_error)
@@ -95,6 +101,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
                       errors: [date: "is invalid"]])   ## <<<
     end
 
+    @tag :skip # current
     test "a field named in the `changeset` arg overrides auto-generated ones" do 
       run_example([:date], [params(date: "2001-01-01"),
                             changeset(no_changes: :date)]) # Note date mentioned.
@@ -102,6 +109,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
     end
 
 
+    @tag :skip # current
     test "overriding a field's changeset prevents `as_cast` calculation" do
       run_example([:date], [params(date: "2001-01-0"),
                                          # ^^^^^^^^ note this is in error.
@@ -120,6 +128,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       #    
     end
 
+    @tag :skip # current
     test "`previously` values are obeyed" do
       as_cast_data([:species_id],
         example: [params(species_id: id_of(:prerequisite))])
@@ -141,6 +150,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
   end
 
   describe "on_success is evaluated later" do 
+    @tag :skip # current
     test "in a success case" do 
       test_data =
         TestBuild.one_workflow(:success,
@@ -172,6 +182,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
         end)
     end
 
+    @tag :skip # current
     test "no check added when a validation failure is expected" do 
       actual =
         TestBuild.one_workflow(:validation_error,
@@ -187,6 +198,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       assert [:invalid, changes: [date_string: "2001-01-0"]] = actual
     end
 
+    @tag :skip # current
     test "more than one argument to checking function" do 
       test_data =
         TestBuild.one_workflow(:success,

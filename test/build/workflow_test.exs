@@ -12,10 +12,12 @@ defmodule Build.WorkflowTest do
     end
   end
 
+  @tag :skip # current
   test "workflows are attached to examples" do
     assert SmartGet.Example.get(Repeat, :ok).metadata.workflow_name == :valid
   end
 
+  @tag :skip # current
   test "you can repeat a workflow" do
     assert Repeat.Tester.params(:ok) ==    %{a: 1,  b: 2}
     assert Repeat.Tester.params(:other) == %{a: 11, b: 22}

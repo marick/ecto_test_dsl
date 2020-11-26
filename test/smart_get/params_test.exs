@@ -20,6 +20,7 @@ defmodule SmartGet.ParamsTest do
   def with_format(start_args),
     do: TestBuild.one_workflow(start_args, [ok: @ok])
 
+  @tag :skip # current
   test "different formats" do
     expect = fn format, expected ->
       with_format(format)
@@ -33,6 +34,7 @@ defmodule SmartGet.ParamsTest do
     [                ] |> expect.(@raw_params)
   end
     
+  @tag :skip # current
   test "getting the id of a previously-created value" do
     TestBuild.one_workflow(
       species: [params(name: "bovine")],

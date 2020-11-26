@@ -11,6 +11,7 @@ defmodule SmartGet.ExampleTest do
     :ok
   end    
 
+  @tag :skip # current
   test "getting an example can use either module name or data" do
     finds_example = &(Example.get(&1, :ok) |> assert_field(params: @expected))
 
@@ -18,6 +19,7 @@ defmodule SmartGet.ExampleTest do
     TestDataServer.test_data(__MODULE__) |> finds_example.()
   end
 
+  @tag :skip # current
   test "pieces" do
     example = Example.get(__MODULE__, :ok)
     
