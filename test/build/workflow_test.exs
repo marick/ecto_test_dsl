@@ -2,24 +2,25 @@ defmodule Build.WorkflowTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.SmartGet
 
-  defmodule Repeat do
-    use TransformerTestSupport.Variants.Trivial
+  defmodule Examples do
+    use Template.Trivial
     
     def create_test_data() do
-      start_with_variant(Trivial, module_under_test: Anything)
+      started()
       |> workflow(:valid, ok:    [params(a: 1,  b: 2)])
+         # Note repeated name
       |> workflow(:valid, other: [params(a: 11, b: 22)])
     end
   end
 
-  @tag :skip # current
   test "workflows are attached to examples" do
-    assert SmartGet.Example.get(Repeat, :ok).metadata.workflow_name == :valid
+    SmartGet.Example.get(Examples, :ok)
+    |> SmartGet.Example.workflow_name
+    |> assert_equal(:valid)
   end
 
-  @tag :skip # current
-  test "you can repeat a workflow" do
-    assert Repeat.Tester.params(:ok) ==    %{a: 1,  b: 2}
-    assert Repeat.Tester.params(:other) == %{a: 11, b: 22}
+  test "workflow examples accumulate" do
+    assert Examples.Tester.params(:ok) ==    %{a: 1,  b: 2}
+    assert Examples.Tester.params(:other) == %{a: 11, b: 22}
   end
 end  

@@ -5,15 +5,12 @@ defmodule Template.Trivial do
       
       def started() do
         start(
-          module_under_test: __MODULE__,
-          format: :phoenix,
-          repo: :no_actual_repo
+          module_under_test: :irrelevant_module_under_test,
+          format: :raw
         )
       end
       
-      def create_test_data do
-        started()
-      end
+      def create_test_data, do: started()
       defoverridable create_test_data: 0
     end
   end
