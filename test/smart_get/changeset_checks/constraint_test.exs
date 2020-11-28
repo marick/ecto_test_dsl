@@ -1,51 +1,26 @@
 defmodule SmartGet.ChangesetChecks.ConstraintTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.SmartGet.ChangesetChecks, as: Checks
-  alias TransformerTestSupport.SmartGet.Example
-  import TransformerTestSupport.Build
+  alias TransformerTestSupport, as: T
+  alias T.SmartGet.ChangesetChecks, as: Checks
+  import T.Build
+  alias Template.Dynamic
 
-  defmodule AsCast do 
-    use Ecto.Schema
-    schema "table" do
-      field :name, :string
-      field :date, :date
-      field :other, :string
-      field :other2, :string
-
-      field :species_id, :integer   # Faking a `belongs_to`
-    end
+  defmodule Examples do 
+    use Template.Trivial
   end
-
-  describe "has no effect" do
-    defp as_cast_data(fields, example_descriptions, workflow_opts) do 
-      TestBuild.one_workflow(
-        Keyword.get(workflow_opts, :workflow),
-        [module_under_test: AsCast,
-         field_transformations: [as_cast: fields]
-          ],
-        example_descriptions)
+  
+  # These are kind of dumb tests, but the code is pretty uncomplicated.
+  test "fetching constraint checks from an example" do
+    expect = fn example_data, expected ->
+      Examples.create_test_data
+      |> Dynamic.example(example_data)
+      |> Checks.get_constraint_checks
+      |> assert_equal(expected)
     end
-
-    # Assumes example to be tested is `:example`
-    defp run_example(fields, example_opts,
-      workflow_opts \\ [workflow: :validation_success]) do
-        
-      as_cast_data(fields, [example: example_opts], workflow_opts)
-      |> Example.get(:example)
-      |> Checks.get_constraint_checks(previously: %{})
-    end
-
-    @tag :skip # current
-    test "starting with no existing checks" do
-      run_example([:date], [params(         date:   "2001-01-01")])
-      |> assert_equal([])
-    end
-
-    @tag :skip # current
-    test "starting with existing checks" do
-      run_example([:date], [params(date: "2001-01-01"),
-                            constraint_changeset(changes: [name: "Bossie"])])
-      |> assert_equal(changes: [name: "Bossie"])
-    end
-  end 
+    
+                          [   ]
+               |> expect.([   ])
+    [constraint_changeset(changes: [name: "bossie"])]
+               |> expect.(changes: [name: "bossie"])
+  end
 end

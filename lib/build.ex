@@ -1,5 +1,6 @@
 defmodule TransformerTestSupport.Build do
-  alias TransformerTestSupport.Build.{Normalize,ParamShorthand}
+  alias TransformerTestSupport, as: T
+  alias T.Build.{Normalize,ParamShorthand}
   import DeepMerge, only: [deep_merge: 2]
   import FlowAssertions.Define.BodyParts
   import ExUnit.Assertions
