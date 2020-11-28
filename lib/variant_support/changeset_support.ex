@@ -1,6 +1,6 @@
 defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   alias TransformerTestSupport, as: T
-  alias T.SmartGet.{Example,ChangesetChecks}
+  alias T.SmartGet.{Example,ChangesetChecks,Params}
   alias T.VariantSupport.ChangesetSupport.Previously
   import FlowAssertions.Define.{Defchain, BodyParts}
   alias T.RunningExample
@@ -10,7 +10,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
 
   def accept_params(running) do
     prior_work = Keyword.get(running.history, :previously, %{})
-    params = Example.params(running.example, previously: prior_work)
+    params = Params.get(running.example, previously: prior_work)
     module = Example.module_under_test(running.example)
     empty = struct(module)
 

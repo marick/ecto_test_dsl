@@ -21,7 +21,7 @@ defmodule TransformerTestSupport.Predefines.Tester do
       
       def params(example_name) do 
         SmartGet.Example.get(@name_of_test_data, example_name)
-        |> SmartGet.Example.params
+        |> SmartGet.Params.get(previously: %{})
       end
 
       @trace_server_translations %{

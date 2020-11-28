@@ -3,26 +3,25 @@ defmodule SmartGet.ExampleTest do
   alias TransformerTestSupport.SmartGet.Example
   alias TransformerTestSupport.TestDataServer
 
-  @params [a: 1]
-  @expected %{a: 1}
 
-  setup do
-    TestBuild.with_params(:ok, @params) |> TestBuild.stash(__MODULE__)
-    :ok
-  end    
+  defmodule Examples do 
+    use Template.Trivial
 
-  @tag :skip # current
-  test "getting an example can use either module name or data" do
-    finds_example = &(Example.get(&1, :ok) |> assert_field(params: @expected))
-
-                             __MODULE__  |> finds_example.()
-    TestDataServer.test_data(__MODULE__) |> finds_example.()
+    def create_test_data do
+      started() |> 
+      workflow(     :any_workflow,
+        example: [params(a: 1)])
+    end
   end
 
-  @tag :skip # current
-  test "pieces" do
-    example = Example.get(__MODULE__, :ok)
-    
-    assert Example.params(example) == @expected
+  test "getting an example can use either module name or data" do
+    from_module_name =
+      Example.get(Examples, :example)
+    from_test_data =
+      TestDataServer.test_data(Examples).examples
+      |> Keyword.get(:example)
+
+    assert from_module_name == from_test_data
+    assert from_module_name.params == %{a: 1}
   end
 end 

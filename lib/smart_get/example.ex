@@ -1,5 +1,4 @@
 defmodule TransformerTestSupport.SmartGet.Example do
-  alias TransformerTestSupport.SmartGet
   alias TransformerTestSupport.TestDataServer
   
   @moduledoc """
@@ -44,6 +43,7 @@ defmodule TransformerTestSupport.SmartGet.Example do
   def module_under_test(example), do: metadata!(example, :module_under_test)
   def format(example), do: metadata!(example, :format)
   def name(example), do: metadata!(example, :name)
+  def workflows(example), do: metadata!(example, :workflows)
   def workflow_name(example), do: metadata!(example, :workflow_name)
   def field_transformations(example), do: metadata!(example, :field_transformations)
   def previously(example), do: metadata!(example, :previously)
@@ -54,12 +54,7 @@ defmodule TransformerTestSupport.SmartGet.Example do
   
 
   def step_list(example) do
-    example.metadata.workflows
-    |> Map.get(example.metadata.workflow_name)
+    workflows(example)
+    |> Map.get(workflow_name(example))
   end
-
-  IO.inspect "This is too error prone"
-  # Because too easy to use it instead of SmartGet.Params
-  def params(example, opts \\ [previously: %{}]),
-    do: SmartGet.Params.get(example, opts)
 end
