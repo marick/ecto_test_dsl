@@ -7,13 +7,11 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
   alias Template.Dynamic
   import FlowAssertions.Define.Defchain
 
-  defmodule Examples do 
-    use Template.Trivial
-  end
-
+  defmodule Examples, do: use Template.EctoClassic
+  
   # ----------------------------------------------------------------------------
   describe "dependencies on workflow" do
-    test "what becomes valid and what becomes invalid" do 
+    test "what becomes valid and what becomes invalid" do
       expect = fn workflow_name, expected ->
         Dynamic.example_in_workflow(Examples, workflow_name)
         |> Checks.get_validation_checks(previously: %{})
@@ -24,7 +22,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       :validation_success |> expect.(  :valid)
       :constraint_error   |> expect.(  :valid)
     end
-    
+
     test "checks are added to the beginning" do
       Dynamic.example_in_workflow(Examples, :validation_success,
         [changeset(no_changes: [:date])])
@@ -34,7 +32,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
   end
 
   # ----------------------------------------------------------------------------
-  defmodule AsCast do 
+  defmodule AsCast do
     use Ecto.Schema
     schema "table" do
       field :name, :string
@@ -47,31 +45,10 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
   end
 
   describe "adding an automatic as_cast test" do
-    def expect(opts, expected) do
-      as_cast = Keyword.fetch!(opts, :as_cast)
-      workflow = Keyword.get(opts, :workflow, :validation_success)
-      params = Keyword.fetch!(opts, :params)
-      previously = Keyword.get(opts, :previously, %{})
-
-      example_opts =
-        case Keyword.get(opts, :checks) do
-          nil -> [params(params)]
-          checks -> [params(params), changeset(checks)]
-        end
-            
-
-      Dynamic.configure(Examples, AsCast)
-      |> field_transformations(as_cast: as_cast)
-      |> Dynamic.example_in_workflow(workflow, example_opts)
-      |> Checks.get_validation_checks(previously: previously)
-      |> assert_equal(expected)
-    end
-      
-    
     test "starting with no existing checks" do
       [            as_cast: [:date],
        params:               [date:   "2001-01-01"]
-      ] |> expect(
+      ] |> expect_changeset_checks(
         [        :valid,
                  changes:    [date: ~D[2001-01-01]]])
     end
@@ -80,9 +57,9 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       [              as_cast: [:date],
        params:                 [date: "2001-01-01"],
        checks: [      changes: [name: "Bossie"]]       # <<<
-      ] |> expect(
+      ] |> expect_changeset_checks(
         [          :valid,
-                   changes:    [name: "Bossie"],       
+                   changes:    [name: "Bossie"],
                    changes:    [date: ~D[2001-01-01]]])
     end
 
@@ -90,9 +67,9 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       [              as_cast: [:other],               # <<<
        params:                 [date: "2001-01-01"],  # `other` not in params
        checks: [      changes: [name: "Bossie"]]
-      ] |> expect(
+      ] |> expect_changeset_checks(
         [          :valid,
-                   changes:    [name: "Bossie"],       
+                   changes:    [name: "Bossie"],
                    no_changes: [:other]])             # <<<<
     end
 
@@ -101,7 +78,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
                      as_cast:      [:date, :name],
                       params:       [date: "2001-01-0",      # <<<<
                                             name: "Bossie"]
-      ] |> expect([:invalid,
+      ] |> expect_changeset_checks([:invalid,
                       changes:             [name: "Bossie"],
                       no_changes:  [:date],                  # <<<
                       errors:       [date: "is invalid"]])   # <<<
@@ -111,23 +88,22 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       [               as_cast: [:date],
                        params: [date:   "2001-01-01"],
           checks: [no_changes: :date]                          # <<<
-      ] |> expect(
+      ] |> expect_changeset_checks(
         [        :valid,
                  no_changes:   :date])
     end
 
-
     test "overriding a field's changeset prevents `as_cast` calculation" do
       [               as_cast: [:date],
                        params:  [date:   "2001-01-0"],
-          checks:    [changes:  [date: ~D[2001-01-01]]]        #^^^ note the error   
-      ] |> expect(
+          checks:    [changes:  [date: ~D[2001-01-01]]]        #^^^ note the error
+      ] |> expect_changeset_checks(
         [              :valid,
                       changes:  [date: ~D[2001-01-01]]])
       # The lack of an assertion failure, gives evidence that
       # the actual `cast` value of the `date` parameter is never calculated.
     end
-    
+
     @tag :skip
     test "no check is made if the field wasn't changed" do
       # This would be relevant to update
@@ -135,21 +111,21 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       #    The params contains the same bogus value.
       #    This does not cause a changeset check, just as it would
       #    not cause a changeset value because those only apply to
-      #    
+      #
     end
 
     test "`previously` values are obeyed" do
       [ as_cast: [:species_id],
         params:  [ species_id: id_of(:prerequisite)],
         previously:              %{ {:prerequisite, __MODULE__} => %{id: 383}}
-      ] |> expect(
+      ] |> expect_changeset_checks(
         [:valid,
          changes:  [species_id:                                          383]])
     end
   end
 
   # ----------------------------------------------------------------------------
-  defmodule OnSuccess do 
+  defmodule OnSuccess do
     use Ecto.Schema
     embedded_schema do
       field :date_string, :string, virtual: true
@@ -158,63 +134,8 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
     end
   end
 
-  def global_transformations(transformations) do 
-    Dynamic.configure(Examples, OnSuccess)
-    |> field_transformations(transformations)
-  end
-
-  def and_example(test_data, opts) do
-    workflow = Keyword.get(opts, :workflow, :validation_success)
-    params = Keyword.fetch!(opts, :params)
-
-    test_data
-    |> Dynamic.example_in_workflow(workflow, [params(params)])
-  end
-
-  def and_custom_checks(n), do: n
-  def date_string_check(s), do: s
-
-  def checks_for(example, validity, expected_date_string, expected_function_count) do
-    assert [^validity, {:changes, [date_string: ^expected_date_string]} | functions] = 
-      Checks.get_validation_checks(example, previously: %{})
-
-    assert expected_function_count == length(functions)
-    
-    functions
-    |> Enum.map(fn {:__custom_changeset_check, f} -> f end)
-  end
-
-  defchain assert_this_changeset_passes(f, changeset_values) do
-    changeset = struct(Changeset, %{changes: Enum.into(changeset_values, %{})})
-    assert f.(changeset) == :ok
-  end
-
-  def assert_this_changeset_fails(f, changeset_values) do
-    changeset = struct(Changeset, %{changes: Enum.into(changeset_values, %{})})
-    assert_raise(ExUnit.AssertionError, fn ->
-      f.(changeset)
-    end)
-  end
-  
-
-  defchain assert_diagnostics(assertion_error, message, others) do
-    assertion_error
-    |> assert_fields(message: message)
-    |> assert_fields(others)
-  end
-      # failure = %Changeset{
-      #   changes: %{date_string: "2001-01-01",
-      #              date: ~D[2001-01-02]}}
-      # assertion_fails(
-      #   "Changeset field `:date` (left) does not match the value calculated from &Date.from_iso8601!/1[:date_string]",
-      #   [left: ~D[2001-01-02], right: ~D[2001-01-01]],
-      #   fn -> 
-      #     custom_check.(failure)
-      #   end)
-  
-
   describe "on_success is evaluated later" do
-    test "in a success case" do 
+    test "in a success case" do
       [custom_check] =
         global_transformations([
                                     as_cast: [:date_string],
@@ -252,7 +173,6 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       |> and_example(params: [date_string: "2000-01-04"])
       |> checks_for(:valid, date_string_check("2000-01-04"), and_custom_checks(2))
 
-
       since_check
       |> assert_this_changeset_passes(date_string: "2000-01-04",
                                       date: ~D[2000-01-04],
@@ -269,16 +189,87 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
     test "Three different ways of expressing an `on_success`"
 
     @tag :skip
-    test "If a first check fails, a later calculation is not made" 
-    
-    @tag :skip
     test "no check is made if the field wasn't changed" do
       # This would be relevant to update
       #    The data part of the changeset contains a bogus value.
       #    The params contains the same bogus value.
       #    This does not cause a changeset check, just as it would
       #    not cause a changeset value because those only apply to
-      #    
+      #
     end
   end
+
+  @tag :skip
+  test "If a first check fails, a later calculation is not made"
+
+
+  # ------------ Helper functions ----------------------------------------------
+
+  defp expect_changeset_checks(opts, expected) do
+    as_cast = Keyword.fetch!(opts, :as_cast)
+    workflow = Keyword.get(opts, :workflow, :validation_success)
+    params = Keyword.fetch!(opts, :params)
+    previously = Keyword.get(opts, :previously, %{})
+
+    example_opts =
+      case Keyword.get(opts, :checks) do
+        nil -> [params(params)]
+        checks -> [params(params), changeset(checks)]
+      end
+
+
+    Dynamic.configure(Examples, AsCast)
+    |> field_transformations(as_cast: as_cast)
+    |> Dynamic.example_in_workflow(workflow, example_opts)
+    |> Checks.get_validation_checks(previously: previously)
+    |> assert_equal(expected)
+  end
+
+  # For on_success
+
+  defp global_transformations(transformations) do
+    Dynamic.configure(Examples, OnSuccess)
+    |> field_transformations(transformations)
+  end
+
+  defp and_example(test_data, opts) do
+    workflow = Keyword.get(opts, :workflow, :validation_success)
+    params = Keyword.fetch!(opts, :params)
+
+    test_data
+    |> Dynamic.example_in_workflow(workflow, [params(params)])
+  end
+
+  # For clearer lines of code
+  defp and_custom_checks(n), do: n
+  defp date_string_check(s), do: s
+
+  defp checks_for(example, validity, expected_date_string, expected_function_count) do
+    assert [^validity, {:changes, [date_string: ^expected_date_string]} | functions] =
+      Checks.get_validation_checks(example, previously: %{})
+
+    assert expected_function_count == length(functions)
+
+    functions
+    |> Enum.map(fn {:__custom_changeset_check, f} -> f end)
+  end
+
+  defchain assert_this_changeset_passes(f, changeset_values) do
+    changeset = struct(Changeset, %{changes: Enum.into(changeset_values, %{})})
+    assert f.(changeset) == :ok
+  end
+
+  defp assert_this_changeset_fails(f, changeset_values) do
+    changeset = struct(Changeset, %{changes: Enum.into(changeset_values, %{})})
+    assert_raise(ExUnit.AssertionError, fn ->
+      f.(changeset)
+    end)
+  end
+
+  defchain assert_diagnostics(assertion_error, message, others) do
+    assertion_error
+    |> assert_fields(message: message)
+    |> assert_fields(others)
+  end
+
 end
