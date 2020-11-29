@@ -3,20 +3,33 @@ defmodule Template.Dynamic do
   alias T.Build
   alias T.SmartGet.Example
 
+
+  def configure(examples_module, module_under_test \\ :irrelevant_module_under_test) do
+    examples_module.create_test_data()
+    |> adjust_metadata(module_under_test: module_under_test)
+  end
+  
+
+  def adjust_metadata(module, opts) when is_atom(module),
+    do: module.create_test_data() |> adjust_metadata(opts)
+
   def adjust_metadata(test_data, opts) do
     Map.merge(test_data, Enum.into(opts, %{}))
   end
 
-  def example(test_data, opts \\ []) do
+  def example(module_or_test_data, example_opts \\ []),
+    do: example_in_workflow(module_or_test_data, :only_workflow, example_opts)
+
+  def example_in_workflow(module_or_test_data, workflow_name, example_opts \\ [])
+
+  def example_in_workflow(module, workflow_name, example_opts) when is_atom(module),
+    do: module.create_test_data() |> example_in_workflow(workflow_name, example_opts)
+
+  def example_in_workflow(test_data, workflow_name, example_opts) do
     test_data
-    |> Build.workflow(:only_workflow, only_example: opts)
+    |> Build.workflow(workflow_name, only_example: example_opts)
     |> Build.propagate_metadata
     |> Example.get(:only_example)
-  end
-
-  def example_with_params(test_data, given_params) do
-    test_data
-    |> example([Build.params(given_params)])
   end
 end
 

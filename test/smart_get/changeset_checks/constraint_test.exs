@@ -12,8 +12,7 @@ defmodule SmartGet.ChangesetChecks.ConstraintTest do
   # These are kind of dumb tests, but the code is pretty uncomplicated.
   test "fetching constraint checks from an example" do
     expect = fn example_data, expected ->
-      Examples.create_test_data
-      |> Dynamic.example(example_data)
+      Dynamic.example(Examples, example_data)
       |> Checks.get_constraint_checks
       |> assert_equal(expected)
     end

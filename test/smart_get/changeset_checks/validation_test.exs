@@ -1,17 +1,21 @@
 defmodule SmartGet.ChangesetChecks.ValidationTest do
-  use TransformerTestSupport.Case
-  alias TransformerTestSupport.SmartGet.ChangesetChecks, as: Checks
-  alias TransformerTestSupport.SmartGet.Example
-  import TransformerTestSupport.Build
+  alias TransformerTestSupport, as: T
+  use T.Case
+  alias T.SmartGet.ChangesetChecks, as: Checks
+  alias T.SmartGet.Example
+  import T.Build
   alias Ecto.Changeset
+  alias Template.Dynamic
+
+  defmodule Examples do 
+    use Template.Trivial
+  end
 
   # ----------------------------------------------------------------------------
   describe "dependencies on workflow" do
-    @tag :skip # current
-    test "a list" do 
+    test "what becomes valid and what becomes invalid" do 
       expect = fn workflow_name, expected ->
-        TestBuild.one_workflow(workflow_name, [], example: [])
-        |> Example.get(:example)
+        Dynamic.example_in_workflow(Examples, workflow_name)
         |> Checks.get_validation_checks(previously: %{})
         |> assert_equal([expected])
       end
@@ -21,12 +25,9 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       :constraint_error   |> expect.(  :valid)
     end
     
-    @tag :skip # current
     test "checks are added to the beginning" do
-      TestBuild.one_workflow(:validation_success,
-        [],
-        example: [changeset(no_changes: [:date])])
-      |> Example.get(:example)
+      Dynamic.example_in_workflow(Examples, :validation_success,
+        [changeset(no_changes: [:date])])
       |> Checks.get_validation_checks(previously: %{})
       |> assert_equal([:valid, {:no_changes, [:date]}])
     end
@@ -46,76 +47,85 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
   end
 
   describe "adding an automatic as_cast test" do
+    def expect(opts, expected) do
+      as_cast = Keyword.fetch!(opts, :as_cast)
+      workflow = Keyword.get(opts, :workflow, :validation_success)
+      params = Keyword.fetch!(opts, :params)
+      previously = Keyword.get(opts, :previously, %{})
 
-    defp as_cast_data(fields, example_descriptions,
-      workflow_opts \\ [workflow: :validation_success]) do
+      example_opts =
+        case Keyword.get(opts, :checks) do
+          nil -> [params(params)]
+          checks -> [params(params), changeset(checks)]
+        end
+            
 
-      TestBuild.one_workflow(
-        Keyword.get(workflow_opts, :workflow),
-        [module_under_test: AsCast,
-         field_transformations: [as_cast: fields]
-          ],
-        example_descriptions)
+      Dynamic.configure(Examples, AsCast)
+      |> field_transformations(as_cast: as_cast)
+      |> Dynamic.example_in_workflow(workflow, example_opts)
+      |> Checks.get_validation_checks(previously: previously)
+      |> assert_equal(expected)
     end
-
-    # Assumes example to be tested is `:example`
-    defp run_example(fields, example_opts,
-      workflow_opts \\ [workflow: :validation_success]) do
-        
-      as_cast_data(fields, [example: example_opts], workflow_opts)
-      |> Example.get(:example)
-      |> Checks.get_validation_checks(previously: %{})
-    end
+      
     
-    @tag :skip # current
     test "starting with no existing checks" do
-      run_example([:date], [params(         date:   "2001-01-01")])
-      |> assert_equal([:valid, changes:    [date: ~D[2001-01-01]]])
+      [            as_cast: [:date],
+       params:               [date:   "2001-01-01"]
+      ] |> expect(
+        [        :valid,
+                 changes:    [date: ~D[2001-01-01]]])
     end
 
-    @tag :skip # current
     test "starting with existing checks" do
-      run_example([:date], [params(date: "2001-01-01"),
-                            changeset(changes: [name: "Bossie"])]) # existing
-      |> assert_equal([:valid,
-                      changes: [name: "Bossie"],
-                      changes: [date: ~D[2001-01-01]]])
+      [              as_cast: [:date],
+       params:                 [date: "2001-01-01"],
+       checks: [      changes: [name: "Bossie"]]       # <<<
+      ] |> expect(
+        [          :valid,
+                   changes:    [name: "Bossie"],       
+                   changes:    [date: ~D[2001-01-01]]])
     end
 
-    @tag :skip # current
     test "it is OK for a parameter to be missing" do
-      run_example([:other], [params(date: "2001-01-01"),
-                             changeset(changes: [name: "Bossie"])])
-      |> assert_equal([:valid,
-                      changes: [name: "Bossie"],
-                      no_changes: [:other]])
+      [              as_cast: [:other],               # <<<
+       params:                 [date: "2001-01-01"],  # `other` not in params
+       checks: [      changes: [name: "Bossie"]]
+      ] |> expect(
+        [          :valid,
+                   changes:    [name: "Bossie"],       
+                   no_changes: [:other]])             # <<<<
     end
 
-    @tag :skip # current
-    test "validation errors appear in result" do
-      run_example([:date, :name], [params(date: "2001-01-0", name: "Bossie")],
-                  workflow: :validation_error)
-      |> assert_equal([:invalid,
-                      changes: [name: "Bossie"],
-                      no_changes: [:date],             ## <<<
-                      errors: [date: "is invalid"]])   ## <<<
+    test "If the `cast` produces an error, that appears in the expected results" do
+      [workflow:                                          :validation_error,
+                     as_cast:      [:date, :name],
+                      params:       [date: "2001-01-0",      # <<<<
+                                            name: "Bossie"]
+      ] |> expect([:invalid,
+                      changes:             [name: "Bossie"],
+                      no_changes:  [:date],                  # <<<
+                      errors:       [date: "is invalid"]])   # <<<
     end
 
-    @tag :skip # current
-    test "a field named in the `changeset` arg overrides auto-generated ones" do 
-      run_example([:date], [params(date: "2001-01-01"),
-                            changeset(no_changes: :date)]) # Note date mentioned.
-      |> assert_equal([:valid, no_changes: :date])
+    test "a field named in the `changeset` arg overrides auto-generated ones" do
+      [               as_cast: [:date],
+                       params: [date:   "2001-01-01"],
+          checks: [no_changes: :date]                          # <<<
+      ] |> expect(
+        [        :valid,
+                 no_changes:   :date])
     end
 
 
-    @tag :skip # current
     test "overriding a field's changeset prevents `as_cast` calculation" do
-      run_example([:date], [params(date: "2001-01-0"),
-                                         # ^^^^^^^^ note this is in error.
-                            changeset(changes: [date: ~D[2001-01-01]])])
-      |> assert_equal([:valid,        changes: [date: ~D[2001-01-01]]])
-      # The actual `cast` value of the `date` parameter is never calculated.
+      [               as_cast: [:date],
+                       params:  [date:   "2001-01-0"],
+          checks:    [changes:  [date: ~D[2001-01-01]]]        #^^^ note the error   
+      ] |> expect(
+        [              :valid,
+                      changes:  [date: ~D[2001-01-01]]])
+      # The lack of an assertion failure, gives evidence that
+      # the actual `cast` value of the `date` parameter is never calculated.
     end
     
     @tag :skip
@@ -128,14 +138,13 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       #    
     end
 
-    @tag :skip # current
     test "`previously` values are obeyed" do
-      as_cast_data([:species_id],
-        example: [params(species_id: id_of(:prerequisite))])
-      |> Example.get(:example)
-      |> Checks.get_validation_checks(
-                    previously: %{ {:prerequisite, __MODULE__} => %{id: 383}})
-      |> assert_equal([:valid,        changes: [species_id: 383]])
+      [ as_cast: [:species_id],
+        params:  [ species_id: id_of(:prerequisite)],
+        previously:              %{ {:prerequisite, __MODULE__} => %{id: 383}}
+      ] |> expect(
+        [:valid,
+         changes:  [species_id:                                          383]])
     end
   end
 
