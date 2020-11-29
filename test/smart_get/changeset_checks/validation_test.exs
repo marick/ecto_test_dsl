@@ -2,7 +2,6 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
   alias TransformerTestSupport, as: T
   use T.Case
   alias T.SmartGet.ChangesetChecks, as: Checks
-  alias T.SmartGet.Example
   import T.Build
   alias Ecto.Changeset
   alias Template.Dynamic
@@ -158,21 +157,17 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
     end
   end
 
-  describe "on_success is evaluated later" do 
-    @tag :skip # current
+  describe "on_success is evaluated later" do
     test "in a success case" do 
-      test_data =
-        TestBuild.one_workflow(:success,
-          [module_under_test: OnSuccess,
-           field_transformations: [
-             as_cast: [:date_string],
-             date: on_success(Date.from_iso8601!(:date_string))
-           ]
-          ],
-          ok: [params(date_string: "2001-01-01")])
+      example =
+        Dynamic.configure(Examples, OnSuccess)
+        |> field_transformations([as_cast: [:date_string],
+                                 date: on_success(Date.from_iso8601!(:date_string))])
+        |> Dynamic.example_in_workflow(:validation_success, [params(date_string: "2001-01-01")])
+
 
       [:valid, changes: [date_string: "2001-01-01"], __custom_changeset_check: f] =
-        Example.get(test_data, :ok) |> Checks.get_validation_checks(previously: %{})
+          Checks.get_validation_checks(example, previously: %{})
 
       success = %Changeset{
         changes: %{date_string: "2001-01-01",
@@ -191,42 +186,56 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
         end)
     end
 
-    @tag :skip # current
-    test "no check added when a validation failure is expected" do 
-      actual =
-        TestBuild.one_workflow(:validation_error,
-          [module_under_test: OnSuccess,
-           field_transformations: [
-             as_cast: [:date_string],
-             date: on_success(&Date.from_iso8601!/1, applied_to: :date_string)
-           ]
-          ],
-          error: [params(date_string: "2001-01-0")])
-      |> Example.get(:error)
-      |> Checks.get_validation_checks(previously: %{})
-      assert [:invalid, changes: [date_string: "2001-01-0"]] = actual
+    def expecT(_opts, _expected) do
+      # as_cast = Keyword.fetch!(opts, :as_cast)
+      # workflow = Keyword.get(opts, :workflow, :validation_success)
+      # params = Keyword.fetch!(opts, :params)
+      # previously = Keyword.get(opts, :previously, %{})
+      # transformation_opts = Keyword.get(opts, field_transformations)
+
+      # example_opts =
+      #   case Keyword.get(opts, :checks) do
+      #     nil -> [params(params)]
+      #     checks -> [params(params), changeset(checks)]
+      #   end
+            
+
+      # Dynamic.configure(Examples, OnSuccess)       # 
+      # |> field_transformations(transformation_opts)
+      # |> Dynamic.example_in_workflow(workflow, example_opts)
+      # |> Checks.get_validation_checks(previously: previously)
+      # |> assert_equal(expected)
     end
 
-    @tag :skip # current
-    test "more than one argument to checking function" do 
-      test_data =
-        TestBuild.one_workflow(:success,
-          [module_under_test: OnSuccess,
-           field_transformations: [
-             as_cast: [:date_string],
-             date: on_success(Date.from_iso8601! :date_string),
-             days_since_2000:
-                on_success(Date.diff(:date, ~D[2000-01-01]))
-           ]
-          ],
-          ok: [params(date_string: "2000-01-04")])
+    test "no check added when a validation failure is expected" do
+      example = 
+        Dynamic.configure(Examples, OnSuccess)
+        |> field_transformations([as_cast: [:date_string],
+                                 date: on_success(&Date.from_iso8601!/1, applied_to: :date_string)])
+        |> Dynamic.example_in_workflow(:validation_error, [
+                                       params(date_string: "2001-01-0")
+                                     ])
+      example 
+      |> Checks.get_validation_checks(previously: %{})
+      |> assert_equal([:invalid, changes: [date_string: "2001-01-0"]])
+    end
 
+    test "more than one argument to checking function" do
+      example = 
+        Dynamic.configure(Examples, OnSuccess)
+        |> field_transformations([as_cast: [:date_string],
+                                 date: on_success(Date.from_iso8601! :date_string),
+                                 days_since_2000: 
+                                   on_success(Date.diff(:date, ~D[2000-01-01]))])
+                                 
+        |> Dynamic.example_in_workflow(:validation_success, [
+                                       params(date_string: "2000-01-04")
+                                     ])
       [:valid, changes: [date_string: "2000-01-04"],
         __custom_changeset_check: _date,
         __custom_changeset_check: days_since] =
-        test_data
-        |> Example.get(:ok)
-        |> Checks.get_validation_checks(previously: %{})
+          example
+          |> Checks.get_validation_checks(previously: %{})
 
       success = %Changeset{
         changes: %{date_string: "2000-01-04",
@@ -247,6 +256,10 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
         end)
     end
 
+    @tag :skip
+    test "Two different ways of expressing an `on_success`"
+
+    
     @tag :skip
     test "no check is made if the field wasn't changed" do
       # This would be relevant to update
