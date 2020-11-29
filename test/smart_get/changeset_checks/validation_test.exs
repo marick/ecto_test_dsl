@@ -5,6 +5,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
   import T.Build
   alias Ecto.Changeset
   alias Template.Dynamic
+  import FlowAssertions.Define.Defchain
 
   defmodule Examples do 
     use Template.Trivial
@@ -157,108 +158,118 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
     end
   end
 
+  def global_transformations(transformations) do 
+    Dynamic.configure(Examples, OnSuccess)
+    |> field_transformations(transformations)
+  end
+
+  def and_example(test_data, opts) do
+    workflow = Keyword.get(opts, :workflow, :validation_success)
+    params = Keyword.fetch!(opts, :params)
+
+    test_data
+    |> Dynamic.example_in_workflow(workflow, [params(params)])
+  end
+
+  def and_custom_checks(n), do: n
+  def date_string_check(s), do: s
+
+  def checks_for(example, validity, expected_date_string, expected_function_count) do
+    assert [^validity, {:changes, [date_string: ^expected_date_string]} | functions] = 
+      Checks.get_validation_checks(example, previously: %{})
+
+    assert expected_function_count == length(functions)
+    
+    functions
+    |> Enum.map(fn {:__custom_changeset_check, f} -> f end)
+  end
+
+  defchain assert_this_changeset_passes(f, changeset_values) do
+    changeset = struct(Changeset, %{changes: Enum.into(changeset_values, %{})})
+    assert f.(changeset) == :ok
+  end
+
+  def assert_this_changeset_fails(f, changeset_values) do
+    changeset = struct(Changeset, %{changes: Enum.into(changeset_values, %{})})
+    assert_raise(ExUnit.AssertionError, fn ->
+      f.(changeset)
+    end)
+  end
+  
+
+  defchain assert_diagnostics(assertion_error, message, others) do
+    assertion_error
+    |> assert_fields(message: message)
+    |> assert_fields(others)
+  end
+      # failure = %Changeset{
+      #   changes: %{date_string: "2001-01-01",
+      #              date: ~D[2001-01-02]}}
+      # assertion_fails(
+      #   "Changeset field `:date` (left) does not match the value calculated from &Date.from_iso8601!/1[:date_string]",
+      #   [left: ~D[2001-01-02], right: ~D[2001-01-01]],
+      #   fn -> 
+      #     custom_check.(failure)
+      #   end)
+  
+
   describe "on_success is evaluated later" do
     test "in a success case" do 
-      example =
-        Dynamic.configure(Examples, OnSuccess)
-        |> field_transformations([as_cast: [:date_string],
-                                 date: on_success(Date.from_iso8601!(:date_string))])
-        |> Dynamic.example_in_workflow(:validation_success, [params(date_string: "2001-01-01")])
+      [custom_check] =
+        global_transformations([
+                                    as_cast: [:date_string],
+          date: on_success(Date.from_iso8601!(:date_string))])
+        |> and_example(              params:  [date_string: "2001-01-01"])
+        |> checks_for(:valid, date_string_check("2001-01-01"), and_custom_checks(1))
 
+      # Provide evidence the function actually does the right thing
+      custom_check
+      |> assert_this_changeset_passes(date_string: "2001-01-01", date: ~D[2001-01-01])
 
-      [:valid, changes: [date_string: "2001-01-01"], __custom_changeset_check: f] =
-          Checks.get_validation_checks(example, previously: %{})
-
-      success = %Changeset{
-        changes: %{date_string: "2001-01-01",
-                   date: ~D[2001-01-01]}}
-      assert f.(success) == :ok
-
-
-      failure = %Changeset{
-        changes: %{date_string: "2001-01-01",
-                   date: ~D[2001-01-02]}}
-      assertion_fails(
-        "Changeset field `:date` (left) does not match the value calculated from &Date.from_iso8601!/1[:date_string]",
-        [left: ~D[2001-01-02], right: ~D[2001-01-01]],
-        fn -> 
-          f.(failure)
-        end)
-    end
-
-    def expecT(_opts, _expected) do
-      # as_cast = Keyword.fetch!(opts, :as_cast)
-      # workflow = Keyword.get(opts, :workflow, :validation_success)
-      # params = Keyword.fetch!(opts, :params)
-      # previously = Keyword.get(opts, :previously, %{})
-      # transformation_opts = Keyword.get(opts, field_transformations)
-
-      # example_opts =
-      #   case Keyword.get(opts, :checks) do
-      #     nil -> [params(params)]
-      #     checks -> [params(params), changeset(checks)]
-      #   end
-            
-
-      # Dynamic.configure(Examples, OnSuccess)       # 
-      # |> field_transformations(transformation_opts)
-      # |> Dynamic.example_in_workflow(workflow, example_opts)
-      # |> Checks.get_validation_checks(previously: previously)
-      # |> assert_equal(expected)
+      custom_check                                                       #vvvvvvvvvv
+      |> assert_this_changeset_fails( date_string: "2001-01-01", date: ~D[2221-11-22])
+      |> assert_diagnostics("Changeset field `:date` (left) does not match the value calculated from &Date.from_iso8601!/1[:date_string]",
+                                                                 left: ~D[2221-11-22],
+                                                                right: ~D[2001-01-01])
     end
 
     test "no check added when a validation failure is expected" do
-      example = 
-        Dynamic.configure(Examples, OnSuccess)
-        |> field_transformations([as_cast: [:date_string],
-                                 date: on_success(&Date.from_iso8601!/1, applied_to: :date_string)])
-        |> Dynamic.example_in_workflow(:validation_error, [
-                                       params(date_string: "2001-01-0")
-                                     ])
-      example 
-      |> Checks.get_validation_checks(previously: %{})
-      |> assert_equal([:invalid, changes: [date_string: "2001-01-0"]])
+      global_transformations([
+                                                 as_cast: [:date_string],
+                       date: on_success(Date.from_iso8601!(:date_string))])
+      |> and_example(workflow: :validation_error, # <<<
+                                                   params: [date_string: "2001-01-0"])
+                                                                               #^^^^
+      |> checks_for(:invalid, date_string_check("2001-01-0"), and_custom_checks(0))
     end
 
     test "more than one argument to checking function" do
-      example = 
-        Dynamic.configure(Examples, OnSuccess)
-        |> field_transformations([as_cast: [:date_string],
-                                 date: on_success(Date.from_iso8601! :date_string),
-                                 days_since_2000: 
-                                   on_success(Date.diff(:date, ~D[2000-01-01]))])
-                                 
-        |> Dynamic.example_in_workflow(:validation_success, [
-                                       params(date_string: "2000-01-04")
-                                     ])
-      [:valid, changes: [date_string: "2000-01-04"],
-        __custom_changeset_check: _date,
-        __custom_changeset_check: days_since] =
-          example
-          |> Checks.get_validation_checks(previously: %{})
+      [_date_check, since_check] =
+        global_transformations([
+          as_cast: [:date_string],
+          date: on_success(Date.from_iso8601! :date_string),
+          days_since_2000: on_success(Date.diff(:date, ~D[2000-01-01]))])
+      |> and_example(params: [date_string: "2000-01-04"])
+      |> checks_for(:valid, date_string_check("2000-01-04"), and_custom_checks(2))
 
-      success = %Changeset{
-        changes: %{date_string: "2000-01-04",
-                   date: ~D[2000-01-04],
-                   days_since_2000: 3}}
-      assert days_since.(success) == :ok
 
-      failure = %Changeset{
-        changes: %{date_string: "2000-01-04",
-                   date: ~D[2000-01-04],
-                   days_since_2000: -3}}
-        
-      assertion_fails(
-        "Changeset field `:days_since_2000` (left) does not match the value calculated from &Date.diff/2[:date, ~D[2000-01-01]]",
-        [left: -3, right: 3],
-        fn -> 
-          days_since.(failure)
-        end)
+      since_check
+      |> assert_this_changeset_passes(date_string: "2000-01-04",
+                                      date: ~D[2000-01-04],
+                                      days_since_2000: 3)
+      since_check                                                       #vvvvvvvvvv
+      |> assert_this_changeset_fails(date_string: "2000-01-04",
+                                     date: ~D[2000-01-04],
+                                     days_since_2000: -3)
+      |> assert_diagnostics("Changeset field `:days_since_2000` (left) does not match the value calculated from &Date.diff/2[:date, ~D[2000-01-01]]",
+           left: -3, right: 3)
     end
 
     @tag :skip
-    test "Two different ways of expressing an `on_success`"
+    test "Three different ways of expressing an `on_success`"
 
+    @tag :skip
+    test "If a first check fails, a later calculation is not made" 
     
     @tag :skip
     test "no check is made if the field wasn't changed" do
