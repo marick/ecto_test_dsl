@@ -3,6 +3,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
   use T.Case
   alias T.SmartGet.ChangesetChecks, as: Checks
   import T.Build
+  alias T.RunningExample
   alias Ecto.Changeset
   alias Template.Dynamic
   import FlowAssertions.Define.Defchain
@@ -177,7 +178,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       |> assert_this_changeset_passes(date_string: "2000-01-04",
                                       date: ~D[2000-01-04],
                                       days_since_2000: 3)
-      since_check                                                       #vvvvvvvvvv
+      since_check
       |> assert_this_changeset_fails(date_string: "2000-01-04",
                                      date: ~D[2000-01-04],
                                      days_since_2000: -3)
@@ -198,10 +199,6 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       #
     end
   end
-
-  @tag :skip
-  test "If a first check fails, a later calculation is not made"
-
 
   # ------------ Helper functions ----------------------------------------------
 

@@ -162,13 +162,17 @@ defmodule Variants.EctoClassic.SuccessWorkflowTest do
       complete_changeset
       |> assert_valid
       |> assert_changes(complete_changes)
+    end
 
+    test "an error in an `on_success` short-circuits later checks" do
       Examples.Tester.validation_changeset(:unexpected_syntax_errors)
       |> assert_invalid
       |> assert_no_changes([:age, :date, :days_since_2000])
+         # Note that there is no attempt to calculate :days_since_2000
       |> assert_errors(age: "is invalid",
                        date_string: "has an invalid format")
     end
+      
     
     test "mistakes in test data" do 
       assertion_fails(~r/:unexpected_syntax_errors.*The changeset is invalid/,
