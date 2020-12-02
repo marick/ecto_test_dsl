@@ -4,6 +4,7 @@ defmodule SmartGet.ParamsTest do
   alias T.SmartGet
   import T.Build
   alias Template.Dynamic
+  import T.Types, only: [een: 1]
 
   defmodule Examples do
     use Template.Trivial
@@ -52,8 +53,11 @@ defmodule SmartGet.ParamsTest do
   end
     
   test "getting the id of a previously-created value" do
+    previously =
+      %{een(species: ExamplesIdOf) => %{id: 112, name: "bovine"}}
+    
     ExamplesIdOf.Tester.example(:animal)
-    |> SmartGet.Params.get(previously: %{{:species, ExamplesIdOf} => %{id: 112, name: "bovine"}})
+    |> SmartGet.Params.get(previously: previously)
     |> assert_fields(name: "bossie", species_id: 112)
   end
 

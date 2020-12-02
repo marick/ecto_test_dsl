@@ -4,6 +4,7 @@ defmodule TransformerTestSupport.Build do
   import DeepMerge, only: [deep_merge: 2]
   import FlowAssertions.Define.BodyParts
   import ExUnit.Assertions
+  import T.Types, only: [een: 1]
 
   @moduledoc """
   """
@@ -101,16 +102,11 @@ defmodule TransformerTestSupport.Build do
   def params_like(example_name), 
     do: params_like(example_name, except: [])
 
-  defmacro id_of([extended_example_name]) when is_tuple(extended_example_name) do
+
+  defmacro id_of(extended_example_name) do
     quote do
-        ParamShorthand.previously_reference(
-          unquote(extended_example_name), :primary_key)
-      end
-    end
-  defmacro id_of(example_name) when is_atom(example_name) do
-    quote do
-      ParamShorthand.previously_reference({
-        unquote(example_name), __MODULE__}, :primary_key)
+      ref = een(unquote(extended_example_name))
+      ParamShorthand.previously_reference(ref, :primary_key)
     end
   end
 
