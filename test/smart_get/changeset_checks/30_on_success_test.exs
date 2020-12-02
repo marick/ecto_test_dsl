@@ -6,6 +6,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
   import T.Build
   alias T.RunningExample
   alias T.Sketch
+  alias Template.Dynamic
 
   
   defmodule OnSuccess do
@@ -35,66 +36,63 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
   
 
   describe "on_success is evaluated later" do
-    test "in a success case" do
+    setup do
       [date_check, days_since_check] = checks(:example)
-      changeset =
-        Sketch.valid_changeset(changes: %{date_string: "2000-01-01",
-                                          date:        ~D[2000-01-01],
-                                          days_since_2000: 0})
-      assert date_check.(changeset) == :ok
-      assert days_since_check.(changeset) == :ok
+      [checks: %{date: date_check, days_since: days_since_check}]
     end
-
-    test "handling a case where the changeset was calculated wrongly" do
-      [date_check, days_since_check] = checks(:example)
-      changeset =
-        Sketch.valid_changeset(changes: %{date_string: "2000-01-01",
-                                          date:        ~D[2000-01-01],
-                                          days_since_2000: 1})
-
-      assert date_check.(changeset) == :ok
-      assertion_fails("Changeset field `:days_since_2000` (left) does not match the value calculated from &Date.diff/2[:date, ~D[2000-01-01]]",
-        [left: 1, right: 0],
-        fn -> 
-          days_since_check.(changeset)
-        end)
-    end
-
-    test "what happens when the changeset value blows up the transforming function" do
-      [_date_check, days_since_check] = checks(:example)
-      changeset =
-        Sketch.valid_changeset(changes: %{date_string: "2000-01-01",
-                                          date:        "oh so wrong",
-                                          days_since_2000: 0})
-
-      assertion_fails(~S|FunctionClauseError was raised when field transformer &Date.diff/2[:date, ~D[2000-01-01]] was applied to ["oh so wrong", ~D[2000-01-01]]|,
-        fn -> 
-          days_since_check.(changeset)
-        end)
-    end
-
-    test "transformations are only applied to changed fields" do
-      [_date_check, days_since_check] = checks(:example)
-      changeset =
-        Sketch.valid_changeset(changes: %{date_string: "2000-01-01"})
-      
-      assert days_since_check.(changeset) == :ok
-    end
-
-    test "a special error when a supposed-to-be-changed field is not present" do
-      [date_check, _days_since_check] = checks(:example)
-      changeset =
-        Sketch.valid_changeset(changes: %{date_string: "2000-01-01"})
-
-      assertion_fails("The changeset has all the prerequisites to calculate `:date` (using &Date.from_iso8601!/1[:date_string]), but `:date` is not in the changeset's changes",
-        fn -> 
-          date_check.(changeset)
-        end)
-    end
-
     
-      
+    defp valid_with_changes(opts),
+      do: Sketch.valid_changeset(changes: Enum.into(opts, %{}))
+    
+    test "a case where the changeset is as expected", %{checks: checks} do
+      changeset = valid_with_changes(
+        date_string: "2000-01-01", date: ~D[2000-01-01], days_since_2000: 0)
+      assert checks.date.(changeset) == :ok
+      assert checks.days_since.(changeset) == :ok
+    end
 
+    test "handling a case where the changeset was calculated wrongly",
+      %{checks: checks}  do
+      changeset = valid_with_changes(                                 ### V
+        date_string: "2000-01-01", date: ~D[2000-01-01], days_since_2000: 1)
+
+      assert checks.date.(changeset) == :ok
+
+      msg = "Changeset field `:days_since_2000` (left) does not match " <>
+            "the value calculated from &Date.diff/2[:date, ~D[2000-01-01]]"
+      assertion_fails(msg,
+        [left: 1, right: 0],
+        fn -> checks.days_since.(changeset) end)
+    end
+
+    test "what happens when the changeset value blows up the transforming function",
+      %{checks: checks} do
+      changeset = valid_with_changes(### VVVVVVVVVVVVV
+        date_string: "2000-01-01", date: "oh so wrong", days_since_2000: 0)
+
+      msg = ~S|FunctionClauseError was raised when field transformer | <>
+            ~S|&Date.diff/2[:date, ~D[2000-01-01]] was applied to | <>
+            ~S|["oh so wrong", ~D[2000-01-01]]|
+      assertion_fails(msg, fn -> checks.days_since.(changeset) end)
+    end
+
+    test "transformations are only applied to changed fields", %{checks: checks}  do
+      changeset = valid_with_changes(date_string: "2000-01-01")
+      assert checks.days_since.(changeset) == :ok
+                   #^^^^^^^^^^
+      # For behavior of `date` check, see below.
+    end
+
+    test "a special error when a supposed-to-be-changed field is not present", %{checks: checks}  do
+      changeset = valid_with_changes(date_string: "2000-01-01")
+
+      msg = "The changeset has all the prerequisites to calculate `:date` " <>
+            "(using &Date.from_iso8601!/1[:date_string]), but `:date` " <>
+            "is not in the changeset's changes"
+      assertion_fails(msg, fn -> checks.date.(changeset) end)
+    end
+  end
+    
     # test "no check added when a validation failure is expected" do
     #   global_transformations([
     #                                              as_cast: [:date_string],
@@ -106,10 +104,6 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
     # end
 
 
-    # @tag :skip
-    # test "Three different ways of expressing an `on_success`"
-
-  end
 
   # ------------ Helper functions ----------------------------------------------
 

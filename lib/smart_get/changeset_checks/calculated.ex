@@ -6,33 +6,29 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
   @moduledoc """
   """
 
-  def add(changeset_checks, example, fields) do
-    Enum.reduce(fields, changeset_checks, fn field, acc ->
-      maybe_add_one(acc, example, field)
-    end)
+  def add(existing_changeset_checks, example, calculated_field_descriptions) do
+    calculated_field_descriptions
+    |> Enum.reduce(existing_changeset_checks, fn field_description, acc ->
+         case Example.workflow_name(example) do
+           :validation_error ->
+             acc
+           _ ->
+             acc ++ [{:__custom_changeset_check, make__checker(field_description)}]
+         end
+       end)
   end
 
-  defp maybe_add_one(changeset_checks, example, check_description) do
-    case Example.workflow_name(example) do
-      :validation_error ->
-        changeset_checks
-      _ ->
-        add_one(changeset_checks, check_description)
-    end
-  end
-
-  defp add_one(changeset_checks, {field, {:__on_success, f, arg_template}}) do 
-    checker = fn changeset ->
-      if function_is_relevant?(arg_template, changeset) do
-        add_one_relevant(changeset, field, f, arg_template)
+  def make__checker({field_name, {:__on_success, f, arg_template}}) do 
+    fn changeset ->
+      if prerequisite_fields_available?(arg_template, changeset) do
+        check_changeset(changeset, field_name, f, arg_template)
       else
         :ok
       end
     end
-    changeset_checks ++ [{:__custom_changeset_check, checker}]
   end
 
-  def add_one_relevant(changeset, field, f, arg_template) do
+  def check_changeset(changeset, field, f, arg_template) do
     args = Enum.map(arg_template, &(translate_arg &1, changeset))
     transformer_spec = "#{inspect f}#{inspect arg_template}"
 
@@ -57,7 +53,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
     :ok
   end
 
-  defp function_is_relevant?(arg_template, changeset) do
+  defp prerequisite_fields_available?(arg_template, changeset) do
     Enum.all?(arg_template, fn one ->
       cond do
         not is_atom(one) -> true
