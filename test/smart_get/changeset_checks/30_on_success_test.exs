@@ -6,7 +6,6 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
   import T.Build
   alias T.RunningExample
   alias T.Sketch
-  alias Template.Dynamic
 
   
   defmodule OnSuccess do
@@ -30,19 +29,24 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
 
       workflow(                                 :success,
         example: [params(date_string: "2001-01-01")]
+      ) |>
+
+      workflow(                                 :validation_error,
+        error: [params(date_string: "1")]
       )
     end
   end
-  
 
-  describe "on_success is evaluated later" do
+  describe "on_success checks are functions evaluated against a changeset" do
     setup do
-      [date_check, days_since_check] = checks(:example)
+      assert [:valid,
+              {:__custom_changeset_check, date_check}, 
+              {:__custom_changeset_check, days_since_check}] = 
+        Example.get(Examples, :example)
+        |> Checks.get_validation_checks(previously: %{})
+
       [checks: %{date: date_check, days_since: days_since_check}]
     end
-    
-    defp valid_with_changes(opts),
-      do: Sketch.valid_changeset(changes: Enum.into(opts, %{}))
     
     test "a case where the changeset is as expected", %{checks: checks} do
       changeset = valid_with_changes(
@@ -92,31 +96,15 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
       assertion_fails(msg, fn -> checks.date.(changeset) end)
     end
   end
-    
-    # test "no check added when a validation failure is expected" do
-    #   global_transformations([
-    #                                              as_cast: [:date_string],
-    #                    date: on_success(Date.from_iso8601!(:date_string))])
-    #   |> and_example(workflow: :validation_error, # <<<
-    #                                                params: [date_string: "2001-01-0"])
-    #                                                                            #^^^^
-    #   |> checks_for(:invalid, date_string_check("2001-01-0"), and_custom_checks(0))
-    # end
 
-
+  test "no check added when a validation failure is expected" do
+    assert [:invalid] =
+      Example.get(Examples, :error)
+      |> Checks.get_validation_checks(previously: %{})
+  end
 
   # ------------ Helper functions ----------------------------------------------
 
-
-  defp checks(example_name) do
-    example = Example.get(Examples, example_name)
-    
-    assert [:valid | functions] =
-      Checks.get_validation_checks(example, previously: %{})
-
-    functions
-    |> Enum.map(fn {:__custom_changeset_check, f} -> f end)
-  end
-
-
+  defp valid_with_changes(opts),
+    do: Sketch.valid_changeset(changes: Enum.into(opts, %{}))
 end
