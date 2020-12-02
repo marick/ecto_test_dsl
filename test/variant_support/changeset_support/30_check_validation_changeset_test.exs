@@ -73,8 +73,10 @@ defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
     [%{date_string: "2001-01-01"},
      %{date_string: "2001-01-01", date: nil}]            |> a.fail.(message)
 
+    no_date = ~R/The changeset has all the prerequisites to calculate `:date`.*, but `:date` is not in the changeset's changes./
+
     [%{date_string: "2001-01-01"},
-     %{date_string: "2001-01-01"}]                       |> a.fail.(message)
+     %{date_string: "2001-01-01"}]                       |> a.fail.(no_date)
 
   end
 end

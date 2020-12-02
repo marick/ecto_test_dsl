@@ -1,6 +1,7 @@
 defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
   alias TransformerTestSupport.SmartGet.Example
   import FlowAssertions.Define.BodyParts
+  import ExUnit.Assertions
   
   @moduledoc """
   """
@@ -33,10 +34,24 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
 
   def add_one_relevant(changeset, field, f, arg_template) do
     args = Enum.map(arg_template, &(translate_arg &1, changeset))
-    expected = apply(f, args)
+    transformer_spec = "#{inspect f}#{inspect arg_template}"
+
+    unless Map.has_key?(changeset.changes, field) do
+      flunk("The changeset has all the prerequisites to calculate `#{inspect field}` (using #{transformer_spec}), but `#{inspect field}` is not in the changeset's changes")
+    end
+    
+    expected = 
+      try do
+        apply(f, args)
+      rescue
+        ex ->
+          exception_name = inspect ex.__struct__
+          elaborate_flunk("#{exception_name} was raised when field transformer #{transformer_spec} was applied to #{inspect args}",
+            [left: Exception.format(:error, ex)])
+      end
     elaborate_assert(
       changeset.changes[field] == expected,
-      "Changeset field `#{inspect field}` (left) does not match the value calculated from #{inspect f}#{inspect arg_template}",
+      "Changeset field `#{inspect field}` (left) does not match the value calculated from #{transformer_spec}",
       left: changeset.changes[field],
       right: expected)
     :ok
