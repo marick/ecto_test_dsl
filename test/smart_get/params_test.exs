@@ -3,45 +3,57 @@ defmodule SmartGet.ParamsTest do
   use T.Case
   alias T.SmartGet
   import T.Build
+  alias Template.Dynamic
 
-  @ok [params: [age: 1,
-                date: "2011-02-03",
-                nested: %{a: 3},
-                list: [1, 2, 3]]]
+  defmodule Examples do
+    use Template.Trivial
+  end
+  
 
-  @phoenix_params %{
+  @params params(
+    age: 1,
+    date: "2011-02-03",
+    nested: %{a: 3},
+    list: [1, 2, 3])
+
+  @interpreted_as_phoenix %{
     "age" => "1",
     "date" => "2011-02-03",
     "nested" => %{"a" => "3"},
     "list" => ["1", "2", "3"]}
 
-  @raw_params Keyword.get(@ok, :params) |> Enum.into(%{})
+  @interpreted_as_raw Keyword.get([@params], :params) |> Enum.into(%{})
 
-  def with_format(start_args),
-    do: TestBuild.one_workflow(start_args, [ok: @ok])
-
-  @tag :skip # current
   test "different formats" do
     expect = fn format, expected ->
-      with_format(format)
-      |> SmartGet.Example.get(:ok)
+      Dynamic.configure(Examples)
+      |> Dynamic.adjust_metadata(format)
+      |> Dynamic.example([@params])
       |> SmartGet.Params.get(previously: %{})
       |> assert_fields(expected)
     end
 
-    [format: :phoenix] |> expect.(@phoenix_params)
-    [format: :raw    ] |> expect.(@raw_params)
-    [                ] |> expect.(@raw_params)
+    [format: :phoenix] |> expect.(@interpreted_as_phoenix)
+    [format: :raw    ] |> expect.(@interpreted_as_raw)
+    [                ] |> expect.(@interpreted_as_raw)
+  end
+
+
+  defmodule ExamplesIdOf do
+    use Template.Trivial
+
+    def create_test_data() do
+      started() |> 
+      workflow(:any_workflow,
+        species: [params(name: "bovine")],
+        animal:  [params(name: "bossie", species_id: id_of(:species))]
+      )
+    end
   end
     
-  @tag :skip # current
   test "getting the id of a previously-created value" do
-    TestBuild.one_workflow(
-      species: [params(name: "bovine")],
-      animal:  [params(name: "bossie", species_id: id_of(:species))]
-    )
-    |> SmartGet.Example.get(:animal)
-    |> SmartGet.Params.get(previously: %{{:species, __MODULE__} => %{id: 112, name: "bovine"}})
+    ExamplesIdOf.Tester.example(:animal)
+    |> SmartGet.Params.get(previously: %{{:species, ExamplesIdOf} => %{id: 112, name: "bovine"}})
     |> assert_fields(name: "bossie", species_id: 112)
   end
 
