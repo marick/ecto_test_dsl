@@ -22,7 +22,7 @@ defmodule VariantSupport.Changeset.PreviouslyTest do
   end
 
   defmodule Examples do
-    use EctoClassic
+    use EctoClassic.Insert
 
     def fake_insert(changeset),
       do: {:ok, Schema.named(changeset.changes.name)}
