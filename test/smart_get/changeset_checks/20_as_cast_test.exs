@@ -19,7 +19,7 @@ defmodule SmartGet.ChangesetChecks.AsCastTest do
   end
 
   defmodule Examples do 
-    use Template.EctoClassic
+    use Template.EctoClassic.Insert
   end
 
   describe "adding an automatic as_cast test" do

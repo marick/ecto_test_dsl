@@ -1,8 +1,8 @@
-defmodule TransformerTestSupport.Variants.EctoClassic do
+defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
   alias TransformerTestSupport, as: T
   alias T.Build
   alias T.VariantSupport.ChangesetSupport
-  alias T.Variants.EctoClassic, as: ThisVariant
+  alias T.Variants.EctoClassic.Insert, as: ThisVariant
 
   import FlowAssertions.Define.BodyParts
   
@@ -86,7 +86,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
     workflows = Map.keys(@workflows)
     elaborate_assert(
       workflow in workflows,
-      "The EctoClassic variant only allows these workflows: #{inspect workflows}",
+      "The EctoClassic.Insert variant only allows these workflows: #{inspect workflows}",
       left: workflow
     )
   end
@@ -101,7 +101,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic do
       alias __MODULE__, as: ExamplesModule
 
       def start(opts) do
-        EctoClassic.start([{:examples_module, ExamplesModule} | opts])
+        EctoClassic.Insert.start([{:examples_module, ExamplesModule} | opts])
       end
 
       defmodule Tester do

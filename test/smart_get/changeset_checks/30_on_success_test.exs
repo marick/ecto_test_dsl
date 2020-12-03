@@ -18,7 +18,7 @@ defmodule SmartGet.ChangesetChecks.ValidationTest do
   end
 
   defmodule Examples do 
-    use Template.EctoClassic
+    use Template.EctoClassic.Insert
 
     def create_test_data do
       started(module_under_test: OnSuccess) |> 

@@ -1,8 +1,8 @@
-defmodule Variants.EctoClassic.SuccessWorkflowTest do
+defmodule Variants.EctoClassic.Insert.SuccessWorkflowTest do
   use TransformerTestSupport.Case
   import FlowAssertions.AssertionA
   
-  use TransformerTestSupport.Variants.EctoClassic
+  use TransformerTestSupport.Variants.EctoClassic.Insert
   alias TransformerTestSupport.SmartGet
 
   defmodule Species do
@@ -61,7 +61,7 @@ defmodule Variants.EctoClassic.SuccessWorkflowTest do
   end
 
   defmodule Examples do
-    use TransformerTestSupport.Variants.EctoClassic
+    use TransformerTestSupport.Variants.EctoClassic.Insert
 
     @failure_instruction "Please fail insertion"
 

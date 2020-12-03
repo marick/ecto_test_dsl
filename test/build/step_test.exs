@@ -16,7 +16,7 @@ defmodule Build.StepTest do
   end
 
   defmodule Examples do
-    use Template.EctoClassic
+    use Template.EctoClassic.Insert
 
     def fake_validate(_changeset), do: "substitute result"
 

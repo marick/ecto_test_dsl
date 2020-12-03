@@ -1,7 +1,7 @@
-defmodule Template.EctoClassic do
+defmodule Template.EctoClassic.Insert do
   defmacro __using__(_) do
     quote do
-      use TransformerTestSupport.Variants.EctoClassic
+      use TransformerTestSupport.Variants.EctoClassic.Insert
       
       def started(opts \\ []) do
         opts = Enum.into(opts, %{module_under_test: :irrelevant_module_under_test})

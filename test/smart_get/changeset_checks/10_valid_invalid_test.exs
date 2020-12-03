@@ -6,7 +6,7 @@ defmodule SmartGet.ChangesetChecks.ValidInvalidTest do
   alias T.RunningExample
   alias Template.Dynamic
 
-  defmodule Examples, do: use Template.EctoClassic
+  defmodule Examples, do: use Template.EctoClassic.Insert
   
   # ----------------------------------------------------------------------------
   describe "dependencies on workflow" do
