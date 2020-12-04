@@ -5,35 +5,34 @@ defmodule BuildTest do
   use T.Predefines
   alias T.SmartGet
 
-  defmodule Variant do
-    def run_start_hook(test_data),
-      do: Map.put(test_data, :adjusted, true)
+
+  defmodule Examples do
+    use Template.Trivial
   end
 
   describe "start" do 
-
     @minimal_start [
-      module_under_test: Anything,
-      variant: Variant
+      module_under_test: SomeSchema,
     ]
     
     test "minimal start" do
       expected = 
         %{format: :raw,
-          module_under_test: Anything,
-          variant: Variant,
+          module_under_test: SomeSchema,
+          variant: T.Variants.Trivial,
           examples: [],
-          adjusted: true,
-          field_transformations: []
+          field_transformations: [],
+          steps: %{},
+          workflows: []
          }
       
-      assert Build.start(@minimal_start) == expected
+      assert Examples.start(@minimal_start) == expected
     end
     
-    test "leave out `:module_under_test` (and, by implication, other required fields)" do
-        assertion_fails("`start` requires the `:module_under_test` option",
+    test "fields are checked" do
+        assertion_fails(~r/Required keys are missing/,
         fn ->
-          Build.start() 
+          Examples.start([]) 
         end)
     end
   end
@@ -70,7 +69,7 @@ defmodule BuildTest do
 
   test "workflow" do
     %{examples: [new: new, ok: ok]} =
-      Build.start(@minimal_start)
+      Examples.start(@minimal_start)
       |> Build.workflow(:valid,
            ok: [params(age: 1)],
            new: [params_like(:ok, except: [age: 2])])
@@ -117,15 +116,15 @@ defmodule BuildTest do
   end
     
   test "metadata propagation" do
-    Build.start(@minimal_start)
+    Examples.start(@minimal_start)
     |> Build.workflow(:valid, ok: [params(age: 1)])
     |> Build.propagate_metadata
     |> SmartGet.Example.get(:ok)
     |> Map.get(:metadata)
     |> assert_fields(workflow_name: :valid,
                      name: :ok,
-                     module_under_test: Anything,
-                     variant: Variant)
+                     module_under_test: SomeSchema,
+                     variant: T.Variants.Trivial)
     |> refute_field(:examples)
   end
 end

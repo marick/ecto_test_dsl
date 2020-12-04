@@ -4,7 +4,6 @@ defmodule TransformerTestSupport.Variants.Trivial do
   alias T.Variants.Trivial, as: ThisVariant
   
   def start(opts \\ []) do
-    opts = [action: :irrelevant] ++ opts
     Build.start_with_variant(ThisVariant, opts)
   end
 
@@ -16,6 +15,7 @@ defmodule TransformerTestSupport.Variants.Trivial do
 
   def run_start_hook(top_level) do
     top_level
+    |> Build.validate_keys_including_variant_keys([], [])
     |> Map.put(:steps, %{})
     |> Map.put(:workflows, [])
   end

@@ -1,6 +1,6 @@
 defmodule TransformerTestSupport.Build do
   alias TransformerTestSupport, as: T
-  alias T.Build.{Normalize,ParamShorthand}
+  alias T.Build.{Normalize,ParamShorthand,KeyValidation}
   import DeepMerge, only: [deep_merge: 2]
   import FlowAssertions.Define.BodyParts
   import ExUnit.Assertions
@@ -17,8 +17,6 @@ defmodule TransformerTestSupport.Build do
     field_transformations: [],
   }
 
-  @required_keys [:module_under_test]
-
   def start_with_variant(variant_name, data),
     do: start([{:variant, variant_name} | data])
 
@@ -27,17 +25,16 @@ defmodule TransformerTestSupport.Build do
     
     @starting_test_data
     |> Map.merge(map_data)
-    |> validate_start
     |> run_start_hook
   end
 
-  def validate_start(test_data) do
-    given_keys = Map.keys(test_data)
-    for key <- @required_keys do
-      unless key in given_keys,
-        do: flunk("`start` requires the `#{inspect key}` option")
-    end
-    test_data
+  @required_keys [:module_under_test, :variant] ++ Map.keys(@starting_test_data)
+  @optional_keys []
+
+  def validate_keys_including_variant_keys(test_data, variant_required, variant_optional) do
+    required = @required_keys ++ variant_required
+    optional = @optional_keys ++ variant_optional
+    KeyValidation.assert_valid_keys(test_data, required, optional)
   end
 
   @doc """
@@ -188,13 +185,6 @@ defmodule TransformerTestSupport.Build do
     end
   end
 
-  defp run_start_hook(%{variant: variant} = test_data_so_far) do
-    case has_hook?(variant, {:run_start_hook, 1}) do
-      true ->
-        apply variant, :run_start_hook, [test_data_so_far]
-      false ->
-        test_data_so_far
-    end
-  end
-  defp run_start_hook(top_level), do: top_level
+  defp run_start_hook(%{variant: variant} = test_data_so_far),
+    do: apply variant, :run_start_hook, [test_data_so_far]
 end
