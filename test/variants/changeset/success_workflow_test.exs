@@ -80,7 +80,8 @@ defmodule Variants.EctoClassic.Insert.SuccessWorkflowTest do
     def create_test_data do
       start(
         module_under_test: Schema,
-        format: :phoenix
+        format: :phoenix,
+        repo: Unused
       ) |>
 
       replace_steps(

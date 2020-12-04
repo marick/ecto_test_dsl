@@ -35,7 +35,8 @@ defmodule VariantSupport.Changeset.PreviouslyTest do
     def create_test_data do 
       start(
         module_under_test: Schema,
-        format: :phoenix
+        format: :phoenix,
+        repo: Unused
       ) |>
 
       replace_steps(insert_changeset: step(&fake_insert/1, :make_changeset)) |> 

@@ -74,9 +74,12 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
     ],
   }
 
+  @required_keys [:examples_module, :repo]
+  @optional_keys []
 
   def run_start_hook(top_level) do
     top_level
+    |> Build.validate_keys_including_variant_keys(@required_keys, @optional_keys)
     |> Map.put(:steps, initial_step_definitions())
     |> Map.put(:workflows, @workflows)
   end
