@@ -17,7 +17,7 @@ defmodule TransformerTestSupport.Build do
     field_transformations: [],
   }
 
-  @required_keys [:action, :module_under_test]
+  @required_keys [:module_under_test]
 
   def start_with_variant(variant_name, data),
     do: start([{:variant, variant_name} | data])

@@ -14,8 +14,7 @@ defmodule BuildTest do
 
     @minimal_start [
       module_under_test: Anything,
-      variant: Variant,
-      action: :insert
+      variant: Variant
     ]
     
     test "minimal start" do
@@ -25,17 +24,16 @@ defmodule BuildTest do
           variant: Variant,
           examples: [],
           adjusted: true,
-          field_transformations: [],
-          action: :insert,
+          field_transformations: []
          }
       
       assert Build.start(@minimal_start) == expected
     end
     
-    test "leave out `:action` (and, by implication, other required fields)" do
-        assertion_fails("`start` requires the `:action` option",
+    test "leave out `:module_under_test` (and, by implication, other required fields)" do
+        assertion_fails("`start` requires the `:module_under_test` option",
         fn ->
-          Build.start(module_under_test: Anything) 
+          Build.start() 
         end)
     end
   end
