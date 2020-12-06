@@ -8,7 +8,8 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
 
   @default_start_opts [
     changeset_with: &ChangesetSupport.changeset_with__default_insert/2,
-    insert_with: &ChangesetSupport.insert_with__default/2
+    insert_with: &ChangesetSupport.insert_with__default/2,
+    format: :phoenix
   ]
   
   

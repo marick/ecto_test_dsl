@@ -7,7 +7,6 @@ defmodule Template.EctoClassic.Insert do
         opts = Enum.into(opts, %{module_under_test: :irrelevant_module_under_test})
         start(
           module_under_test: opts.module_under_test,
-          format: :raw,
           repo: :no_actual_repo
         )
       end

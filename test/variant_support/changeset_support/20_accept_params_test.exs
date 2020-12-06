@@ -24,7 +24,6 @@ defmodule VariantSupport.Changeset.AcceptParamsTest do
   test "the only result" do
     example = 
       Dynamic.configure(Examples, Schema)
-      |> Dynamic.adjust_metadata(format: :phoenix)
       |> Dynamic.example_in_workflow(:success,
           params: %{age: 1})
     running = 

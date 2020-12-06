@@ -20,7 +20,7 @@ defmodule Variants.EctoClassic.StartTest do
 
     metadata
     |> assert_fields(
-         format: :raw,
+         format: :phoenix,
          module_under_test: SomeSchema,
          variant: Variant,
          examples: [],
