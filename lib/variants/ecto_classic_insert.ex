@@ -5,8 +5,15 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
   alias T.Variants.EctoClassic.Insert, as: ThisVariant
 
   import FlowAssertions.Define.BodyParts
+
+  @default_start_opts [
+    changeset_with: &ChangesetSupport.changeset_with__default_insert/2,
+    insert_with: &ChangesetSupport.insert_with__default/2
+  ]
+  
   
   def start(opts) do
+    opts = Keyword.merge(@default_start_opts, opts)
     Build.start_with_variant(ThisVariant, opts)
   end
 
@@ -74,7 +81,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
     ],
   }
 
-  @required_keys [:examples_module, :repo]
+  @required_keys [:examples_module, :repo] ++ Keyword.keys(@default_start_opts)
   @optional_keys []
 
   def run_start_hook(top_level) do

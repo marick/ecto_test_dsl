@@ -10,24 +10,24 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
 
   # Default functions
 
-  def make_insertion_changeset__default(module_under_test, params) do
+  def changeset_with__default_insert(module_under_test, params) do
     default_struct = struct(module_under_test)
     module_under_test.changeset(default_struct, params)
   end
 
-  def insert_changeset__default(repo, changeset),
+  def insert_with__default(repo, changeset),
     do: repo.insert(changeset)
   
 
   # ----------------------------------------------------------------------------
-  def accept_params(running) do
-    prior_work = Keyword.get(running.history, :previously, %{})
-    params = Params.get(running.example, previously: prior_work)
+  def accept_params(%{history: history, example: example}) do
+    prior_work = Keyword.get(history, :previously, %{})
+    params = Params.get(example, previously: prior_work)
 
     Trace.say(params, :params)
 
-    module = Example.module_under_test(running.example)
-    make_insertion_changeset__default(module, params)
+    module = Example.module_under_test(example)
+    apply Example.metadata!(example, :changeset_with), [module, params]
   end
 
   def check_validation_changeset(running, changeset_step) do 
@@ -64,7 +64,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   def insert(running, changeset_step) do
     changeset = RunningExample.step_value!(running, changeset_step)
     repo = Example.repo(running.example)
-    insert_changeset__default(repo, changeset)
+    insert_with__default(repo, changeset)
   end
 
   def check_insertion_result(running, insertion_step) do

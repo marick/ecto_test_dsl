@@ -22,8 +22,9 @@ defmodule Template.Dynamic do
 
   def example_in_workflow(module_or_test_data, workflow_name, example_opts \\ [])
 
-  def example_in_workflow(module, workflow_name, example_opts) when is_atom(module),
-    do: module.create_test_data() |> example_in_workflow(workflow_name, example_opts)
+  def example_in_workflow(module, workflow_name, example_opts) when is_atom(module) do
+    module.create_test_data() |> example_in_workflow(workflow_name, example_opts)
+  end
 
   def example_in_workflow(test_data, workflow_name, example_opts) do
     test_data
