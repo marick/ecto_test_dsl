@@ -68,17 +68,19 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
       :make_changeset, 
       :check_validation_changeset, 
     ],
-    validation_success: [
-      :previously,
-      :make_changeset, 
-      :check_validation_changeset, 
-    ],
     constraint_error: [
       :previously,
       :make_changeset, 
       :check_validation_changeset, 
       :insert_changeset, 
       :check_constraint_changeset
+    ],
+
+    # Conveniences
+    validation_success: [
+      :previously,
+      :make_changeset, 
+      :check_validation_changeset, 
     ],
   }
 

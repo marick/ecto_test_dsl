@@ -64,7 +64,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   def insert(running, changeset_step) do
     changeset = RunningExample.step_value!(running, changeset_step)
     repo = Example.repo(running.example)
-    insert_with__default(repo, changeset)
+    apply Example.metadata!(running.example, :insert_with), [repo, changeset]
   end
 
   def check_insertion_result(running, insertion_step) do
