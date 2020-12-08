@@ -17,7 +17,7 @@ defmodule TransformerTestSupport.Variants.Trivial do
     top_level
     |> Build.validate_keys_including_variant_keys([], [])
     |> Map.put(:steps, %{})
-    |> Map.put(:workflows, [])
+    |> Map.put(:workflows, %{})
   end
 
   # Anything is valid

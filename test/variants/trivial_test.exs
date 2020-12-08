@@ -22,7 +22,7 @@ defmodule Variants.TrivialTest do
           examples: [],
           field_transformations: [],
           steps: %{},
-          workflows: []
+          workflows: %{}
          }
       
       assert Examples.start(@minimal_start) == expected

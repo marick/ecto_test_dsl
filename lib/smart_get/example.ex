@@ -1,5 +1,7 @@
 defmodule TransformerTestSupport.SmartGet.Example do
   alias TransformerTestSupport.TestDataServer
+  use FlowAssertions
+  import FlowAssertions.Define.BodyParts
   
   @moduledoc """
   """
@@ -31,8 +33,7 @@ defmodule TransformerTestSupport.SmartGet.Example do
       for name <- step_names, do: {name, step_functions[name]}
     end
 
-    example
-    |> step_list
+    step_list!(example)
     |> EnumX.take_until(&(&1 == stop))
     |> attach_functions.()
   end
@@ -53,8 +54,20 @@ defmodule TransformerTestSupport.SmartGet.Example do
   def repo(example), do: metadata(example, :repo)
   
 
-  def step_list(example) do
-    workflows(example)
-    |> Map.get(workflow_name(example))
+  defp step_list!(example) do
+    workflows = workflows(example)
+    workflow_name = workflow_name(example)
+    
+    step_list = 
+      Map.get(workflows, workflow_name, :missing_workflow)
+
+    # This should be a bug in one of the tests in tests, most likely using
+    # the Trivial variant instead of one with actual steps.
+    # Or the variant's validity checks are wrong.
+    elaborate_refute(step_list == :missing_workflow,
+      "Example #{inspect name(example)} seems to have an incorrect workflow name.",
+      left: workflow_name, right: Map.keys(workflows))
+
+    step_list
   end
 end
