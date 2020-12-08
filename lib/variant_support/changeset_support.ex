@@ -20,12 +20,16 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   
 
   # ----------------------------------------------------------------------------
-  def accept_params(%{history: history, example: example}) do
-    prior_work = Keyword.get(history, :previously, %{})
-    params = Params.get(example, previously: prior_work)
+  def params(running) do
+    prior_work = Keyword.get(running.history, :previously, %{})
+    params = Params.get(running.example, previously: prior_work)
 
     Trace.say(params, :params)
-
+    params
+  end
+  
+  def accept_params(%{history: history, example: example}) do
+    params = Keyword.fetch!(history, :params)
     module = Example.module_under_test(example)
     apply Example.metadata!(example, :changeset_with), [module, params]
   end

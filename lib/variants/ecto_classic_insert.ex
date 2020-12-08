@@ -24,6 +24,10 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
     ChangesetSupport.previously(running)
   end
 
+  defp params(running) do
+    ChangesetSupport.params(running)
+  end
+
   defp make_changeset(running) do 
     ChangesetSupport.accept_params(running)
   end
@@ -46,9 +50,10 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
   
   def initial_step_definitions() do
     %{
+      previously: &previously/1,
+      params: &params/1,
       make_changeset: &make_changeset/1,
       check_validation_changeset: &check_validation_changeset/1,
-      previously: &previously/1,
       insert_changeset: &insert_changeset/1,
       check_insertion: &check_insertion/1,
       check_constraint_changeset: &check_constraint_changeset/1
@@ -58,6 +63,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
   @workflows %{
     success: [
       :previously,
+      :params,
       :make_changeset, 
       :check_validation_changeset,
       :insert_changeset, 
@@ -65,11 +71,13 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
     ],
     validation_error: [
       :previously,
+      :params,
       :make_changeset, 
       :check_validation_changeset, 
     ],
     constraint_error: [
       :previously,
+      :params,
       :make_changeset, 
       :check_validation_changeset, 
       :insert_changeset, 
@@ -79,6 +87,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
     # Conveniences
     validation_success: [
       :previously,
+      :params,
       :make_changeset, 
       :check_validation_changeset, 
     ],

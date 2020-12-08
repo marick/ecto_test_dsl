@@ -3,7 +3,6 @@ defmodule VariantSupport.Changeset.AcceptParamsTest do
   use T.Case
   alias T.VariantSupport.ChangesetSupport
   alias T.RunningExample
-  alias T.RunningExample.History
   alias Template.Dynamic
 
 
@@ -26,12 +25,9 @@ defmodule VariantSupport.Changeset.AcceptParamsTest do
       Dynamic.configure(Examples, Schema)
       |> Dynamic.example_in_workflow(:success,
           params: %{age: 1})
-    running = 
-      %RunningExample{example: example, history: History.trivial}
-    assert ChangesetSupport.accept_params(running) == :changeset_result
-  end
 
-  @tag :skip
-  test "should have a 'with previously case"
-  
+    %RunningExample{example: example, history: [params: %{"age" => "1"}]}
+    |> ChangesetSupport.accept_params
+    |> assert_equal(:changeset_result)
+  end
 end

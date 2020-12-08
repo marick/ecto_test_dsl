@@ -19,9 +19,9 @@ defmodule TransformerTestSupport.Predefines.Tester do
       def example(name),
         do: SmartGet.Example.get(@name_of_test_data, name)
       
-      def params(example_name) do 
-        SmartGet.Example.get(@name_of_test_data, example_name)
-        |> SmartGet.Params.get(previously: %{})
+      def params(example_name) do
+        check_workflow(example_name, stop_after: :params)
+        |> Keyword.get(:params)
       end
 
       @trace_server_translations %{

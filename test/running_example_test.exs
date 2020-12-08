@@ -46,11 +46,14 @@ defmodule TransformerTestSupport.RunningExampleTest do
     use TransformerTestSupport.Case
 
     test "stopping early after a step" do
-      assert [make_changeset: made, previously: %{}, previously: %{}, example: _] = 
+      assert [
+        make_changeset: made, params: %{"name" => "young"},
+          previously: %{}, previously: %{}, example: _] = 
         Examples.Tester.example(:young) |> RunningExample.run(stop_after: :make_changeset)
       
       made
       |> assert_shape(%Changeset{})
+      |> assert_change(name: "young")
     end
 
     @presupplied "presupplied, not created"
