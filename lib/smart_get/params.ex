@@ -20,22 +20,11 @@ defmodule TransformerTestSupport.SmartGet.Params do
 
       formatter ->
         example.params
-        |> substitute_previous_values(previously)
+        |> SmartGet.Previously.expand_in_list(previously)
+        |> Map.new
         |> formatter.()
     end
   end
-
-  defp substitute_previous_values(params, previously) do
-    for {name, value} <- params do
-      case value do
-        {:__previously_reference, extended_example_name, :primary_key} ->
-          {name, Map.get(previously, extended_example_name).id}
-        _ ->
-          {name, value}
-      end
-    end |> Map.new
-  end
-  
     
   # ----------------------------------------------------------------------------
 
