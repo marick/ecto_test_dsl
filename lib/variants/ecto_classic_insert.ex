@@ -114,6 +114,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
 
   # ----------------------------------------------------------------------------
 
+  IO.puts "inserted and friends should take trace arguments"
 
   defmacro __using__(_) do
     quote do
@@ -134,7 +135,6 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
           |> Keyword.get(:make_changeset)
         end
 
-        IO.puts "inserted and friends should take trace arguments"
         def inserted(example_name) do
           {:ok, value} = 
             check_workflow(example_name, stop_after: :check_insertion)

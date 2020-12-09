@@ -4,11 +4,13 @@ defmodule Template.EctoClassic.Insert do
       use TransformerTestSupport.Variants.EctoClassic.Insert
       
       def started(opts \\ []) do
-        opts = Enum.into(opts, %{module_under_test: :irrelevant_module_under_test})
-        start(
-          module_under_test: opts.module_under_test,
-          repo: :no_actual_repo
-        )
+        opts =
+          Keyword.merge(
+            [module_under_test: :irrelevant_module_under_test,
+             repo: :no_actual_repo],
+            opts)
+            
+        start(opts)
       end
       
       def create_test_data, do: started()
