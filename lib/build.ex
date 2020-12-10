@@ -4,7 +4,7 @@ defmodule TransformerTestSupport.Build do
   import DeepMerge, only: [deep_merge: 2]
   import FlowAssertions.Define.BodyParts
   import ExUnit.Assertions
-  import T.Types, only: [een: 1]
+  import T.Types
 
   @moduledoc """
   """
@@ -102,7 +102,7 @@ defmodule TransformerTestSupport.Build do
 
   defmacro id_of(extended_example_name) do
     quote do
-      ref = een(unquote(extended_example_name))
+      ref = een_t(unquote(extended_example_name))
       ParamShorthand.previously_reference(ref, :primary_key)
     end
   end

@@ -2,10 +2,10 @@ defmodule SmartGet.PreviouslyTest do
   alias TransformerTestSupport, as: T
   use T.Case
   alias T.SmartGet.Previously
-  import T.Types, only: [een: 1]
+  import T.Types
   import T.Build
 
-  @example_has_5 %{een(:example) => %{id: 5}}
+  @example_has_5 %{een_t(:example) => %{id: 5}}
 
   test "expand_in_list success cases" do
     expect = fn [list, previously], expected ->
@@ -14,7 +14,7 @@ defmodule SmartGet.PreviouslyTest do
 
     [ [    ], %{                      } ] |> expect.([    ])
     [ [a: 5], %{                      } ] |> expect.([a: 5])
-    [ [a: 5], %{een(:example) => "..."} ] |> expect.([a: 5])
+    [ [a: 5], %{een_t(:example) => "..."} ] |> expect.([a: 5])
 
     [ [a: id_of(:example)], @example_has_5] |> expect.([a: 5])
 
