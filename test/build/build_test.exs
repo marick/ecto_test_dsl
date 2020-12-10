@@ -1,9 +1,7 @@
 defmodule BuildTest do
-  use TransformerTestSupport.Case
-  alias TransformerTestSupport, as: T
-  alias T.Build
+  use TransformerTestSupport.Drink.Me
+  use T.Case
   use T.Predefines
-  alias T.SmartGet
 
   defmodule Examples do
     use Template.Trivial

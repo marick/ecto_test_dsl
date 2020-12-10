@@ -1,5 +1,5 @@
 defmodule VariantSupport.Changeset.CheckInsertionResultTest do
-  alias TransformerTestSupport, as: T
+  use TransformerTestSupport.Drink.Me
   use T.Case
   alias T.VariantSupport.ChangesetSupport
   alias T.Sketch

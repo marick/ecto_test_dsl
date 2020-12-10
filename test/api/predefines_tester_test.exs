@@ -1,5 +1,5 @@
 defmodule Api.PredefinesTesterTest do
-  alias TransformerTestSupport, as: T
+  use TransformerTestSupport.Drink.Me
   use T.Case
 
 

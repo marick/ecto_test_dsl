@@ -1,5 +1,5 @@
 defmodule Build.ParamsShorthandTest do
-  alias TransformerTestSupport, as: T
+  use TransformerTestSupport.Drink.Me
   use T.Case
   use T.Predefines
 

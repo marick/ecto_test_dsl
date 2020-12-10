@@ -1,9 +1,7 @@
 defmodule Variants.EctoClassic.StartTest do
-  use TransformerTestSupport.Case
-  alias TransformerTestSupport, as: T
-  alias T.Build
+  use TransformerTestSupport.Drink.Me
+  use T.Case
   use T.Predefines
-  alias T.SmartGet
   alias T.Variants.EctoClassic.Insert, as: Variant
 
   defmodule Examples do

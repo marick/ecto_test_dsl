@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport.SmartGet.Previously do
-  alias TransformerTestSupport, as: T
+  use TransformerTestSupport.Drink.Me
   import FlowAssertions.Define.BodyParts
   alias T.Messages
     

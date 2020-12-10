@@ -1,5 +1,5 @@
 defmodule VariantSupport.Changeset.PreviouslyTest do
-  alias TransformerTestSupport, as: T
+  use TransformerTestSupport.Drink.Me
   alias T.Variants.EctoClassic
   alias T.VariantSupport.ChangesetSupport
 

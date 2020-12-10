@@ -1,5 +1,5 @@
 defmodule SmartGet.ChangesetChecks.ValidInvalidTest do
-  alias TransformerTestSupport, as: T
+  use TransformerTestSupport.Drink.Me
   use T.Case
   alias T.SmartGet.ChangesetChecks, as: Checks
   import T.Build

@@ -1,6 +1,5 @@
 defmodule TransformerTestSupport.RunningExampleTest do
-  alias TransformerTestSupport, as: T
-  alias T.Build
+  use TransformerTestSupport.Drink.Me
   alias T.RunningExample
   alias T.Variants.EctoClassic
   alias Ecto.Changeset

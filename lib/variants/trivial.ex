@@ -1,6 +1,5 @@
 defmodule TransformerTestSupport.Variants.Trivial do
-  alias TransformerTestSupport, as: T
-  alias T.Build
+  use TransformerTestSupport.Drink.Me
   alias T.Variants.Trivial, as: ThisVariant
   
   def start(opts \\ []) do

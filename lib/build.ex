@@ -1,10 +1,9 @@
 defmodule TransformerTestSupport.Build do
-  alias TransformerTestSupport, as: T
+  use TransformerTestSupport.Drink.Me
   alias T.Build.{Normalize,ParamShorthand,KeyValidation}
   import DeepMerge, only: [deep_merge: 2]
   import FlowAssertions.Define.BodyParts
   import ExUnit.Assertions
-  import T.Types
 
   @moduledoc """
   """

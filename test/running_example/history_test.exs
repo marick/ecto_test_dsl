@@ -1,5 +1,5 @@
 defmodule RunningExample.HistoryTest do
-  # alias TransformerTestSupport, as: T
+  # use TransformerTestSupport.Drink.Me
   # alias T.Build
   # alias T.Runner
   # alias T.Variants.EctoClassic

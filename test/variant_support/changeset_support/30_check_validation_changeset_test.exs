@@ -1,5 +1,5 @@
 defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
-  alias TransformerTestSupport, as: T
+  use TransformerTestSupport.Drink.Me
   use T.Case
   import FlowAssertions.Define.Tabular
   alias T.VariantSupport.ChangesetSupport

@@ -1,10 +1,8 @@
 defmodule SmartGet.ParamsTest do
-  alias TransformerTestSupport, as: T
+  use TransformerTestSupport.Drink.Me
   use T.Case
-  alias T.SmartGet
   import T.Build
   alias Template.Dynamic
-  import T.Types
 
   defmodule Examples do
     use Template.Trivial

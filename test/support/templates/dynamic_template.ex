@@ -1,6 +1,5 @@
 defmodule Template.Dynamic do
-  alias TransformerTestSupport, as: T
-  alias T.Build
+  use TransformerTestSupport.Drink.Me
   alias T.SmartGet.Example
 
 

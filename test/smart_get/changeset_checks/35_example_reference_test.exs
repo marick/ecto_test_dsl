@@ -1,5 +1,5 @@
 defmodule SmartGet.ChangesetChecks.ExampleReferenceTest do
-  alias TransformerTestSupport, as: T
+  use TransformerTestSupport.Drink.Me
   use T.Case
   import T.Build
   alias T.RunningExample

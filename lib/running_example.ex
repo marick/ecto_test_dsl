@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport.RunningExample do
-  alias TransformerTestSupport, as: T
+  use TransformerTestSupport.Drink.Me
   alias T.RunningExample
   alias T.RunningExample.History
   import T.RunningExample.Trace

@@ -1,6 +1,6 @@
 defmodule RunningExample.TraceServerTest do
+  use TransformerTestSupport.Drink.Me
   use ExUnit.Case, async: false
-  alias TransformerTestSupport, as: T
   alias T.RunningExample.TraceServer
 
   test "indentation leaders" do

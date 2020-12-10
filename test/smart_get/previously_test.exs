@@ -1,8 +1,7 @@
 defmodule SmartGet.PreviouslyTest do
-  alias TransformerTestSupport, as: T
+  use TransformerTestSupport.Drink.Me
   use T.Case
   alias T.SmartGet.Previously
-  import T.Types
   import T.Build
 
   @example_has_5 %{een_t(:example) => %{id: 5}}
@@ -22,13 +21,10 @@ defmodule SmartGet.PreviouslyTest do
   end
 
   test "expand_in_list failure" do
-
-   assertion_fails("There is no example named `{:examp, SmartGet.PreviouslyTest}`",
-      [right: [example: SmartGet.PreviouslyTest]],
+    assertion_fails("There is no example named `{:examp, SmartGet.PreviouslyTest}`",
+#      [right: [example: SmartGet.PreviouslyTest]],
       fn ->
         Previously.expand_in_list([a: id_of(:examp)], @example_has_5)
       end)
   end
-
-  
 end 

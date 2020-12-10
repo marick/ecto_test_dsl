@@ -1,6 +1,5 @@
 defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
-  alias TransformerTestSupport, as: T
-  alias T.Build
+  use TransformerTestSupport.Drink.Me
   alias T.VariantSupport.ChangesetSupport
   alias T.Variants.EctoClassic.Insert, as: ThisVariant
 

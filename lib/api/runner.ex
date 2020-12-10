@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport.Runner do
-  # alias TransformerTestSupport, as: T
+  use TransformerTestSupport.Drink.Me
 
   # ----------------------------------------------------------------------------
   defmacro check_examples_with(module, opts \\ []) do

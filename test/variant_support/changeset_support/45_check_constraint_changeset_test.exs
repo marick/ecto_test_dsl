@@ -1,7 +1,6 @@
 defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
-  alias TransformerTestSupport, as: T
+  use TransformerTestSupport.Drink.Me
   use T.Case
-  alias T.Build
   alias T.VariantSupport.ChangesetSupport
   alias T.Sketch
   alias T.RunningExample
