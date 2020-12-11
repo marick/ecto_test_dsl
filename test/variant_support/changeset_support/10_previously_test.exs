@@ -43,7 +43,7 @@ defmodule VariantSupport.Changeset.PreviouslyTest do
       workflow(                                         :success, [
         make(:leaf),
         make(:leaf2),
-        make(:dependent, previously(insert:  {:leaf, __MODULE__})),
+        make(:dependent, previously(insert:  [leaf: __MODULE__])),
         make(:depth_3,   previously(insert:   :dependent)),
 
         make(:breadth_2, previously(insert:          [:leaf,   # one insert, two examples
@@ -85,7 +85,9 @@ defmodule VariantSupport.Changeset.PreviouslyTest do
       
       expected = 
         names
-        |> Enum.map(fn name -> {{name, Examples}, Schema.named(to_string name)} end)
+        |> Enum.map(fn name ->
+                      {een_t(name, Examples), Schema.named(to_string name)}
+                    end)
         |> Map.new
       assert actual == expected
     end

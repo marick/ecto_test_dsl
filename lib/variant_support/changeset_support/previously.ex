@@ -32,6 +32,10 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport.Previously do
     from_a_leaf({source, example_module}, prior_work)
   end
 
+  # previously(..., insert: een_t{name, module}, ...)
+  def from_a_tuple({:insert, %Types.EEN{} = een}, _to_help_example, so_far),
+    do: from_a_leaf(een, so_far)
+
   # previously(..., insert: {name, module}, ...)
   def from_a_tuple({:insert, extended_example_name}, _to_help_example, so_far),
     do: from_a_leaf(extended_example_name, so_far)
@@ -40,7 +44,12 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport.Previously do
 
   # At last, just the example name and module.
   def from_a_leaf({example_name, example_module}, so_far) do
-    een = Types.EEN.new(example_name, example_module) |> IO.inspect
+    Types.EEN.new(example_name, example_module)
+    |> from_a_leaf(so_far)
+  end
+  
+  # At last, just the example name and module.
+  def from_a_leaf(%Types.EEN{} = een, so_far) do
     unless_already_present(een, so_far, fn ->
       workflow_results = 
         een.module

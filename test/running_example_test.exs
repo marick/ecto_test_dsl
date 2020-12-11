@@ -66,7 +66,7 @@ defmodule TransformerTestSupport.RunningExampleTest do
         assert Keyword.get(actual, :previously) == expected
       end
 
-      :dependent |> expect.(%{{:young, Examples} => @presupplied})
+      :dependent |> expect.(%{een_t(young: Examples) => @presupplied})
       # There is a recursive call
       :two_level |> expect.(%{
             een_t(young: Examples) => @presupplied,

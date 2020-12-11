@@ -99,9 +99,9 @@ defmodule TransformerTestSupport.Build do
     do: params_like(example_name, except: [])
 
 
-  defmacro id_of(extended_example_name) do
+  defmacro id_of(extended_example_desc) do
     quote do
-      ref = een_t(unquote(extended_example_name))
+      ref = een_t(unquote(extended_example_desc))
       ParamShorthand.previously_reference(ref, :primary_key)
     end
   end

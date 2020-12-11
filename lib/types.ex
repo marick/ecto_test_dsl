@@ -11,15 +11,21 @@ defmodule TransformerTestSupport.Types do
   dubious.
   """
   
-  defmacro een_t(pair_list) when is_list(pair_list) do
+  defmacro een_t([{example_name, module}]) do 
     quote do
-      EEN.new(unquote(pair_list))
+      EEN.new(unquote(example_name), unquote(module))
     end
   end
 
   defmacro een_t(example_name) when is_atom(example_name) do
     quote do
-      EEN.new([{unquote(example_name), __MODULE__}])
+      EEN.new(unquote(example_name), __MODULE__)
+    end
+  end
+
+  defmacro een_t(example_name, module) do 
+    quote do
+      EEN.new([{unquote(example_name), unquote(module)}])
     end
   end
 end
