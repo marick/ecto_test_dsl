@@ -6,10 +6,6 @@ defmodule TransformerTestSupport.Types.EEN do
 
   defstruct [:name, :module]
 
-  def new([{name, module}]) do
-    new(name, module)
-  end
-
   def new(name, module) do
     %__MODULE__{name: name, module: module}
   end
