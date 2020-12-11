@@ -56,7 +56,4 @@ defmodule TransformerTestSupport.Build.ParamShorthand do
 
   def previously_reference(extended_example_name, use_type),
     do: {@previously_reference, extended_example_name, use_type}
-    
-  
-    
 end

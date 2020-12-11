@@ -1,7 +1,8 @@
 defmodule TransformerTestSupport.VariantSupport.ChangesetSupport.Previously do
-  alias TransformerTestSupport.SmartGet.Example
+  use TransformerTestSupport.Drink.Me
+  alias T.SmartGet.Example
   use FlowAssertions.Ecto
-  alias TransformerTestSupport.RunningExample
+  alias T.RunningExample
 
   # ----------------------------------------------------------------------------
   # Working with a container of one or more example sources
@@ -38,17 +39,18 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport.Previously do
   # ----------------------------------------------------------------------------
 
   # At last, just the example name and module.
-  def from_a_leaf({example_name, example_module} = extended_example_name, so_far) do
-    unless_already_present(extended_example_name, so_far, fn ->
+  def from_a_leaf({example_name, example_module}, so_far) do
+    een = Types.EEN.new(example_name, example_module) |> IO.inspect
+    unless_already_present(een, so_far, fn ->
       workflow_results = 
-        example_module
-        |> Example.get(example_name)
+        een.module
+        |> Example.get(een.name)
         |> RunningExample.run(previously: so_far)
 
       dependently_created = Keyword.get(workflow_results, :previously)
       {:ok, insert_result} = Keyword.get(workflow_results, :insert_changeset)
       
-      Map.put(dependently_created, {example_name, example_module}, insert_result)
+      Map.put(dependently_created, een, insert_result)
     end)
   end
   

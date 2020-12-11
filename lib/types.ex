@@ -1,4 +1,5 @@
 defmodule TransformerTestSupport.Types do
+  alias TransformerTestSupport.Types.EEN
 
   @moduledoc """
   These are constructors for everything I'm boldly treating as an
@@ -11,15 +12,14 @@ defmodule TransformerTestSupport.Types do
   """
   
   defmacro een_t(pair_list) when is_list(pair_list) do
-    [{example_name, module_name}] = pair_list
     quote do
-      {unquote(example_name), unquote(module_name)}
+      EEN.new(unquote(pair_list))
     end
   end
 
   defmacro een_t(example_name) when is_atom(example_name) do
     quote do
-      {unquote(example_name), __MODULE__}
+      EEN.new([{unquote(example_name), __MODULE__}])
     end
   end
 end

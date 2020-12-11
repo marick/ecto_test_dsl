@@ -21,8 +21,7 @@ defmodule SmartGet.PreviouslyTest do
   end
 
   test "expand_in_list failure" do
-    assertion_fails("There is no example named `{:examp, SmartGet.PreviouslyTest}`",
-#      [right: [example: SmartGet.PreviouslyTest]],
+    assertion_fails("There is no example named `:examp` in PreviouslyTest",
       fn ->
         Previously.expand_in_list([a: id_of(:examp)], @example_has_5)
       end)

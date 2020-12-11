@@ -27,9 +27,9 @@ defmodule BuildTest do
 
     test "id_of" do
       assert id_of(animal: Examples) ==
-         {:__previously_reference, {:animal, Examples}, :primary_key}
+         {:__previously_reference, een_t(animal: Examples), :primary_key}
       assert id_of(:animal) == 
-         {:__previously_reference, {:animal, __MODULE__}, :primary_key}
+         {:__previously_reference, een_t(animal: __MODULE__), :primary_key}
     end
     
     test "id_of works within params_like as well" do
@@ -41,7 +41,8 @@ defmodule BuildTest do
         except: [b: id_of(:previously), c: 3])
 
       %{params: %{b: b}} = Build.ParamShorthand.expand(%{params: f}, :example, previous)
-      assert b == {:__previously_reference, {:previously, __MODULE__}, :primary_key}
+      assert b == {:__previously_reference, een_t(previously: __MODULE__),
+                   :primary_key}
     end
   end
 
