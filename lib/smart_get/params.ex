@@ -1,4 +1,5 @@
 defmodule TransformerTestSupport.SmartGet.Params do
+  alias TransformerTestSupport.Link.CrossReference
   alias TransformerTestSupport.SmartGet
     
   @moduledoc """
@@ -20,7 +21,7 @@ defmodule TransformerTestSupport.SmartGet.Params do
 
       formatter ->
         example.params
-        |> SmartGet.Previously.expand_in_list(previously)
+        |> CrossReference.expand_in_list(previously)
         |> Map.new
         |> formatter.()
     end

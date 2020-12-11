@@ -1,14 +1,14 @@
-defmodule SmartGet.PreviouslyTest do
+defmodule Link.CrossReferenceTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
-  alias T.SmartGet.Previously
+  alias T.Link.CrossReference
   import T.Build
 
   @example_has_5 %{een_t(:example) => %{id: 5}}
 
   test "expand_in_list success cases" do
     expect = fn [list, previously], expected ->
-      assert Previously.expand_in_list(list, previously) == expected
+      assert CrossReference.expand_in_list(list, previously) == expected
     end
 
     [ [    ], %{                      } ] |> expect.([    ])
@@ -21,9 +21,9 @@ defmodule SmartGet.PreviouslyTest do
   end
 
   test "expand_in_list failure" do
-    assertion_fails("There is no example named `:examp` in PreviouslyTest",
+    assertion_fails("There is no example named `:examp` in CrossReferenceTest",
       fn ->
-        Previously.expand_in_list([a: id_of(:examp)], @example_has_5)
+        CrossReference.expand_in_list([a: id_of(:examp)], @example_has_5)
       end)
   end
 end 
