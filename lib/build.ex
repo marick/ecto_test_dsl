@@ -123,8 +123,8 @@ defmodule TransformerTestSupport.Build do
     case Macro.decompose_call(funcall) do
       {{:__aliases__, _, aliases},  fun_atom, args} -> 
         composed_module = Enum.reduce(aliases, :Elixir, fn alias, acc ->
-        Module.safe_concat(acc, alias)
-      end)
+          Module.safe_concat(acc, alias)
+        end)
         fun = Function.capture(composed_module, fun_atom, length(args))
         quote do
           {:__on_success, unquote(fun), unquote(args)}
