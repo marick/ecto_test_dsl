@@ -36,8 +36,8 @@ defmodule TransformerTestSupport.Build.ParamShorthand do
     new =
       params
       |> KeywordX.filter_by_value(&cross_reference?/1)
-      |> KeywordX.map_values(fn {_, extended_example_name, _} ->
-          {:insert, extended_example_name}
+      |> KeywordX.map_values(fn xref ->
+          {:insert, xref.een}
          end)
 
     case {old, new} do

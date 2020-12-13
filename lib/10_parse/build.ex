@@ -103,7 +103,7 @@ defmodule TransformerTestSupport.Build do
   defmacro id_of(extended_example_desc) do
     quote do
       een = een_t(unquote(extended_example_desc))
-      xref_t(een, :primary_key)
+      xref_t(een, :id)
     end
   end
 
