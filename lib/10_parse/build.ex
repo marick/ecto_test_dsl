@@ -4,6 +4,7 @@ defmodule TransformerTestSupport.Build do
   import DeepMerge, only: [deep_merge: 2]
   import FlowAssertions.Define.BodyParts
   import ExUnit.Assertions
+  import T.Parse.Types.CrossReference, only: [xref_t: 2]
 
   @moduledoc """
   """
@@ -101,8 +102,8 @@ defmodule TransformerTestSupport.Build do
 
   defmacro id_of(extended_example_desc) do
     quote do
-      ref = een_t(unquote(extended_example_desc))
-      ParamShorthand.previously_reference(ref, :primary_key)
+      een = een_t(unquote(extended_example_desc))
+      xref_t(een, :primary_key)
     end
   end
 

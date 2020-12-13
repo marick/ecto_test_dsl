@@ -44,8 +44,9 @@ defmodule SmartGet.ChangesetChecks.ExampleReferenceTest do
     end
   end
 
+  IO.inspect "NEXT TEST"
   @tag :skip
-  test "foo" do
+  test "references" do
     IO.inspect Examples.Tester.inserted(:has_peer)
   end
 

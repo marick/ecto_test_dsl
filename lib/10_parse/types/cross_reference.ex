@@ -1,12 +1,28 @@
-defmodule TransformerTestSupport.Link.CrossReference do
+defmodule TransformerTestSupport.Parse.Types.CrossReference do
   use TransformerTestSupport.Drink.Me
   import FlowAssertions.Define.BodyParts
   alias T.Messages
-    
+
   @moduledoc """
+  A reference to a field within an example
   """
 
+  # defstruct [:een, :field]
   
+
+  @previously_reference :__previously_reference
+
+  def new(een, use_type),
+    do: {@previously_reference, een, use_type}
+  
+  def xref_t(een, use_type), do: new(een, use_type)
+
+  def cross_reference?(value) do
+    is_tuple(value) && elem(value, 0) == @previously_reference
+  end
+  def cross_reference(_), do: false
+  
+
 
   def expand_in_list(list, previously) do
     for elt <- list do
@@ -24,4 +40,5 @@ defmodule TransformerTestSupport.Link.CrossReference do
       end
     end
   end
+  
 end

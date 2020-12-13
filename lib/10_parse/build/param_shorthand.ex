@@ -27,13 +27,16 @@ defmodule TransformerTestSupport.Build.ParamShorthand do
   end
 
   def add_previously(example) do
+    import KeywordX
+    import TransformerTestSupport.Parse.Types.CrossReference
+    
     params = Map.get(example, :params, [])
     old = Map.get(example, :previously, [])
 
     new =
       params
-      |> Enum.filter(&example_reference?/1)
-      |> Enum.map(fn {_, {_, extended_example_name, _}} ->
+      |> KeywordX.filter_by_value(&cross_reference?/1)
+      |> KeywordX.map_values(fn {_, extended_example_name, _} ->
           {:insert, extended_example_name}
          end)
 
@@ -46,14 +49,4 @@ defmodule TransformerTestSupport.Build.ParamShorthand do
         Map.put(example, :previously, old ++ new)
     end
   end
-
-  @previously_reference :__previously_reference
-
-  def example_reference?({_key, value}) do
-    is_tuple(value) && elem(value, 0) == @previously_reference
-  end
-  def example_reference?(_), do: false
-
-  def previously_reference(extended_example_name, use_type),
-    do: {@previously_reference, extended_example_name, use_type}
 end
