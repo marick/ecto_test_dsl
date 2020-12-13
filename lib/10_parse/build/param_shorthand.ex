@@ -28,7 +28,7 @@ defmodule TransformerTestSupport.Build.ParamShorthand do
 
   def add_previously(example) do
     import KeywordX
-    import TransformerTestSupport.Parse.Types.CrossReference
+    import TransformerTestSupport.Parse.CrossReference
     
     params = Map.get(example, :params, [])
     old = Map.get(example, :previously, [])

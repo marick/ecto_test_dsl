@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Parse.Types.EEN do
+defmodule TransformerTestSupport.Parse.EEN do
 
   @moduledoc """
   An Extended Example Name. 
@@ -20,7 +20,7 @@ defmodule TransformerTestSupport.Parse.Types.EEN do
 
 
   defmodule Macros do
-    alias TransformerTestSupport.Parse.Types.EEN
+    alias TransformerTestSupport.Parse.EEN
   
     defmacro een_t([{example_name, module}]) do 
       quote do

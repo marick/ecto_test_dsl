@@ -1,7 +1,7 @@
 defmodule Link.CrossReferenceTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
-  alias T.Parse.Types.CrossReference
+  alias T.Parse.CrossReference
   import T.Build
 
   @example_has_5 %{een_t(:example) => %{id: 5}}

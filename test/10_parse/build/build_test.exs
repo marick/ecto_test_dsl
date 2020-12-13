@@ -2,7 +2,7 @@ defmodule BuildTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   use T.Predefines
-  import T.Parse.Types.CrossReference, only: [xref_t: 2]
+  import T.Parse.CrossReference, only: [xref_t: 2]
   
 
   defmodule Examples do

@@ -4,7 +4,7 @@ defmodule TransformerTestSupport.Build do
   import DeepMerge, only: [deep_merge: 2]
   import FlowAssertions.Define.BodyParts
   import ExUnit.Assertions
-  import T.Parse.Types.CrossReference, only: [xref_t: 2]
+  import T.Parse.CrossReference, only: [xref_t: 2]
 
   @moduledoc """
   """

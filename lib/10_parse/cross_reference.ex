@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Parse.Types.CrossReference do
+defmodule TransformerTestSupport.Parse.CrossReference do
   use TransformerTestSupport.Drink.Me
   import FlowAssertions.Define.BodyParts
   alias T.Messages

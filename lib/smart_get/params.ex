@@ -1,5 +1,5 @@
 defmodule TransformerTestSupport.SmartGet.Params do
-  alias TransformerTestSupport.Parse.Types.CrossReference
+  alias TransformerTestSupport.Parse.CrossReference
   alias TransformerTestSupport.SmartGet
     
   @moduledoc """
