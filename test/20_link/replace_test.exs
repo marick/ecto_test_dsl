@@ -1,14 +1,15 @@
-defmodule Link.CrossReferenceTest do
+defmodule Link.ReplaceTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   alias T.Parse.CrossReference
   import T.Build
+  alias T.Link.Replace
 
   @example_has_5 %{een_t(:example) => %{id: 5}}
 
-  test "expand_in_list success cases" do
+  test "any_cross_reference_values success cases" do
     expect = fn [list, previously], expected ->
-      assert CrossReference.expand_in_list(list, previously) == expected
+      assert Replace.any_cross_reference_values(list, previously) == expected
     end
 
     [ [    ], %{                      } ] |> expect.([    ])
@@ -20,10 +21,10 @@ defmodule Link.CrossReferenceTest do
     [ [:z, {:a, id_of(:example)}], @example_has_5] |> expect.([:z, {:a, 5}])
   end
 
-  test "expand_in_list failure" do
-    assertion_fails("There is no example named `:examp` in CrossReferenceTest",
+  test "any_cross_reference_values failure" do
+    assertion_fails("There is no example named `:examp` in ReplaceTest",
       fn ->
-        CrossReference.expand_in_list([a: id_of(:examp)], @example_has_5)
+        Replace.any_cross_reference_values([a: id_of(:examp)], @example_has_5)
       end)
   end
 end 

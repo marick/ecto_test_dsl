@@ -1,6 +1,8 @@
 defmodule TransformerTestSupport.SmartGet.Params do
-  alias TransformerTestSupport.Parse.CrossReference
-  alias TransformerTestSupport.SmartGet
+  use TransformerTestSupport.Drink.Me
+  alias T.Parse.CrossReference
+  alias T.SmartGet
+  alias T.Link.Replace
     
   @moduledoc """
   """
@@ -21,7 +23,7 @@ defmodule TransformerTestSupport.SmartGet.Params do
 
       formatter ->
         example.params
-        |> CrossReference.expand_in_list(previously)
+        |> Replace.any_cross_reference_values(previously)
         |> Map.new
         |> formatter.()
     end
