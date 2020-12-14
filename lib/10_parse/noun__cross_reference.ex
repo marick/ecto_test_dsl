@@ -15,22 +15,4 @@ defmodule TransformerTestSupport.Parse.CrossReference do
 
   def cross_reference?(%__MODULE__{} = _value), do: true
   def cross_reference?(_), do: false
-
-  def expand_in_list(list, previously) do
-    for elt <- list do
-      case elt do
-        {name, %__MODULE__{een: een, field: field}} ->
-          case Map.get(previously, een) do 
-            nil ->
-              keys = Map.keys(previously)
-              elaborate_flunk(Messages.missing_een(een), right: keys)
-            earlier ->
-              {name, Map.get(earlier, field)}
-          end
-        _ -> 
-          elt
-      end
-    end
-  end
-  
 end
