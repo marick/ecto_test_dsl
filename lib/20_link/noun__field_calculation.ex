@@ -1,5 +1,7 @@
-defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
-  alias TransformerTestSupport.SmartGet.Example
+defmodule TransformerTestSupport.Link.FieldCalculation do
+  use TransformerTestSupport.Drink.Me
+  alias T.SmartGet.Example
+  alias T.Parse.FieldCalculation
   import FlowAssertions.Define.BodyParts
   import ExUnit.Assertions
   
@@ -18,7 +20,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks.Calculated do
        end)
   end
 
-  def make__checker({field_name, {:__on_success, f, arg_template}}) do 
+  def make__checker({field_name, %FieldCalculation{calculation: f, args: arg_template}}) do 
     fn changeset ->
       if prerequisite_fields_available?(arg_template, changeset) do
         check_changeset(changeset, field_name, f, arg_template)

@@ -5,6 +5,7 @@ defmodule TransformerTestSupport.Build do
   import FlowAssertions.Define.BodyParts
   import ExUnit.Assertions
   import T.Parse.CrossReference, only: [xref_t: 2]
+  alias T.Parse.FieldCalculation
 
   @moduledoc """
   """
@@ -128,13 +129,13 @@ defmodule TransformerTestSupport.Build do
         end)
         fun = Function.capture(composed_module, fun_atom, length(args))
         quote do
-          {:__on_success, unquote(fun), unquote(args)}
+          FieldCalculation.new(unquote(fun), unquote(args))
         end
 
       {fun_atom, args} ->
         quote do 
           fun = Function.capture(__MODULE__, unquote(fun_atom), length(unquote(args)))
-          {:__on_success, fun, unquote(args)}
+          FieldCalculation.new(fun, unquote(args))
         end
 
       _ ->
@@ -146,7 +147,7 @@ defmodule TransformerTestSupport.Build do
   end
 
   def on_success(f, applied_to: fields) when is_list(fields),
-    do: {:__on_success, f, fields}
+    do: FieldCalculation.new(f, fields)
   def on_success(f, applied_to: field),
     do: on_success(f, applied_to: [field])
 

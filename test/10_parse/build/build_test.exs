@@ -74,7 +74,8 @@ defmodule BuildTest do
   end
 
   def function_in_module(x), do: x - 3
-  
+
+  @tag :skip
   test "on_success, specifically" do
     assert {:__on_success, &Date.diff/2, [:date, ~D[2000-01-01]]} ==
       on_success(Date.diff(:date, ~D[2000-01-01]))

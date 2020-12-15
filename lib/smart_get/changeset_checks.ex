@@ -1,7 +1,8 @@
 defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
-  alias TransformerTestSupport.SmartGet
-  alias SmartGet.Example
-  alias SmartGet.ChangesetChecks, as: Checks
+  use TransformerTestSupport.Drink.Me
+  alias T.SmartGet.Example
+  alias T.SmartGet.ChangesetChecks, as: Checks
+  alias T.Link.FieldCalculation
     
   @moduledoc """
   """
@@ -17,7 +18,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
     changeset_checks
     |> add_whole_changeset_check(example)
     |> Checks.AsCast.add(example, previously, as_cast_fields)
-    |> Checks.Calculated.add(example, calculated_fields)
+    |> FieldCalculation.add(example, calculated_fields)
   end
 
   defp add_whole_changeset_check(checks_so_far, example) do
