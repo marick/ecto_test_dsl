@@ -32,4 +32,37 @@ defmodule KeywordXTest do
     # Just for fun
     [[a: 5, c: 3, d: 8], %{a: :b, c: :c}] |> expect.({[b: 5, c: 3], [d: 8]})
   end
+
+  test "`filter_by_value` preserves structure, deletes unwanted values" do
+    assert KeywordX.filter_by_value([a: 1, b: "b"], &is_integer/1) == [a: 1]
+  end
+
+  test "`map_values` loses keys, transforms values" do
+    assert KeywordX.map_values([a: 1, b: 2], &(-&1)) == [-1, -2]
+  end
+  
+  defmodule Struct do
+    defstruct [:val]
+    
+    def transform(s), do: String.upcase(s.val)
+  end
+  
+  defmodule Other do 
+    defstruct [:val]
+    
+    def transform(s), do: s.val + 100
+  end
+
+  test "`update_matching_structs`" do
+    args = [s: %Struct{val: "down"}, fnord: 3, o: %Other{val: 5}]
+    transforms = [Struct, &Struct.transform/1, Other, &Other.transform/1]
+    actual = KeywordX.update_matching_structs(args, transforms) 
+    assert actual == [s: "DOWN", fnord: 3, o: 105]
+  end
+
+  test "shorthand for single transform" do 
+    args = [s: %Struct{val: "down"}, fnord: 3]
+    actual = KeywordX.update_matching_structs(args, Struct, &Struct.transform/1)
+    assert actual == [s: "DOWN", fnord: 3]
+  end
 end

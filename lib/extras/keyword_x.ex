@@ -20,4 +20,29 @@ defmodule KeywordX do
   def map_values(kvs, f) do
     Enum.map(kvs, fn {_k, v} -> f.(v) end)
   end
+
+  def update_matching_structs(kvs, s, f) do
+    update_matching_structs(kvs, [s, f])
+  end
+
+  def update_matching_structs(kvs, ungrouped) do
+    pairs = Enum.chunk_every(ungrouped, 2)
+    for {k, v} <- kvs do
+      case struct_function(v, pairs) do
+        nil -> {k,    v }
+        f   -> {k, f.(v)}
+      end
+    end      
+  end
+
+  def struct_function(value, struct_function_pairs) do
+    Enum.find_value(struct_function_pairs, fn [struct_name, f] ->
+      case is_struct(value, struct_name) do
+        true -> f
+        false -> false
+      end
+    end)
+  end
+
+  
 end
