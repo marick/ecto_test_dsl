@@ -1,6 +1,5 @@
 defmodule TransformerTestSupport.SmartGet.Params do
   use TransformerTestSupport.Drink.Me
-  alias T.Parse.CrossReference
   alias T.SmartGet
   alias T.Link.Replace
     

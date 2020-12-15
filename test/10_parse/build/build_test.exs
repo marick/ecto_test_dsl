@@ -2,7 +2,6 @@ defmodule BuildTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   use T.Predefines
-  import T.Parse.CrossReference, only: [xref_t: 2]
   
 
   defmodule Examples do
@@ -28,8 +27,8 @@ defmodule BuildTest do
     end
 
     test "id_of" do
-      assert id_of(animal: Examples) == xref_t(een(animal: Examples), :id)
-      assert id_of(:animal) == xref_t(een(animal: __MODULE__), :id)
+      assert id_of(animal: Examples) == FieldRef.new(id: een(animal: Examples))
+      assert id_of(:animal) == FieldRef.new(id: een(animal: __MODULE__))
     end
     
     test "id_of works within params_like as well" do
@@ -41,7 +40,7 @@ defmodule BuildTest do
         except: [b: id_of(:previously), c: 3])
 
       %{params: %{b: b}} = Build.ParamShorthand.expand(%{params: f}, :example, previous)
-      assert b == xref_t(een(previously: __MODULE__), :id)
+      assert b == FieldRef.new(id: een(previously: __MODULE__))
     end
   end
 

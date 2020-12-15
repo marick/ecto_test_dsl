@@ -4,7 +4,6 @@ defmodule TransformerTestSupport.Build do
   import DeepMerge, only: [deep_merge: 2]
   import FlowAssertions.Define.BodyParts
   import ExUnit.Assertions
-  import T.Parse.CrossReference, only: [xref_t: 2]
   alias T.Parse.FieldCalculation
 
   @moduledoc """
@@ -104,7 +103,7 @@ defmodule TransformerTestSupport.Build do
   defmacro id_of(extended_example_desc) do
     quote do
       een = een(unquote(extended_example_desc))
-      xref_t(een, :id)
+      FieldRef.new(id: een)
     end
   end
 

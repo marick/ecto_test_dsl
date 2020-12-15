@@ -1,4 +1,6 @@
 defmodule TransformerTestSupport.Build.ParamShorthand do
+  use TransformerTestSupport.Drink.Me
+
   @moduledoc """
   This is a second pass of processing examples, following `Normalize`.
   The two passes could be consolidated. But let's hold off on that.
@@ -28,14 +30,14 @@ defmodule TransformerTestSupport.Build.ParamShorthand do
 
   def add_previously(example) do
     import KeywordX
-    import TransformerTestSupport.Parse.CrossReference
+    import TransformerTestSupport.Nouns.FieldRef
     
     params = Map.get(example, :params, [])
     old = Map.get(example, :previously, [])
 
     new =
       params
-      |> KeywordX.filter_by_value(&cross_reference?/1)
+      |> KeywordX.filter_by_value(&FieldRef.match?/1)
       |> KeywordX.map_values(fn xref ->
           {:insert, xref.een}
          end)

@@ -1,7 +1,6 @@
 defmodule Link.ReplaceTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
-  alias T.Parse.CrossReference
   import T.Build
   alias T.Link.Replace
 
