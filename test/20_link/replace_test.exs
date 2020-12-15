@@ -5,7 +5,7 @@ defmodule Link.ReplaceTest do
   import T.Build
   alias T.Link.Replace
 
-  @example_has_5 %{een_t(:example) => %{id: 5}}
+  @example_has_5 %{een(:example) => %{id: 5}}
 
   test "any_cross_reference_values success cases" do
     expect = fn [list, previously], expected ->
@@ -14,7 +14,7 @@ defmodule Link.ReplaceTest do
 
     [ [    ], %{                      } ] |> expect.([    ])
     [ [a: 5], %{                      } ] |> expect.([a: 5])
-    [ [a: 5], %{een_t(:example) => "..."} ] |> expect.([a: 5])
+    [ [a: 5], %{een(:example) => "..."} ] |> expect.([a: 5])
 
     [ [a: id_of(:example)], @example_has_5] |> expect.([a: 5])
 

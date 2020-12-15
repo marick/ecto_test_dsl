@@ -95,7 +95,7 @@ defmodule SmartGet.ChangesetChecks.AsCastTest do
     test "`previously` values are obeyed" do
       [ as_cast: [:species_id],
         params:  [ species_id: id_of(:prerequisite)],
-        previously:              %{ een_t(:prerequisite) => %{id: 383}}
+        previously:              %{ een(:prerequisite) => %{id: 383}}
       ] |> expect_changeset_checks(
         [:valid,
          changes:  [species_id:                                          383]])

@@ -52,7 +52,7 @@ defmodule SmartGet.ParamsTest do
     
   test "getting the id of a previously-created value" do
     previously =
-      %{een_t(species: ExamplesIdOf) => %{id: 112, name: "bovine"}}
+      %{een(species: ExamplesIdOf) => %{id: 112, name: "bovine"}}
     
     ExamplesIdOf.Tester.example(:animal)
     |> SmartGet.Params.get(previously: previously)

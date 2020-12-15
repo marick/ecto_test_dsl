@@ -86,7 +86,7 @@ defmodule VariantSupport.Changeset.PreviouslyTest do
       expected = 
         names
         |> Enum.map(fn name ->
-                      {een_t(name, Examples), Schema.named(to_string name)}
+                      {een(name, Examples), Schema.named(to_string name)}
                     end)
         |> Map.new
       assert actual == expected

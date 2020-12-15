@@ -78,7 +78,7 @@ defmodule Build.ParamsShorthandTest do
            ])
 
       assert example(test_data, :similar).previously ==
-          [insert: een_t(species: ExampleModule)]
+          [insert: een(species: ExampleModule)]
     end
 
     test "adds on to existing previously" do
@@ -87,13 +87,13 @@ defmodule Build.ParamsShorthandTest do
         |> workflow(:invalid, name: [
              params(a: id_of(species: ExampleModule),
                     b: id_of(:thing)),
-             previously(insert: een_t(:noog))
+             previously(insert: een(:noog))
         ])
 
       assert example(test_data, :name).previously ==
-          [insert: een_t(:noog),
-           insert: een_t(species: ExampleModule),
-           insert: een_t(thing: __MODULE__)]
+          [insert: een(:noog),
+           insert: een(species: ExampleModule),
+           insert: een(thing: __MODULE__)]
     end
   end
 end  

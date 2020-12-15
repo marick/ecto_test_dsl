@@ -28,8 +28,8 @@ defmodule BuildTest do
     end
 
     test "id_of" do
-      assert id_of(animal: Examples) == xref_t(een_t(animal: Examples), :id)
-      assert id_of(:animal) == xref_t(een_t(animal: __MODULE__), :id)
+      assert id_of(animal: Examples) == xref_t(een(animal: Examples), :id)
+      assert id_of(:animal) == xref_t(een(animal: __MODULE__), :id)
     end
     
     test "id_of works within params_like as well" do
@@ -41,7 +41,7 @@ defmodule BuildTest do
         except: [b: id_of(:previously), c: 3])
 
       %{params: %{b: b}} = Build.ParamShorthand.expand(%{params: f}, :example, previous)
-      assert b == xref_t(een_t(previously: __MODULE__), :id)
+      assert b == xref_t(een(previously: __MODULE__), :id)
     end
   end
 

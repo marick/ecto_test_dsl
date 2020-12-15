@@ -32,8 +32,8 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport.Previously do
     from_a_leaf({source, example_module}, prior_work)
   end
 
-  # previously(..., insert: een_t{name, module}, ...)
-  def from_a_tuple({:insert, %Parse.EEN{} = een}, _to_help_example, so_far),
+  # previously(..., insert: een{name, module}, ...)
+  def from_a_tuple({:insert, %EEN{} = een}, _to_help_example, so_far),
     do: from_a_leaf(een, so_far)
 
   # previously(..., insert: {name, module}, ...)
@@ -44,12 +44,12 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport.Previously do
 
   # At last, just the example name and module.
   def from_a_leaf({example_name, example_module}, so_far) do
-    Parse.EEN.new(example_name, example_module)
+    EEN.new(example_name, example_module)
     |> from_a_leaf(so_far)
   end
   
   # At last, just the example name and module.
-  def from_a_leaf(%Parse.EEN{} = een, so_far) do
+  def from_a_leaf(%EEN{} = een, so_far) do
     unless_already_present(een, so_far, fn ->
       workflow_results = 
         een.module
