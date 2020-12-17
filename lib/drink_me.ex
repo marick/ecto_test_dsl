@@ -7,6 +7,7 @@ defmodule TransformerTestSupport.Drink.Me do
       alias T.Parse
       alias T.Build
       alias T.SmartGet
+      alias T.Messages
     end
   end
 end
