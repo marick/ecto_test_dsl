@@ -1,13 +1,13 @@
 defmodule TransformerTestSupport.SmartGet.Params do
   use TransformerTestSupport.Drink.Me
   alias T.SmartGet
-  alias T.Link.Replace
+  import FlowAssertions.Define.BodyParts
     
   @moduledoc """
   """
 
 
-  def get(example, previously: previously) do
+  def get(example, previously: examples) do
     formatters = %{
       raw: &raw_format/1,
       phoenix: &phoenix_format/1
@@ -22,19 +22,31 @@ defmodule TransformerTestSupport.SmartGet.Params do
 
       formatter ->
         example.params
-        |> Replace.any_cross_reference_values(previously)
+        |> resolve_field_refs(examples)
         |> Map.new
         |> formatter.()
     end
   end
-    
+
+  # Public for testing
+  def resolve_field_refs(params, examples) do
+    KeywordX.update_matching_structs(params, FieldRef,
+      &(field_ref_to_field_value(&1, examples)))
+  end
+
+  defp field_ref_to_field_value(%FieldRef{} = fieldref, examples) do
+    case Map.get(examples, fieldref.een) do 
+      nil ->
+        keys = Map.keys(examples)
+        elaborate_flunk(Messages.missing_een(fieldref.een), right: keys)
+      earlier ->
+        Map.get(earlier, fieldref.field)
+    end
+  end
+  
   # ----------------------------------------------------------------------------
 
-  def raw_params(test_data, example_name),
-    do: SmartGet.Example.get(test_data, example_name).params
-
   defp raw_format(map), do: map
-    
   
   defp phoenix_format(map) do
     map

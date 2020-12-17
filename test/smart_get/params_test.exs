@@ -59,4 +59,31 @@ defmodule SmartGet.ParamsTest do
     |> assert_fields(name: "bossie", species_id: 112)
   end
 
-end 
+
+  describe "resolve_field_refs" do 
+    alias T.SmartGet.Params      
+
+    @example_has_5 %{een(:example) => %{id: 5}}
+
+    test "fieldref success cases" do
+      expect = fn [list, examples], expected ->
+        assert Params.resolve_field_refs(list, examples) == expected
+      end
+      
+      [ [    ], %{                      } ] |> expect.([    ])
+      [ [a: 5], %{                      } ] |> expect.([a: 5])
+      [ [a: 5], %{een(:example) => "..."} ] |> expect.([a: 5])
+      
+      [ [a: id_of(:example)], @example_has_5] |> expect.([a: 5])
+      
+      [ [:z, {:a, id_of(:example)}], @example_has_5] |> expect.([:z, {:a, 5}])
+    end
+    
+    test "any_cross_reference_values failure" do
+      assertion_fails("There is no example named `:examp` in ParamsTest",
+        fn ->
+          Params.resolve_field_refs([a: id_of(:examp)], @example_has_5)
+        end)
+    end 
+  end 
+end
