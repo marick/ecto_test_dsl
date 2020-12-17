@@ -29,9 +29,6 @@ defmodule TransformerTestSupport.Build.ParamShorthand do
   end
 
   def add_previously(example) do
-    import KeywordX
-    import TransformerTestSupport.Nouns.FieldRef
-    
     params = Map.get(example, :params, [])
     old = Map.get(example, :previously, [])
 

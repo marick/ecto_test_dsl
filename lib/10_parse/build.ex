@@ -3,7 +3,6 @@ defmodule TransformerTestSupport.Build do
   alias T.Build.{Normalize,ParamShorthand,KeyValidation}
   import DeepMerge, only: [deep_merge: 2]
   import FlowAssertions.Define.BodyParts
-  import ExUnit.Assertions
   alias T.Parse.FieldCalculation
 
   @moduledoc """
