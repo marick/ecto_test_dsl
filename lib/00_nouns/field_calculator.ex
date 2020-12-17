@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Parse.FieldCalculation do
+defmodule TransformerTestSupport.Nouns.FieldCalculator do
   use TransformerTestSupport.Drink.Me
   import FlowAssertions.Define.BodyParts
   alias T.Messages

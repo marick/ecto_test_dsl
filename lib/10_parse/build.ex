@@ -3,7 +3,7 @@ defmodule TransformerTestSupport.Build do
   alias T.Build.{Normalize,ParamShorthand,KeyValidation}
   import DeepMerge, only: [deep_merge: 2]
   import FlowAssertions.Define.BodyParts
-  alias T.Parse.FieldCalculation
+  alias T.Parse.FieldCalculator
 
   @moduledoc """
   """
@@ -127,13 +127,13 @@ defmodule TransformerTestSupport.Build do
         end)
         fun = Function.capture(composed_module, fun_atom, length(args))
         quote do
-          FieldCalculation.new(unquote(fun), unquote(args))
+          FieldCalculator.new(unquote(fun), unquote(args))
         end
 
       {fun_atom, args} ->
         quote do 
           fun = Function.capture(__MODULE__, unquote(fun_atom), length(unquote(args)))
-          FieldCalculation.new(fun, unquote(args))
+          FieldCalculator.new(fun, unquote(args))
         end
 
       _ ->
@@ -145,7 +145,7 @@ defmodule TransformerTestSupport.Build do
   end
 
   def on_success(f, applied_to: fields) when is_list(fields),
-    do: FieldCalculation.new(f, fields)
+    do: FieldCalculator.new(f, fields)
   def on_success(f, applied_to: field),
     do: on_success(f, applied_to: [field])
 
