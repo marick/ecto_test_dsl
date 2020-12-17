@@ -119,7 +119,6 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
         error_message(running.example, changeset, message)
       end)
   end
-
   defp apply_assertion(changeset, {:__custom_changeset_check, f}),
     do: f.(changeset)
   
