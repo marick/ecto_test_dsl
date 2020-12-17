@@ -65,4 +65,11 @@ defmodule KeywordXTest do
     actual = KeywordX.update_matching_structs(args, Struct, &Struct.transform/1)
     assert actual == [s: "DOWN", fnord: 3]
   end
+
+  test "this is tolerant of list values that are not key-value pairs" do
+    args = [:key, fnord: 3]
+    transforms = [Struct, &Struct.transform/1]
+    actual = KeywordX.update_matching_structs(args, transforms) 
+    assert actual == [:key, fnord: 3]
+  end
 end
