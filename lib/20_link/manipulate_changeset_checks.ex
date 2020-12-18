@@ -30,5 +30,23 @@ defmodule TransformerTestSupport.Link.ManipulateChangesetChecks do
       fn ref -> Map.get(examples, ref.een) |> Map.get(ref.field) end)
   end
 
+  # ----------------------------------------------------------------------------
+
+  def unique_fields(changeset_checks) do
+    changeset_checks
+    |> Enum.filter(&is_tuple/1)
+    |> Keyword.values
+    |> Enum.flat_map(&from_check_args/1)
+    |> Enum.uniq
+  end
+
+  def from_check_args(field) when is_atom(field), do: [field]
+  def from_check_args(list) when is_list(list), do: Enum.map(list, &field/1)
+  def from_check_args(map)  when is_map(map), do: Enum.map(map,  &field/1)
+
+  def field({field, _value}), do: field
+  def field(field), do: field
+    
+  
   
 end

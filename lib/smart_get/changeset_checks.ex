@@ -2,6 +2,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
   use TransformerTestSupport.Drink.Me
   alias T.SmartGet.Example
   alias T.SmartGet.ChangesetChecks, as: Checks
+  alias T.Link.ManipulateChangesetChecks, as: CC
   alias T.Link.FieldCalculation
     
   @moduledoc """
@@ -9,7 +10,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
 
   def get_validation_checks(example, previously: previously) do
     changeset_checks = Map.get(example, :changeset_for_validation_step, [])
-    user_mentioned = Checks.Util.unique_fields(changeset_checks)
+    user_mentioned = CC.unique_fields(changeset_checks)
 
     [as_cast_fields, calculated_fields] =
       Checks.Util.separate_types_of_transformed_fields(example)

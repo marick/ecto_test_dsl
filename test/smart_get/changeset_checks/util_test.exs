@@ -1,27 +1,12 @@
 defmodule SmartGet.ChangesetChecks.UtilTest do
-  use TransformerTestSupport.Case
-  alias TransformerTestSupport.SmartGet.ChangesetChecks.Util
+  use TransformerTestSupport.Drink.Me
+  use T.Case
+  alias T.SmartGet.ChangesetChecks.Util
+  alias T.Link.ManipulateChangesetChecks, as: CC
 
-  test "unique_fields" do
-    expect = fn changeset_checks, expected ->
-      actual = Util.unique_fields(changeset_checks)
-      assert actual == expected
-    end
-    
-    # Handling of lone symbols
-    [change: :a            ] |> expect.([:a])
-    [change: :a, change: :b] |> expect.([:a, :b])
-    [change: :a, error:  :a] |> expect.([:a])
-    
-    
-    # Is not fooled by single-element (global) checks
-    [:valid, change: :a    ] |> expect.([:a])
-  end
-  
-  
   test "removing fields described by user" do
     expect = fn {fields, changeset_checks}, expected ->
-      user_mentioned = Util.unique_fields(changeset_checks)
+      user_mentioned = CC.unique_fields(changeset_checks)
       actual = Util.remove_fields_named_by_user(fields, user_mentioned)
       assert actual == expected
     end
