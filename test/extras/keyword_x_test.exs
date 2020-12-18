@@ -1,9 +1,9 @@
 defmodule KeywordXTest do
   use ExUnit.Case
 
-  test "translate" do
+  test "translate_keys" do
     expect = fn [kws, key_map], expected ->
-      assert KeywordX.translate(kws, key_map) == expected
+      assert KeywordX.translate_keys(kws, key_map) == expected
     end
 
     # Filters out values not mentioned in the second argument.
@@ -18,9 +18,9 @@ defmodule KeywordXTest do
   end
 
 
-  test "split_translate" do
+  test "split_and_translate_keys" do
     expect = fn [kws, key_map], expected ->
-      assert KeywordX.split_and_translate(kws, key_map) == expected
+      assert KeywordX.split_and_translate_keys(kws, key_map) == expected
     end
     
     [[a: 5], %{     }] |> expect.({[    ], [a: 5]})

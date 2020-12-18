@@ -32,7 +32,7 @@ defmodule TransformerTestSupport.Predefines.Tester do
       
       def check_workflow(example_name, opts \\ []) do
         {trace_server_opts, other_opts} =
-          KeywordX.split_and_translate(opts, @trace_server_translations)
+          KeywordX.split_and_translate_keys(opts, @trace_server_translations)
         try do
           TraceServer.update(trace_server_opts)
           example(example_name)
