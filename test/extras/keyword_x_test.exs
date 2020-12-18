@@ -37,8 +37,16 @@ defmodule KeywordXTest do
     assert KeywordX.filter_by_value([a: 1, b: "b"], &is_integer/1) == [a: 1]
   end
 
+  test "`filter_by_key` preserves structure, deletes unwanted keys" do
+    assert KeywordX.filter_by_key([a: 1, b: "b"], &(&1 == :a)) == [a: 1]
+  end
+
   test "`map_values` loses keys, transforms values" do
     assert KeywordX.map_values([a: 1, b: 2], &(-&1)) == [-1, -2]
+  end
+
+  test "`map_over_values` reatins keys, transforms values" do
+    assert KeywordX.map_over_values([a: 1, b: 2], &(-&1)) == [a: -1, b: -2]
   end
   
   defmodule Struct do

@@ -18,8 +18,16 @@ defmodule KeywordX do
     Enum.filter(kvs, fn {_k, v} -> predicate.(v) end)
   end
 
+  def filter_by_key(kvs, predicate) do
+    Enum.filter(kvs, fn {k, _v} -> predicate.(k) end)
+  end
+
   def map_values(kvs, f) do
     Enum.map(kvs, fn {_k, v} -> f.(v) end)
+  end
+
+  def map_over_values(kvs, f) do
+    Enum.map(kvs, fn {k, v} -> {k, f.(v)} end)
   end
 
   # ----------------------------------------------------------------------------
