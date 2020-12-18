@@ -17,20 +17,10 @@ defmodule TransformerTestSupport.Nouns.AsCast do
   
 
   def changeset_checks(%__MODULE__{} = data, params) do
-    {changed, unchanged, errors} = cast_results(data, params)
-    [changes: changed,
-     no_changes: unchanged,
-     errors: errors]
-  end
+    changeset = cast_results(data, params)
 
-
-  defp cast_results(data, params) do
-    changeset = 
-      struct(data.module)
-      |> Changeset.cast(params, data.field_names)
-
-    mentioned = fn where ->
-      KeywordX.filter_by_key(where, &(&1 in data.field_names))
+    mentioned = fn changeset_part ->
+      KeywordX.filter_by_key(changeset_part, &(&1 in data.field_names))
     end
 
     changes =
@@ -41,7 +31,15 @@ defmodule TransformerTestSupport.Nouns.AsCast do
       mentioned.(changeset.errors)
       |> KeywordX.map_over_values(&(elem &1, 0))
 
-    {changes, unchanged, errors}
+    [changes: changes,
+     no_changes: unchanged,
+     errors: errors]
+  end
+
+
+  defp cast_results(data, params) do
+    struct(data.module)
+    |> Changeset.cast(params, data.field_names)
   end
 
     
