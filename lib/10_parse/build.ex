@@ -3,7 +3,7 @@ defmodule TransformerTestSupport.Build do
   alias T.Build.{Normalize,ParamShorthand,KeyValidation}
   import DeepMerge, only: [deep_merge: 2]
   import FlowAssertions.Define.BodyParts
-  alias T.Nouns.FieldCalculator
+  alias T.Nouns.{FieldCalculator,AsCast}
 
   @moduledoc """
   """
@@ -14,6 +14,7 @@ defmodule TransformerTestSupport.Build do
     format: :raw,
     examples: [],
     field_transformations: [],
+    as_cast: AsCast.nothing
   }
 
   def start_with_variant(variant_name, data),
@@ -52,7 +53,13 @@ defmodule TransformerTestSupport.Build do
   end
 
   def field_transformations(test_data, opts) do
-    deep_merge(test_data, %{field_transformations: opts})
+    as_cast =
+      AsCast.new(test_data.module_under_test,
+        Keyword.get_values(opts, :as_cast) |> Enum.concat)
+
+    test_data
+    |> Map.update!(:as_cast, &(AsCast.merge(&1, as_cast)))
+    |> deep_merge(%{field_transformations: opts})
   end
 
   def replace_steps(test_data, replacements) do

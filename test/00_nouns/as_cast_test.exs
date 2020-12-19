@@ -51,7 +51,20 @@ defmodule Nouns.AsCastTest do
     assert_raise(ArgumentError, fn -> 
       [[:mistake], %{"int_field" => "383"}] |> expect.([int_field: 383], [], [])
     end)
-    
   end
-  
+
+  test "there is a null AsCast value" do
+    AsCast.nothing()
+    |> AsCast.changeset_checks(%{"date_string" => "irrelevant"})
+    |> assert_equal([])
+  end
+
+
+  test "merging" do
+    AsCast.nothing
+    |> AsCast.merge(AsCast.new(MyStruct, [:a]))
+    |> assert_fields(module: MyStruct, field_names: [:a])
+    |> AsCast.merge(AsCast.new(MyStruct, [:b]))
+    |> assert_fields(module: MyStruct, field_names: [:a, :b])
+  end
 end 

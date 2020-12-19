@@ -60,18 +60,6 @@ defmodule BuildTest do
       assert new.metadata.name == :new
   end
 
-  test "field transformations" do
-    args = [
-      as_cast: [:date_string, :id],
-      date: on_success(Date.from_iso8601!(:date_string))
-    ]
-    
-    %{field_transformations: %{}}
-    |> Build.field_transformations(args)
-    |> assert_field(field_transformations: args)
-    # Note that field transformations are run in order.
-  end
-
   def function_in_module(x), do: x - 3
 
   @tag :skip

@@ -14,8 +14,15 @@ defmodule TransformerTestSupport.Nouns.AsCast do
     %__MODULE__{module: module, field_names: field_names}
   end
 
-  
+  def nothing() do
+    %__MODULE__{module: :nothing, field_names: []}
+  end
 
+  def merge(%__MODULE__{} = first, %__MODULE__{} = second) do
+    new(second.module, first.field_names ++ second.field_names)
+  end
+
+  def changeset_checks(%__MODULE__{field_names: []}, _params), do: []
   def changeset_checks(%__MODULE__{} = data, params) do
     changeset = cast_results(data, params)
 

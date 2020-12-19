@@ -2,6 +2,7 @@ defmodule Variants.TrivialTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   use T.Predefines
+  alias T.Nouns.AsCast
 
   defmodule Examples do
     use Template.Trivial
@@ -18,6 +19,7 @@ defmodule Variants.TrivialTest do
           module_under_test: SomeSchema,
           variant: T.Variants.Trivial,
           examples: [],
+          as_cast: AsCast.nothing,
           field_transformations: [],
           steps: %{},
           workflows: %{}
