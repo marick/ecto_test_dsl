@@ -1,8 +1,14 @@
 defmodule TransformerTestSupport.Sketch do
+  use TransformerTestSupport.Drink.Me
   alias Ecto.Changeset
+  alias T.Nouns.AsCast
   
   def example(name, workflow, example_fields \\ []) do
-    default_metadata = %{field_transformations: [], format: :phoenix}
+    default_metadata = %{
+      field_transformations: [],
+      format: :phoenix,
+      as_cast: AsCast.nothing,
+    }
     given_metadata = %{name: name, workflow_name: workflow}
 
     Enum.into(example_fields, %{})
