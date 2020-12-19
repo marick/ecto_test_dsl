@@ -1,8 +1,7 @@
 defmodule TransformerTestSupport.Nouns.AsCast do
   use TransformerTestSupport.Drink.Me
-#  import FlowAssertions.Define.BodyParts
-  #  alias T.Messages
   alias Ecto.Changeset
+  alias T.Nouns.AsCast
 
   @moduledoc """
   A reference to a schema field.
@@ -11,19 +10,24 @@ defmodule TransformerTestSupport.Nouns.AsCast do
   defstruct [:module, :field_names]
 
   def new(module, field_names) do
-    %__MODULE__{module: module, field_names: field_names}
+    %AsCast{module: module, field_names: field_names}
   end
 
   def nothing() do
-    %__MODULE__{module: :nothing, field_names: []}
+    %AsCast{module: :nothing, field_names: []}
   end
 
-  def merge(%__MODULE__{} = first, %__MODULE__{} = second) do
+  def merge(%AsCast{} = first, %AsCast{} = second) do
     new(second.module, first.field_names ++ second.field_names)
   end
 
-  def changeset_checks(%__MODULE__{field_names: []}, _params), do: []
-  def changeset_checks(%__MODULE__{} = data, params) do
+  def subtract(%AsCast{} = first, names)do
+    new_names = EnumX.difference(first.field_names, names)
+    new(first.module, new_names)
+  end
+
+  def changeset_checks(%AsCast{field_names: []}, _params), do: []
+  def changeset_checks(%AsCast{} = data, params) do
     changeset = cast_results(data, params)
 
     mentioned = fn changeset_part ->

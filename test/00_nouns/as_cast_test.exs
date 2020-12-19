@@ -67,4 +67,10 @@ defmodule Nouns.AsCastTest do
     |> AsCast.merge(AsCast.new(MyStruct, [:b]))
     |> assert_fields(module: MyStruct, field_names: [:a, :b])
   end
+
+  test "subtracting field names" do
+    AsCast.new(MyStruct, [:a, :b, :c])
+    |> AsCast.subtract([:b, :c, :d])
+    |> assert_fields(module: MyStruct, field_names: [:a])
+  end
 end 
