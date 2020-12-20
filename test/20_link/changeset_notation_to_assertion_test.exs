@@ -1,32 +1,32 @@
-defmodule Nouns.ChangesetAssertionTest do
+defmodule Link.ChangesetNotationToAssertionTest do
   use TransformerTestSupport.Drink.Me
-  alias T.Nouns.ChangesetAssertion
+  alias T.Link.ChangesetNotationToAssertion, as: Translate
   alias Ecto.Changeset
   alias FlowAssertions.Ecto.ChangesetA
   use T.Case
 
   describe "creation and running" do
     test "a symbol" do 
-      assertion = ChangesetAssertion.from(:valid)
+      assertion = Translate.from(:valid)
       assert assertion.from == :valid
       
       valid = %Changeset{valid?: true}
-      assert ChangesetAssertion.check(assertion, valid) == :ok
+      assert Translate.check(assertion, valid) == :ok
 
       invalid = %Changeset{valid?: false}    
       assertion_fails("The changeset is invalid",
         fn ->
-          ChangesetAssertion.check(assertion, invalid) == :ok
+          Translate.check(assertion, invalid) == :ok
         end)
     end
 
     test "a symbol plus arg" do 
-      assertion = ChangesetAssertion.from({:changes, [a: "a", b: "b"]})
+      assertion = Translate.from({:changes, [a: "a", b: "b"]})
       assert assertion.from == {:changes, [a: "a", b: "b"]}
 
       check  = fn changes ->
         changeset = %Changeset{changes: changes}
-        ChangesetAssertion.check(assertion, changeset)
+        Translate.check(assertion, changeset)
       end
 
       assert check.(%{a: "a", b: "b"}) == :ok
@@ -41,18 +41,18 @@ defmodule Nouns.ChangesetAssertionTest do
 
   test "raw version" do
     assertion =
-      ChangesetAssertion.from(
+      Translate.from(
         fn changeset -> ChangesetA.assert_valid(changeset) end,
         "from")
     assert assertion.from == "from"
       
     valid = %Changeset{valid?: true}
-    assert ChangesetAssertion.check(assertion, valid) == :ok
+    assert Translate.check(assertion, valid) == :ok
     
     invalid = %Changeset{valid?: false}    
     assertion_fails("The changeset is invalid",
       fn ->
-        ChangesetAssertion.check(assertion, invalid) == :ok
+        Translate.check(assertion, invalid) == :ok
       end)
   end
 end 
