@@ -7,12 +7,14 @@ defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
   alias T.Sketch
   alias T.RunningExample
   alias T.RunningExample.History
+  alias Template.Dynamic
 
   def run(example, changeset) do 
     %RunningExample{example: example, history: History.trivial(step: changeset)}
     |> ChangesetSupport.check_validation_changeset(:step)
   end
   # ----------------------------------------------------------------------------
+
   test "handling of auto-generated valid/invalid checks" do
     a = nonflow_assertion_runners_for(&(run Sketch.success_example(), &1))
     Sketch.valid_changeset()   |> a.pass.()
@@ -45,17 +47,24 @@ defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
     end
   end
 
+  defmodule Examples do
+    use Template.EctoClassic.Insert
+
+    def create_test_data do 
+      started(module_under_test: Schema)
+      |> field_transformations(
+           as_cast: [:date_string, :age],
+           date: on_success(Date.from_iso8601!(:date_string)))
+    end
+  end
+
+
+
   test "failure with field transformers" do
     a = nonflow_assertion_runners_for(fn example_params, changeset_changes ->
-      example =
-        Sketch.example(:ok, :success, params: example_params)
-        |> Sketch.merge_metadata(
-          module_under_test: Schema,
-          field_transformations: [
-            as_cast: [:date_string, :age],
-            date: on_success(Date.from_iso8601!(:date_string))])
-
-      run(example, Sketch.valid_changeset(changes: changeset_changes))
+      Dynamic.example_in_workflow(Examples, :validation_success,
+        [params: example_params])
+      |> run(Sketch.valid_changeset(changes: changeset_changes))
     end)
 
     message = ~r/`:date`.* does not match/

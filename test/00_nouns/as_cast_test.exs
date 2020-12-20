@@ -23,8 +23,7 @@ defmodule Nouns.AsCastTest do
   end
 
   test "creating and checking" do
-    expect = fn [cast_fields, params], ex_changes, ex_unchanged, ex_errors ->
-      expected = [changes: ex_changes, no_changes: ex_unchanged, errors: ex_errors]
+    expect = fn [cast_fields, params], expected ->
       AsCast.new(Struct, cast_fields)
       |> AsCast.changeset_checks(params)
       |> assert_equal(expected)
@@ -32,24 +31,25 @@ defmodule Nouns.AsCastTest do
       
 
     [[:int_field], %{"int_field" => "383"}]
-                          |> expect.([int_field: 383], [], [])
+                          |> expect.([changes: [int_field: 383]])
     [[:int_field], %{                    }]
-                          |> expect.([], [:int_field], [])
+                          |> expect.([no_changes: [:int_field]])
     [[:int_field], %{"int_field" => "foo"}]
-                          |> expect.([], [:int_field], [int_field: "is invalid"])
+                          |> expect.([no_changes: [:int_field],
+                                     errors: [int_field: "is invalid"]])
 
     # A big example
     [[:int_field, :string_field, :association_field_id],
      %{"int_field" => "ape", "string_field" => "s", "association_field_id" => "8",
        "date_string" => "irrelevant", "extra_field" => "irrelevant"}
     ]
-    |> expect.([association_field_id: 8, string_field: "s"],
-               [:int_field],
-               [int_field: "is invalid"])
+    |> expect.([changes: [association_field_id: 8, string_field: "s"],
+               no_changes: [:int_field],
+               errors: [int_field: "is invalid"]])
 
     # The default error message is OK.
     assert_raise(ArgumentError, fn -> 
-      [[:mistake], %{"int_field" => "383"}] |> expect.([int_field: 383], [], [])
+      [[:mistake], %{"int_field" => "383"}] |> expect.([changes: [int_field: 383]])
     end)
   end
 
@@ -58,7 +58,6 @@ defmodule Nouns.AsCastTest do
     |> AsCast.changeset_checks(%{"date_string" => "irrelevant"})
     |> assert_equal([])
   end
-
 
   test "merging" do
     AsCast.nothing

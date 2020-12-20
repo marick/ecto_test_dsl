@@ -14,9 +14,10 @@ defmodule KeywordX do
     {translate_keys(translatable, key_map), retain}
   end
 
-  def filter_by_value(kvs, predicate) do
-    Enum.filter(kvs, fn {_k, v} -> predicate.(v) end)
-  end
+  def filter_by_value(kvs, predicate),
+    do: Enum.filter(kvs, fn {_k, v} -> predicate.(v) end)
+  def reject_by_value(kvs, predicate),
+    do: Enum.reject(kvs, fn {_k, v} -> predicate.(v) end)
 
   def filter_by_key(kvs, predicate) do
     Enum.filter(kvs, fn {k, _v} -> predicate.(k) end)

@@ -33,8 +33,9 @@ defmodule KeywordXTest do
     [[a: 5, c: 3, d: 8], %{a: :b, c: :c}] |> expect.({[b: 5, c: 3], [d: 8]})
   end
 
-  test "`filter_by_value` preserves structure, deletes unwanted values" do
+  test "`filter/reject_by_value` preserves structure, deletes unwanted values" do
     assert KeywordX.filter_by_value([a: 1, b: "b"], &is_integer/1) == [a: 1]
+    assert KeywordX.reject_by_value([a: 1, b: "b"], &is_integer/1) == [b: "b"]
   end
 
   test "`filter_by_key` preserves structure, deletes unwanted keys" do

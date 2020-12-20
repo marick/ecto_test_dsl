@@ -42,9 +42,8 @@ defmodule TransformerTestSupport.Nouns.AsCast do
       mentioned.(changeset.errors)
       |> KeywordX.map_over_values(&(elem &1, 0))
 
-    [changes: changes,
-     no_changes: unchanged,
-     errors: errors]
+    [changes: changes, no_changes: unchanged, errors: errors]
+    |> KeywordX.reject_by_value(&Enum.empty?/1)
   end
 
 

@@ -21,7 +21,7 @@ defmodule TransformerTestSupport.SmartGet.Params do
         """
 
       formatter ->
-        example.params
+        Map.get(example, :params, [])
         |> resolve_field_refs(examples)
         |> Map.new
         |> formatter.()
