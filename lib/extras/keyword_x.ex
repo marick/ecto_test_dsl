@@ -19,9 +19,14 @@ defmodule KeywordX do
   def reject_by_value(kvs, predicate),
     do: Enum.reject(kvs, fn {_k, v} -> predicate.(v) end)
 
-  def filter_by_key(kvs, predicate) do
-    Enum.filter(kvs, fn {k, _v} -> predicate.(k) end)
-  end
+  def filter_by_key(kvs, predicate), 
+    do: Enum.filter(kvs, fn {k, _v} -> predicate.(k) end)
+  def reject_by_key(kvs, predicate), 
+    do: Enum.reject(kvs, fn {k, _v} -> predicate.(k) end)
+
+  def delete(kvs, atom) when is_atom(atom), do: Keyword.delete(kvs, atom)
+  def delete(kvs, atoms) when is_list(atoms),
+    do: reject_by_key(kvs, &(&1 in atoms))
 
   def map_values(kvs, f) do
     Enum.map(kvs, fn {_k, v} -> f.(v) end)

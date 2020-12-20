@@ -40,6 +40,13 @@ defmodule KeywordXTest do
 
   test "`filter_by_key` preserves structure, deletes unwanted keys" do
     assert KeywordX.filter_by_key([a: 1, b: "b"], &(&1 == :a)) == [a: 1]
+    assert KeywordX.reject_by_key([a: 1, b: "b"], &(&1 == :a)) == [b: "b"]
+  end
+
+  test "delete" do
+    assert KeywordX.delete([a: 1, b: 2],  :a     ) == [b: 2]
+    assert KeywordX.delete([a: 1, b: 2], [:a    ]) == [b: 2]
+    assert KeywordX.delete([a: 1, b: 2], [:a, :b]) == [    ]
   end
 
   test "`map_values` loses keys, transforms values" do
