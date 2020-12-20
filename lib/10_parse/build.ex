@@ -14,7 +14,8 @@ defmodule TransformerTestSupport.Build do
     format: :raw,
     examples: [],
     field_transformations: [],
-    as_cast: AsCast.nothing
+    as_cast: AsCast.nothing,
+    field_calculators: []
   }
 
   def start_with_variant(variant_name, data),

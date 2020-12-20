@@ -20,6 +20,7 @@ defmodule Variants.TrivialTest do
           variant: T.Variants.Trivial,
           examples: [],
           as_cast: AsCast.nothing,
+          field_calculators: [],
           field_transformations: [],
           steps: %{},
           workflows: %{}

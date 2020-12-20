@@ -16,7 +16,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
 
     resolved_params = Params.get(example, previously: previously)
 
-    as_cast_fields =
+    as_cast_checks =
       Example.metadata!(example, :as_cast)
       |> AsCast.subtract(user_mentioned)
       |> AsCast.changeset_checks(resolved_params)
@@ -29,7 +29,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
       changeset_checks
       |> add_whole_changeset_check(example)
 
-    (with_valid ++ as_cast_fields)
+    (with_valid ++ as_cast_checks)
     |> FieldCalculation.add(example, calculated_fields)
   end
 
