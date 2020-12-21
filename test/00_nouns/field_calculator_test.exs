@@ -29,7 +29,11 @@ defmodule Nouns.FieldCalculatorTest do
     inc = &(&1 + 1)
 
     FieldCalculator.new(inc, [:int_field])
-    |> assert_fields(calculation: inc, args: [:int_field])    
+    |> assert_fields(calculation: inc, args: [:int_field], from: "unknown")
+
+    FieldCalculator.new(inc, [:int_field], "source")
+    |> assert_fields(calculation: inc, args: [:int_field], from: "source")
+    
   end
 
   describe "merging" do 

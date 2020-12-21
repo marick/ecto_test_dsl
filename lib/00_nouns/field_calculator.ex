@@ -7,9 +7,10 @@ defmodule TransformerTestSupport.Nouns.FieldCalculator do
   other fields (and constants).
   """
 
-  defstruct [:calculation, :args]
+  defstruct [:calculation, :args, :from]
 
-  def new(calculation, args), do: %__MODULE__{calculation: calculation, args: args}
+  def new(calculation, args, from \\ "unknown"),
+    do: %__MODULE__{calculation: calculation, args: args, from: from}
 
   def merge(kws1, kws2) do
     on_duplicate_key = fn field, val1, val2 ->
