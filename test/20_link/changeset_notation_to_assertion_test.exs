@@ -14,14 +14,17 @@ defmodule Link.ChangesetNotationToAssertionTest do
       valid = %Changeset{valid?: true}
       assert Translate.check(assertion, valid) == :ok
 
-      invalid = %Changeset{valid?: false}    
+      
+      invalid = %Changeset{valid?: false}
+
       assertion_fails("The changeset is invalid",
+        [expr: [changeset: [:valid, "..."]]],
         fn ->
           Translate.check(assertion, invalid) == :ok
         end)
     end
 
-    test "a symbol plus arg" do 
+    test "a symbol plus arg" do
       assertion = Translate.from({:changes, [a: "a", b: "b"]})
       assert assertion.from == {:changes, [a: "a", b: "b"]}
 
@@ -31,9 +34,11 @@ defmodule Link.ChangesetNotationToAssertionTest do
       end
 
       assert check.(%{a: "a", b: "b"}) == :ok
-      
+
+
       assertion_fails("Field `:b` has the wrong value",
-        [left: 3, right: "b"],
+        [left: 3, right: "b",
+         expr: [changeset: [{:changes, [a: "a", b: "b"]}, "..."]]],
         fn ->
           check.(%{a: "a", b: 3})
         end)

@@ -2,6 +2,7 @@ defmodule TransformerTestSupport.Link.ChangesetNotationToAssertion do
   use TransformerTestSupport.Drink.Me
   alias Ecto.Changeset
   alias FlowAssertions.Ecto.ChangesetA
+  import FlowAssertions.Define.BodyParts, only: [adjust_assertion_error: 2]
 
   @moduledoc """
   A function that might throw an AssertionError about a given changeset.
@@ -34,8 +35,11 @@ defmodule TransformerTestSupport.Link.ChangesetNotationToAssertion do
   def new(f, from), do: %__MODULE__{runner: f, from: from}
   
   def check(assertion, %Changeset{} = changeset) do
-    assertion.runner.(changeset)
-    :ok
+    adjust_assertion_error(fn -> 
+      assertion.runner.(changeset)
+      :ok
+    end,
+      expr: [changeset: [assertion.from, "..."]])
   end
 
   defp assert_name(changeset_check),
