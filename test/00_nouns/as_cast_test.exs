@@ -1,7 +1,8 @@
 defmodule Nouns.AsCastTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
-  alias T.Nouns.AsCast
+  alias T.Nouns.{AsCast, ChangesetAssertion}
+  alias T.Sketch
 
   defmodule Association do
     use Ecto.Schema
@@ -11,7 +12,7 @@ defmodule Nouns.AsCastTest do
     end
   end
 
-  defmodule Struct do
+  defmodule Schema do
     use Ecto.Schema
 
     schema "struct" do 
@@ -22,9 +23,11 @@ defmodule Nouns.AsCastTest do
     end
   end
 
-  test "creating and checking" do
+  # This generates `changeset` notation rather than assertions because
+  # that's easier to examine.
+  test "creating and checking, part 1" do
     expect = fn [cast_fields, params], expected ->
-      AsCast.new(Struct, cast_fields)
+      AsCast.new(Schema, cast_fields)
       |> AsCast.changeset_checks(params)
       |> assert_equal(expected)
     end
@@ -53,6 +56,19 @@ defmodule Nouns.AsCastTest do
     end)
   end
 
+  test "creating and checking, part 2: assertions" do
+    [assertion] = 
+      AsCast.new(Schema, [:int_field])
+      |> AsCast.assertions(%{"int_field" => "383"})
+
+    assertion_fails("Field `:int_field` has the wrong value",
+      [left: 384, right: 383],
+      fn ->
+        Sketch.valid_changeset(changes: %{int_field: 384}) |> assertion.runner.()
+      end)
+  end
+
+
   test "there is a null AsCast value" do
     AsCast.nothing()
     |> AsCast.changeset_checks(%{"date_string" => "irrelevant"})
@@ -61,15 +77,15 @@ defmodule Nouns.AsCastTest do
 
   test "merging" do
     AsCast.nothing
-    |> AsCast.merge(AsCast.new(MyStruct, [:a]))
-    |> assert_fields(module: MyStruct, field_names: [:a])
-    |> AsCast.merge(AsCast.new(MyStruct, [:b]))
-    |> assert_fields(module: MyStruct, field_names: [:a, :b])
+    |> AsCast.merge(AsCast.new(Schema, [:a]))
+    |> assert_fields(module: Schema, field_names: [:a])
+    |> AsCast.merge(AsCast.new(Schema, [:b]))
+    |> assert_fields(module: Schema, field_names: [:a, :b])
   end
 
   test "subtracting field names" do
-    AsCast.new(MyStruct, [:a, :b, :c])
+    AsCast.new(Schema, [:a, :b, :c])
     |> AsCast.subtract([:b, :c, :d])
-    |> assert_fields(module: MyStruct, field_names: [:a])
+    |> assert_fields(module: Schema, field_names: [:a])
   end
 end 

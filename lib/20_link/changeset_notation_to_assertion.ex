@@ -13,21 +13,25 @@ defmodule TransformerTestSupport.Link.ChangesetNotationToAssertion do
 
   defstruct [:runner, :from]
 
+  def from(list) when is_list(list) do
+    for one <- list, do: from(one)
+  end
+
   def from(check_name) when is_atom(check_name) do 
     f = fn changeset ->
       apply ChangesetA, assert_name(check_name), [changeset]
     end
-    from(f, check_name)
+    new(f, check_name)
   end
 
   def from({check_name, arg} = item) do 
     f = fn changeset ->
       apply ChangesetA, assert_name(check_name), [changeset, arg]
     end
-    from(f, item)
+    new(f, item)
   end
 
-  def from(f, from), do: %__MODULE__{runner: f, from: from}
+  def new(f, from), do: %__MODULE__{runner: f, from: from}
   
   def check(assertion, %Changeset{} = changeset) do
     assertion.runner.(changeset)

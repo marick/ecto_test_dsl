@@ -4,6 +4,7 @@ defmodule Link.ChangesetNotationToAssertionTest do
   alias Ecto.Changeset
   alias FlowAssertions.Ecto.ChangesetA
   use T.Case
+  alias T.Sketch
 
   describe "creation and running" do
     test "a symbol" do 
@@ -37,22 +38,21 @@ defmodule Link.ChangesetNotationToAssertionTest do
           check.(%{a: "a", b: 3})
         end)
     end
-  end
 
-  test "raw version" do
-    assertion =
-      Translate.from(
-        fn changeset -> ChangesetA.assert_valid(changeset) end,
-        "from")
-    assert assertion.from == "from"
+    test "list" do
+      [valid, changes] = Translate.from([:valid, changes: [a: "a", b: "b"]])
       
-    valid = %Changeset{valid?: true}
-    assert Translate.check(assertion, valid) == :ok
-    
-    invalid = %Changeset{valid?: false}    
-    assertion_fails("The changeset is invalid",
-      fn ->
-        Translate.check(assertion, invalid) == :ok
-      end)
+      assertion_fails("The changeset is invalid",
+        fn ->
+          valid.runner.(Sketch.invalid_changeset(changes: %{}))
+        end)
+
+      assertion_fails("Field `:b` has the wrong value",
+        [left: 3, right: "b"],
+        fn ->
+          changes.runner.(Sketch.valid_changeset(changes: %{a: "a", b: 3}))
+        end)
+
+    end      
   end
 end 

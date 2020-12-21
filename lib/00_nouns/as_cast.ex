@@ -2,6 +2,7 @@ defmodule TransformerTestSupport.Nouns.AsCast do
   use TransformerTestSupport.Drink.Me
   alias Ecto.Changeset
   alias T.Nouns.AsCast
+  alias T.Link.ChangesetNotationToAssertion, as: Translate
 
   @moduledoc """
   A reference to a schema field.
@@ -24,6 +25,12 @@ defmodule TransformerTestSupport.Nouns.AsCast do
   def subtract(%AsCast{} = first, names)do
     new_names = EnumX.difference(first.field_names, names)
     new(first.module, new_names)
+  end
+
+  def assertions(%AsCast{} = data, params) do
+    data
+    |> changeset_checks(params)
+    |> Translate.from
   end
 
   def changeset_checks(%AsCast{field_names: []}, _params), do: []
