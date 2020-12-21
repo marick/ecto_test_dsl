@@ -69,6 +69,11 @@ defmodule Nouns.FieldCalculatorTest do
   end
 
   test "subtracting field names" do
+    original = Enum.map([:a, :b, :c], &({&1, "field calculator #{inspect &1}"}))
+
+    original
+    |> FieldCalculator.subtract([:b, :c, :d])
+    |> assert_equal([a: "field calculator :a"])
   end
   
 end 

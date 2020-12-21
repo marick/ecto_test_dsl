@@ -25,4 +25,8 @@ defmodule TransformerTestSupport.Nouns.FieldCalculator do
   def merge_error(field),
     do: "You gave field `#{inspect field}` two different values"
 
+  def subtract(kws, names) do
+    KeywordX.delete(kws, names)
+  end
+
 end
