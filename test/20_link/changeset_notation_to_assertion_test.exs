@@ -9,38 +9,33 @@ defmodule Link.ChangesetNotationToAssertionTest do
   describe "creation and running" do
     test "a symbol" do 
       assertion = Translate.from(:valid)
-      assert assertion.from == :valid
       
       valid = %Changeset{valid?: true}
-      assert Translate.check(assertion, valid) == :ok
+      assert assertion.(valid) == :ok
 
-      
       invalid = %Changeset{valid?: false}
 
       assertion_fails("The changeset is invalid",
         [expr: [changeset: [:valid, "..."]]],
         fn ->
-          Translate.check(assertion, invalid) == :ok
+          assertion.(invalid)
         end)
     end
 
     test "a symbol plus arg" do
       assertion = Translate.from({:changes, [a: "a", b: "b"]})
-      assert assertion.from == {:changes, [a: "a", b: "b"]}
 
-      check  = fn changes ->
-        changeset = %Changeset{changes: changes}
-        Translate.check(assertion, changeset)
-      end
+      changeset  = fn changes -> %Changeset{changes: changes} end
 
-      assert check.(%{a: "a", b: "b"}) == :ok
+      ok = changeset.(%{a: "a", b: "b"})
+      assert assertion.(ok) == :ok
 
-
+      wrong = changeset.(%{a: "a", b: 3})
       assertion_fails("Field `:b` has the wrong value",
         [left: 3, right: "b",
          expr: [changeset: [{:changes, [a: "a", b: "b"]}, "..."]]],
         fn ->
-          check.(%{a: "a", b: 3})
+          assertion.(wrong)
         end)
     end
 
@@ -49,13 +44,14 @@ defmodule Link.ChangesetNotationToAssertionTest do
       
       assertion_fails("The changeset is invalid",
         fn ->
-          valid.runner.(Sketch.invalid_changeset(changes: %{}))
+          valid.(Sketch.invalid_changeset(changes: %{}))
         end)
 
       assertion_fails("Field `:b` has the wrong value",
-        [left: 3, right: "b"],
+        [left: 3, right: "b",
+         expr: [changeset: [{:changes, [a: "a", b: "b"]}, "..."]]],
         fn ->
-          changes.runner.(Sketch.valid_changeset(changes: %{a: "a", b: 3}))
+          changes.(Sketch.valid_changeset(changes: %{a: "a", b: 3}))
         end)
 
     end      

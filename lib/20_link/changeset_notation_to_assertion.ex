@@ -21,26 +21,30 @@ defmodule TransformerTestSupport.Link.ChangesetNotationToAssertion do
   def from(check_name) when is_atom(check_name) do 
     f = fn changeset ->
       apply ChangesetA, assert_name(check_name), [changeset]
+      :ok
     end
-    new(f, check_name)
+    friendlier_location(f, check_name)
   end
 
   def from({check_name, arg} = item) do 
     f = fn changeset ->
       apply ChangesetA, assert_name(check_name), [changeset, arg]
+      :ok
     end
-    new(f, item)
+    friendlier_location(f, item)
   end
 
   def new(f, from), do: %__MODULE__{runner: f, from: from}
   
-  def check(assertion, %Changeset{} = changeset) do
-    adjust_assertion_error(fn -> 
-      assertion.runner.(changeset)
-      :ok
-    end,
-      expr: [changeset: [assertion.from, "..."]])
+  defp friendlier_location(f, from) do 
+    fn changeset ->
+      adjust_assertion_error(fn -> 
+        f.(changeset)
+      end,
+        expr: [changeset: [from, "..."]])
+    end
   end
+
 
   defp assert_name(changeset_check),
     do: "assert_#{to_string changeset_check}" |> String.to_atom
