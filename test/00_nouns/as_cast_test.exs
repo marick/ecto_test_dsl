@@ -61,10 +61,14 @@ defmodule Nouns.AsCastTest do
       AsCast.new(Schema, [:int_field])
       |> AsCast.assertions(%{"int_field" => "383"})
 
+    wrapped_location = [{:changeset, [{:changes, [int_field: 383]}, "..."]}]
+    additional_context = [as_cast: [:int_field]]
+
     assertion_fails("Field `:int_field` has the wrong value",
-      [left: 384, right: 383],
+      [left: 384, right: 383,
+       expr: [additional_context, "expanded to", wrapped_location]],
       fn ->
-        Sketch.valid_changeset(changes: %{int_field: 384}) |> assertion.runner.()
+        Sketch.valid_changeset(changes: %{int_field: 384}) |> assertion.()
       end)
   end
 

@@ -3,6 +3,7 @@ defmodule TransformerTestSupport.Nouns.AsCast do
   alias Ecto.Changeset
   alias T.Nouns.AsCast
   alias T.Link.ChangesetNotationToAssertion, as: Translate
+  import FlowAssertions.Define.BodyParts, only: [adjust_assertion_error: 2]
 
   @moduledoc """
   A reference to a schema field.
@@ -27,11 +28,6 @@ defmodule TransformerTestSupport.Nouns.AsCast do
     new(first.module, new_names)
   end
 
-  def assertions(%AsCast{} = data, params) do
-    data
-    |> changeset_checks(params)
-    |> Translate.from
-  end
 
   def changeset_checks(%AsCast{field_names: []}, _params), do: []
   def changeset_checks(%AsCast{} = data, params) do
@@ -59,6 +55,21 @@ defmodule TransformerTestSupport.Nouns.AsCast do
     |> Changeset.cast(params, data.field_names)
   end
 
-    
-  
+  # ----------------------------------------------------------------------------
+
+  def assertions(%AsCast{} = data, params) do
+    data
+    |> changeset_checks(params)
+    |> Translate.from
+    |> Enum.map(&(friendlier_location &1, data.field_names))
+  end
+
+  defp friendlier_location(f, field_names) do 
+    fn changeset ->
+      adjust_assertion_error(fn -> 
+        f.(changeset)
+      end,
+        expr: fn expr -> [[as_cast: field_names], "expanded to", expr] end)
+    end
+  end
 end
