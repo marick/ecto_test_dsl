@@ -57,13 +57,13 @@ defmodule TransformerTestSupport.MixProject do
   defp deps do
     [
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
-      {:flow_assertions, "~> 0.4",
-       path: "/Users/bem/src/flow_assertions",
-       override: true
-      },
-      {:ecto_flow_assertions, "~> 0.1",
-       path: "/Users/bem/src/ecto_flow_assertions"
-      },
+      {:flow_assertions, "~> 0.6"},
+      #  path: "/Users/bem/src/flow_assertions",
+      #  override: true
+      # },
+      {:ecto_flow_assertions, "~> 0.1"},
+      #  path: "/Users/bem/src/ecto_flow_assertions"
+      # },
 ###      {:ecto, "~> 3.0"},
       {:ecto_sql, "~> 3.4"},      
       {:deep_merge, "~> 1.0"},      
