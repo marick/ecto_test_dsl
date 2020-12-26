@@ -26,7 +26,7 @@ defmodule Build.KeyValidationTest do
                                     |> a.plus.(left: [missing: [], 
                                                      extras: [:typoe]])
 
-    # Both
+    # Both missing and extra
     [ [:required1,   :required2],
                                   [:allowed1, :not_used],
       %{required1: 1, required2: 2, allowed1: 3}] |> a.pass.()
