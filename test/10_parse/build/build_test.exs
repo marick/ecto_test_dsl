@@ -2,6 +2,7 @@ defmodule BuildTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   use T.Predefines
+  alias T.Nouns.FieldCalculator
   
 
   defmodule Examples do
@@ -62,23 +63,30 @@ defmodule BuildTest do
 
   def function_in_module(x), do: x - 3
 
-  @tag :skip
   test "on_success, specifically" do
-    assert {:__on_success, &Date.diff/2, [:date, ~D[2000-01-01]]} ==
-      on_success(Date.diff(:date, ~D[2000-01-01]))
+    
+    on_success(Date.diff(:date, ~D[2000-01-01]))
+    |> assert_fields(calculation: &Date.diff/2,
+                     args: [:date, ~D[2000-01-01]],
+                     from: "on_success(Date.diff(:date, ~D[2000-01-01]))")
+                          
+    on_success(List.Chars.to_charlist(:date))
+    |> assert_fields(calculation: &List.Chars.to_charlist/1,
+                     args: [:date],
+                     from: "on_success(List.Chars.to_charlist(:date))")
+                          
 
-    assert {:__on_success, &List.Chars.to_charlist/1, [:date]} ==
-      on_success(List.Chars.to_charlist(:date))
-
-    assert {:__on_success, function, [:date]} =
-      on_success(function_in_module(:date))
-    assert function.(3) == 0
-
-
+    on_success(function_in_module(:date))
+    |> assert_fields(calculation: &BuildTest.function_in_module/1,
+                     args: [:date],
+                     from: "on_success(function_in_module(:date))")
+    
     # The variant that accepts functions
     f = &(&1 + 1)
-    assert {:__on_success, f, [:date]} ==
-      on_success(f, applied_to: :date)
+    on_success(f, applied_to: :date)
+    |> assert_fields(calculation: f,
+                     args: [:date],
+                     from: "on_success(<fn>, applied_to: [:date])")
   end
     
   test "metadata propagation" do

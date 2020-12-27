@@ -128,6 +128,7 @@ defmodule TransformerTestSupport.Build do
   def constraint_changeset(opts), do: {:changeset_for_constraint_step, opts}
 
   defmacro on_success(funcall) do
+    from = "on_success(#{Macro.to_string(funcall)})"
     case Macro.decompose_call(funcall) do
       {{:__aliases__, _, aliases},  fun_atom, args} -> 
         composed_module = Enum.reduce(aliases, :Elixir, fn alias, acc ->
@@ -135,13 +136,13 @@ defmodule TransformerTestSupport.Build do
         end)
         fun = Function.capture(composed_module, fun_atom, length(args))
         quote do
-          FieldCalculator.new(unquote(fun), unquote(args))
+          FieldCalculator.new(unquote(fun), unquote(args), unquote(from))
         end
 
       {fun_atom, args} ->
         quote do 
           fun = Function.capture(__MODULE__, unquote(fun_atom), length(unquote(args)))
-          FieldCalculator.new(fun, unquote(args))
+          FieldCalculator.new(fun, unquote(args), unquote(from))
         end
 
       _ ->
@@ -153,7 +154,7 @@ defmodule TransformerTestSupport.Build do
   end
 
   def on_success(f, applied_to: fields) when is_list(fields),
-    do: FieldCalculator.new(f, fields)
+    do: FieldCalculator.new(f, fields, "on_success(<fn>, applied_to: #{inspect fields})")
   def on_success(f, applied_to: field),
     do: on_success(f, applied_to: [field])
 
