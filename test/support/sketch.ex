@@ -40,4 +40,7 @@ defmodule TransformerTestSupport.Sketch do
     changeset(fields)
     |> Map.put(:valid?, false)
   end
+
+  def   valid_changes(fields), do:   valid_changeset(changes: Enum.into(fields, %{}))
+  def invalid_changes(fields), do: invalid_changeset(changes: Enum.into(fields, %{}))
 end
