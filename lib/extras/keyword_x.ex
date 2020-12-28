@@ -36,6 +36,16 @@ defmodule KeywordX do
     Enum.map(kvs, fn {k, v} -> {k, f.(v)} end)
   end
 
+  def split_by_value_predicate(kvs, value_pred) do
+    pair_pred = fn {_key, value} -> value_pred.(value) end
+    split = Enum.group_by(kvs, pair_pred)
+
+    %{true => Map.get(split, true, []),
+      false => Map.get(split, false, []) }
+  end
+
+
+
   # ----------------------------------------------------------------------------
 
   def update_matching_structs(kvs, s, f) do

@@ -53,8 +53,26 @@ defmodule KeywordXTest do
     assert KeywordX.map_values([a: 1, b: 2], &(-&1)) == [-1, -2]
   end
 
-  test "`map_over_values` reatins keys, transforms values" do
+  test "`map_over_values` retains keys, transforms values" do
     assert KeywordX.map_over_values([a: 1, b: 2], &(-&1)) == [a: -1, b: -2]
+  end
+
+
+  test "split_by_value_predicate" do
+    lt0 = &(&1 < 0)
+
+    input = [a: 1, b: 2, c: -1, d: 1]
+    actual = KeywordX.split_by_value_predicate(input, lt0)
+    expected = %{true: [c: -1],
+                 false: [a: 1, b: 2, d: 1] }
+    assert actual == expected
+
+    # missing values
+    actual = KeywordX.split_by_value_predicate([], lt0)
+    expected = %{true: [], false: []}
+    assert actual == expected
+    
+    
   end
   
   defmodule Struct do
