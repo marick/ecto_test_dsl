@@ -17,8 +17,8 @@ defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
 
   test "handling of auto-generated valid/invalid checks" do
     a = nonflow_assertion_runners_for(&(run Sketch.success_example(), &1))
-    Sketch.valid_changeset()   |> a.pass.()
-    Sketch.invalid_changeset() |> a.fail.(~r/changeset is invalid/)
+    ChangesetX.valid_changeset()   |> a.pass.()
+    ChangesetX.invalid_changeset() |> a.fail.(~r/changeset is invalid/)
   end
   
   # ----------------------------------------------------------------------------
@@ -26,7 +26,7 @@ defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
     a = nonflow_assertion_runners_for(fn example_checks, changeset_changes ->
       run(
         Sketch.example(:ok, :success, changeset_for_validation_step: example_checks),
-        Sketch.valid_changeset(       changes: changeset_changes))
+        ChangesetX.valid_changeset(       changes: changeset_changes))
     end)
     
     [[:no_changes], %{}        ] |> a.pass.()
@@ -64,7 +64,7 @@ defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
     a = nonflow_assertion_runners_for(fn example_params, changeset_changes ->
       Dynamic.example_in_workflow(Examples, :validation_success,
         [params: example_params])
-      |> run(Sketch.valid_changeset(changes: changeset_changes))
+      |> run(ChangesetX.valid_changeset(changes: changeset_changes))
     end)
 
     message = ~r/`:date`.* does not match/

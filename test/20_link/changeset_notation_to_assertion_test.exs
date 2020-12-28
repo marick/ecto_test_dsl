@@ -3,7 +3,6 @@ defmodule Link.ChangesetNotationToAssertionTest do
   alias T.Link.ChangesetNotationToAssertion, as: Translate
   alias Ecto.Changeset
   use T.Case
-  alias T.Sketch
 
   describe "creation and running" do
     test "a symbol" do 
@@ -43,14 +42,14 @@ defmodule Link.ChangesetNotationToAssertionTest do
       
       assertion_fails("The changeset is invalid",
         fn ->
-          valid.(Sketch.invalid_changeset(changes: %{}))
+          valid.(ChangesetX.invalid_changeset(changes: %{}))
         end)
 
       assertion_fails("Field `:b` has the wrong value",
         [left: 3, right: "b",
          expr: [changeset: [{:changes, [a: "a", b: "b"]}, "..."]]],
         fn ->
-          changes.(Sketch.valid_changeset(changes: %{a: "a", b: 3}))
+          changes.(ChangesetX.valid_changeset(changes: %{a: "a", b: 3}))
         end)
 
     end      

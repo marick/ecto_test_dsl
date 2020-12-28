@@ -2,7 +2,6 @@ defmodule Nouns.AsCastTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   alias T.Nouns.AsCast
-  alias T.Sketch
 
   defmodule Association do
     use Ecto.Schema
@@ -68,7 +67,7 @@ defmodule Nouns.AsCastTest do
       [left: 384, right: 383,
        expr: [additional_context, "expanded to", wrapped_location]],
       fn ->
-        Sketch.valid_changeset(changes: %{int_field: 384}) |> assertion.()
+        ChangesetX.valid_changeset(changes: %{int_field: 384}) |> assertion.()
       end)
   end
 

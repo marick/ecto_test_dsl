@@ -2,7 +2,6 @@ defmodule Nouns.FieldCalculatorTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   alias T.Nouns.FieldCalculator
-  alias T.Sketch
   alias FlowAssertions.Define.Tabular
   import T.Build
 
@@ -87,7 +86,7 @@ defmodule Nouns.FieldCalculatorTest do
     expect = fn changeset_fields, expected_ ->
       expected = MapSet.new(expected_)
 
-      Sketch.valid_changeset(changeset_fields)
+      ChangesetX.valid_changeset(changeset_fields)
       |> FieldCalculator.valid_prerequisites
       |> assert_equal(expected)
     end
@@ -119,7 +118,7 @@ defmodule Nouns.FieldCalculatorTest do
     test "readable format is produced" do
       expect = fn changeset_fields, expected ->
         f = &(&1 + &2 + &3)
-        changeset = Sketch.valid_changeset(changeset_fields)
+        changeset = ChangesetX.valid_changeset(changeset_fields)
         [derived: FieldCalculator.new(f, [:field1, 5, :field2])]
         |> FieldCalculator.changeset_checks(changeset)
         |> assert_equal(expected)
@@ -139,7 +138,7 @@ defmodule Nouns.FieldCalculatorTest do
       ]
 
       changeset = 
-        Sketch.valid_changes(to_be_present: 5)
+        ChangesetX.valid_changes(to_be_present: 5)
 
       [no_change, change] =
         FieldCalculator.changeset_checks(calculators, changeset)
@@ -158,22 +157,22 @@ defmodule Nouns.FieldCalculatorTest do
 
     [missing, present] =
       input 
-      |> FieldCalculator.assertions(Sketch.valid_changes(datestring: "2001-01-01"))
+      |> FieldCalculator.assertions(ChangesetX.valid_changes(datestring: "2001-01-01"))
       |> Enum.map(&Tabular.nonflow_assertion_runners_for/1)
 
     # dependency_missing
-    Sketch.valid_changes(some_other_field: "irrelevant")
+    ChangesetX.valid_changes(some_other_field: "irrelevant")
     |> missing.pass.()
     
-    Sketch.valid_changes(some_other_field: "irrelevant", dependency_missing: 5)
+    ChangesetX.valid_changes(some_other_field: "irrelevant", dependency_missing: 5)
     |> missing.fail.("Field `:dependency_missing` should not have changed, but it did")
     |> missing.plus.(expr: "on_success(Date.from_iso8601!(:missing_field))")
     
     # dependency_present
-    Sketch.valid_changes(dependency_present: ~D[2001-01-01])
+    ChangesetX.valid_changes(dependency_present: ~D[2001-01-01])
     |> present.pass.()
 
-    Sketch.valid_changes(dependency_present: ~D[2111-11-11])
+    ChangesetX.valid_changes(dependency_present: ~D[2111-11-11])
     |> present.fail.("Field `:dependency_present` has the wrong value")
     |> present.plus.(left: ~D[2111-11-11], right: ~D[2001-01-01])
     |> present.plus.(expr: "on_success(Date.from_iso8601!(:datestring))")

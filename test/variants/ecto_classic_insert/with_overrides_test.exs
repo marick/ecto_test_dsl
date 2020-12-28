@@ -7,7 +7,7 @@ defmodule Variants.EctoClassic.Insert.WithOverridesTest do
     use T.Variants.EctoClassic.Insert
     
     def changeset_maker(SomeSchema, _params) do
-      T.Sketch.valid_changeset(changes: %{field: "value"})
+      ChangesetX.valid_changeset(changes: %{field: "value"})
     end      
     
     def insertion_doer(SomeRepo, %Changeset{changes: %{field: "value"}}) do

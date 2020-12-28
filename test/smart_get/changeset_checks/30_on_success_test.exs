@@ -5,7 +5,6 @@ defmodule SmartGet.ChangesetChecks.OnSuccessTest do
   alias T.SmartGet.Example
   import T.Build
   alias T.RunningExample
-  alias T.Sketch
 
   
   defmodule OnSuccess do
@@ -106,5 +105,5 @@ defmodule SmartGet.ChangesetChecks.OnSuccessTest do
   # ------------ Helper functions ----------------------------------------------
 
   defp valid_with_changes(opts),
-    do: Sketch.valid_changeset(changes: Enum.into(opts, %{}))
+    do: ChangesetX.valid_changeset(changes: Enum.into(opts, %{}))
 end
