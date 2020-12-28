@@ -2,8 +2,6 @@ defmodule BuildTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   use T.Predefines
-  alias T.Nouns.FieldCalculator
-  
 
   defmodule Examples do
     use Template.Trivial

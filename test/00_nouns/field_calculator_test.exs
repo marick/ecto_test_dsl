@@ -115,41 +115,67 @@ defmodule Nouns.FieldCalculatorTest do
     [ [:field1, 5, :field2], [:field2, :field1] ] |> expect.(true)
   end
 
-  test "creating checks based on a changeset" do
-    expect = fn changeset_fields, expected ->
-      f = &(&1 + &2 + &3)
-      changeset = Sketch.valid_changeset(changeset_fields)
-      [derived: FieldCalculator.new(f, [:field1, 5, :field2])]
-      |> FieldCalculator.changeset_checks(changeset)
-      |> assert_equal(expected)
+  describe "creating checks based on a changeset" do 
+    test "readable format is produced" do
+      expect = fn changeset_fields, expected ->
+        f = &(&1 + &2 + &3)
+        changeset = Sketch.valid_changeset(changeset_fields)
+        [derived: FieldCalculator.new(f, [:field1, 5, :field2])]
+        |> FieldCalculator.changeset_checks(changeset)
+        |> assert_equal(expected)
+      end
+      
+      [changes: %{field1: 1, field2: 2}] |> expect.(change: [derived: 8])
+      
+      # A missing field means a no-change is expected
+      [changes: %{field1: 1}] |> expect.(no_changes: :derived)
     end
 
-    [changes: %{field1: 1, field2: 2}] |> expect.(changes: [derived: 8])
+    test "order is preserved" do
+      inc = &(&1 + 1)
+      calculators = [
+        no_change: FieldCalculator.new(inc, [:to_be_missing]),
+        change:    FieldCalculator.new(inc, [:to_be_present])
+      ]
 
-    # A missing field means nothing checked
-    [changes: %{field1: 1}] |> expect.([])
+      changeset = 
+        Sketch.valid_changes(to_be_present: 5)
+
+      [no_change, change] =
+        FieldCalculator.changeset_checks(calculators, changeset)
+
+      assert no_change == {:no_changes, :no_change}
+      assert change    == {:change, [change: 6]}
+    end
   end
+  
 
   test "turning calculations into assertions" do
     input = [
-      invalid: on_success(Date.from_iso8601!(:missing_field)), 
-      dependent: on_success(Date.from_iso8601!(:datestring))
-    ] |> IO.inspect
+      dependency_missing: on_success(Date.from_iso8601!(:missing_field)), 
+      dependency_present: on_success(Date.from_iso8601!(:datestring))
+    ]
 
-    a =
+    [missing, present] =
       input 
       |> FieldCalculator.assertions(Sketch.valid_changes(datestring: "2001-01-01"))
-      |> singleton_content
-      |> Tabular.nonflow_assertion_runners_for
+      |> Enum.map(&Tabular.nonflow_assertion_runners_for/1)
 
-    Sketch.valid_changes(dependent:   ~D[2001-01-01])
-    |> a.pass.()
+    # dependency_missing
+    Sketch.valid_changes(some_other_field: "irrelevant")
+    |> missing.pass.()
+    
+    Sketch.valid_changes(some_other_field: "irrelevant", dependency_missing: 5)
+    |> missing.fail.("Field `:dependency_missing` should not have changed, but it did")
+    |> missing.plus.(expr: "on_success(Date.from_iso8601!(:missing_field))")
+    
+    # dependency_present
+    Sketch.valid_changes(dependency_present: ~D[2001-01-01])
+    |> present.pass.()
 
-    Sketch.valid_changes(dependent: ~D[2111-11-11])
-    |> a.fail.("Field `:dependent` has the wrong value")
-    |> a.plus.(left: ~D[2111-11-11], right: ~D[2001-01-01])
-#    |> a.plus.(expr: "slsl")
-
+    Sketch.valid_changes(dependency_present: ~D[2111-11-11])
+    |> present.fail.("Field `:dependency_present` has the wrong value")
+    |> present.plus.(left: ~D[2111-11-11], right: ~D[2001-01-01])
+    |> present.plus.(expr: "on_success(Date.from_iso8601!(:datestring))")
   end
-  
 end 

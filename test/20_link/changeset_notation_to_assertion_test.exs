@@ -2,7 +2,6 @@ defmodule Link.ChangesetNotationToAssertionTest do
   use TransformerTestSupport.Drink.Me
   alias T.Link.ChangesetNotationToAssertion, as: Translate
   alias Ecto.Changeset
-  alias FlowAssertions.Ecto.ChangesetA
   use T.Case
   alias T.Sketch
 

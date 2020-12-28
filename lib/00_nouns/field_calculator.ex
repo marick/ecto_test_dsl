@@ -32,27 +32,34 @@ defmodule TransformerTestSupport.Nouns.FieldCalculator do
   end
 
   def assertions(named_calculators, changeset) when is_list(named_calculators) do
-    changeset_checks(named_calculators, changeset)
-    |> Translate.from
+    named_calculators
+    |> changeset_checks(changeset)
+    |> Enum.zip(named_calculators)
+    |> Enum.map(&translate_one_check/1)
+  end
+
+  defp translate_one_check({check, {_, %__MODULE__{from: from}}}) do
+    raw_assertion = Translate.from(check)
+    fn changeset ->
+      adjust_assertion_error(fn -> 
+        raw_assertion.(changeset)
+      end,
+        expr: from)
+    end
   end
 
   def changeset_checks(named_calculators, changeset) do
-    relevant_calculators =
-      named_calculators
-      |> KeywordX.filter_by_value(&(relevant?(&1, valid_prerequisites(changeset))))
-
-    changes =
-    for {name, calculator} <- relevant_calculators do
-      args = translate_args(calculator.args, changeset)
-      {name, apply(calculator.calculation, args)}
-    end
-      
-
-    [changes: changes]
-    |> KeywordX.reject_by_value(&Enum.empty?/1)
+    valid_prerequisites = valid_prerequisites(changeset)
     
-    # args = 
-    # [changes: [{name, apply(calculator.calculation, args)}]]
+    for {name, calculator} <- named_calculators do
+      case relevant?(calculator, valid_prerequisites) do
+        true -> 
+          args = translate_args(calculator.args, changeset)
+          {:change, [{name, apply(calculator.calculation, args)}]}
+        false -> 
+          {:no_changes, name}
+      end
+    end
   end
 
   def valid_prerequisites(changeset) do
