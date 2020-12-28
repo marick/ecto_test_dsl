@@ -147,39 +147,56 @@ defmodule Nouns.FieldCalculatorTest do
     end
   end
 
-
-  test "turning calculations into assertions" do
-    input = [
-      dependency_missing: on_success(Date.from_iso8601!(:missing_field)), 
-      dependency_present: on_success(Date.from_iso8601!(:datestring))
-    ]
-
-    [missing, present] =
-      input 
-      |> FieldCalculator.assertions(ChangesetX.valid_changes(datestring: "2001-01-01"))
-      |> Enum.map(&nonflow_assertion_runners_for/1)
-
-    # dependency_missing
-    ChangesetX.valid_changes(some_other_field: "irrelevant")
-    |> missing.pass.()
-    
-    ChangesetX.valid_changes(some_other_field: "irrelevant", dependency_missing: 5)
-    |> missing.fail.("Field `:dependency_missing` should not have changed, but it did")
-    |> missing.plus.(expr: "on_success(Date.from_iso8601!(:missing_field))")
-    
-    # dependency_present
-    ChangesetX.valid_changes(dependency_present: ~D[2001-01-01])
-    |> present.pass.()
-
-    ChangesetX.valid_changes(dependency_present: ~D[2111-11-11])
-    |> present.fail.("Field `:dependency_present` has the wrong value")
-    |> present.plus.(left: ~D[2111-11-11], right: ~D[2001-01-01])
-    |> present.plus.(expr: "on_success(Date.from_iso8601!(:datestring))")
-
-
-    ChangesetX.valid_changes(calculated_field: :is_missing_in_changeset)
-    |> present.fail.("Field `:dependency_present` is missing")
-    |> present.plus.(left: %{calculated_field: :is_missing_in_changeset},
-                     right: [dependency_present: ~D[2001-01-01]])
-  end
+  describe "FieldCalculator.assertions" do 
+    test "turning calculations into assertions" do
+      input = [
+        dependency_missing: on_success(Date.from_iso8601!(:missing_field)), 
+        dependency_present: on_success(Date.from_iso8601!(:datestring))
+      ]
+  
+      [missing, present] =
+        input 
+        |> FieldCalculator.assertions(ChangesetX.valid_changes(datestring: "2001-01-01"))
+        |> Enum.map(&nonflow_assertion_runners_for/1)
+  
+      # dependency_missing
+      ChangesetX.valid_changes(some_other_field: "irrelevant")
+      |> missing.pass.()
+      
+      ChangesetX.valid_changes(some_other_field: "irrelevant", dependency_missing: 5)
+      |> missing.fail.("Field `:dependency_missing` should not have changed, but it did")
+      |> missing.plus.(expr: "on_success(Date.from_iso8601!(:missing_field))")
+      
+      # dependency_present
+      ChangesetX.valid_changes(dependency_present: ~D[2001-01-01])
+      |> present.pass.()
+  
+      ChangesetX.valid_changes(dependency_present: ~D[2111-11-11])
+      |> present.fail.("Field `:dependency_present` has the wrong value")
+      |> present.plus.(left: ~D[2111-11-11], right: ~D[2001-01-01])
+      |> present.plus.(expr: "on_success(Date.from_iso8601!(:datestring))")
+  
+  
+      ChangesetX.valid_changes(calculated_field: :is_missing_in_changeset)
+      |> present.fail.("Field `:dependency_present` is missing")
+      |> present.plus.(left: %{calculated_field: :is_missing_in_changeset},
+                       right: [dependency_present: ~D[2001-01-01]])
+    end
+  
+  
+    test "exceptions during calculations are converted to AssertionError" do
+      # It would be nice to have an `all_of` checker here
+      msg = 
+        ~r/Exception raised while calculating value for `:field`.*cannot parse "oops" as date, reason: :invalid_format/s
+  
+      assertion_fails(msg,
+        [expr: "on_success(Date.from_iso8601!(:datestring))",
+         left: ["Here are the actual arguments used": ["oops"]]],
+        fn ->
+          [field: on_success(Date.from_iso8601!(:datestring))]
+          |> FieldCalculator.assertions(ChangesetX.valid_changes(datestring: "oops"))
+        end)
+          
+    end        
+  end  
 end 

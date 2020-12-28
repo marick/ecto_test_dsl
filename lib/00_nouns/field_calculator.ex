@@ -2,6 +2,7 @@ defmodule TransformerTestSupport.Nouns.FieldCalculator do
   use TransformerTestSupport.Drink.Me
   import FlowAssertions.Define.BodyParts
   alias T.Link.ChangesetNotationToAssertion, as: Translate
+  import ExUnit.Assertions
   
   @moduledoc """
   A description of how a field's value can be calculated in terms of
@@ -53,9 +54,18 @@ defmodule TransformerTestSupport.Nouns.FieldCalculator do
     
     for {name, calculator} <- named_calculators do
       case relevant?(calculator, valid_prerequisites) do
-        true -> 
+        true ->
           args = translate_args(calculator.args, changeset)
-          {:change, [{name, apply(calculator.calculation, args)}]}
+          try do 
+            {:change, [{name, apply(calculator.calculation, args)}]}
+          rescue ex ->
+            msg =
+              "Exception raised while calculating value for `#{inspect name}`\n  " <>
+              ex.message
+              elaborate_flunk(msg,
+                expr: calculator.from, 
+                left: ["Here are the actual arguments used": args])
+          end
         false -> 
           {:no_changes, name}
       end
