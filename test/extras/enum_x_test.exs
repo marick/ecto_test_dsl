@@ -1,4 +1,5 @@
 defmodule EnumXTest do
+  use TransformerTestSupport.Drink.Me
   use ExUnit.Case
 
   describe "take_until" do

@@ -8,6 +8,8 @@ defmodule TransformerTestSupport.Drink.Me do
       alias T.Build
       alias T.SmartGet
       alias T.Messages
+
+      alias T.{ChangesetX, EnumX, KeywordX}
     end
   end
 end

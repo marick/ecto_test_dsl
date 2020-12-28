@@ -148,7 +148,7 @@ defmodule Nouns.FieldCalculatorTest do
       assert change    == {:change, [change: 6]}
     end
   end
-  
+
 
   test "turning calculations into assertions" do
     input = [

@@ -1,4 +1,4 @@
-defmodule KeywordX do
+defmodule TransformerTestSupport.KeywordX do
   def translate_keys(opts, key_map) do
     Enum.flat_map(opts, fn {key,v} ->
       case Map.get(key_map, key) do

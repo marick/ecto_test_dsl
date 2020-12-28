@@ -1,4 +1,5 @@
 defmodule KeywordXTest do
+  use TransformerTestSupport.Drink.Me
   use ExUnit.Case
 
   test "translate_keys" do

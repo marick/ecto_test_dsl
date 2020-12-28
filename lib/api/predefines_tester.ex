@@ -10,6 +10,7 @@ defmodule TransformerTestSupport.Predefines.Tester do
       alias T.SmartGet
       alias T.RunningExample
       alias T.RunningExample.TraceServer
+      alias T.KeywordX
         
       @name_of_test_data Module.split(__MODULE__)
       |> Enum.drop(-1) |> Module.safe_concat

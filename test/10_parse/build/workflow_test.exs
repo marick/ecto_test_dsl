@@ -1,4 +1,5 @@
 defmodule Build.WorkflowTest do
+  use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Case
   alias TransformerTestSupport.SmartGet
 
@@ -19,6 +20,7 @@ defmodule Build.WorkflowTest do
     |> assert_equal(:success)
   end
 
+  
   test "workflow examples accumulate" do
     assert Examples.Tester.params(:ok) ==    %{"a" => "1",  "b" => "2"}
     assert Examples.Tester.params(:other) == %{"a" => "11", "b" => "22"}
