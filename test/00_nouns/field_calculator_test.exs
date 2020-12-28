@@ -175,5 +175,11 @@ defmodule Nouns.FieldCalculatorTest do
     |> present.fail.("Field `:dependency_present` has the wrong value")
     |> present.plus.(left: ~D[2111-11-11], right: ~D[2001-01-01])
     |> present.plus.(expr: "on_success(Date.from_iso8601!(:datestring))")
+
+
+    ChangesetX.valid_changes(calculated_field: :is_missing_in_changeset)
+    |> present.fail.("Field `:dependency_present` is missing")
+    |> present.plus.(left: %{calculated_field: :is_missing_in_changeset},
+                     right: [dependency_present: ~D[2001-01-01]])
   end
 end 
