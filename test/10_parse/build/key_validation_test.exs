@@ -2,7 +2,6 @@ defmodule Build.KeyValidationTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   alias T.Build.KeyValidation
-  alias FlowAssertions.Define.Tabular
   alias T.Messages
   
 
@@ -13,7 +12,7 @@ defmodule Build.KeyValidationTest do
       required  # kludge for `pass`
     end
     
-    a = Tabular.assertion_runners_for(reorganized)
+    a = assertion_runners_for(reorganized)
 
     # missing keys
     [[:required], [], %{required: 1}] |> a.pass.()

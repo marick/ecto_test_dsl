@@ -2,7 +2,6 @@ defmodule Nouns.FieldCalculatorTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   alias T.Nouns.FieldCalculator
-  alias FlowAssertions.Define.Tabular
   import T.Build
 
   defmodule Association do
@@ -158,7 +157,7 @@ defmodule Nouns.FieldCalculatorTest do
     [missing, present] =
       input 
       |> FieldCalculator.assertions(ChangesetX.valid_changes(datestring: "2001-01-01"))
-      |> Enum.map(&Tabular.nonflow_assertion_runners_for/1)
+      |> Enum.map(&nonflow_assertion_runners_for/1)
 
     # dependency_missing
     ChangesetX.valid_changes(some_other_field: "irrelevant")
