@@ -1,4 +1,7 @@
 defmodule TransformerTestSupport.KeywordX do
+  import ExUnit.Assertions
+  import FlowAssertions.Define.{Defchain,BodyParts}
+  
   def translate_keys(opts, key_map) do
     Enum.flat_map(opts, fn {key,v} ->
       case Map.get(key_map, key) do
@@ -75,5 +78,10 @@ defmodule TransformerTestSupport.KeywordX do
     end)
   end
 
-  
+  defchain assert_no_duplicate_keys(kws) do
+    keys = Keyword.keys(kws)
+    elaborate_assert(length(keys) == length(Enum.uniq(keys)),
+      "Keyword list should not have duplicate keys",
+      left: kws, right: keys)
+  end
 end

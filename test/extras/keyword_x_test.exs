@@ -1,6 +1,6 @@
 defmodule KeywordXTest do
   use TransformerTestSupport.Drink.Me
-  use ExUnit.Case
+  use T.Case
 
   test "translate_keys" do
     expect = fn [kws, key_map], expected ->
@@ -106,5 +106,16 @@ defmodule KeywordXTest do
     transforms = [Struct, &Struct.transform/1]
     actual = KeywordX.update_matching_structs(args, transforms) 
     assert actual == [:key, fnord: 3]
+  end
+
+  test "assert_no_duplicate_keys" do
+    a = assertion_runners_for(&KeywordX.assert_no_duplicate_keys/1)
+
+    [] |> a.pass.()
+    [a: 1, b: 2] |> a.pass.()
+
+    [a: 1, b: 2, a: 3] |> a.fail.("Keyword list should not have duplicate keys")
+                       |> a.plus.(left: [a: 1, b: 2, a: 3],
+                                  right: [:a, :b, :a])
   end
 end
