@@ -1,6 +1,5 @@
 defmodule VariantSupport.Changeset.AcceptParamsTest do
-  use TransformerTestSupport.Drink.Me
-  use T.Case
+  use TransformerTestSupport.Case
   alias T.VariantSupport.ChangesetSupport
   alias T.RunningExample
   alias Template.Dynamic

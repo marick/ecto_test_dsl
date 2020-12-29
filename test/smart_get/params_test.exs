@@ -1,6 +1,5 @@
 defmodule SmartGet.ParamsTest do
-  use TransformerTestSupport.Drink.Me
-  use T.Case
+  use TransformerTestSupport.Case
   use T.Parse.All
   alias Template.Dynamic
 

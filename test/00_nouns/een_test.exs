@@ -1,6 +1,5 @@
 defmodule Nouns.EENTest do
-  use TransformerTestSupport.Drink.Me
-  use T.Case
+  use TransformerTestSupport.Case
 
   test "there are three special ways to create an EEN" do
     expect = fn een, kvs ->

@@ -1,6 +1,5 @@
 defmodule KeywordXTest do
-  use TransformerTestSupport.Drink.Me
-  use T.Case
+  use TransformerTestSupport.Case
 
   test "translate_keys" do
     expect = fn [kws, key_map], expected ->

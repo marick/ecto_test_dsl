@@ -1,6 +1,5 @@
 defmodule Variants.EctoClassic.Insert.WithOverridesTest do
-  use TransformerTestSupport.Drink.Me
-  use T.Case
+  use TransformerTestSupport.Case
   alias Ecto.Changeset
   
   defmodule Examples do

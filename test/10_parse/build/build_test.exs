@@ -1,6 +1,5 @@
 defmodule BuildTest do
-  use TransformerTestSupport.Drink.Me
-  use T.Case
+  use TransformerTestSupport.Case
   use T.Predefines
 
   defmodule Examples do

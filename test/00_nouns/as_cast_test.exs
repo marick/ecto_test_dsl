@@ -1,6 +1,5 @@
 defmodule Nouns.AsCastTest do
-  use TransformerTestSupport.Drink.Me
-  use T.Case
+  use TransformerTestSupport.Case
   alias T.Nouns.AsCast
 
   defmodule Association do

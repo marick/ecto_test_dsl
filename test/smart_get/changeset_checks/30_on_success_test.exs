@@ -1,6 +1,5 @@
 defmodule SmartGet.ChangesetChecks.OnSuccessTest do
-  use TransformerTestSupport.Drink.Me
-  use T.Case
+  use TransformerTestSupport.Case
   alias T.SmartGet.ChangesetChecks, as: Checks
   alias T.SmartGet.Example
   use T.Parse.All

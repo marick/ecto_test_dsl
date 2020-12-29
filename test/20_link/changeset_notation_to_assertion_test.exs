@@ -1,8 +1,7 @@
 defmodule Link.ChangesetNotationToAssertionTest do
-  use TransformerTestSupport.Drink.Me
+  use TransformerTestSupport.Case
   alias T.Link.ChangesetNotationToAssertion, as: Translate
   alias Ecto.Changeset
-  use T.Case
 
   describe "creation and running" do
     test "a symbol" do 

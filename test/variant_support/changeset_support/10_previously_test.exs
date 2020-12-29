@@ -57,7 +57,7 @@ defmodule VariantSupport.Changeset.PreviouslyTest do
   end
 
   defmodule ActualTests do
-    use T.Case
+    use TransformerTestSupport.Case
 
     # Note: this won't necessarily prevent races if any other tests
     # use these names.

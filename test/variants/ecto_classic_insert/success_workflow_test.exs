@@ -1,6 +1,5 @@
 defmodule Variants.EctoClassic.Insert.SuccessWorkflowTest do
-  use TransformerTestSupport.Drink.Me
-  use T.Case
+  use TransformerTestSupport.Case
   use T.Parse.All
   import FlowAssertions.AssertionA
   

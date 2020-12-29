@@ -1,6 +1,5 @@
 defmodule Nouns.FieldRefTest do
-  use TransformerTestSupport.Drink.Me
-  use T.Case
+  use TransformerTestSupport.Case
 
   test "creation" do
     expect = fn een, kvs ->

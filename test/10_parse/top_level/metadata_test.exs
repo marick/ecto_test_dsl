@@ -1,6 +1,5 @@
 defmodule Parse.TopLevel.MetadataTest do
-  use TransformerTestSupport.Drink.Me
-  use T.Case
+  use TransformerTestSupport.Case
   use T.Predefines
   use T.Parse.All
   alias T.Parse.TopLevel

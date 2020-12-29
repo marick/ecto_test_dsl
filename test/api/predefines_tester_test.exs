@@ -1,6 +1,5 @@
 defmodule Api.PredefinesTesterTest do
-  use TransformerTestSupport.Drink.Me
-  use T.Case
+  use TransformerTestSupport.Case
 
 
   describe "params" do

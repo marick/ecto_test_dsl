@@ -1,6 +1,5 @@
 defmodule Nouns.FieldCalculatorTest do
-  use TransformerTestSupport.Drink.Me
-  use T.Case
+  use TransformerTestSupport.Case
   alias T.Nouns.FieldCalculator
   use T.Parse.All
 

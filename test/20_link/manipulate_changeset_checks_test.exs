@@ -1,6 +1,5 @@
 defmodule Link.ManipulateChangesetChecksTest do
-  use TransformerTestSupport.Drink.Me
-  use T.Case
+  use TransformerTestSupport.Case
   import T.Link.ManipulateChangesetChecks
   use T.Parse.All
 
