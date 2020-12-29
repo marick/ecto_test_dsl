@@ -6,7 +6,8 @@ defmodule TransformerTestSupport.Predefines do
     quote do
       alias TransformerTestSupport, as: T
       alias T.Impl
-      import T.Build, except: [start: 1]  # Variant must define `start`.
+      use T.Parse.All
+      
       alias T.Build
       alias T.{Get,Validations}
       alias T.SmartGet

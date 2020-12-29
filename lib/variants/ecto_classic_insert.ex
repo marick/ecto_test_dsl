@@ -1,6 +1,7 @@
 defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
   use TransformerTestSupport.Drink.Me
   alias T.VariantSupport.ChangesetSupport
+  alias T.Parse.TopLevel
   alias T.Variants.EctoClassic.Insert, as: ThisVariant
 
   import FlowAssertions.Define.BodyParts

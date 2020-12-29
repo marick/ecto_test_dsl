@@ -1,5 +1,4 @@
 defmodule Build.WorkflowTest do
-  use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Case
   alias TransformerTestSupport.SmartGet
 

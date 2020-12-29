@@ -28,7 +28,7 @@ defmodule Template.Dynamic do
 
   def example_in_workflow(test_data, workflow_name, example_opts) do
     test_data
-    |> Build.workflow(workflow_name, only_example: example_opts)
+    |> TopLevel.workflow(workflow_name, only_example: example_opts)
     |> TopLevel.propagate_metadata
     |> Example.get(:only_example)
   end

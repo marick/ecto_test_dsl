@@ -4,6 +4,7 @@ defmodule TransformerTestSupport.Build do
   import DeepMerge, only: [deep_merge: 2]
   import FlowAssertions.Define.BodyParts
   alias T.Nouns.{FieldCalculator,AsCast}
+  alias T.Parse.Hooks
 
   @moduledoc """
   """
@@ -26,7 +27,7 @@ defmodule TransformerTestSupport.Build do
     
     @starting_test_data
     |> Map.merge(map_data)
-    |> run_start_hook
+    |> Hooks.run_start_hook
   end
 
   @required_keys [:module_under_test, :variant] ++ Map.keys(@starting_test_data)
@@ -58,24 +59,6 @@ defmodule TransformerTestSupport.Build do
 
   # ----------------------------------------------------------------------------
 
-  def workflow(so_far, workflow, raw_examples) do
-    earlier_examples = so_far.examples
-
-    run_variant(so_far, :assert_workflow_hook, [workflow])
-    
-    updated_examples =
-      Normalize.as(:example_pairs, raw_examples)
-      |> attach_workflow_metadata(workflow)
-      |> ParamShorthand.build_time_expansion(earlier_examples)
-    Map.put(so_far, :examples, updated_examples)
-  end
-
-  defp attach_workflow_metadata(pairs, workflow) do
-    for {name, example} <- pairs do
-      metadata = %{metadata: %{workflow_name: workflow, name: name}}
-      {name, deep_merge(example, metadata)}
-    end
-  end
 
   # ----------------------------------------------------------------------------
 
@@ -155,25 +138,4 @@ defmodule TransformerTestSupport.Build do
       end
     end
   end
-
-  # ----------------------------------------------------------------------------
-
-  defp has_hook?(nil, _hook_tuple), do: false
-  
-  defp has_hook?(variant, hook_tuple), 
-    do: hook_tuple in variant.__info__(:functions)
-
-  defp run_variant(test_data, hook_name, rest_args) do
-    hook_tuple = {hook_name, 1 + length(rest_args)}
-    variant = Map.get(test_data, :variant)  
-    case has_hook?(variant, hook_tuple) do
-      true ->
-        apply variant, hook_name, [test_data | rest_args]
-      false ->
-        test_data
-    end
-  end
-
-  defp run_start_hook(%{variant: variant} = test_data_so_far),
-    do: apply variant, :run_start_hook, [test_data_so_far]
 end

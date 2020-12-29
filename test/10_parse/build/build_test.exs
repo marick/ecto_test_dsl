@@ -1,6 +1,7 @@
 defmodule BuildTest do
   use TransformerTestSupport.Case
   use T.Predefines
+  alias T.Parse.TopLevel
 
   defmodule Examples do
     use Template.Trivial
@@ -45,7 +46,7 @@ defmodule BuildTest do
   test "workflow" do
     %{examples: [new: new, ok: ok]} =
       Examples.start(@minimal_start)
-      |> Build.workflow(:valid,
+      |> TopLevel.workflow(:valid,
            ok: [params(age: 1)],
            new: [params_like(:ok, except: [age: 2])])
 
