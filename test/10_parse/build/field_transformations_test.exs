@@ -2,7 +2,7 @@ defmodule Build.FieldTransformationsTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   use T.Predefines
-  import T.Build
+  use T.Parse.All
   alias T.Nouns.{AsCast,FieldCalculator}
 
   @empty %{

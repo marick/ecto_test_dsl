@@ -2,7 +2,7 @@ defmodule Link.ManipulateChangesetChecksTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   import T.Link.ManipulateChangesetChecks
-  import T.Build
+  use T.Parse.All
 
   test "replace_check_values" do
     expect = fn original, expected ->

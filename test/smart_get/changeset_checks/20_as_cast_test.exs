@@ -2,7 +2,7 @@ defmodule SmartGet.ChangesetChecks.AsCastTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   alias T.SmartGet.ChangesetChecks, as: Checks
-  import T.Build
+  use T.Parse.All
   alias T.RunningExample
   alias Template.Dynamic
 

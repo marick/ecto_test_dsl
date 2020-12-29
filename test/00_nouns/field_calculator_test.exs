@@ -2,7 +2,7 @@ defmodule Nouns.FieldCalculatorTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   alias T.Nouns.FieldCalculator
-  import T.Build
+  use T.Parse.All
 
   defmodule Association do
     use Ecto.Schema

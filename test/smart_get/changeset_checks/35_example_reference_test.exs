@@ -1,7 +1,7 @@
 defmodule SmartGet.ChangesetChecks.ExampleReferenceTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
-  import T.Build
+  use T.Parse.All
   alias T.RunningExample
 
   defmodule Schema do

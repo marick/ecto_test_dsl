@@ -3,7 +3,7 @@ defmodule VariantSupport.Changeset.ParamsTest do
   use T.Case
   alias T.VariantSupport.ChangesetSupport
   alias T.RunningExample
-  import T.Build
+  use T.Parse.All
   alias Ecto.Changeset
 
   defmodule Species do

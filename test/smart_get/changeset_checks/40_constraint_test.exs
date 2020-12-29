@@ -2,7 +2,7 @@ defmodule SmartGet.ChangesetChecks.ConstraintTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   alias T.SmartGet.ChangesetChecks, as: Checks
-  import T.Build
+  use T.Parse.All
   alias Template.Dynamic
 
   defmodule Examples do 

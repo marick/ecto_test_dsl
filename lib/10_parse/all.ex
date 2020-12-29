@@ -8,7 +8,7 @@ defmodule TransformerTestSupport.Parse.All do
       import TransformerTestSupport.Build
       import TransformerTestSupport.Parse.TopLevel
       import TransformerTestSupport.Parse.ExampleFunctions
-      import TransformerTestSupport.Parse.InteriorFunctions
+      import TransformerTestSupport.Parse.InternalFunctions
     end
   end
 end

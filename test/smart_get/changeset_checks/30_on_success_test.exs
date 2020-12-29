@@ -3,7 +3,7 @@ defmodule SmartGet.ChangesetChecks.OnSuccessTest do
   use T.Case
   alias T.SmartGet.ChangesetChecks, as: Checks
   alias T.SmartGet.Example
-  import T.Build
+  use T.Parse.All
   alias T.RunningExample
 
   
