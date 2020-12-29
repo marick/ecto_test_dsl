@@ -7,6 +7,7 @@ defmodule TransformerTestSupport.Sketch do
       field_transformations: [],
       format: :phoenix,
       as_cast: AsCast.nothing,
+      field_calculators: []
     }
     given_metadata = %{name: name, workflow_name: workflow}
 
