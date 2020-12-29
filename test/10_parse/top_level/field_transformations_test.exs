@@ -1,4 +1,4 @@
-defmodule Build.FieldTransformationsTest do
+defmodule Parse.TopLevel.FieldTransformationsTest do
   use TransformerTestSupport.Drink.Me
   use T.Case
   use T.Predefines

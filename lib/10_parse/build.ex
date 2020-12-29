@@ -44,22 +44,6 @@ defmodule TransformerTestSupport.Build do
   def example(test_data, example_name),
     do: test_data.examples |> Keyword.get(example_name)
 
-  def field_transformations(test_data, opts) do
-    as_cast =
-      AsCast.new(test_data.module_under_test,
-        Keyword.get_values(opts, :as_cast) |> Enum.concat)
-
-    calculators =
-      opts
-      |> Keyword.delete(:as_cast)
-      |> KeywordX.assert_no_duplicate_keys
-
-    test_data
-    |> Map.update!(:as_cast, &(AsCast.merge(&1, as_cast)))
-    |> Map.update!(:field_calculators, &(Keyword.merge(&1, calculators)))
-    |> deep_merge(%{field_transformations: opts})
-  end
-
   def replace_steps(test_data, replacements) do
     replacements = Enum.into(replacements, %{})
     DeepMerge.deep_merge(test_data, %{steps: replacements})
