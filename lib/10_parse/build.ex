@@ -1,15 +1,12 @@
 defmodule TransformerTestSupport.Build do
   use TransformerTestSupport.Drink.Me
-  alias T.Build.{Normalize,ParamShorthand,KeyValidation}
-  import DeepMerge, only: [deep_merge: 2]
+  alias T.Build.KeyValidation
   import FlowAssertions.Define.BodyParts
   alias T.Nouns.{FieldCalculator,AsCast}
   alias T.Parse.Hooks
 
   @moduledoc """
   """
-
-  import DeepMerge, only: [deep_merge: 2]
 
   @starting_test_data %{
     format: :raw,
@@ -37,17 +34,6 @@ defmodule TransformerTestSupport.Build do
     required = @required_keys ++ variant_required
     optional = @optional_keys ++ variant_optional
     KeyValidation.assert_valid_keys(test_data, required, optional)
-  end
-
-  @doc """
-  May be useful for debugging
-  """
-  def example(test_data, example_name),
-    do: test_data.examples |> Keyword.get(example_name)
-
-  def replace_steps(test_data, replacements) do
-    replacements = Enum.into(replacements, %{})
-    DeepMerge.deep_merge(test_data, %{steps: replacements})
   end
 
   def step(f, key) do

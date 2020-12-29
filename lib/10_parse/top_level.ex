@@ -45,6 +45,19 @@ defmodule TransformerTestSupport.Parse.TopLevel do
   end
   
   # ----------------------------------------------------------------------------
+  def replace_steps(test_data, replacements) do
+    replacements = Enum.into(replacements, %{})
+    DeepMerge.deep_merge(test_data, %{steps: replacements})
+  end
+
+  # ----------------------------------------------------------------------------
+  @doc """
+  May be useful for debugging
+  """
+  def example(test_data, example_name),
+    do: test_data.examples |> Keyword.get(example_name)
+
+  # ----------------------------------------------------------------------------
   def propagate_metadata(test_data) do
     metadata = Map.delete(test_data, :examples) # Let's not have a recursive structure.
     new_examples = 
