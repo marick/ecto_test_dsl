@@ -90,5 +90,4 @@ defmodule TransformerTestSupport.Nouns.FieldCalculator do
     
   defp translate_arg(arg,  changeset) when is_atom(arg), do: changeset.changes[arg]
   defp translate_arg(arg, _changeset),                   do:                   arg
-
 end

@@ -13,7 +13,7 @@ defmodule TransformerTestSupport.Build do
   @starting_test_data %{
     format: :raw,
     examples: [],
-    field_transformations: [],
+    field_transformations: [],     # Delete
     as_cast: AsCast.nothing,
     field_calculators: []
   }
@@ -58,8 +58,14 @@ defmodule TransformerTestSupport.Build do
       AsCast.new(test_data.module_under_test,
         Keyword.get_values(opts, :as_cast) |> Enum.concat)
 
+    calculators =
+      opts
+      |> Keyword.delete(:as_cast)
+      |> KeywordX.assert_no_duplicate_keys
+
     test_data
     |> Map.update!(:as_cast, &(AsCast.merge(&1, as_cast)))
+    |> Map.update!(:field_calculators, &(Keyword.merge(&1, calculators)))
     |> deep_merge(%{field_transformations: opts})
   end
 
