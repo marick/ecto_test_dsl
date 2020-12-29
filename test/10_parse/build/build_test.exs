@@ -87,16 +87,4 @@ defmodule BuildTest do
                      from: "on_success(<fn>, applied_to: [:date])")
   end
     
-  test "metadata propagation" do
-    Examples.start(@minimal_start)
-    |> Build.workflow(:valid, ok: [params(age: 1)])
-    |> Build.propagate_metadata
-    |> SmartGet.Example.get(:ok)
-    |> Map.get(:metadata)
-    |> assert_fields(workflow_name: :valid,
-                     name: :ok,
-                     module_under_test: SomeSchema,
-                     variant: T.Variants.Trivial)
-    |> refute_field(:examples)
-  end
 end

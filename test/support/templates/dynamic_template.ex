@@ -1,6 +1,7 @@
 defmodule Template.Dynamic do
   use TransformerTestSupport.Drink.Me
   alias T.SmartGet.Example
+  alias T.Parse.TopLevel
 
 
   def configure(examples_module, module_under_test \\ :irrelevant_module_under_test) do
@@ -28,7 +29,7 @@ defmodule Template.Dynamic do
   def example_in_workflow(test_data, workflow_name, example_opts) do
     test_data
     |> Build.workflow(workflow_name, only_example: example_opts)
-    |> Build.propagate_metadata
+    |> TopLevel.propagate_metadata
     |> Example.get(:only_example)
   end
 end
