@@ -1,10 +1,10 @@
 defmodule TransformerTestSupport.Parse.TopLevel do
   use TransformerTestSupport.Drink.Me
-  alias T.Build.{Normalize,ParamShorthand,KeyValidation}
+  alias T.Parse.TopLevel.Normalize
+  alias T.Build.{ParamShorthand,KeyValidation}
   import DeepMerge, only: [deep_merge: 2]
   # import FlowAssertions.Define.BodyParts
   alias T.Nouns.{FieldCalculator,AsCast}
-  alias T.Build.Normalize
   alias T.Parse.Hooks
 
   # ----------------------------------------------------------------------------

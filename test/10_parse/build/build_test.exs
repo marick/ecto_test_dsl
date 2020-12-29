@@ -1,15 +1,10 @@
 defmodule BuildTest do
   use TransformerTestSupport.Case
   use T.Predefines
-  alias T.Parse.TopLevel
 
   defmodule Examples do
     use Template.Trivial
   end
-
-  @minimal_start [
-    module_under_test: SomeSchema,
-  ]
 
   describe "start" do
     # Start is described in variant-specific tests
@@ -43,21 +38,6 @@ defmodule BuildTest do
     end
   end
 
-  test "workflow" do
-    %{examples: [new: new, ok: ok]} =
-      Examples.start(@minimal_start)
-      |> TopLevel.workflow(:valid,
-           ok: [params(age: 1)],
-           new: [params_like(:ok, except: [age: 2])])
-
-      assert ok.params == %{age: 1}
-      assert new.params == %{age: 2}
-
-      assert ok.metadata.workflow_name == :valid
-      assert ok.metadata.name == :ok
-      assert new.metadata.workflow_name == :valid
-      assert new.metadata.name == :new
-  end
 
   def function_in_module(x), do: x - 3
 
