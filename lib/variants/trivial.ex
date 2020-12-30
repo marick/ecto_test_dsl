@@ -2,6 +2,7 @@ defmodule TransformerTestSupport.Variants.Trivial do
   use TransformerTestSupport.Drink.Me
   alias T.Variants.Trivial, as: ThisVariant
   alias T.Parse.Start
+  alias T.Parse.TopLevel.Validate
   
   def start(opts \\ []) do
     Start.start_with_variant(ThisVariant, opts)
@@ -15,7 +16,7 @@ defmodule TransformerTestSupport.Variants.Trivial do
 
   def run_start_hook(top_level) do
     top_level
-    |> Build.validate_keys_including_variant_keys([], [])
+    |> Validate.validate_keys_including_variant_keys([], [])
     |> Map.put(:steps, %{})
     |> Map.put(:workflows, %{})
   end

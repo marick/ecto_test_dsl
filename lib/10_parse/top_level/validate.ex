@@ -2,6 +2,17 @@ defmodule TransformerTestSupport.Parse.TopLevel.Validate do
   use TransformerTestSupport.Drink.Me
   alias T.Messages
   import FlowAssertions.Define.{Defchain,BodyParts}
+  alias T.Parse.Start
+
+  @required_keys [:module_under_test, :variant] ++ Map.keys(Start.starting_test_data)
+  @optional_keys []
+
+  def validate_keys_including_variant_keys(test_data, variant_required, variant_optional) do
+    required = @required_keys ++ variant_required
+    optional = @optional_keys ++ variant_optional
+    assert_valid_keys(test_data, required, optional)
+  end
+
 
   defchain assert_valid_keys(map, required, optional) do
     missing = EnumX.difference(required, Map.keys(map))
