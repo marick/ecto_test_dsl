@@ -1,7 +1,5 @@
 defmodule TransformerTestSupport.Nouns.FieldRef do
   use TransformerTestSupport.Drink.Me
-  import FlowAssertions.Define.BodyParts
-  alias T.Messages
 
   @moduledoc """
   A reference to a field within an example

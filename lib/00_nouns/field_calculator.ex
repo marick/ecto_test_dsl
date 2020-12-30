@@ -2,7 +2,6 @@ defmodule TransformerTestSupport.Nouns.FieldCalculator do
   use TransformerTestSupport.Drink.Me
   import FlowAssertions.Define.BodyParts
   alias T.Link.ChangesetNotationToAssertion, as: Translate
-  import ExUnit.Assertions
   
   @moduledoc """
   A description of how a field's value can be calculated in terms of

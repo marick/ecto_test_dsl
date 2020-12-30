@@ -1,6 +1,5 @@
 defmodule TransformerTestSupport.Build do
   use TransformerTestSupport.Drink.Me
-  alias T.Nouns.{FieldCalculator}
 
   @moduledoc """
   """
