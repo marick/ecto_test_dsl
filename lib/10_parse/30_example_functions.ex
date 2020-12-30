@@ -31,7 +31,7 @@ defmodule TransformerTestSupport.Parse.ExampleFunctions do
   # Nothing is 
   
   def previously(opts) do
-    {:previously, opts}
+    {:setup_instructions, opts}
   end
 
   def changeset(opts), do: {:changeset_for_validation_step, opts}

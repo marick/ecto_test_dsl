@@ -27,7 +27,7 @@ defmodule TransformerTestSupport.Parse.Adjustments.CrossExample do
 
   defp add_setup_required_by_refs(example) do
     params = Map.get(example, :params, [])
-    old = Map.get(example, :previously, [])
+    old = Map.get(example, :setup_instructions, [])
 
     new =
       params
@@ -40,9 +40,9 @@ defmodule TransformerTestSupport.Parse.Adjustments.CrossExample do
       {_, []} ->
         example
       {[], _} -> 
-        Map.put(example, :previously, new)
+        Map.put(example, :setup_instructions, new)
       {_, _} ->
-        Map.put(example, :previously, old ++ new)
+        Map.put(example, :setup_instructions, old ++ new)
     end
   end
 end

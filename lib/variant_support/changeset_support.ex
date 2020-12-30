@@ -59,7 +59,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
 
   def previously(running) do
     prior_work = Keyword.get(running.history, :previously, %{})
-    sources = Map.get(running.example, :previously, [])
+    sources = Map.get(running.example, :setup_instructions, [])
     Previously.from_a_list(sources, running.example, prior_work)
   end
 

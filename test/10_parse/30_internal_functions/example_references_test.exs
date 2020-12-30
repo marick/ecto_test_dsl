@@ -23,11 +23,11 @@ defmodule Parse.InternalFunctions.ExampleReferencesTest do
               params_like(:ok, except: [a: id_of(species: ExampleModule)])
            ])
 
-      assert example(test_data, :similar).previously ==
+      assert example(test_data, :similar).setup_instructions ==
           [insert: een(species: ExampleModule)]
     end
 
-    test "adds on to existing previously" do
+    test "adds on to existing setup" do
       test_data = 
         Examples.started()
         |> workflow(:invalid, name: [
@@ -36,7 +36,7 @@ defmodule Parse.InternalFunctions.ExampleReferencesTest do
              previously(insert: een(:noog))
         ])
 
-      assert example(test_data, :name).previously ==
+      assert example(test_data, :name).setup_instructions ==
           [insert: een(:noog),
            insert: een(species: ExampleModule),
            insert: een(thing: __MODULE__)]
