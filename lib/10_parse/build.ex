@@ -1,8 +1,8 @@
 defmodule TransformerTestSupport.Build do
   use TransformerTestSupport.Drink.Me
   alias T.Parse.TopLevel.Validate
-  alias T.Nouns.{FieldCalculator,AsCast}
-  alias T.Parse.{Hooks,Start}
+  alias T.Nouns.{FieldCalculator}
+  alias T.Parse.{Start}
 
   @moduledoc """
   """
