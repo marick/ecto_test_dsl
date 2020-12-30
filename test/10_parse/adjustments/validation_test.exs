@@ -1,4 +1,4 @@
-defmodule Parse.PostProcessing.ValidateTest do
+defmodule Parse.Adjustments.ValidateTest do
   use TransformerTestSupport.Case
   alias T.Parse.TopLevel.Validate
   alias T.Messages

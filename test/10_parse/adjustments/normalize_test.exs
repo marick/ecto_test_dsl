@@ -1,6 +1,6 @@
-defmodule Parse.PostProcessing.NormalizeTest do
+defmodule Parse.Adjustments.NormalizeTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.Parse.PostProcessing.Normalize
+  alias TransformerTestSupport.Parse.Adjustments.Normalize
 
   test "params become maps" do
     assert Normalize.as(:params, [a: 1, b: 2]) == %{a: 1, b: 2}

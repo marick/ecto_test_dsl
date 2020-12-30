@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Parse.PostProcessing.Normalize do
+defmodule TransformerTestSupport.Parse.Adjustments.Normalize do
   import  ExUnit.Assertions
   
   @moduledoc """

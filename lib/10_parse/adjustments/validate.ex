@@ -21,6 +21,4 @@ defmodule TransformerTestSupport.Parse.TopLevel.Validate do
       Messages.invalid_keys,
       left: [missing: missing, extras: extras])
   end
-
-  
 end
