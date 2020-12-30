@@ -28,12 +28,19 @@ defmodule TransformerTestSupport.Parse.ExampleFunctions do
   end
 
   # ----------------------------------------------------------------------------
+  # Nothing is 
+  
   def previously(opts) do
     {:previously, opts}
   end
 
+  def changeset(opts), do: {:changeset_for_validation_step, opts}
+  def constraint_changeset(opts), do: {:changeset_for_constraint_step, opts}
+
+  # ----------------------------------------------------------------------------
+
+  # This is expanded during normalization.
   def insert_twice(example_name),
     do: {:__flatten, [previously(insert: example_name), params_like(example_name)]}
-    
-  
+
 end

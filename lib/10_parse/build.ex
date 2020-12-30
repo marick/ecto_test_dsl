@@ -58,8 +58,6 @@ defmodule TransformerTestSupport.Build do
 
   # ----------------------------------------------------------------------------
 
-  def changeset(opts), do: {:changeset_for_validation_step, opts}
-  def constraint_changeset(opts), do: {:changeset_for_constraint_step, opts}
 
   defmacro on_success(funcall) do
     from = "on_success(#{Macro.to_string(funcall)})"

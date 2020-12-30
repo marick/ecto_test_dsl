@@ -5,6 +5,7 @@ defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
   alias T.RunningExample
   alias T.RunningExample.History
   alias Ecto.Changeset
+  use T.Parse.All
 
   defmodule Schema do
     use Ecto.Schema
@@ -24,7 +25,7 @@ defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
   # ----------------------------------------------------------------------------
 
   @example Sketch.example(:name, :constraint_error, [
-        Build.constraint_changeset(error: [name: ~r/duplicate/])])
+        constraint_changeset(error: [name: ~r/duplicate/])])
   
   test "unexpected :ok" do
     assertion_fails(~r/Example `:name`: Expected an error tuple/,
