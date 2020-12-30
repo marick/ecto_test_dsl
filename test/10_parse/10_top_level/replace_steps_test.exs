@@ -1,4 +1,4 @@
-defmodule Build.StepTest do
+defmodule Parse.TopLevel.ReplaceStepTest do
   use TransformerTestSupport.Case
 
   defmodule Schema do 

@@ -40,5 +40,13 @@ defmodule TransformerTestSupport.Parse.InternalFunctions do
     do: FieldCalculator.new(f, fields, "on_success(<fn>, applied_to: #{inspect fields})")
   def on_success(f, applied_to: field),
     do: on_success(f, applied_to: [field])
+  # ----------------------------------------------------------------------------
+
+  # Used to create arguments for TopLevel.replace_steps
+  def step(f, key) do
+    fn running ->
+      Keyword.fetch!(running.history, key) |> f.()
+    end
+  end
   
 end
