@@ -1,8 +1,6 @@
 defmodule TransformerTestSupport.Build do
   use TransformerTestSupport.Drink.Me
-  alias T.Parse.TopLevel.Validate
   alias T.Nouns.{FieldCalculator}
-  alias T.Parse.{Start}
 
   @moduledoc """
   """
@@ -19,13 +17,6 @@ defmodule TransformerTestSupport.Build do
 
 
   # ----------------------------------------------------------------------------
-
-  defmacro id_of(extended_example_desc) do
-    quote do
-      een = een(unquote(extended_example_desc))
-      FieldRef.new(id: een)
-    end
-  end
 
 
   # ----------------------------------------------------------------------------

@@ -12,10 +12,6 @@ defmodule BuildTest do
         
         
   describe "params" do 
-    test "id_of" do
-      assert id_of(animal: Examples) == FieldRef.new(id: een(animal: Examples))
-      assert id_of(:animal) == FieldRef.new(id: een(animal: __MODULE__))
-    end
     
     # test "id_of works within params_like as well" do
     #   previous = [
