@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Build.ParamShorthand do
+defmodule TransformerTestSupport.Parse.TopLevel.ExpandExampleReferences do
   use TransformerTestSupport.Drink.Me
 
   @moduledoc """

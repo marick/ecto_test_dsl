@@ -1,10 +1,8 @@
 defmodule TransformerTestSupport.Parse.TopLevel do
   use TransformerTestSupport.Drink.Me
-  alias T.Parse.TopLevel.Normalize
-  alias T.Build.{ParamShorthand}
+  alias T.Parse.TopLevel.{Normalize,ExpandExampleReferences}
   import DeepMerge, only: [deep_merge: 2]
-  # import FlowAssertions.Define.BodyParts
-  alias T.Nouns.{FieldCalculator,AsCast}
+  alias T.Nouns.AsCast
   alias T.Parse.Hooks
 
   # ----------------------------------------------------------------------------
@@ -33,7 +31,7 @@ defmodule TransformerTestSupport.Parse.TopLevel do
     updated_examples =
       Normalize.as(:example_pairs, raw_examples)
       |> attach_workflow_metadata(workflow)
-      |> ParamShorthand.build_time_expansion(earlier_examples)
+      |> ExpandExampleReferences.build_time_expansion(earlier_examples)
     Map.put(so_far, :examples, updated_examples)
   end
 
