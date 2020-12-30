@@ -12,30 +12,22 @@ defmodule BuildTest do
         
         
   describe "params" do 
-    test "params_like" do
-      previous = [ok: %{params:                   %{a: 1, b: 2 }}]
-      f = Build.make__params_like(:ok, except:           [b: 22, c: 3])
-      expected =      %{params:                   %{a: 1, b: 22, c: 3}}
-      
-      assert Build.ParamShorthand.expand(%{params: f}, :example, previous) == expected
-    end
-
     test "id_of" do
       assert id_of(animal: Examples) == FieldRef.new(id: een(animal: Examples))
       assert id_of(:animal) == FieldRef.new(id: een(animal: __MODULE__))
     end
     
-    test "id_of works within params_like as well" do
-      previous = [
-        template:   %{params: %{a: 1, b: 2 }},
-        previously: %{}
-      ]
-      f = Build.make__params_like(:template,
-        except: [b: id_of(:previously), c: 3])
+    # test "id_of works within params_like as well" do
+    #   previous = [
+    #     template:   %{params: %{a: 1, b: 2 }},
+    #     previously: %{}
+    #   ]
+    #   f = Build.make__params_like(:template,
+    #     except: [b: id_of(:previously), c: 3])
 
-      %{params: %{b: b}} = Build.ParamShorthand.expand(%{params: f}, :example, previous)
-      assert b == FieldRef.new(id: een(previously: __MODULE__))
-    end
+    #   %{params: %{b: b}} = Build.ParamShorthand.expand(%{params: f}, :example, previous)
+    #   assert b == FieldRef.new(id: een(previously: __MODULE__))
+    # end
   end
 
 
