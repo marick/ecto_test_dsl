@@ -12,4 +12,6 @@ defmodule TransformerTestSupport.Nouns.FieldRef do
 
   def match?(%__MODULE__{} = _value), do: true
   def match?(_), do: false
+
+  def relevant_pairs(pairs), do: KeywordX.filter_by_value(pairs, &match?/1)
 end
