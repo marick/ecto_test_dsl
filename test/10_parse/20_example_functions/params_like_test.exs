@@ -1,4 +1,4 @@
-defmodule Build.ParamsShorthandTest do
+defmodule Parse.ParamsLikeTest do
   use TransformerTestSupport.Case
   use T.Predefines
 
@@ -67,32 +67,4 @@ defmodule Build.ParamsShorthandTest do
     end
   end
     
-  describe "id_of" do 
-    test "instances of `id_of` generate a previously" do
-      test_data = 
-        Examples.started()
-        |> workflow(:valid, ok: [params(a: 1, b: 2)])
-        |> workflow(:invalid, similar: [
-              params_like(:ok, except: [a: id_of(species: ExampleModule)])
-           ])
-
-      assert example(test_data, :similar).previously ==
-          [insert: een(species: ExampleModule)]
-    end
-
-    test "adds on to existing previously" do
-      test_data = 
-        Examples.started()
-        |> workflow(:invalid, name: [
-             params(a: id_of(species: ExampleModule),
-                    b: id_of(:thing)),
-             previously(insert: een(:noog))
-        ])
-
-      assert example(test_data, :name).previously ==
-          [insert: een(:noog),
-           insert: een(species: ExampleModule),
-           insert: een(thing: __MODULE__)]
-    end
-  end
 end  
