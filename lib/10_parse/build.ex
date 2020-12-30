@@ -1,7 +1,6 @@
 defmodule TransformerTestSupport.Build do
   use TransformerTestSupport.Drink.Me
-  alias T.Build.KeyValidation
-  import FlowAssertions.Define.BodyParts
+  alias T.Parse.TopLevel.Validate
   alias T.Nouns.{FieldCalculator,AsCast}
   alias T.Parse.Hooks
 
@@ -33,7 +32,7 @@ defmodule TransformerTestSupport.Build do
   def validate_keys_including_variant_keys(test_data, variant_required, variant_optional) do
     required = @required_keys ++ variant_required
     optional = @optional_keys ++ variant_optional
-    KeyValidation.assert_valid_keys(test_data, required, optional)
+    Validate.assert_valid_keys(test_data, required, optional)
   end
 
   def step(f, key) do

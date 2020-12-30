@@ -1,13 +1,13 @@
-defmodule Build.KeyValidationTest do
+defmodule Parse.TopLevel.ValidateTest do
   use TransformerTestSupport.Case
-  alias T.Build.KeyValidation
+  alias T.Parse.TopLevel.Validate
   alias T.Messages
   
 
   test "validation" do
     reorganized = fn required, optional, map ->
       # reorganized for better narrative flow in test table
-      assert KeyValidation.assert_valid_keys(map, required, optional) == map
+      assert Validate.assert_valid_keys(map, required, optional) == map
       required  # kludge for `pass`
     end
     

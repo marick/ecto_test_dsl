@@ -1,7 +1,7 @@
 defmodule TransformerTestSupport.Parse.TopLevel do
   use TransformerTestSupport.Drink.Me
   alias T.Parse.TopLevel.Normalize
-  alias T.Build.{ParamShorthand,KeyValidation}
+  alias T.Build.{ParamShorthand}
   import DeepMerge, only: [deep_merge: 2]
   # import FlowAssertions.Define.BodyParts
   alias T.Nouns.{FieldCalculator,AsCast}
