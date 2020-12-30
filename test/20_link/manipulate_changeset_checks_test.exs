@@ -3,11 +3,11 @@ defmodule Link.ManipulateChangesetChecksTest do
   import T.Link.ManipulateChangesetChecks
   use T.Parse.All
 
-  test "replace_check_values" do
+  test "tested_replace_check_values" do
     expect = fn original, expected ->
       predicate = &is_binary/1
       replacer = &String.upcase/1
-      assert replace_check_values(original, predicate, replacer) == expected
+      assert tested_replace_check_values(original, predicate, replacer) == expected
     end
 
     unchanged = fn original -> original |> expect.(original) end

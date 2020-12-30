@@ -1,7 +1,13 @@
 defmodule TransformerTestSupport.Link.ManipulateChangesetChecks do
   use TransformerTestSupport.Drink.Me
 
-  def replace_check_values(checks, predicate, replacer) do
+  def replace_field_refs(checks, examples) do
+    tested_replace_check_values(checks,
+      fn v -> is_struct(v, FieldRef) end,
+      fn ref -> Map.get(examples, ref.een) |> Map.get(ref.field) end)
+  end
+  
+  def tested_replace_check_values(checks, predicate, replacer) do
     inner_loop = fn 
         check_args when is_list(check_args) ->
           for elt <- check_args do
@@ -24,12 +30,6 @@ defmodule TransformerTestSupport.Link.ManipulateChangesetChecks do
     end      
   end
 
-  def replace_field_refs(checks, examples) do
-    replace_check_values(checks,
-      fn v -> is_struct(v, FieldRef) end,
-      fn ref -> Map.get(examples, ref.een) |> Map.get(ref.field) end)
-  end
-
   # ----------------------------------------------------------------------------
 
   def unique_fields(changeset_checks) do
@@ -40,13 +40,10 @@ defmodule TransformerTestSupport.Link.ManipulateChangesetChecks do
     |> Enum.uniq
   end
 
-  def from_check_args(field) when is_atom(field), do: [field]
-  def from_check_args(list) when is_list(list), do: Enum.map(list, &field/1)
-  def from_check_args(map)  when is_map(map), do: Enum.map(map,  &field/1)
+  defp from_check_args(field) when is_atom(field), do: [field]
+  defp from_check_args(list) when is_list(list), do: Enum.map(list, &field/1)
+  defp from_check_args(map)  when is_map(map), do: Enum.map(map,  &field/1)
 
-  def field({field, _value}), do: field
-  def field(field), do: field
-    
-  
-  
+  defp field({field, _value}), do: field
+  defp field(field), do: field
 end
