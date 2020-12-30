@@ -1,7 +1,6 @@
 defmodule Parse.ParamsTest do
   use TransformerTestSupport.Case
   use T.Predefines
-  alias T.Build
 
   defmodule Examples do
     use Template.Trivial

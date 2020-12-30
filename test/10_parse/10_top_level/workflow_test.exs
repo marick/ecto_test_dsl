@@ -1,4 +1,4 @@
-defmodule Build.WorkflowTest do
+defmodule Parse.TopLevel.WorkflowTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.SmartGet
   use T.Parse.All

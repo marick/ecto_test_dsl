@@ -5,7 +5,6 @@ defmodule TransformerTestSupport.Drink.Me do
       import T.Nouns.EEN.Macros
       alias T.Nouns.{EEN,FieldRef,FieldCalculator}
       alias T.Parse
-      alias T.Build
       alias T.SmartGet
       alias T.Messages
 
