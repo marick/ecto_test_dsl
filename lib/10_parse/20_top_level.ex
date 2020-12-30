@@ -1,6 +1,6 @@
 defmodule TransformerTestSupport.Parse.TopLevel do
   use TransformerTestSupport.Drink.Me
-  alias T.Parse.TopLevel.{Normalize,ExpandExampleReferences}
+  alias T.Parse.PostProcessing.{Normalize,ExpandExampleReferences}
   import DeepMerge, only: [deep_merge: 2]
   alias T.Nouns.AsCast
   alias T.Parse.Hooks

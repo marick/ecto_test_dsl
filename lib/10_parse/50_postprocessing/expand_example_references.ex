@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Parse.TopLevel.ExpandExampleReferences do
+defmodule TransformerTestSupport.Parse.PostProcessing.ExpandExampleReferences do
   use TransformerTestSupport.Drink.Me
 
   @moduledoc """
