@@ -2,31 +2,13 @@ defmodule TransformerTestSupport.Build do
   use TransformerTestSupport.Drink.Me
   alias T.Parse.TopLevel.Validate
   alias T.Nouns.{FieldCalculator,AsCast}
-  alias T.Parse.Hooks
+  alias T.Parse.{Hooks,Start}
 
   @moduledoc """
   """
 
-  @starting_test_data %{
-    format: :raw,
-    examples: [],
-    field_transformations: [],     # Delete
-    as_cast: AsCast.nothing,
-    field_calculators: []
-  }
 
-  def start_with_variant(variant_name, data),
-    do: start([{:variant, variant_name} | data])
-
-  def start(data \\ []) when is_list(data) do
-    map_data = Enum.into(data, %{})
-    
-    @starting_test_data
-    |> Map.merge(map_data)
-    |> Hooks.run_start_hook
-  end
-
-  @required_keys [:module_under_test, :variant] ++ Map.keys(@starting_test_data)
+  @required_keys [:module_under_test, :variant] ++ Map.keys(Start.starting_test_data)
   @optional_keys []
 
   def validate_keys_including_variant_keys(test_data, variant_required, variant_optional) do

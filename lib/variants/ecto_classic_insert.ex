@@ -2,6 +2,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
   use TransformerTestSupport.Drink.Me
   alias T.VariantSupport.ChangesetSupport
   alias T.Variants.EctoClassic.Insert, as: ThisVariant
+  alias T.Parse.Start
 
   import FlowAssertions.Define.BodyParts
 
@@ -14,7 +15,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
   
   def start(opts) do
     opts = Keyword.merge(@default_start_opts, opts)
-    Build.start_with_variant(ThisVariant, opts)
+    Start.start_with_variant(ThisVariant, opts)
   end
 
   # ------------------- Hook functions -----------------------------------------
