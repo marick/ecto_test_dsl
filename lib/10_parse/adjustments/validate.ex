@@ -1,7 +1,6 @@
 defmodule TransformerTestSupport.Parse.TopLevel.Validate do
   use TransformerTestSupport.Drink.Me
-  alias T.Messages
-  import FlowAssertions.Define.{Defchain,BodyParts}
+  use T.Drink.AssertionJuice
   alias T.Parse.Start
 
   @required_keys [:module_under_test, :variant] ++ Map.keys(Start.starting_test_data)

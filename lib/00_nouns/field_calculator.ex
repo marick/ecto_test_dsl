@@ -1,6 +1,7 @@
 defmodule TransformerTestSupport.Nouns.FieldCalculator do
   use TransformerTestSupport.Drink.Me
-  import FlowAssertions.Define.BodyParts
+  use TransformerTestSupport.Drink.AssertionJuice
+
   alias T.Link.ChangesetNotationToAssertion, as: Translate
   
   @moduledoc """

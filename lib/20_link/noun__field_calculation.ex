@@ -1,9 +1,9 @@
 defmodule TransformerTestSupport.Link.FieldCalculation do
   use TransformerTestSupport.Drink.Me
+  use TransformerTestSupport.Drink.AssertionJuice
+
   alias T.SmartGet.Example
   alias T.Nouns.FieldCalculator
-  import FlowAssertions.Define.BodyParts
-  import ExUnit.Assertions
   
   @moduledoc """
   """

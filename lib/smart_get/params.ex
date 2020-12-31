@@ -1,7 +1,7 @@
 defmodule TransformerTestSupport.SmartGet.Params do
   use TransformerTestSupport.Drink.Me
+  use T.Drink.AssertionJuice
   alias T.SmartGet
-  import FlowAssertions.Define.BodyParts
     
   @moduledoc """
   """

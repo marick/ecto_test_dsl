@@ -1,7 +1,6 @@
 defmodule TransformerTestSupport.Validations do
-  import FlowAssertions.Define.{Defchain,BodyParts}
-  import ExUnit.Assertions
-  use FlowAssertions.Ecto
+  use TransformerTestSupport.Drink.Me
+  use TransformerTestSupport.Drink.AssertionJuice
   
 
   @moduledoc """

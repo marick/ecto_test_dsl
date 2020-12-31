@@ -1,8 +1,9 @@
 defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   use TransformerTestSupport.Drink.Me
+  use TransformerTestSupport.Drink.AssertionJuice
+
   alias T.SmartGet.{Example,ChangesetChecks,Params}
   alias T.VariantSupport.ChangesetSupport.Previously
-  import FlowAssertions.Define.{Defchain, BodyParts}
   alias T.RunningExample
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA

@@ -1,9 +1,9 @@
 defmodule TransformerTestSupport.Nouns.AsCast do
   use TransformerTestSupport.Drink.Me
+  use T.Drink.AssertionJuice
   alias Ecto.Changeset
   alias T.Nouns.AsCast
   alias T.Link.ChangesetNotationToAssertion, as: Translate
-  import FlowAssertions.Define.BodyParts, only: [adjust_assertion_error: 2]
 
   @moduledoc """
   A reference to a schema field.

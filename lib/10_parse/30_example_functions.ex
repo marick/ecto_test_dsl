@@ -1,6 +1,6 @@
 defmodule TransformerTestSupport.Parse.ExampleFunctions do
   use TransformerTestSupport.Drink.Me
-  import FlowAssertions.Define.BodyParts
+  use TransformerTestSupport.Drink.AssertionJuice
   alias Parse.Nouns.DeferredParams
 
   # ----------------------------------------------------------------------------

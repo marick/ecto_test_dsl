@@ -1,8 +1,7 @@
 defmodule TransformerTestSupport.SmartGet.Example do
   use TransformerTestSupport.Drink.Me
+  use T.Drink.AssertionJuice
   alias TransformerTestSupport.TestDataServer
-  use FlowAssertions
-  import FlowAssertions.Define.BodyParts
   
   @moduledoc """
   """

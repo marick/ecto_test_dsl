@@ -1,8 +1,8 @@
 defmodule TransformerTestSupport.Parse.Nouns do
   use TransformerTestSupport.Drink.Me
+  use T.Drink.AssertionJuice
   alias T.Nouns.AsCast
   alias T.Parse.Hooks
-  import FlowAssertions.Define.BodyParts
 
   defmodule DeferredParams do
     def like(previous_name, except: override_kws) do

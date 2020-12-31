@@ -1,7 +1,6 @@
 defmodule TransformerTestSupport.Link.ChangesetNotationToAssertion do
   use TransformerTestSupport.Drink.Me
-  alias FlowAssertions.Ecto.ChangesetA
-  import FlowAssertions.Define.BodyParts, only: [adjust_assertion_error: 2]
+  use TransformerTestSupport.Drink.AssertionJuice
 
   @moduledoc """
   A function that might throw an AssertionError about a given changeset.
