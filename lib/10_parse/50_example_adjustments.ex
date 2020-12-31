@@ -1,28 +1,28 @@
-defmodule TransformerTestSupport.Parse.Adjustments.Normalize do
+defmodule TransformerTestSupport.Parse.ExampleAdjustments do
   import  ExUnit.Assertions
   
   @moduledoc """
   """
 
-  def as(:example_pairs, example_pairs) when is_list(example_pairs) do
-    Enum.map(example_pairs, &(as :example_pair, &1))
+  def adjust(:example_pairs, example_pairs) when is_list(example_pairs) do
+    Enum.map(example_pairs, &(adjust :example_pair, &1))
   end
 
-  def as(:example_pairs, _) do
+  def adjust(:example_pairs, _) do
     flunk "Examples must be given in a keyword list (in order for `like/2` to work)"
   end
 
-  def as(:example_pair, {name, example}),
-    do: {name, as(:example, example)}
+  def adjust(:example_pair, {name, example}),
+    do: {name, adjust(:example, example)}
 
-  def as(:example, example) do
+  def adjust(:example, example) do
     example
     |> flatten_keywords
     |> ensure_map
     |> interior(:params)
   end
 
-  def as(:params, args), do: ensure_map(args)
+  def adjust(:params, args), do: ensure_map(args)
 
   def interior(map, key) do
     value = Map.get(map, key, :missing)    
@@ -32,7 +32,7 @@ defmodule TransformerTestSupport.Parse.Adjustments.Normalize do
       is_function(value) -> # Functions are expanded in a second pass. I is lazy.
         map
       true ->
-        Map.put(map, key, as(key, value))
+        Map.put(map, key, adjust(key, value))
     end
   end
 

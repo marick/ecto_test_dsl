@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Parse.Adjustments.CrossExample do
+defmodule TransformerTestSupport.Parse.ExampleAdjustments.CrossExample do
   use TransformerTestSupport.Drink.Me
   use Magritte
   alias T.Parse.Nouns.DeferredParams

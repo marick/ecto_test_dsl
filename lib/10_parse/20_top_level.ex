@@ -1,6 +1,6 @@
 defmodule TransformerTestSupport.Parse.TopLevel do
   use TransformerTestSupport.Drink.Me
-  alias T.Parse.Adjustments.{Normalize,CrossExample}
+  alias T.Parse.ExampleAdjustments
   import DeepMerge, only: [deep_merge: 2]
   alias T.Nouns.AsCast
   alias T.Parse.Hooks
@@ -27,9 +27,9 @@ defmodule TransformerTestSupport.Parse.TopLevel do
     Hooks.run_variant(test_data, :assert_workflow_hook, [workflow])
     
     updated_examples =
-      Normalize.as(:example_pairs, raw_examples)
+      ExampleAdjustments.adjust(:example_pairs, raw_examples)
       |> attach_workflow_metadata(workflow)
-      |> CrossExample.connect(test_data.examples)
+      |> ExampleAdjustments.CrossExample.connect(test_data.examples)
     Map.put(test_data, :examples, updated_examples)
   end
 
