@@ -1,13 +1,13 @@
-defmodule Parse.Adjustments.ValidateTest do
+defmodule Parse.CallbacksTest do
   use TransformerTestSupport.Case
-  alias T.Parse.TopLevel.Validate
+  alias T.Parse.Callbacks
   alias T.Messages
   
 
   test "validation" do
     reorganized = fn required, optional, map ->
       # reorganized for better narrative flow in test table
-      assert Validate.assert_valid_keys(map, required, optional) == map
+      assert Callbacks.assert_valid_keys(map, required, optional) == map
       required  # kludge for `pass`
     end
     

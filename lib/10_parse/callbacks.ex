@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Parse.TopLevel.Validate do
+defmodule TransformerTestSupport.Parse.Callbacks do
   use TransformerTestSupport.Drink.Me
   use T.Drink.AssertionJuice
   alias T.Parse.Start
@@ -6,7 +6,7 @@ defmodule TransformerTestSupport.Parse.TopLevel.Validate do
   @required_keys [:module_under_test, :variant] ++ Map.keys(Start.starting_test_data)
   @optional_keys []
 
-  def validate_keys_including_variant_keys(test_data, variant_required, variant_optional) do
+  def validate_top_level_keys(test_data, variant_required, variant_optional) do
     required = @required_keys ++ variant_required
     optional = @optional_keys ++ variant_optional
     assert_valid_keys(test_data, required, optional)

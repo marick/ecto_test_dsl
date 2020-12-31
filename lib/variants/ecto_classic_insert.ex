@@ -3,7 +3,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
   alias T.VariantSupport.ChangesetSupport
   alias T.Variants.EctoClassic.Insert, as: ThisVariant
   alias T.Parse.Start
-  alias T.Parse.TopLevel.Validate
+  alias T.Parse.Callbacks
 
   import FlowAssertions.Define.BodyParts
 
@@ -99,7 +99,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
 
   def run_start_hook(top_level) do
     top_level
-    |> Validate.validate_keys_including_variant_keys(@required_keys, @optional_keys)
+    |> Callbacks.validate_top_level_keys(@required_keys, @optional_keys)
     |> Map.put(:steps, initial_step_definitions())
     |> Map.put(:workflows, @workflows)
   end
