@@ -1,6 +1,7 @@
 defmodule TransformerTestSupport.Parse.Adjustments.CrossExample do
   use TransformerTestSupport.Drink.Me
   use Magritte
+  alias T.Parse.Nouns.DeferredParams
 
   @moduledoc """
   """
@@ -18,13 +19,8 @@ defmodule TransformerTestSupport.Parse.Adjustments.CrossExample do
   end
 
   defp expand_like(example, existing_named_examples) do
-    params = Map.get(example, :params, [])
-    case is_function(params) do
-      true ->
-        Map.put(example, :params, params.(existing_named_examples))
-      false ->
-        example
-    end
+    resolve = &(DeferredParams.resolve(&1, existing_named_examples))
+    Map.update(example, :params, %{}, resolve)
   end
 
   defp add_setup_required_by_refs(example) do
