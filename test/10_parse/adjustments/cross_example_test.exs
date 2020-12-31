@@ -14,8 +14,11 @@ defmodule Parse.Adjustments.CrossExampleTest do
           params(name: "bossie", species_id: id_of(:species)),
           changeset(changed: [species_id: id_of(:species)])
         ],
-        animal2: [
-          params_like(:animal)
+        animal_like_1: [
+          params_like(:animal, except: [exception: 1])
+        ],
+        animal_like_2: [
+          params_like(:animal_like_1, except: [exception: 222])
         ]
       )
     end
@@ -45,8 +48,15 @@ defmodule Parse.Adjustments.CrossExampleTest do
     |> Keyword.get(:species_id)
     |> assert_equal(@expected_field_ref)
 
-    params_for(:animal2)
+    params_for(:animal_like_1)
     |> assert_field(name: "bossie",
-                    species_id: @expected_field_ref)
+                    species_id: @expected_field_ref,
+                    exception: 1)
+
+    params_for(:animal_like_2)
+    |> assert_field(name: "bossie",
+                    species_id: @expected_field_ref,
+                    exception: 222)
+
   end
 end  

@@ -1,10 +1,12 @@
 defmodule TransformerTestSupport.Parse.Adjustments.CrossExample do
   use TransformerTestSupport.Drink.Me
+  use Magritte
 
   @moduledoc """
   """
   def connect(new_named_examples, existing_named_examples) do
-    Enum.reduce(new_named_examples, existing_named_examples, &connect_one/2)
+    new_named_examples
+    |> Enum.reduce(existing_named_examples, &connect_one/2)
   end
 
   defp connect_one({new_name, new_example}, existing_named_examples) do
@@ -26,23 +28,9 @@ defmodule TransformerTestSupport.Parse.Adjustments.CrossExample do
   end
 
   defp add_setup_required_by_refs(example) do
-    params = Map.get(example, :params, [])
-    old = Map.get(example, :setup_instructions, [])
-
-    new =
-      params
-      |> FieldRef.relevant_pairs
-      |> KeywordX.map_values(fn xref ->
-          {:insert, xref.een}
-         end)
-
-    case {old, new} do
-      {_, []} ->
-        example
-      {[], _} -> 
-        Map.put(example, :setup_instructions, new)
-      {_, _} ->
-        Map.put(example, :setup_instructions, old ++ new)
-    end
+    Map.get(example, :params, [])
+    |> FieldRef.relevant_pairs
+    |> KeywordX.map_values(fn xref -> {:insert, xref.een} end)
+    |> Example.append_to_setup(example, ...)
   end
 end
