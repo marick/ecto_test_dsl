@@ -6,17 +6,23 @@ defmodule TransformerTestSupport.Parse.ExampleAdjustments.CrossExample do
   @moduledoc """
   """
   def connect(new_named_examples, existing_named_examples) do
-    new_named_examples
-    |> Enum.reduce(existing_named_examples, &connect_one/2)
+    processed = 
+      expand_likes(new_named_examples, [], existing_named_examples)
+      |> KeywordX.map_over_values(&add_setup_required_by_refs/1)
+
+    processed ++ existing_named_examples
   end
 
-  defp connect_one({new_name, new_example}, existing_named_examples) do
+  defp expand_likes([{new_name, new_example} | rest], acc, existing_named_examples) do
     expanded = 
       new_example
       |> expand_like(existing_named_examples)
-      |> add_setup_required_by_refs
-    [{new_name, expanded} | existing_named_examples]
+    new = {new_name, expanded}
+    
+    expand_likes(rest, [new | acc ], [new | existing_named_examples])
   end
+
+  defp expand_likes([], acc, _existing_named_examples), do: acc
 
   defp expand_like(example, existing_named_examples) do
     resolve = &(DeferredParams.resolve(&1, existing_named_examples))
