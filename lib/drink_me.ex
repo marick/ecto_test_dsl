@@ -3,7 +3,7 @@ defmodule TransformerTestSupport.Drink.Me do
     quote do
       alias TransformerTestSupport, as: T
       import T.Nouns.EEN.Macros
-      alias T.Nouns.{EEN,FieldRef,FieldCalculator,Example}
+      alias T.Nouns.{EEN,FieldRef,FieldCalculator}
       alias T.Parse
       alias T.SmartGet
       alias T.Messages

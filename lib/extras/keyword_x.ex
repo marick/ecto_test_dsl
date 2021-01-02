@@ -34,8 +34,10 @@ defmodule TransformerTestSupport.KeywordX do
     Enum.map(kvs, fn {_k, v} -> f.(v) end)
   end
 
+  defp map_value({k, v}, f), do: {k, f.(v)}
+
   def map_over_values(kvs, f) do
-    Enum.map(kvs, fn {k, v} -> {k, f.(v)} end)
+    Enum.map(kvs, &(map_value &1, f))
   end
 
   def split_by_value_predicate(kvs, value_pred) do

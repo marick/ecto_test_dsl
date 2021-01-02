@@ -4,6 +4,7 @@ defmodule TransformerTestSupport.Parse.TopLevel do
   import DeepMerge, only: [deep_merge: 2]
   alias T.Nouns.AsCast
   alias T.Parse.Hooks
+  alias T.Parse.Nouns.Example
 
   # ----------------------------------------------------------------------------
   def field_transformations(test_data, opts) do
@@ -29,8 +30,10 @@ defmodule TransformerTestSupport.Parse.TopLevel do
     updated_examples =
       ExampleAdjustments.adjust(:example_pairs, raw_examples)
       |> attach_workflow_metadata(workflow)
-      |> ExampleAdjustments.CrossExample.connect(test_data.examples)
-    Map.put(test_data, :examples, updated_examples)
+      |> ExampleAdjustments.CrossExample.expand_likes(test_data.examples)
+      |> KeywordX.map_over_values(&Example.add_setup_required_by_refs/1)
+
+    Map.update!(test_data, :examples, &(updated_examples ++ &1))
   end
 
   defp attach_workflow_metadata(pairs, workflow) do

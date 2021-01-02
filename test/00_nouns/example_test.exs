@@ -1,6 +1,7 @@
-defmodule Nouns.ExampleTest do
+defmodule Parse.Nouns.ExampleTest do
+  
   use TransformerTestSupport.Case
-  alias T.Nouns.Example
+  alias T.Parse.Nouns.Example
 
   test "to_empty" do
     expect = fn [initial, new], expected ->
