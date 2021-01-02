@@ -2,7 +2,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport.Previously do
   use TransformerTestSupport.Drink.Me
   alias T.SmartGet.Example
   use FlowAssertions.Ecto
-  alias T.RunningExample
+  alias T.Run.RunningExample
 
   # ----------------------------------------------------------------------------
   # Working with a container of one or more example sources

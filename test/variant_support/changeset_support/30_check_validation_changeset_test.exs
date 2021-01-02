@@ -3,8 +3,8 @@ defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
   alias T.VariantSupport.ChangesetSupport
   use T.Parse.All
   alias T.Sketch
-  alias T.RunningExample
-  alias T.RunningExample.History
+  alias T.Run.RunningExample
+  alias T.Run.RunningExample.History
   alias Template.Dynamic
 
   def run(example, changeset) do 

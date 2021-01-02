@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.RunningExample.TraceServer do
+defmodule TransformerTestSupport.Run.RunningExample.TraceServer do
   use GenServer
 
   @init %{

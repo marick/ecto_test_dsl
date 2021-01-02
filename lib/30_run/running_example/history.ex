@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.RunningExample.History do
+defmodule TransformerTestSupport.Run.RunningExample.History do
   # alias TransformerTestSupport, as: T
   
   def new(example, opts) do 

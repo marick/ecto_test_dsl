@@ -3,7 +3,7 @@ defmodule SmartGet.ChangesetChecks.OnSuccessTest do
   alias T.SmartGet.ChangesetChecks, as: Checks
   alias T.SmartGet.Example
   use T.Parse.All
-  alias T.RunningExample
+  alias T.Run.RunningExample
 
   
   defmodule OnSuccess do

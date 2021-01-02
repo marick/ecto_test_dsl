@@ -2,8 +2,8 @@ defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
   use TransformerTestSupport.Case
   alias T.VariantSupport.ChangesetSupport
   alias T.Sketch
-  alias T.RunningExample
-  alias T.RunningExample.History
+  alias T.Run.RunningExample
+  alias T.Run.RunningExample.History
   alias Ecto.Changeset
   use T.Parse.All
 

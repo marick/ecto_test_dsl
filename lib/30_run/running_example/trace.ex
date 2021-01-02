@@ -1,6 +1,6 @@
-defmodule TransformerTestSupport.RunningExample.Trace do
+defmodule TransformerTestSupport.Run.RunningExample.Trace do
   use TransformerTestSupport.Drink.Me
-  alias T.RunningExample.TraceServer
+  alias T.Run.RunningExample.TraceServer
   alias T.SmartGet.Example
 
   # -----------Wrappers around functions--------------------------------------

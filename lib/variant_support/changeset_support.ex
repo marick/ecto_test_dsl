@@ -4,10 +4,10 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
 
   alias T.SmartGet.{Example,ChangesetChecks,Params}
   alias T.VariantSupport.ChangesetSupport.Previously
-  alias T.RunningExample
+  alias T.Run.RunningExample
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
-  alias T.RunningExample.Trace
+  alias T.Run.RunningExample.Trace
 
   # Default functions
 

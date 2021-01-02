@@ -1,4 +1,4 @@
-defmodule RunningExample.HistoryTest do
+defmodule Run.RunningExample.HistoryTest do
   # use TransformerTestSupport.Drink.Me
   # alias T.Runner
   # alias T.Variants.EctoClassic

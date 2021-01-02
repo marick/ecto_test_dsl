@@ -2,7 +2,7 @@ defmodule SmartGet.ChangesetChecks.AsCastTest do
   use TransformerTestSupport.Case
   alias T.SmartGet.ChangesetChecks, as: Checks
   use T.Parse.All
-  alias T.RunningExample
+  alias T.Run.RunningExample
   alias Template.Dynamic
 
   defmodule AsCast do

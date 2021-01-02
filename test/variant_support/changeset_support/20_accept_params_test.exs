@@ -1,7 +1,7 @@
 defmodule VariantSupport.Changeset.AcceptParamsTest do
   use TransformerTestSupport.Case
   alias T.VariantSupport.ChangesetSupport
-  alias T.RunningExample
+  alias T.Run.RunningExample
   alias Template.Dynamic
 
 

@@ -1,8 +1,8 @@
-defmodule TransformerTestSupport.RunningExample do
+defmodule TransformerTestSupport.Run.RunningExample do
   use TransformerTestSupport.Drink.Me
-  alias T.RunningExample
-  alias T.RunningExample.History
-  import T.RunningExample.Trace
+  alias T.Run.RunningExample
+  alias T.Run.RunningExample.History
+  import T.Run.RunningExample.Trace
   alias T.SmartGet.Example
 
   @enforce_keys [:example, :history]

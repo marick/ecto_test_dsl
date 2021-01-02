@@ -2,8 +2,8 @@ defmodule VariantSupport.Changeset.CheckInsertionResultTest do
   use TransformerTestSupport.Case
   alias T.VariantSupport.ChangesetSupport
   alias T.Sketch
-  alias T.RunningExample
-  alias T.RunningExample.History
+  alias T.Run.RunningExample
+  alias T.Run.RunningExample.History
   alias Ecto.Changeset
 
   def run(example, result) do 
