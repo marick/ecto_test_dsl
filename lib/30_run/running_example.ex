@@ -1,8 +1,6 @@
 defmodule TransformerTestSupport.Run.RunningExample do
   use TransformerTestSupport.Drink.Me
-  alias T.Run.RunningExample
-  alias T.Run.RunningExample.History
-  import T.Run.RunningExample.Trace
+  use TransformerTestSupport.Drink.AndRun
   alias T.SmartGet.Example
 
   @enforce_keys [:example, :history]
@@ -16,7 +14,7 @@ defmodule TransformerTestSupport.Run.RunningExample do
       script: Example.workflow_script(example, opts),
       history: History.new(example, opts)
     }
-    |> tio__(&run_steps/1)
+    |> Trace.tio__(&run_steps/1)
   end
 
   defp run_steps(running) do
@@ -24,7 +22,7 @@ defmodule TransformerTestSupport.Run.RunningExample do
       [] ->
         running.history
       [{step_name, function} | rest] ->
-        value = tli__(running, function, step_name)
+        value = Trace.tli__(running, function, step_name)
 
         running
         |> Map.update!(:history, &(History.add(&1, step_name, value)))

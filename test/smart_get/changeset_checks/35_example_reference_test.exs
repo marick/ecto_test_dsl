@@ -1,7 +1,7 @@
 defmodule SmartGet.ChangesetChecks.ExampleReferenceTest do
   use TransformerTestSupport.Case
+  use T.Drink.AndRun
   use T.Parse.All
-  alias T.Run.RunningExample
 
   defmodule Schema do
     use Ecto.Schema

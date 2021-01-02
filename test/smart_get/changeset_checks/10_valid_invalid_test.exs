@@ -1,8 +1,9 @@
 defmodule SmartGet.ChangesetChecks.ValidInvalidTest do
   use TransformerTestSupport.Case
+  use T.Drink.AndRun
+  
   alias T.SmartGet.ChangesetChecks, as: Checks
   use T.Parse.All
-  alias T.Run.RunningExample
   alias Template.Dynamic
 
   defmodule Examples, do: use Template.EctoClassic.Insert

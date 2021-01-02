@@ -1,10 +1,10 @@
 defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
   use TransformerTestSupport.Case
+  use T.Drink.AndRun
+
   alias T.VariantSupport.ChangesetSupport
   use T.Parse.All
   alias T.Sketch
-  alias T.Run.RunningExample
-  alias T.Run.RunningExample.History
   alias Template.Dynamic
 
   def run(example, changeset) do 

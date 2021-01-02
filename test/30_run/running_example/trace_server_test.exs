@@ -1,5 +1,7 @@
 defmodule RunningExample.Run.TraceServerTest do
   use TransformerTestSupport.Drink.Me
+  use TransformerTestSupport.Drink.AndRun
+  
   use ExUnit.Case, async: false
   alias T.Run.RunningExample.TraceServer
 

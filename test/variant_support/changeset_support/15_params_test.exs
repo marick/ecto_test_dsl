@@ -1,7 +1,7 @@
 defmodule VariantSupport.Changeset.ParamsTest do
   use TransformerTestSupport.Case
+  use T.Drink.AndRun
   alias T.VariantSupport.ChangesetSupport
-  alias T.Run.RunningExample
   use T.Parse.All
   alias Ecto.Changeset
 
