@@ -1,6 +1,6 @@
 defmodule TransformerTestSupport do
   def start do
     TransformerTestSupport.TestDataServer.start
-    TransformerTestSupport.Run.RunningExample.TraceServer.start
+    TransformerTestSupport.TraceServer.start
   end
 end

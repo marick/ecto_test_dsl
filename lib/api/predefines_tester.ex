@@ -9,7 +9,7 @@ defmodule TransformerTestSupport.Predefines.Tester do
       alias T.TestDataServer
       alias T.SmartGet
       alias T.Run.RunningExample
-      alias T.Run.RunningExample.TraceServer
+      alias T.TraceServer
       alias T.KeywordX
         
       @name_of_test_data Module.split(__MODULE__)

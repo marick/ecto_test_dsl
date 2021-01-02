@@ -1,9 +1,9 @@
-defmodule RunningExample.Run.TraceServerTest do
+defmodule TraceServerTest do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AndRun
   
   use ExUnit.Case, async: false
-  alias T.Run.RunningExample.TraceServer
+  alias T.TraceServer
 
   test "indentation leaders" do
     pass = fn arg, expected -> 
