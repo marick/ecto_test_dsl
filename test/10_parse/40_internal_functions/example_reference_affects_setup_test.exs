@@ -1,21 +1,13 @@
-defmodule Parse.InternalFunctions.ExampleReferencesTest do
+defmodule Parse.InternalFunctions.ExampleReferenceAffectsSetupTest do
   use TransformerTestSupport.Case
   use T.Predefines
-
-  describe "basic parsing" do 
-    test "id_of" do
-      assert id_of(animal: Examples) == FieldRef.new(id: een(animal: Examples))
-      assert id_of(:animal) == FieldRef.new(id: een(animal: __MODULE__))
-    end
-  end
-
 
   defmodule Examples do 
     use Template.Trivial
   end
 
   describe "id_of" do 
-    test "instances of `id_of` generate a previously" do
+    test "instances of `id_of` generate a setup" do
       test_data = 
         Examples.started()
         |> workflow(:valid, ok: [params(a: 1, b: 2)])
@@ -42,6 +34,4 @@ defmodule Parse.InternalFunctions.ExampleReferencesTest do
            insert: een(thing: __MODULE__)]
     end
   end
-  
-  
 end

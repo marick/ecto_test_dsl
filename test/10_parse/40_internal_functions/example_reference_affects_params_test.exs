@@ -1,4 +1,4 @@
-defmodule Parse.Adjustments.CrossExampleTest do
+defmodule Parse.InternalFunctions.ExampleReferenceAffectsParamsTest do
   use TransformerTestSupport.Case
 
   defmodule Examples do
@@ -11,8 +11,7 @@ defmodule Parse.Adjustments.CrossExampleTest do
         species: [params(name: "bovine")],
 
         animal:  [
-          params(name: "bossie", species_id: id_of(:species)),
-          changeset(changed: [species_id: id_of(:species)])
+          params(name: "bossie", species_id: id_of(:species))
         ],
         animal_like_1: [
           params_like(:animal, except: [exception: 1])
@@ -31,10 +30,6 @@ defmodule Parse.Adjustments.CrossExampleTest do
   end
   
   defp params_for(example_name), do: get_for(example_name, :params)
-  defp changes_for(example_name) do
-    get_for(example_name, :changeset_for_validation_step)
-    |> Keyword.get(:changed)
-  end
 
   @expected_field_ref FieldRef.new(id: een(:species, Examples))
   
@@ -44,10 +39,6 @@ defmodule Parse.Adjustments.CrossExampleTest do
   end
 
   test "`id_of` and `params_like`" do
-    changes_for(:animal)
-    |> Keyword.get(:species_id)
-    |> assert_equal(@expected_field_ref)
-
     params_for(:animal_like_1)
     |> assert_field(name: "bossie",
                     species_id: @expected_field_ref,
