@@ -13,12 +13,13 @@ defmodule Parse.ExampleAdjustmentsTest do
 
   test "... but examples don't have to have params" do
     input = [other: 2]
-    assert ExampleAdjustments.adjust(:example, input) == %{other: 2}
+    assert ExampleAdjustments.adjust(:example, input) == %{other: 2, params: %{}}
   end
 
   test "a flatten list is obeyed" do
     input = [__flatten: [a: 1, b: 2], c: 3, __flatten: [d: 4]]
-    assert ExampleAdjustments.adjust(:example, input) == %{a: 1, b: 2, c: 3, d: 4}
+    expected = %{a: 1, b: 2, c: 3, d: 4, params: %{}}
+    assert ExampleAdjustments.adjust(:example, input) == expected
   end
 
   test "note that flattening preserves order for intermediate processing" do

@@ -19,20 +19,15 @@ defmodule TransformerTestSupport.Parse.ExampleAdjustments do
     example
     |> flatten_keywords
     |> ensure_map
-    |> interior(:params)
+    |> Map.update(:params, %{}, &(adjust(:params, &1)))
   end
 
-  def adjust(:params, args), do: ensure_map(args)
-
-  def interior(map, key) do
-    value = Map.get(map, key, :missing)    
+  def adjust(:params, map) do
     cond do
-      value == :missing -> 
-        map
-      is_function(value) -> # Functions are expanded in a second pass. I is lazy.
+      is_function(map) -> # Functions are expanded in a second pass. I is lazy.
         map
       true ->
-        Map.put(map, key, adjust(key, value))
+        ensure_map(map)
     end
   end
 
