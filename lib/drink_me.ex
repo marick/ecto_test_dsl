@@ -7,6 +7,7 @@ defmodule TransformerTestSupport.Drink.Me do
       alias T.Parse
       alias T.SmartGet
       alias T.Messages
+      alias T.Trace
 
       alias T.{ChangesetX, EnumX, KeywordX}
     end

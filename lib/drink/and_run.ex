@@ -3,7 +3,6 @@ defmodule TransformerTestSupport.Drink.AndRun do
     quote do
       alias TransformerTestSupport.Nouns.History
       alias TransformerTestSupport.Run.RunningExample
-      alias TransformerTestSupport.Run.RunningExample.Trace
     end
   end
 end
