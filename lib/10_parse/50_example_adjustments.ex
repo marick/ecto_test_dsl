@@ -9,7 +9,6 @@ defmodule TransformerTestSupport.Parse.ExampleAdjustments do
   end
 
   def adjust(:example_pairs, _) do
-    flunk "Examples must be given in a keyword list (in order for `like/2` to work)"
   end
 
   def adjust(:example_pair, {name, example}),
@@ -22,11 +21,8 @@ defmodule TransformerTestSupport.Parse.ExampleAdjustments do
     |> Map.update(:params, %{}, &(adjust(:params, &1)))
   end
 
-  def adjust(:params, %__ParamsLike__{} = like) do
-    # Functions are expanded in a second pass. I is lazy.
-    like
-  end
-
+  # Functions are expanded in a second pass. I is lazy.
+  def adjust(:params, %__ParamsLike__{} = like), do: like
   def adjust(:params, map), do: ensure_map(map)
 
   # N^2 baby!

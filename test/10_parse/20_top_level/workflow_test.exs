@@ -1,6 +1,7 @@
 defmodule Parse.TopLevel.WorkflowTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.SmartGet
+  alias T.Parse.TopLevel
   use T.Parse.All
 
   defmodule Examples do
@@ -37,4 +38,13 @@ defmodule Parse.TopLevel.WorkflowTest do
     assert Examples.Tester.params(:ok) ==    %{"a" => "1",  "b" => "2"}
     assert Examples.Tester.params(:other) == %{"a" => "1", "b" => "22"}
   end
+
+  test "example may *not* be in a map" do
+    assertion_fails(
+      "Examples must be given in a keyword list",
+      fn -> 
+        TopLevel.workflow(%{}, :workflow_name, %{example: []})
+      end)
+  end
+  
 end  

@@ -1,5 +1,7 @@
 defmodule TransformerTestSupport.Parse.TopLevel do
   use TransformerTestSupport.Drink.Me
+  use TransformerTestSupport.Drink.AssertionJuice
+  
   alias T.Parse.ExampleAdjustments
   import DeepMerge, only: [deep_merge: 2]
   alias T.Nouns.AsCast
@@ -24,9 +26,9 @@ defmodule TransformerTestSupport.Parse.TopLevel do
   end
 
   # ----------------------------------------------------------------------------
-  def workflow(test_data, workflow, raw_examples) do
+  def workflow(test_data, workflow, raw_examples) when is_list(raw_examples) do
     Hooks.run_variant(test_data, :assert_workflow_hook, [workflow])
-    
+
     updated_examples =
       ExampleAdjustments.adjust(:example_pairs, raw_examples)
       |> attach_workflow_metadata(workflow)
@@ -35,6 +37,9 @@ defmodule TransformerTestSupport.Parse.TopLevel do
 
     Map.update!(test_data, :examples, &(updated_examples ++ &1))
   end
+
+  def workflow(_, _, _supposed_examples),
+    do: flunk "Examples must be given in a keyword list"
 
   defp attach_workflow_metadata(pairs, workflow) do
     for {name, example} <- pairs do

@@ -40,12 +40,4 @@ defmodule Parse.ExampleAdjustmentsTest do
     assert [name: %{params: %{a: 1}, other: 2}] == actual
   end
 
-  test "example pairs may *not* be in a map" do
-    input = %{name: [params: [a: 1], other: 2]}
-    assertion_fails(
-      "Examples must be given in a keyword list (in order for `like/2` to work)",
-      fn -> 
-        ExampleAdjustments.adjust(:example_pairs, input)
-      end)
-  end
 end
