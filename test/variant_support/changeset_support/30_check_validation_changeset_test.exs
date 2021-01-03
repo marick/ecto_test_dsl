@@ -2,14 +2,14 @@ defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
   use TransformerTestSupport.Case
   use T.Drink.AndRun
 
-  alias T.VariantSupport.ChangesetSupport
+  alias T.Run.Steps
   use T.Parse.All
   alias T.Sketch
   alias Template.Dynamic
 
   def run(example, changeset) do 
     %RunningExample{example: example, history: History.trivial(step: changeset)}
-    |> ChangesetSupport.check_validation_changeset(:step)
+    |> Steps.check_validation_changeset(:step)
   end
   # ----------------------------------------------------------------------------
 

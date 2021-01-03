@@ -1,7 +1,7 @@
 defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
   use TransformerTestSupport.Case
   use T.Drink.AndRun
-  alias T.VariantSupport.ChangesetSupport
+  alias T.Run.Steps
   alias T.Sketch
   alias Ecto.Changeset
   use T.Parse.All
@@ -18,7 +18,7 @@ defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
 
   def run(example, result) do
     %RunningExample{example: example, history: History.trivial(step: result)}
-    |> ChangesetSupport.check_constraint_changeset(:step)
+    |> Steps.check_constraint_changeset(:step)
   end
 
   # ----------------------------------------------------------------------------

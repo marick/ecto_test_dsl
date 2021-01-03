@@ -1,7 +1,7 @@
-defmodule VariantSupport.Changeset.PreviouslyTest do
+defmodule Setup.CreatePreviousExamplesTest do
   use TransformerTestSupport.Drink.Me
   alias T.Variants.EctoClassic
-  alias T.VariantSupport.ChangesetSupport
+  alias T.Run.Steps
 
   defmodule Schema do
     use Ecto.Schema

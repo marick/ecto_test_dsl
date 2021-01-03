@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.VariantSupport.ChangesetSupport.Previously do
+defmodule TransformerTestSupport.Setup.CreatePreviousExamples do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AndRun
   alias T.SmartGet.Example

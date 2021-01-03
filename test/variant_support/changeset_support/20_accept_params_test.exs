@@ -1,7 +1,7 @@
 defmodule VariantSupport.Changeset.AcceptParamsTest do
   use TransformerTestSupport.Case
   use T.Drink.AndRun
-  alias T.VariantSupport.ChangesetSupport
+  alias T.Run.Steps
   alias Template.Dynamic
 
 
@@ -26,7 +26,7 @@ defmodule VariantSupport.Changeset.AcceptParamsTest do
           params: %{age: 1})
 
     %RunningExample{example: example, history: [params: %{"age" => "1"}]}
-    |> ChangesetSupport.accept_params
+    |> Steps.accept_params
     |> assert_equal(:changeset_result)
   end
 end

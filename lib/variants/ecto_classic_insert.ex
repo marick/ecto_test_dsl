@@ -1,6 +1,6 @@
 defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
   use TransformerTestSupport.Drink.Me
-  alias T.VariantSupport.ChangesetSupport
+  alias T.Run.Steps
   alias T.Variants.EctoClassic.Insert, as: ThisVariant
   alias T.Parse.Start
   alias T.Parse.Callbacks
@@ -8,8 +8,8 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
   import FlowAssertions.Define.BodyParts
 
   @default_start_opts [
-    changeset_with: &ChangesetSupport.changeset_with__default_insert/2,
-    insert_with: &ChangesetSupport.insert_with__default/2,
+    changeset_with: &Steps.changeset_with__default_insert/2,
+    insert_with: &Steps.insert_with__default/2,
     format: :phoenix
   ]
   
@@ -22,31 +22,31 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
   # ------------------- Hook functions -----------------------------------------
 
   defp previously(running) do
-    ChangesetSupport.previously(running)
+    Steps.previously(running)
   end
 
   defp params(running) do
-    ChangesetSupport.params(running)
+    Steps.params(running)
   end
 
   defp make_changeset(running) do 
-    ChangesetSupport.accept_params(running)
+    Steps.accept_params(running)
   end
   
   defp check_validation_changeset(running) do 
-    ChangesetSupport.check_validation_changeset(running, :make_changeset)
+    Steps.check_validation_changeset(running, :make_changeset)
   end
 
   defp insert_changeset(running) do
-    ChangesetSupport.insert(running, :make_changeset)
+    Steps.insert(running, :make_changeset)
   end
   
   defp check_insertion(running) do
-    ChangesetSupport.check_insertion_result(running, :insert_changeset)
+    Steps.check_insertion_result(running, :insert_changeset)
   end
   
   defp check_constraint_changeset(running) do
-    ChangesetSupport.check_constraint_changeset(running, :insert_changeset)
+    Steps.check_constraint_changeset(running, :insert_changeset)
   end
   
   def initial_step_definitions() do
@@ -129,7 +129,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
 
       defmodule Tester do
         use TransformerTestSupport.Predefines.Tester
-        alias T.VariantSupport.ChangesetSupport
+        alias T.Run.Steps
 
         def validation_changeset(example_name) do
           check_workflow(example_name, stop_after: :make_changeset)
@@ -144,7 +144,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
         end
 
         def allow_asynchronous_tests(example_name),
-          do: example(example_name) |> ChangesetSupport.start_sandbox
+          do: example(example_name) |> Steps.start_sandbox
         
       end
     end

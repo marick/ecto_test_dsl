@@ -1,10 +1,10 @@
-defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
+defmodule TransformerTestSupport.Run.Steps do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AssertionJuice
   use TransformerTestSupport.Drink.AndRun
 
   alias T.SmartGet.{Example,ChangesetChecks,Params}
-  alias T.VariantSupport.ChangesetSupport.Previously
+  alias T.Setup.CreatePreviousExamples
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
 
@@ -60,7 +60,7 @@ defmodule TransformerTestSupport.VariantSupport.ChangesetSupport do
   def previously(running) do
     prior_work = Keyword.get(running.history, :previously, %{})
     sources = Map.get(running.example, :setup_instructions, [])
-    Previously.from_a_list(sources, running.example, prior_work)
+    CreatePreviousExamples.from_a_list(sources, running.example, prior_work)
   end
 
   # ----------------------------------------------------------------------------
