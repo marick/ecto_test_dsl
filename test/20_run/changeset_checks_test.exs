@@ -1,6 +1,6 @@
-defmodule Neighborhood.ManipulateChangesetChecksTest do
+defmodule Run.ChangesetChecksTest do
   use TransformerTestSupport.Case
-  import T.Neighborhood.ManipulateChangesetChecks
+  import T.Run.ChangesetChecks
   use T.Parse.All
 
   test "tested_replace_check_values" do

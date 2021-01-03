@@ -2,7 +2,7 @@ defmodule TransformerTestSupport.Nouns.FieldCalculator do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AssertionJuice
 
-  alias T.Neighborhood.ChangesetNotationToAssertion, as: Translate
+  alias T.Run.Assertions
   
   @moduledoc """
   A description of how a field's value can be calculated in terms of
@@ -40,7 +40,7 @@ defmodule TransformerTestSupport.Nouns.FieldCalculator do
   end
 
   defp translate_one_check({check, {_, %__MODULE__{from: from}}}) do
-    raw_assertion = Translate.from(check)
+    raw_assertion = Assertions.from(check)
     fn changeset ->
       adjust_assertion_error(fn -> 
         raw_assertion.(changeset)

@@ -1,11 +1,11 @@
-defmodule Neighborhood.ChangesetNotationToAssertionTest do
+defmodule Run.AssertionsTest do
   use TransformerTestSupport.Case
-  alias T.Neighborhood.ChangesetNotationToAssertion, as: Translate
+  alias T.Run.Assertions
   alias Ecto.Changeset
 
   describe "creation and running" do
     test "a symbol" do 
-      assertion = Translate.from(:valid)
+      assertion = Assertions.from(:valid)
       
       valid = %Changeset{valid?: true}
       assert assertion.(valid) == :ok
@@ -20,7 +20,7 @@ defmodule Neighborhood.ChangesetNotationToAssertionTest do
     end
 
     test "a symbol plus arg" do
-      assertion = Translate.from({:changes, [a: "a", b: "b"]})
+      assertion = Assertions.from({:changes, [a: "a", b: "b"]})
 
       changeset  = fn changes -> %Changeset{changes: changes} end
 
@@ -37,7 +37,7 @@ defmodule Neighborhood.ChangesetNotationToAssertionTest do
     end
 
     test "list" do
-      [valid, changes] = Translate.from([:valid, changes: [a: "a", b: "b"]])
+      [valid, changes] = Assertions.from([:valid, changes: [a: "a", b: "b"]])
       
       assertion_fails("The changeset is invalid",
         fn ->

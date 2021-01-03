@@ -3,7 +3,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
   alias T.SmartGet.Example
   alias T.SmartGet.ChangesetChecks, as: Checks
   alias T.Neighborhood.Params
-  alias T.Neighborhood.ManipulateChangesetChecks, as: CC
+  alias T.Run.ChangesetChecks, as: CC
   alias T.Neighborhood.FieldCalculation
   alias T.Nouns.AsCast
     

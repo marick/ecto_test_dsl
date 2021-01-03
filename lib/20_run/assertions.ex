@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Neighborhood.ChangesetNotationToAssertion do
+defmodule TransformerTestSupport.Run.Assertions do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AssertionJuice
 
