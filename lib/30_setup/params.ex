@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.SmartGet.Params do
+defmodule TransformerTestSupport.Setup.Params do
   use TransformerTestSupport.Drink.Me
   use T.Drink.AssertionJuice
   alias T.SmartGet

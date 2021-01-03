@@ -1,6 +1,7 @@
-defmodule SmartGet.ParamsTest do
+defmodule Setup.ParamsTest do
   use TransformerTestSupport.Case
   use T.Parse.All
+  alias T.Setup
   alias Template.Dynamic
 
   defmodule Examples do
@@ -27,7 +28,7 @@ defmodule SmartGet.ParamsTest do
       Dynamic.configure(Examples)
       |> Dynamic.adjust_metadata(format)
       |> Dynamic.example([@params])
-      |> SmartGet.Params.get(previously: %{})
+      |> Setup.Params.get(previously: %{})
       |> assert_fields(expected)
     end
 
@@ -54,13 +55,13 @@ defmodule SmartGet.ParamsTest do
       %{een(species: ExamplesIdOf) => %{id: 112, name: "bovine"}}
     
     ExamplesIdOf.Tester.example(:animal)
-    |> SmartGet.Params.get(previously: previously)
+    |> Setup.Params.get(previously: previously)
     |> assert_fields(name: "bossie", species_id: 112)
   end
 
 
   describe "resolve_field_refs" do 
-    alias T.SmartGet.Params      
+    alias T.Setup.Params      
 
     @example_has_5 %{een(:example) => %{id: 5}}
 

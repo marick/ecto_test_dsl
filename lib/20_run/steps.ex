@@ -3,8 +3,8 @@ defmodule TransformerTestSupport.Run.Steps do
   use TransformerTestSupport.Drink.AssertionJuice
   use TransformerTestSupport.Drink.AndRun
 
-  alias T.SmartGet.{Example,ChangesetChecks,Params}
-  alias T.Setup.CreatePreviousExamples
+  alias T.SmartGet.{Example,ChangesetChecks}
+  alias T.Setup.{CreatePreviousExamples,Params}
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
 
