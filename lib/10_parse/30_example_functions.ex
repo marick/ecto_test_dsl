@@ -1,14 +1,14 @@
 defmodule TransformerTestSupport.Parse.ExampleFunctions do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AssertionJuice
-  alias Parse.Nouns.DeferredParams
+  alias Parse.Nouns.ParamsLike
 
   # ----------------------------------------------------------------------------
   def params(opts \\ []),
     do: {:params, Enum.into(opts, %{})}
   
   def params_like(example_name, opts),
-    do: {:params, DeferredParams.like(example_name, opts)}
+    do: {:params, ParamsLike.new(example_name, opts)}
   def params_like(example_name), 
     do: params_like(example_name, except: [])
 

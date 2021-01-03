@@ -22,14 +22,12 @@ defmodule TransformerTestSupport.Parse.ExampleAdjustments do
     |> Map.update(:params, %{}, &(adjust(:params, &1)))
   end
 
-  def adjust(:params, map) do
-    cond do
-      is_function(map) -> # Functions are expanded in a second pass. I is lazy.
-        map
-      true ->
-        ensure_map(map)
-    end
+  def adjust(:params, %__ParamsLike__{} = like) do
+    # Functions are expanded in a second pass. I is lazy.
+    like
   end
+
+  def adjust(:params, map), do: ensure_map(map)
 
   # N^2 baby!
   def flatten_keywords(kws) do
