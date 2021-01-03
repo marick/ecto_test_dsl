@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Link.FieldCalculation do
+defmodule TransformerTestSupport.Neighborhood.FieldCalculation do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AssertionJuice
 

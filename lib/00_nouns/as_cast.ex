@@ -3,7 +3,7 @@ defmodule TransformerTestSupport.Nouns.AsCast do
   use T.Drink.AssertionJuice
   alias Ecto.Changeset
   alias T.Nouns.AsCast
-  alias T.Link.ChangesetNotationToAssertion, as: Translate
+  alias T.Neighborhood.ChangesetNotationToAssertion, as: Translate
 
   @moduledoc """
   A reference to a schema field.

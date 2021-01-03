@@ -2,9 +2,9 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
   use TransformerTestSupport.Drink.Me
   alias T.SmartGet.Example
   alias T.SmartGet.ChangesetChecks, as: Checks
-  alias T.Setup.Params
-  alias T.Link.ManipulateChangesetChecks, as: CC
-  alias T.Link.FieldCalculation
+  alias T.Neighborhood.Params
+  alias T.Neighborhood.ManipulateChangesetChecks, as: CC
+  alias T.Neighborhood.FieldCalculation
   alias T.Nouns.AsCast
     
   @moduledoc """

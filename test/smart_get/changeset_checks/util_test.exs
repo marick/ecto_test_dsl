@@ -1,7 +1,7 @@
 defmodule SmartGet.ChangesetChecks.UtilTest do
   use TransformerTestSupport.Case
   alias T.SmartGet.ChangesetChecks.Util
-  alias T.Link.ManipulateChangesetChecks, as: CC
+  alias T.Neighborhood.ManipulateChangesetChecks, as: CC
 
   test "removing fields described by user" do
     expect = fn {fields, changeset_checks}, expected ->

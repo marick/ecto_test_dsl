@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Link.ManipulateChangesetChecks do
+defmodule TransformerTestSupport.Neighborhood.ManipulateChangesetChecks do
   use TransformerTestSupport.Drink.Me
 
   def replace_field_refs(checks, examples) do

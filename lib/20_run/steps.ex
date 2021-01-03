@@ -4,7 +4,7 @@ defmodule TransformerTestSupport.Run.Steps do
   use TransformerTestSupport.Drink.AndRun
 
   alias T.SmartGet.{Example,ChangesetChecks}
-  alias T.Setup.{CreatePreviousExamples,Params}
+  alias T.Neighborhood.{CreatePreviousExamples,Params}
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
 

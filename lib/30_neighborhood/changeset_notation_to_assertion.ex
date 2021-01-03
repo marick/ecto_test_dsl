@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Link.ChangesetNotationToAssertion do
+defmodule TransformerTestSupport.Neighborhood.ChangesetNotationToAssertion do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AssertionJuice
 
@@ -6,7 +6,7 @@ defmodule TransformerTestSupport.Link.ChangesetNotationToAssertion do
   A function that might throw an AssertionError about a given changeset.
   Plus, for debugging, where that assertion came from.
 
-  Note that this is created at Link time because a changeset assertion
+  Note that this is created at Neighborhood time because a changeset assertion
   might depend on, say, the ID of another assertion.
   """
 

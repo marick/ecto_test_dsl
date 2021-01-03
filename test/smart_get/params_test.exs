@@ -1,7 +1,7 @@
-defmodule Setup.ParamsTest do
+defmodule Neighborhood.ParamsTest do
   use TransformerTestSupport.Case
   use T.Parse.All
-  alias T.Setup
+  alias T.Neighborhood
   alias Template.Dynamic
 
   defmodule Examples do
@@ -28,7 +28,7 @@ defmodule Setup.ParamsTest do
       Dynamic.configure(Examples)
       |> Dynamic.adjust_metadata(format)
       |> Dynamic.example([@params])
-      |> Setup.Params.get(previously: %{})
+      |> Neighborhood.Params.get(previously: %{})
       |> assert_fields(expected)
     end
 
@@ -55,13 +55,13 @@ defmodule Setup.ParamsTest do
       %{een(species: ExamplesIdOf) => %{id: 112, name: "bovine"}}
     
     ExamplesIdOf.Tester.example(:animal)
-    |> Setup.Params.get(previously: previously)
+    |> Neighborhood.Params.get(previously: previously)
     |> assert_fields(name: "bossie", species_id: 112)
   end
 
 
   describe "resolve_field_refs" do 
-    alias T.Setup.Params      
+    alias T.Neighborhood.Params      
 
     @example_has_5 %{een(:example) => %{id: 5}}
 

@@ -1,6 +1,6 @@
-defmodule Link.ChangesetNotationToAssertionTest do
+defmodule Neighborhood.ChangesetNotationToAssertionTest do
   use TransformerTestSupport.Case
-  alias T.Link.ChangesetNotationToAssertion, as: Translate
+  alias T.Neighborhood.ChangesetNotationToAssertion, as: Translate
   alias Ecto.Changeset
 
   describe "creation and running" do

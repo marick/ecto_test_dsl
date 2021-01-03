@@ -1,4 +1,4 @@
-defmodule Setup.CreatePreviousExamplesTest do
+defmodule Neighborhood.CreatePreviousExamplesTest do
   use TransformerTestSupport.Drink.Me
   alias T.Variants.EctoClassic
   alias T.Run.Steps

@@ -2,7 +2,7 @@ defmodule TransformerTestSupport.Nouns.FieldCalculator do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AssertionJuice
 
-  alias T.Link.ChangesetNotationToAssertion, as: Translate
+  alias T.Neighborhood.ChangesetNotationToAssertion, as: Translate
   
   @moduledoc """
   A description of how a field's value can be calculated in terms of
