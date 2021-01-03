@@ -4,7 +4,7 @@ defmodule TransformerTestSupport.Run.Steps do
   use TransformerTestSupport.Drink.AndRun
 
   alias T.SmartGet.{Example,ChangesetChecks}
-  alias T.Neighborhood.{CreatePreviousExamples,Params}
+  alias T.Neighborhood.{Create,Params}
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
 
@@ -60,7 +60,7 @@ defmodule TransformerTestSupport.Run.Steps do
   def previously(running) do
     prior_work = Keyword.get(running.history, :previously, %{})
     sources = Map.get(running.example, :setup_instructions, [])
-    CreatePreviousExamples.from_a_list(sources, running.example, prior_work)
+    Create.from_a_list(sources, running.example, prior_work)
   end
 
   # ----------------------------------------------------------------------------

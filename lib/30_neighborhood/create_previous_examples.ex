@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Neighborhood.CreatePreviousExamples do
+defmodule TransformerTestSupport.Neighborhood.Create do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AndRun
   alias T.SmartGet.Example
