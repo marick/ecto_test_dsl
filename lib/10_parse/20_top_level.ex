@@ -2,7 +2,7 @@ defmodule TransformerTestSupport.Parse.TopLevel do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AssertionJuice
   
-  alias T.Parse.ExampleAdjustments
+  alias T.Parse.Normalize
   import DeepMerge, only: [deep_merge: 2]
   alias T.Nouns.AsCast
   alias T.Parse.Hooks
@@ -30,7 +30,7 @@ defmodule TransformerTestSupport.Parse.TopLevel do
     Hooks.run_variant(test_data, :assert_workflow_hook, [workflow])
 
     updated_examples =
-      ExampleAdjustments.adjust(:example_pairs, raw_examples)
+      Normalize.as(:example_pairs, raw_examples)
       |> attach_workflow_metadata(workflow)
       |> expand_likes(test_data.examples)
       |> KeywordX.map_over_values(&Example.add_setup_required_by_refs/1)
