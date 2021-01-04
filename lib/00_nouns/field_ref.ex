@@ -14,4 +14,11 @@ defmodule TransformerTestSupport.Nouns.FieldRef do
   def match?(_), do: false
 
   def relevant_pairs(pairs), do: KeywordX.filter_by_value(pairs, &match?/1)
+
+
+  def dereference(%FieldRef{} = ref, in: neighborhood) do
+    neighborhood
+    |> MapX.fetch!(ref.een, &Messages.missing_een/1)
+    |> MapX.fetch!(ref.field, &Messages.missing_key/1)
+  end
 end

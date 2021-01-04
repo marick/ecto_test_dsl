@@ -11,6 +11,10 @@ defmodule TransformerTestSupport.Messages do
 
   def missing_een(een),
     do: "There is no example named #{inspect een}"
+
+  def missing_key(key),
+    do: "There is no key named `#{inspect key}`"
+
   # ----------------------------------------------------------------------------
 
   defp example(name), do: "Example `#{inspect name}`"
