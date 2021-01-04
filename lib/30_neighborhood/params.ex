@@ -7,7 +7,7 @@ defmodule TransformerTestSupport.Neighborhood.Params do
   """
 
 
-  def get(example, previously: examples) do
+  def get(example, previously: neighborhood) do
     formatters = %{
       raw: &raw_format/1,
       phoenix: &phoenix_format/1
@@ -22,22 +22,22 @@ defmodule TransformerTestSupport.Neighborhood.Params do
 
       formatter ->
         Map.get(example, :params, [])
-        |> resolve_field_refs(examples)
+        |> resolve_field_refs(neighborhood)
         |> Map.new
         |> formatter.()
     end
   end
 
   # Public for testing
-  def resolve_field_refs(params, examples) do
+  def resolve_field_refs(params, neighborhood) do
     KeywordX.update_matching_structs(params, FieldRef,
-      &(field_ref_to_field_value(&1, examples)))
+      &(field_ref_to_field_value(&1, neighborhood)))
   end
 
-  defp field_ref_to_field_value(%FieldRef{} = fieldref, examples) do
-    case Map.get(examples, fieldref.een) do 
+  defp field_ref_to_field_value(%FieldRef{} = fieldref, neighborhood) do
+    case Map.get(neighborhood, fieldref.een) do 
       nil ->
-        keys = Map.keys(examples)
+        keys = Map.keys(neighborhood)
         elaborate_flunk(Messages.missing_een(fieldref.een), right: keys)
       earlier ->
         Map.get(earlier, fieldref.field)

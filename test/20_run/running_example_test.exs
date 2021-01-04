@@ -1,6 +1,5 @@
 defmodule TransformerTestSupport.Run.RunningExampleTest do
   use TransformerTestSupport.Drink.Me
-  use TransformerTestSupport.Drink.AndRun
   
   alias T.Variants.EctoClassic
   alias Ecto.Changeset
@@ -44,12 +43,13 @@ defmodule TransformerTestSupport.Run.RunningExampleTest do
 
   defmodule Tests do
     use TransformerTestSupport.Case
+    alias TransformerTestSupport.Run
 
     test "stopping early after a step" do
       assert [
         make_changeset: made, params: %{"name" => "young"},
           previously: %{}, previously: %{}, example: _] = 
-        Examples.Tester.example(:young) |> RunningExample.run(stop_after: :make_changeset)
+        Examples.Tester.example(:young) |> Run.example(stop_after: :make_changeset)
       
       made
       |> assert_shape(%Changeset{})
@@ -62,7 +62,7 @@ defmodule TransformerTestSupport.Run.RunningExampleTest do
       expect = fn example_name, expected ->
         actual =  
           Examples.Tester.example(example_name)
-          |> RunningExample.run(previously:
+          |> Run.example(previously:
                 %{een(young: Examples) => "presupplied, not created"})
         assert Keyword.get(actual, :previously) == expected
       end

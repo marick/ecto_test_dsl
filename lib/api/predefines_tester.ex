@@ -8,7 +8,7 @@ defmodule TransformerTestSupport.Predefines.Tester do
 
       alias T.TestDataServer
       alias T.SmartGet
-      alias T.Run.RunningExample
+      alias T.Run
       alias T.TraceServer
       alias T.KeywordX
         
@@ -37,7 +37,7 @@ defmodule TransformerTestSupport.Predefines.Tester do
         try do
           TraceServer.update(trace_server_opts)
           example(example_name)
-          |> RunningExample.run(other_opts)
+          |> Run.example(other_opts)
         after
           TraceServer.reset
         end

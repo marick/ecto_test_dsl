@@ -53,7 +53,7 @@ defmodule TransformerTestSupport.Neighborhood.Create do
       workflow_results = 
         een.module
         |> Example.get(een.name)
-        |> RunningExample.run(previously: so_far)
+        |> Run.example(previously: so_far)
 
       dependently_created = Keyword.get(workflow_results, :previously)
       {:ok, insert_result} = Keyword.get(workflow_results, :insert_changeset)

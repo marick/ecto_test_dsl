@@ -8,34 +8,45 @@ defmodule TransformerTestSupport.Run.RunningExample do
              script: :none_just_testing,
              tracer: :none]
 
-  def run(example, opts \\ []) do
-    running = %RunningExample{
-      example: example,
-      script: Example.workflow_script(example, opts),
-      history: History.new(example, opts)
-    }
-
-    Trace.apply(&run_steps/1, running) |> Trace.in_out
-  end
-
-  defp run_steps(running) do
-    case running.script do
-      [] ->
-        running.history
-      [{step_name, function} | rest] ->
-        value = 
-          Trace.apply(function, running) |> Trace.as_nested_value(step_name)
-
-        running
-        |> Map.update!(:history, &(History.add(&1, step_name, value)))
-        |> Map.put(:script, rest)
-        |> run_steps
-    end
-  end
-
-
-  # ----------------------------------------------------------------------------
+  def neighborhood(running),
+    do: Keyword.get(running.history, :previously, %{})
 
   def step_value!(running, step_name),
     do: History.step_value!(running.history, step_name)
+
+  # ----------------------------------------------------------------------------
+  def format_params(running, params) do
+    formatters = %{
+      raw: &raw_format/1,
+      phoenix: &phoenix_format/1
+    }
+
+    format = running.example.metadata.format
+    case Map.get(formatters, format) do
+      nil -> 
+        raise """
+        `#{inspect format}` is not a valid format for test data params.
+        Try one of these: `#{inspect Map.keys(formatters)}`
+        """
+      formatter ->
+        formatter.(params)
+    end
+  end
+
+  defp raw_format(map), do: map
+  
+  defp phoenix_format(map) do
+    map
+    |> Enum.map(fn {k,v} -> {value_to_string(k), value_to_string(v)} end)
+    |> Map.new
+  end
+
+  defp value_to_string(value) when is_list(value),
+    do: Enum.map(value, &to_string/1)
+  defp value_to_string(value) when is_map(value),
+    do: phoenix_format(value)
+  defp value_to_string(value),
+    do: to_string(value)
+  
+  
 end
