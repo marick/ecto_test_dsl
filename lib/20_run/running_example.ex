@@ -9,12 +9,13 @@ defmodule TransformerTestSupport.Run.RunningExample do
              tracer: :none]
 
   def run(example, opts \\ []) do
-    %RunningExample{
+    running = %RunningExample{
       example: example,
       script: Example.workflow_script(example, opts),
       history: History.new(example, opts)
     }
-    |> Trace.tio__(&run_steps/1)
+
+    Trace.apply(&run_steps/1, running) |> Trace.in_out
   end
 
   defp run_steps(running) do
@@ -22,7 +23,8 @@ defmodule TransformerTestSupport.Run.RunningExample do
       [] ->
         running.history
       [{step_name, function} | rest] ->
-        value = Trace.tli__(running, function, step_name)
+        value = 
+          Trace.apply(function, running) |> Trace.as_nested_value(step_name)
 
         running
         |> Map.update!(:history, &(History.add(&1, step_name, value)))
@@ -30,6 +32,7 @@ defmodule TransformerTestSupport.Run.RunningExample do
         |> run_steps
     end
   end
+
 
   # ----------------------------------------------------------------------------
 
