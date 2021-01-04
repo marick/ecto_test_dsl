@@ -17,6 +17,9 @@ defmodule TransformerTestSupport.Run.RunningExample do
 
   def original_params(running), do: running.example.params
 
+  def setup_instructions(running),
+    do: Map.get(running.example, :setup_instructions, [])
+
   def neighborhood(running),
     do: Keyword.get(running.history, :previously, %{})
 

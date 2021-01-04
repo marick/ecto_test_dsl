@@ -36,9 +36,10 @@ defmodule TransformerTestSupport.Run.Steps do
   end
 
   def previously(running) do
-    prior_work = Keyword.get(running.history, :previously, %{})
-    sources = Map.get(running.example, :setup_instructions, [])
-    Neighborhood.Create.from_a_list(sources, running.example, prior_work)
+    neighborhood = RunningExample.neighborhood(running)
+    instructions = RunningExample.setup_instructions(running)
+
+    Neighborhood.Create.from_a_list(instructions, running.example, neighborhood)
   end
 
   # ----------------------------------------------------------------------------
