@@ -4,7 +4,7 @@ defmodule TransformerTestSupport.Run.Steps do
   use TransformerTestSupport.Drink.AndRun
 
   alias T.SmartGet.{Example,ChangesetChecks}
-  alias T.Neighborhood.{Create,Params}
+  alias T.Neighborhood.{Create,Params,Expand}
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
 
@@ -21,8 +21,12 @@ defmodule TransformerTestSupport.Run.Steps do
 
   # ----------------------------------------------------------------------------
   def params(running) do
-    prior_work = Keyword.get(running.history, :previously, %{})
-    params = Params.get(running.example, previously: prior_work)
+    neighborhood = RunningExample.neighborhood(running)
+
+    original_params = running.example.params
+    params = 
+      RunningExample.format_params(running,
+        Expand.params(original_params, with: neighborhood))
 
     Trace.say(params, :params)
     params
@@ -46,7 +50,7 @@ defmodule TransformerTestSupport.Run.Steps do
   # use the results of another that isn't part of the same dependency tree.
   # That might change if I add a workflowy-wide or test-data-wide setup.
 
-  # If that is done, the history must be passed in by `RunningExample.run`
+  # If that is done, the history must be passed in by `Run.example`
 
   def start_sandbox(example) do
     alias Ecto.Adapters.SQL.Sandbox

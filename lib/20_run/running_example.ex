@@ -8,6 +8,15 @@ defmodule TransformerTestSupport.Run.RunningExample do
              script: :none_just_testing,
              tracer: :none]
 
+  def from(example, opts \\ []) do
+    %RunningExample{
+      example: example,
+      script: Keyword.get(opts, :script, []),
+      history: Keyword.get(opts, :history, History.new(example))
+    }
+  end    
+  
+
   def neighborhood(running),
     do: Keyword.get(running.history, :previously, %{})
 

@@ -4,11 +4,10 @@ defmodule TransformerTestSupport.Run do
   alias T.SmartGet.Example
 
   def example(example, opts \\ []) do
-    running = %RunningExample{
-      example: example,
+    running = RunningExample.from(example,
       script: Example.workflow_script(example, opts),
       history: History.new(example, opts)
-    }
+    )
 
     Trace.apply(&run_steps/1, running) |> Trace.in_out
   end
