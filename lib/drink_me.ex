@@ -9,7 +9,7 @@ defmodule TransformerTestSupport.Drink.Me do
       alias T.Messages
       alias T.Trace
 
-      alias T.{ChangesetX, EnumX, KeywordX}
+      alias T.{ChangesetX, EnumX, KeywordX, MapX}
     end
   end
 end
