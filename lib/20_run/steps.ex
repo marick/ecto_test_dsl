@@ -4,7 +4,6 @@ defmodule TransformerTestSupport.Run.Steps do
   use TransformerTestSupport.Drink.AndRun
 
   alias T.SmartGet.{Example,ChangesetChecks}
-  alias T.Neighborhood.{Create,Params,Expand}
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
 
@@ -19,31 +18,6 @@ defmodule TransformerTestSupport.Run.Steps do
     do: repo.insert(changeset)
   
 
-  # ----------------------------------------------------------------------------
-  def params(running) do
-    neighborhood = RunningExample.neighborhood(running)
-
-    original_params = running.example.params
-    params = 
-      RunningExample.format_params(running,
-        Expand.params(original_params, with: neighborhood))
-
-    Trace.say(params, :params)
-    params
-  end
-  
-  def accept_params(%{history: history, example: example}) do
-    params = Keyword.fetch!(history, :params)
-    module = Example.module_under_test(example)
-    apply Example.metadata!(example, :changeset_with), [module, params]
-  end
-
-  def check_validation_changeset(running, changeset_step) do 
-    changeset = RunningExample.step_value!(running, changeset_step)
-    check_validation_changeset_(changeset, running)
-    :uninteresting_result
-  end
-  
   # ----------------------------------------------------------------------------
 
   # I can't offhand think of any case where one `previously` might need to
@@ -64,9 +38,34 @@ defmodule TransformerTestSupport.Run.Steps do
   def previously(running) do
     prior_work = Keyword.get(running.history, :previously, %{})
     sources = Map.get(running.example, :setup_instructions, [])
-    Create.from_a_list(sources, running.example, prior_work)
+    Neighborhood.Create.from_a_list(sources, running.example, prior_work)
   end
 
+  # ----------------------------------------------------------------------------
+  def params(running) do
+    neighborhood = RunningExample.neighborhood(running)
+
+    original_params = RunningExample.original_params(running)
+    params = 
+      RunningExample.format_params(running,
+        Neighborhood.Expand.params(original_params, with: neighborhood))
+
+    Trace.say(params, :params)
+    params
+  end
+  
+  def accept_params(%{history: history, example: example}) do
+    params = Keyword.fetch!(history, :params)
+    module = Example.module_under_test(example)
+    apply Example.metadata!(example, :changeset_with), [module, params]
+  end
+
+  def check_validation_changeset(running, changeset_step) do 
+    changeset = RunningExample.step_value!(running, changeset_step)
+    check_validation_changeset_(changeset, running)
+    :uninteresting_result
+  end
+  
   # ----------------------------------------------------------------------------
 
   def insert(running, changeset_step) do

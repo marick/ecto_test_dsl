@@ -1,7 +1,6 @@
 defmodule TransformerTestSupport.Run.RunningExample do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AndRun
-  alias T.SmartGet.Example
 
   @enforce_keys [:example, :history]
   defstruct [:example, :history,
@@ -15,7 +14,8 @@ defmodule TransformerTestSupport.Run.RunningExample do
       history: Keyword.get(opts, :history, History.new(example))
     }
   end    
-  
+
+  def original_params(running), do: running.example.params
 
   def neighborhood(running),
     do: Keyword.get(running.history, :previously, %{})
