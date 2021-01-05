@@ -5,7 +5,6 @@ defmodule TransformerTestSupport.Parse.TopLevel do
   import DeepMerge, only: [deep_merge: 2]
   alias T.Nouns.AsCast
   alias T.Parse.Hooks
-  alias T.Parse.Nouns.Example
   alias T.Parse.{Previously,ParamsLike,Normalize,ImpliedSetup}
 
   # ----------------------------------------------------------------------------
