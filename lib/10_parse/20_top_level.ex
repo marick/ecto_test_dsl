@@ -6,7 +6,7 @@ defmodule TransformerTestSupport.Parse.TopLevel do
   alias T.Nouns.AsCast
   alias T.Parse.Hooks
   alias T.Parse.Nouns.Example
-  alias T.Parse.{Previously,ParamsLike,Normalize}
+  alias T.Parse.{Previously,ParamsLike,Normalize,ImpliedSetup}
 
   # ----------------------------------------------------------------------------
   def field_transformations(test_data, opts) do
@@ -34,7 +34,7 @@ defmodule TransformerTestSupport.Parse.TopLevel do
       |> attach_workflow_metadata(workflow)
       |> ParamsLike.expand(test_data.examples)
       |> Previously.ensure_references(test_data.examples_module)
-      |> KeywordX.map_over_values(&Example.add_setup_required_by_refs/1)
+      |> ImpliedSetup.add
 
     Map.update!(test_data, :examples, &(updated_examples ++ &1))
   end

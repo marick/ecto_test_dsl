@@ -1,11 +1,10 @@
-defmodule Parse.Nouns.ExampleTest do
-  
+defmodule Parse.Nouns.ImpliedSetupTest do
   use TransformerTestSupport.Case
-  alias T.Parse.Nouns.Example
+  alias T.Parse.ImpliedSetup
 
   test "to_empty" do
     expect = fn [initial, new], expected ->
-      Example.append_to_setup(initial, new)
+      ImpliedSetup.testable__append_to_setup(initial, new)
       |> Map.get(:setup_instructions)
       |> assert_equal(expected)
     end
