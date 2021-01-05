@@ -2,12 +2,11 @@ defmodule TransformerTestSupport.Parse.TopLevel do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AssertionJuice
   
-  alias T.Parse.Normalize
   import DeepMerge, only: [deep_merge: 2]
   alias T.Nouns.AsCast
   alias T.Parse.Hooks
   alias T.Parse.Nouns.Example
-  alias T.Parse.Previously
+  alias T.Parse.{Previously,ParamsLike,Normalize}
 
   # ----------------------------------------------------------------------------
   def field_transformations(test_data, opts) do
@@ -33,7 +32,7 @@ defmodule TransformerTestSupport.Parse.TopLevel do
     updated_examples =
       Normalize.as(:example_pairs, raw_examples)
       |> attach_workflow_metadata(workflow)
-      |> expand_likes(test_data.examples)
+      |> ParamsLike.expand(test_data.examples)
       |> Previously.ensure_references(test_data.examples_module)
       |> KeywordX.map_over_values(&Example.add_setup_required_by_refs/1)
 
@@ -50,21 +49,6 @@ defmodule TransformerTestSupport.Parse.TopLevel do
     end
   end
 
-  def expand_likes(new_named_examples, existing_named_examples) do
-    starting_acc = %{expanded: [], existing: existing_named_examples}
-
-    reducer = fn {new_name, new_example}, acc ->
-      # Should write a map_second
-      better =
-        {new_name, Example.expand_like(new_example, acc.existing)}
-
-      %{expanded: [better | acc.expanded ], existing: [better | acc.existing]}
-    end
-
-    Enum.reduce(new_named_examples, starting_acc, reducer).expanded
-  end
-  
-  
   # ----------------------------------------------------------------------------
   def replace_steps(test_data, replacements) do
     replacements = Enum.into(replacements, %{})

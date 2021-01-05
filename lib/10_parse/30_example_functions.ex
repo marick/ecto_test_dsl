@@ -1,7 +1,7 @@
 defmodule TransformerTestSupport.Parse.ExampleFunctions do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AssertionJuice
-  alias Parse.Nouns.ParamsLike
+  alias Parse.ParamsLike
 
   # ----------------------------------------------------------------------------
   def params(opts \\ []),

@@ -1,7 +1,6 @@
 defmodule TransformerTestSupport.Parse.Nouns.Example do
   use TransformerTestSupport.Drink.Me
   use Magritte
-  alias T.Parse.Nouns.ParamsLike
 
   @moduledoc """
   An Example is a plain map because variants may want to add fields to
@@ -9,11 +8,6 @@ defmodule TransformerTestSupport.Parse.Nouns.Example do
   under it.
   """
 
-  def expand_like(example, existing_named_examples) do
-    resolve = &(ParamsLike.resolve(&1, existing_named_examples))
-    Map.update(example, :params, %{}, resolve)
-  end
-  
   # ----------------------------------------------------------------------------
   
   def add_setup_required_by_refs(example) do
