@@ -10,7 +10,7 @@ defmodule Parse.TopLevel.MetadataTest do
 
   test "metadata propagation" do
     test_data = 
-      Examples.start(module_under_test: SomeSchema)
+      Examples.started()
       |> workflow(:workflow, example: [params(age: 1)])
       |> TopLevel.propagate_metadata
 
@@ -22,7 +22,7 @@ defmodule Parse.TopLevel.MetadataTest do
     metadata
     |> assert_fields(workflow_name: :workflow,
                      name: :example,
-                     module_under_test: SomeSchema,
+                     module_under_test: :irrelevant_module_under_test,
                      variant: T.Variants.Trivial)
     |> refute_field(:examples)   # Let's not get infinitely recursive
   end
