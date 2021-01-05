@@ -24,7 +24,20 @@ defmodule TransformerTestSupport.Run.RunningExample do
     do: Keyword.get(running.history, :previously, %{})
 
   def step_value!(running, step_name),
-    do: History.step_value!(running.history, step_name)
+    do: History.fetch!(running.history, step_name)
+
+  defp metadata(running), do: running.example.metadata
+  defp metadata(running, kind), do: metadata(running) |> Map.get(kind)
+
+  defp expanded_params(running), do: Keyword.fetch!(running.history, :params)
+  defp module_under_test(running), do: metadata(running, :module_under_test)
+
+  def accept_params(running) do
+    params = expanded_params(running)
+    module = module_under_test(running)
+    apply metadata(running, :changeset_with), [module, params]
+  end
+    
 
   # ----------------------------------------------------------------------------
   def format_params(running, params) do

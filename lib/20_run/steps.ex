@@ -55,13 +55,10 @@ defmodule TransformerTestSupport.Run.Steps do
     params
   end
   
-  def accept_params(%{history: history, example: example}) do
-    params = Keyword.fetch!(history, :params)
-    module = Example.module_under_test(example)
-    apply Example.metadata!(example, :changeset_with), [module, params]
-  end
+  def accept_params(running), 
+    do: RunningExample.accept_params(running)
 
-  def check_validation_changeset(running, changeset_step) do 
+  def check_validation_changeset(running, changeset_step) do
     changeset = RunningExample.step_value!(running, changeset_step)
     check_validation_changeset_(changeset, running)
     :uninteresting_result
