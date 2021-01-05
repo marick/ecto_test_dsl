@@ -2,7 +2,6 @@ defmodule TransformerTestSupport.Variants.Trivial do
   use TransformerTestSupport.Drink.Me
   alias T.Variants.Trivial, as: ThisVariant
   alias T.Parse.Start
-  alias T.Parse.Callbacks
   
   def start(opts \\ []) do
     Start.start_with_variant(ThisVariant, opts)

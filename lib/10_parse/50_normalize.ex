@@ -1,5 +1,4 @@
 defmodule TransformerTestSupport.Parse.Normalize do
-  alias TransformerTestSupport.Parse.Previously
   
   @moduledoc """
   """
