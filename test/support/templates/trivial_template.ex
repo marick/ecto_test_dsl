@@ -6,7 +6,9 @@ defmodule Template.Trivial do
       def started() do
         start(
           module_under_test: :irrelevant_module_under_test,
-          format: :raw
+          format: :raw,
+          examples_module: :default_trivial_examples_module,
+          examples: []
         )
       end
       

@@ -27,13 +27,6 @@ defmodule Variants.TrivialTest do
       
       assert Examples.start(@minimal_start) == expected
     end
-    
-    test "fields are checked" do
-      assertion_fails(~r/Required keys are missing/,
-        fn ->
-          Examples.start([]) 
-        end)
-    end
   end
         
 end

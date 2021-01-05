@@ -16,7 +16,6 @@ defmodule TransformerTestSupport.Variants.Trivial do
 
   def run_start_hook(top_level) do
     top_level
-    |> Callbacks.validate_top_level_keys([], [])
     |> Map.put(:steps, %{})
     |> Map.put(:workflows, %{})
   end
