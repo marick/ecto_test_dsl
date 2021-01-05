@@ -25,11 +25,11 @@ defmodule Parse.InternalFunctions.ExampleReferenceAffectsSetupTest do
         |> workflow(:invalid, name: [
              params(a: id_of(species: ExampleModule),
                     b: id_of(:thing)),
-             previously(insert: een(:noog))
+             previously(insert: :noog)
         ])
 
       assert example(test_data, :name).setup_instructions ==
-          [insert: een(:noog),
+          [insert: een(:noog, :default_trivial_examples_module),
            insert: een(species: ExampleModule),
            insert: een(thing: __MODULE__)]
     end
