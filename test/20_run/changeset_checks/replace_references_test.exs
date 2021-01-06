@@ -1,8 +1,9 @@
-defmodule Run.ChangesetChecksTest do
+defmodule Run.ChangesetChecks.ReplaceReferencesTest do
   use TransformerTestSupport.Case
   import T.Run.ChangesetChecks
   use T.Parse.All
 
+  # ----------------------------------------------------------------------------
   test "tested_replace_check_values" do
     expect = fn original, expected ->
       predicate = &is_binary/1
