@@ -8,6 +8,10 @@ defmodule TransformerTestSupport.Neighborhood.FieldCalculation do
   @moduledoc """
   """
 
+  def changeset_checks(calculated_field_descriptions, example) do
+    add([], example, calculated_field_descriptions)
+  end
+
   def add(existing_changeset_checks, example, calculated_field_descriptions) do
     calculated_field_descriptions
     |> Enum.reduce(existing_changeset_checks, fn field_description, acc ->
