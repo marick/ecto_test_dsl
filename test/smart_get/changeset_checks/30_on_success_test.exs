@@ -41,7 +41,8 @@ defmodule SmartGet.ChangesetChecks.OnSuccessTest do
               {:__custom_changeset_check, date_check}, 
               {:__custom_changeset_check, days_since_check}] = 
         Example.get(Examples, :example)
-        |> Checks.get_validation_checks(previously: %{})
+        |> RunningExample.from
+        |> Checks.get_validation_checks
 
       [checks: %{date: date_check, days_since: days_since_check}]
     end
@@ -98,7 +99,8 @@ defmodule SmartGet.ChangesetChecks.OnSuccessTest do
   test "no check added when a validation failure is expected" do
     assert [:invalid] =
       Example.get(Examples, :error)
-      |> Checks.get_validation_checks(previously: %{})
+      |> RunningExample.from
+      |> Checks.get_validation_checks
   end
 
   # ------------ Helper functions ----------------------------------------------

@@ -92,6 +92,7 @@ defmodule SmartGet.ChangesetChecks.AsCastTest do
       #
     end
 
+    @tag :skip
     test "`previously` values are obeyed" do
       [ as_cast: [:species_id],
         params:  [ species_id: id_of(:prerequisite)],
@@ -108,7 +109,6 @@ defmodule SmartGet.ChangesetChecks.AsCastTest do
     as_cast = Keyword.fetch!(opts, :as_cast)
     workflow = Keyword.get(opts, :workflow, :validation_success)
     params = Keyword.fetch!(opts, :params)
-    previously = Keyword.get(opts, :previously, %{})
 
     example_opts =
       case Keyword.get(opts, :checks) do
@@ -120,7 +120,8 @@ defmodule SmartGet.ChangesetChecks.AsCastTest do
     Dynamic.configure(Examples, AsCast)
     |> field_transformations(as_cast: as_cast)
     |> Dynamic.example_in_workflow(workflow, example_opts)
-    |> Checks.get_validation_checks(previously: previously)
+    |> RunningExample.from
+    |> Checks.get_validation_checks
     |> assert_equal(expected)
   end
 end

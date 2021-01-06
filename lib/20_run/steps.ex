@@ -98,10 +98,9 @@ defmodule TransformerTestSupport.Run.Steps do
   # ----------------------------------------------------------------------------
 
   defchain check_validation_changeset_(changeset, running) do
-    prior_work = Keyword.get(running.history, :previously, %{})
     adjust_assertion_message(
       fn ->
-        for check <- ChangesetChecks.get_validation_checks(running.example, previously: prior_work),
+        for check <- ChangesetChecks.get_validation_checks(running),
           do: apply_assertion(changeset, check)
       end,
       fn message ->

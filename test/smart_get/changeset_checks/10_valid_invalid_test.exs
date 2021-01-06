@@ -13,7 +13,8 @@ defmodule SmartGet.ChangesetChecks.ValidInvalidTest do
     test "what becomes valid and what becomes invalid" do
       expect = fn workflow_name, expected ->
         Dynamic.example_in_workflow(Examples, workflow_name)
-        |> Checks.get_validation_checks(previously: %{})
+        |> RunningExample.from
+        |> Checks.get_validation_checks
         |> assert_equal([expected])
       end
 
@@ -25,7 +26,8 @@ defmodule SmartGet.ChangesetChecks.ValidInvalidTest do
     test "checks are added to the beginning" do
       Dynamic.example_in_workflow(Examples, :validation_success,
         [changeset(no_changes: [:date])])
-      |> Checks.get_validation_checks(previously: %{})
+      |> RunningExample.from
+      |> Checks.get_validation_checks
       |> assert_equal([:valid, {:no_changes, [:date]}])
     end
   end

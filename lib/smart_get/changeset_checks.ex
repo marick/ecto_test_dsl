@@ -6,11 +6,14 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
   alias T.Run.ChangesetChecks, as: CC
   alias T.Neighborhood.FieldCalculation
   alias T.Nouns.AsCast
+  alias T.Run.RunningExample
     
   @moduledoc """
   """
 
-  def get_validation_checks(example, previously: previously) do
+  def get_validation_checks(running) do
+    previously = RunningExample.neighborhood(running)
+    example = running.example
     example_specific_checks = Map.get(example, :changeset_for_validation_step, [])
     user_mentioned = CC.unique_fields(example_specific_checks)
 
