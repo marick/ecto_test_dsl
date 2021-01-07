@@ -13,6 +13,7 @@ defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
   end
   # ----------------------------------------------------------------------------
 
+  @tag :skip
   test "handling of auto-generated valid/invalid checks" do
     a = nonflow_assertion_runners_for(&(run Sketch.success_example(), &1))
     ChangesetX.valid_changeset()   |> a.pass.()
@@ -20,6 +21,7 @@ defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
   end
   
   # ----------------------------------------------------------------------------
+  @tag :skip
   test "handling of explicit assertions" do
     a = nonflow_assertion_runners_for(fn example_checks, changeset_changes ->
       run(

@@ -16,6 +16,9 @@ defmodule TransformerTestSupport.Run.RunningExample do
   end    
 
   def original_params(running), do: running.example.params
+  def name(running), do: running.example.name
+  def changeset_for_validation_step(running), do:
+    Map.get(running.example, :changeset_for_validation_step, [])
 
   def setup_instructions(running),
     do: Map.get(running.example, :setup_instructions, [])
@@ -27,9 +30,12 @@ defmodule TransformerTestSupport.Run.RunningExample do
     do: History.fetch!(running.history, step_name)
 
   defp metadata(running), do: running.example.metadata
-  defp metadata(running, kind), do: metadata(running) |> Map.get(kind)
+  def metadata(running, kind), do: metadata(running) |> Map.get(kind)
 
-  defp expanded_params(running), do: Keyword.fetch!(running.history, :params)
+  # There are a number of older tests that don't think about history
+  def expanded_params(running) do
+    Keyword.get(running.history, :params, original_params(running))
+  end
   defp module_under_test(running), do: metadata(running, :module_under_test)
 
   def accept_params(running) do
@@ -37,7 +43,8 @@ defmodule TransformerTestSupport.Run.RunningExample do
     module = module_under_test(running)
     apply metadata(running, :changeset_with), [module, params]
   end
-    
+
+  def workflow_name(running), do: metadata(running, :workflow_name)
 
   # ----------------------------------------------------------------------------
   def format_params(running, params) do

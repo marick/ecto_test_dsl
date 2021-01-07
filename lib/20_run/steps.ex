@@ -6,6 +6,7 @@ defmodule TransformerTestSupport.Run.Steps do
   alias T.SmartGet.{Example,ChangesetChecks}
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
+  alias T.Run.Assertions
 
   # Default functions
 
@@ -63,6 +64,39 @@ defmodule TransformerTestSupport.Run.Steps do
     check_validation_changeset_(changeset, running)
     :uninteresting_result
   end
+
+  def check_validation_changeset__2(running) do
+    get = fn key -> RunningExample.step_value!(running, key) end
+
+    changeset = get.(:make_changeset)
+
+    run =  fn assertions ->
+      run_assertions(assertions, changeset, RunningExample.name(running))
+    end
+
+    get.(:workflow_name)
+    |> validity_assertions() |> run.()
+  end
+
+  def validity_assertions(workflow_name) do
+    if workflow_name == :validation_error,
+      do:   Assertions.from([:invalid]),
+      else: Assertions.from([:valid])
+  end
+
+  def run_assertions(assertions, changeset, name) do
+    adjust_assertion_message(
+      fn ->
+        for a <- assertions, do: a.(changeset)
+      end,
+      fn message ->
+          """
+          "Example `#{inspect name}`: #{message}."
+          Changeset: #{inspect changeset}
+          """
+      end)
+  end
+
   
   # ----------------------------------------------------------------------------
 
