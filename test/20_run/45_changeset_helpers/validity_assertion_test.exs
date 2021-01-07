@@ -1,8 +1,8 @@
-defmodule Neighborhood.Run.ChangesetChecks.ValidityIsCheckedTest do
+defmodule Neighborhood.Run.ChangesetChecks.ValidityIsCheckedHelperTest do
   use TransformerTestSupport.Case
   alias T.Run.Steps
 
-  test "foo" do
+  test "helper function" do
     a = nonflow_assertion_runners_for(fn [workflow_name, changeset] ->
       Steps.validity_assertions(workflow_name)
       |> Steps.run_assertions(changeset, :some_example_name)
@@ -19,6 +19,5 @@ defmodule Neighborhood.Run.ChangesetChecks.ValidityIsCheckedTest do
         message: ~r/The changeset is invalid/,
         message: ~r/Changeset.* valid.: false/)
     [:success         , ChangesetX.valid_changeset] |> a.pass.()
-
   end
 end
