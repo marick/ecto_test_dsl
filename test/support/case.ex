@@ -5,6 +5,7 @@ defmodule TransformerTestSupport.Case do
       use ExUnit.Case, async: true
       use FlowAssertions
       use FlowAssertions.Ecto
+      use Given
       import FlowAssertions.AssertionA
       import FlowAssertions.Define.Tabular
       alias T.Run

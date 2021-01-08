@@ -1,5 +1,6 @@
 defmodule Given do
   import Mockery
+  alias ExUnit.Assertions
 
   defmodule Util do
     def decompose_call(funcall, default_module) do
@@ -31,6 +32,23 @@ defmodule Given do
       end
     end
 
+    def process_fetch!(key) do
+      case Process.get(key, :__missing_process_key) do
+        :__missing_process_key ->
+          {_, module, [{function_name, _}], arglist} = key
+          arg_string =
+            arglist
+            |> Enum.map(&inspect/1)
+            |> Enum.join(", ")
+          funcall = "#{inspect module}.#{to_string function_name}(#{arg_string})"
+            
+          Assertions.flunk("You did not set up a stub for #{funcall}")
+        value ->     
+          value
+      end
+    end
+    
+
     @args [:a1, :a2, :a3, :a4, :a5, :a6, :a7, :a8, :a9, :aa, :ab, :ac, :ad, :ae, :af]
 
     def return_function_ast({module, function_description, arglist}) do
@@ -38,12 +56,12 @@ defmodule Given do
 
       quote do 
         fn unquote_splicing(vars) ->
-          Process.get {
+          Given.Util.process_fetch!({
             Given,
             unquote(module),
             unquote(function_description),
             unquote(vars)
-          }
+          })
         end
       end
     end
