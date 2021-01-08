@@ -19,28 +19,17 @@ defmodule GivenTest do
     end
   end
 
-  # test "creating the return function" do
-  #   expect = fn key, expected ->
-  #     actual = Given.Util.mk__return_function(key) |> Macro.to_string
-  #     assert actual == expected
-  #   end
-
-  #   input = {Kernel, [to_string: 1], [{1, 2}]}
-  #   input |> expect.("fn _ -> Process.get(#{inspect input}) end")
-
-  #   input = {Kernel, [no_arg: 0], []}
-  #   input |> expect.("fn -> Process.get(#{inspect input}) end")
-  # end
-
-
   def function_under_test(count) do
     {:ok, mockable(Date).add(~D[2001-02-03], count)}
   end
 
   test "given" do
+    # Manifest constants
+    given Date.add(~D[2001-02-03], 3), return: "return for 3"
+
+    # Calculations and variables
     date = ~D[2001-02-03]
-    given(Date.add(date, 1+2), return: "return for 3")
-    given Date.add(~D[2001-02-03], 4), return: "return for 4"
+    given(Date.add(date, 1+3), return: "return for 4")
 
     assert function_under_test(3) == {:ok, "return for 3"}
     assert function_under_test(4) == {:ok, "return for 4"}

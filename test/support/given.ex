@@ -31,17 +31,26 @@ defmodule Given do
       end
     end
 
-    def return_function_ast({module, function_description, arglist} = key) do
+    @args [:a1, :a2, :a3, :a4, :a5, :a6, :a7, :a8, :a9, :aa, :ab, :ac, :ad, :ae, :af]
+
+    def return_function_ast({module, function_description, arglist}) do
+      vars = for a <- Enum.take(@args, length(arglist)), do: Macro.var(a, __MODULE__)
+
       quote do 
-        fn a, b ->
-          Process.get{Given, unquote(module), unquote(function_description), [a, b]}
+        fn unquote_splicing(vars) ->
+          Process.get {
+            Given,
+            unquote(module),
+            unquote(function_description),
+            unquote(vars)
+          }
         end
       end
     end
   end
   
   defmacro given(funcall, return: body) do
-    {module, function_description, arglist} = triple = 
+    {module, function_description, _arglist} = triple = 
       Given.Util.decompose_call(funcall, __MODULE__)
 
     key = Util.key_ast(triple)
@@ -52,27 +61,6 @@ defmodule Given do
       mock(unquote(module), unquote(function_description), unquote(value_calculator))
     end
   end
-    
-
-  # @doc """
-  # Mockery support
-
-  # given Module.function, [args...], do: return-value
-  # """
-
-  # defmacro given(modulename, args, do: body) do
-  #   {{:., _, [module, fn_name]},
-  #     _, _
-  #   } = modulename
-
-  #   fn_descriptor = [{fn_name, length(args)}]
-
-  #   quote do
-  #     mock(unquote(module), unquote(fn_descriptor), fn(unquote_splicing(args)) ->
-  #       unquote(body)
-  #     end)
-  #   end
-  # end
 
   defmacro __using__(_) do
     quote do
