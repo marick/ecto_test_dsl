@@ -1,4 +1,4 @@
-defmodule Neighborhood.Run.ChangesetChecks.ValidityIsCheckedHelperTest do
+defmodule Run.ChangesetHelpers.ValidityIsCheckedHelperTest do
   use TransformerTestSupport.Case
   alias T.Run.Steps
 

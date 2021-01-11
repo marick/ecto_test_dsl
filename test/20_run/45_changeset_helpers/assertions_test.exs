@@ -1,4 +1,4 @@
-defmodule Run.AssertionsTest do
+defmodule Run.ChangesetHelpers.AssertionsTest do
   use TransformerTestSupport.Case
   alias T.Run.Assertions
   alias Ecto.Changeset

@@ -1,4 +1,4 @@
-defmodule Run.ChangesetChecks.ReplaceReferencesTest do
+defmodule Run.ChangesetHelpers.ReplaceReferencesTest do
   use TransformerTestSupport.Case
   import T.Run.ChangesetChecks
   use T.Parse.All
