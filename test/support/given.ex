@@ -1,37 +1,9 @@
 defmodule Given do
   import Mockery
   alias ExUnit.Assertions
+  alias TransformerTestSupport.MacroX
 
   defmodule Util do
-    # Note that this doesn't resolve aliases, which requires the __ENV__ at
-    # macroexpansion time. Haven't figured out how to make use of that
-    # information within a single function, so the caller will have to
-    # adjust the result if the first part of the function is a module
-    # alias.
-    
-    def decompose_call(funcall, default_module) do
-      case Macro.decompose_call(funcall) do
-        {{:__aliases__, _, aliases},  fun_atom, args} -> 
-          composed_alias =
-            Enum.reduce(aliases, :Elixir, fn alias, acc ->
-              Module.safe_concat(acc, alias)
-            end)
-          function_description = [{fun_atom, length(args)}]
-
-          {composed_alias, function_description, args}
-          
-        {fun_atom, args} ->
-          function_description = [{fun_atom, length(args)}]
-          {default_module, function_description, args}
-          
-          _ ->
-        raise """
-        #{Macro.to_string(funcall)} does not look like a call to a function
-        attached to a module.
-        """
-      end
-    end
-
     def key({module, function_description, arglist}) do
       {Given, module, function_description, arglist}
     end
@@ -103,19 +75,16 @@ defmodule Given do
     # end
     
   end
-
-
-  
   
   defmacro given(funcall, return: body) do
-    {aliass, function_description, arglist} = 
-      Given.Util.decompose_call(funcall, __MODULE__)
+    {the_alias, function_description, arglist} = 
+      MacroX.decompose_call_alt(funcall, __MODULE__)
 
     quote do
-      module = Keyword.get(__ENV__.aliases, unquote(aliass), unquote(aliass))
+      module = MacroX.alias_to_module(unquote(the_alias), __ENV__)
       triple = {module, unquote(function_description), unquote(arglist)}
 
-      key = Given.Util.key(triple)
+      key = Util.key(triple)
       value_calculator = Util.return_function(triple)
       Process.put(key, unquote(body))
       mock(module, unquote(function_description), value_calculator)
