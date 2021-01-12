@@ -1,5 +1,6 @@
 defmodule TransformerTestSupport.Parse.InternalFunctions do
   use TransformerTestSupport.Drink.Me
+  alias T.MacroX
 
   # ----------------------------------------------------------------------------
   defmacro id_of(extended_example_desc) do
@@ -10,36 +11,34 @@ defmodule TransformerTestSupport.Parse.InternalFunctions do
   end
 
   # ----------------------------------------------------------------------------
+
+  # Clearly some more duplication could be removed, but that's enough for now.
+  
   defmacro on_success(funcall) do
     from = "on_success(#{Macro.to_string(funcall)})"
-    case Macro.decompose_call(funcall) do
-      {{:__aliases__, _, aliases},  fun_atom, args} -> 
-        composed_module = Enum.reduce(aliases, :Elixir, fn alias, acc ->
-          Module.safe_concat(acc, alias)
-        end)
-        fun = Function.capture(composed_module, fun_atom, length(args))
+    case MacroX.decompose_call_alt(funcall) do
+      {:in_named_module, alias_or_module, [{fun_atom, fun_count}], args} ->
         quote do
-          FieldCalculator.new(unquote(fun), unquote(args), unquote(from))
-        end
-
-      {fun_atom, args} ->
-        quote do 
-          fun = Function.capture(__MODULE__, unquote(fun_atom), length(unquote(args)))
+          module = MacroX.alias_to_module(unquote(alias_or_module), __ENV__)
+          fun = Function.capture(module, unquote(fun_atom), unquote(fun_count))
           FieldCalculator.new(fun, unquote(args), unquote(from))
         end
 
-      _ ->
-        raise """
-        The argument to `on_success/1` does not look like a function call.
-        You may want the `on_success(f, applied_to: args)` variant.
-        """
+      {:in_calling_module, _, [{fun_atom, fun_count}], args} ->
+        quote do 
+          module = MacroX.alias_to_module(__MODULE__, __ENV__)   # NO-OP
+          fun = Function.capture(module, unquote(fun_atom), unquote(fun_count))
+          FieldCalculator.new(fun, unquote(args), unquote(from))
+        end
     end
   end
 
   def on_success(f, applied_to: fields) when is_list(fields),
     do: FieldCalculator.new(f, fields, "on_success(<fn>, applied_to: #{inspect fields})")
   def on_success(f, applied_to: field),
-    do: on_success(f, applied_to: [field])
+      do: on_success(f, applied_to: [field])
+
+  
   # ----------------------------------------------------------------------------
 
   # Used to create arguments for TopLevel.replace_steps

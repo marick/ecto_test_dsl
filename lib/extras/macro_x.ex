@@ -6,7 +6,7 @@ defmodule TransformerTestSupport.MacroX do
     # adjust the result if the first part of the function is a module
     # alias.
   
-  def decompose_call_alt(funcall, default_module) do
+  def decompose_call_alt(funcall) do
     case Macro.decompose_call(funcall) do
       {{:__aliases__, _, aliases},  fun_atom, args} -> 
         composed_alias =
@@ -15,13 +15,13 @@ defmodule TransformerTestSupport.MacroX do
           end)
         function_description = [{fun_atom, length(args)}]
         
-        {composed_alias, function_description, args}
+        {:in_named_module, composed_alias, function_description, args}
         
       {fun_atom, args} ->
         function_description = [{fun_atom, length(args)}]
-        {default_module, function_description, args}
+        {:in_calling_module, :use__MODULE__, function_description, args}
         
-        _ ->
+      _ ->
         raise """
         #{Macro.to_string(funcall)} does not look like a call to a function
         attached to a module.

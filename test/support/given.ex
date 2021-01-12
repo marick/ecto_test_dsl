@@ -77,8 +77,8 @@ defmodule Given do
   end
   
   defmacro given(funcall, return: body) do
-    {the_alias, function_description, arglist} = 
-      MacroX.decompose_call_alt(funcall, __MODULE__)
+    {_, the_alias, function_description, arglist} = 
+      MacroX.decompose_call_alt(funcall)
 
     quote do
       module = MacroX.alias_to_module(unquote(the_alias), __ENV__)
