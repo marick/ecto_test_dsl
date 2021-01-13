@@ -7,6 +7,7 @@ defmodule TransformerTestSupport.Run.Steps do
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
   alias T.Run.Assertions
+  import Mockery.Macro
 
   # Default functions
 
@@ -65,23 +66,28 @@ defmodule TransformerTestSupport.Run.Steps do
     :uninteresting_result
   end
 
-  def check_validation_changeset__2(running) do
-    get = fn key -> RunningExample.step_value!(running, key) end
+  def check_validation_changeset__2(running, changeset_step) do
+    example_name = mockable(RunningExample).name(running)
+    changeset = mockable(RunningExample).step_value!(running, changeset_step)
+    workflow_name = mockable(RunningExample).workflow_name(running)
 
-    changeset = get.(:make_changeset)
-
-    run =  fn assertions ->
-      run_assertions(assertions, changeset, RunningExample.name(running))
-    end
-
-    get.(:workflow_name)
-    |> validity_assertions() |> run.()
+    run_validity_assertions(workflow_name, example_name, changeset)
+    :uninteresting_result
   end
 
-  def validity_assertions(workflow_name) do
-    if workflow_name == :validation_error,
-      do:   Assertions.from([:invalid]),
-      else: Assertions.from([:valid])
+  def run_validity_assertions(workflow_name, example_name, changeset) do
+    {assertion, error_snippet} =
+      if workflow_name == :validation_error,
+        do:   {Assertions.from(:invalid), "an invalid"},
+        else: {Assertions.from(:valid), "a valid"}
+
+    message =
+      "Example `#{inspect example_name}`: workflow `#{inspect workflow_name}` expects #{error_snippet} changeset"
+    adjust_assertion_message(
+      fn ->
+        assertion.(changeset)
+      end,
+      fn _ -> message end)
   end
 
   def run_assertions(assertions, changeset, name) do
