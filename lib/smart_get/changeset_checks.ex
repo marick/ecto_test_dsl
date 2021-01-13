@@ -45,7 +45,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
   # refer to previous examples.
   def get_constraint_checks(example, opts \\ []) do
     _previously = Keyword.get(opts, :previously, %{})
-    example_specific_checks = Map.get(example, :changeset_for_constraint_step, [])
+    example_specific_checks = Map.get(example, :constraint_changeset_checks, [])
 
     example_specific_checks
   end

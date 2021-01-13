@@ -31,6 +31,8 @@ defmodule Parse.InternalFunctions.FieldCalculationTest do
 
   alias String.Chars
 
+  def get_rid_of_annoying_compile_warning(x), do: Chars.to_string(x)
+
   test "on_success with aliases" do
     x = on_success(Chars.to_string(:date))
     x.calculation.(5)
