@@ -25,7 +25,7 @@ defmodule VariantSupport.Changeset.CheckValidationChangesetTest do
   test "handling of explicit assertions" do
     a = nonflow_assertion_runners_for(fn example_checks, changeset_changes ->
       run(
-        Sketch.example(:ok, :success, changeset_for_validation_step: example_checks),
+        Sketch.example(:ok, :success, validation_changeset_checks: example_checks),
         ChangesetX.valid_changeset(       changes: changeset_changes))
     end)
     

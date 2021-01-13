@@ -2,6 +2,7 @@ defmodule Run.ChangesetHelpers.ValidityIsCheckedHelperTest do
   use TransformerTestSupport.Case
   alias T.Run.Steps
 
+  @tag :skip
   test "helper function" do
     a = nonflow_assertion_runners_for(fn [workflow_name, changeset] ->
       Steps.validity_assertions(workflow_name)

@@ -11,7 +11,7 @@ defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
 
   def get_validation_checks(running) do
     example = running.example
-    example_specific_checks = Map.get(example, :changeset_for_validation_step, [])
+    example_specific_checks = Map.get(example, :validation_changeset_checks, [])
     user_mentioned = CC.unique_fields(example_specific_checks)
 
     resolved_params = RunningExample.expanded_params(running)

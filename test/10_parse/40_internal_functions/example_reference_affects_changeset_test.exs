@@ -25,7 +25,7 @@ defmodule Parse.InternalFunctions.ExampleReferenceAffectsChangesetTest do
   end
   
   defp changes_for(example_name) do
-    get_for(example_name, :changeset_for_validation_step)
+    get_for(example_name, :validation_changeset_checks)
     |> Keyword.get(:changed)
   end
 

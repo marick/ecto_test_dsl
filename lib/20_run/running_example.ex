@@ -17,8 +17,8 @@ defmodule TransformerTestSupport.Run.RunningExample do
 
   def original_params(running), do: running.example.params
   def name(running), do: running.example.name
-  def changeset_for_validation_step(running), do:
-    Map.get(running.example, :changeset_for_validation_step, [])
+  def validation_changeset_checks(running),
+    do: Map.get(running.example, :validation_changeset_checks, [])
 
   def setup_instructions(running),
     do: Map.get(running.example, :setup_instructions, [])

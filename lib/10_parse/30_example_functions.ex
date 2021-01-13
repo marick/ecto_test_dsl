@@ -20,7 +20,7 @@ defmodule TransformerTestSupport.Parse.ExampleFunctions do
     {:setup_instructions, opts}
   end
 
-  def changeset(opts), do: {:changeset_for_validation_step, opts}
+  def changeset(opts), do: {:validation_changeset_checks, opts}
   def constraint_changeset(opts), do: {:changeset_for_constraint_step, opts}
 
   # ----------------------------------------------------------------------------
