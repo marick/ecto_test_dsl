@@ -73,28 +73,35 @@ defmodule Given do
     #     end
     #   end
     # end
-    
+
   end
   
-  defmacro given(funcall, return: body) do
+  defmacro given(funcall, return: value) do
     {_, the_alias, function_description, arglist} = 
       MacroX.decompose_call_alt(funcall)
 
+    expand_into_stubs(the_alias, function_description, arglist, value)
+  end
+
+
+  def expand_into_stubs(the_alias, function_description, arglist, value) do 
     quote do
       module = MacroX.alias_to_module(unquote(the_alias), __ENV__)
       triple = {module, unquote(function_description), unquote(arglist)}
 
       key = Util.key(triple)
       value_calculator = Util.return_function(triple)
-      Process.put(key, unquote(body))
+      Process.put(key, unquote(value))
       mock(module, unquote(function_description), value_calculator)
     end
   end
 
+
   defmacro __using__(_) do
     quote do
       require Given
-      import Given
+      import Given, except: [expand_into_stubs: 4]
+      alias Given
     end
   end
 end

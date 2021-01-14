@@ -3,28 +3,16 @@ defmodule Run.ValidationStep.UserChecksTest do
   use T.Drink.AndRun
   alias Run.Steps
   use Mockery
+  import T.RunningStubs
 
   setup do
-    stub_workflow_name(:success)
-    given RunningExample.name(:running), return: :example
+    stub(workflow_name: :success, name: :example)
     :ok
   end
 
-  defp stub_changeset(changeset) do
-    given RunningExample.step_value!(:running, :make_changeset), return: changeset
-  end
-
-  defp stub_workflow_name(name) do
-    given RunningExample.workflow_name(:running), return: name
-  end
-
-  defp stub_validation_changeset_checks(value) do
-    given RunningExample.validation_changeset_checks(:running), return: value
-  end
-
   defp run([checks, changeset]) do 
-    stub_changeset(changeset)
-    stub_validation_changeset_checks(checks)
+    stub_history(make_changeset: changeset)
+    stub(validation_changeset_checks: checks)
     Steps.check_validation_changeset__2(:running, :make_changeset)
   end
 
@@ -50,7 +38,7 @@ defmodule Run.ValidationStep.UserChecksTest do
   end
 
   test "error cases are fine" do
-    stub_workflow_name(:validation_error)
+    stub(workflow_name: :validation_error)   # overrides
 
     [                            [changes:  [name: "Bossie"]],
      ChangesetX.invalid_changeset(changes: %{name: "Bossie"})] |> pass()
@@ -61,5 +49,4 @@ defmodule Run.ValidationStep.UserChecksTest do
     [                          [                          ],
      ChangesetX.valid_changeset(changes: %{name: "Bossie"})] |> pass()
   end
-  
 end

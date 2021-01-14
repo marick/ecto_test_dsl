@@ -3,24 +3,16 @@ defmodule Run.ValidationStep.ChangesetValidityTest do
   use T.Drink.AndRun
   alias Run.Steps
   use Mockery
+  import T.RunningStubs
 
   setup do
-    given RunningExample.validation_changeset_checks(:running), return: []
-    given RunningExample.name(:running), return: :example
+    stub(name: :example, validation_changeset_checks: [])
     :ok
   end
 
-  defp stub_changeset(changeset) do
-    given RunningExample.step_value!(:running, :make_changeset), return: changeset
-  end
-
-  defp stub_workflow_name(name) do
-    given RunningExample.workflow_name(:running), return: name
-  end
-
-  defp run([changeset, {:workflow, workflow_name}]) do 
-    stub_changeset(changeset)
-    stub_workflow_name(workflow_name)
+  defp run([changeset, {:workflow, workflow_name}]) do
+    stub(workflow_name: workflow_name)
+    stub_history(make_changeset: changeset)
     Steps.check_validation_changeset__2(:running, :make_changeset)
   end
 
