@@ -72,6 +72,11 @@ defmodule TransformerTestSupport.Run.Steps do
     workflow_name = mockable(RunningExample).workflow_name(running)
 
     run_validity_assertions(workflow_name, example_name, changeset)
+    
+    running
+    |> mockable(RunningExample).validation_changeset_checks
+    |> run_user_checks(example_name, changeset)
+    
     :uninteresting_result
   end
 
@@ -90,6 +95,12 @@ defmodule TransformerTestSupport.Run.Steps do
       fn _ -> message end)
   end
 
+  def run_user_checks(checks, example_name, changeset) do
+    checks
+    |> Assertions.from
+    |> run_assertions(changeset, example_name)
+  end
+
   def run_assertions(assertions, changeset, name) do
     adjust_assertion_message(
       fn ->
@@ -97,7 +108,7 @@ defmodule TransformerTestSupport.Run.Steps do
       end,
       fn message ->
           """
-          "Example `#{inspect name}`: #{message}."
+          "Example `#{inspect name}`: #{message}"
           Changeset: #{inspect changeset}
           """
       end)

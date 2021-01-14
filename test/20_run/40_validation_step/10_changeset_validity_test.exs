@@ -5,6 +5,7 @@ defmodule Run.ValidationStep.ChangesetValidityTest do
   use Mockery
 
   setup do
+    given RunningExample.validation_changeset_checks(:running), return: []
     given RunningExample.name(:running), return: :example
     :ok
   end
