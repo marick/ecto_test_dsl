@@ -45,6 +45,7 @@ defmodule TransformerTestSupport.Run.RunningExample do
   end
 
   def workflow_name(running), do: metadata(running, :workflow_name)
+  def as_cast(running), do: running.as_cast
 
   # ----------------------------------------------------------------------------
   def format_params(running, params) do

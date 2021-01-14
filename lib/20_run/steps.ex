@@ -76,6 +76,13 @@ defmodule TransformerTestSupport.Run.Steps do
     running
     |> mockable(RunningExample).validation_changeset_checks
     |> run_user_checks(example_name, changeset)
+
+    params = mockable(RunningExample).step_value!(running, :params)
+    
+    running
+    |> mockable(RunningExample).as_cast
+    |> AsCast.assertions(params)
+    |> run_assertions(changeset, example_name)
     
     :uninteresting_result
   end

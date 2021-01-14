@@ -6,7 +6,9 @@ defmodule Run.ValidationStep.ChangesetValidityTest do
   import T.RunningStubs
 
   setup do
-    stub(name: :example, validation_changeset_checks: [])
+    stub(workflow_name: :success, name: :example,
+      as_cast: AsCast.nothing, validation_changeset_checks: [])
+    stub_history(params: %{})
     :ok
   end
 
