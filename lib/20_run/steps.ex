@@ -8,6 +8,7 @@ defmodule TransformerTestSupport.Run.Steps do
   alias FlowAssertions.Ecto.ChangesetA
   alias T.Run.Assertions
   import Mockery.Macro
+  alias T.Run.ChangesetChecks, as: CC
 
   # Default functions
 
@@ -72,9 +73,11 @@ defmodule TransformerTestSupport.Run.Steps do
     example_name = mockable(RunningExample).name(running)
     changeset = mockable(RunningExample).step_value!(running, changeset_step)
 
+
     # Check changeset valid field
     workflow_name = mockable(RunningExample).workflow_name(running)
     run_validity_assertions(workflow_name, example_name, changeset)
+
 
     # User checks
     user_checks = mockable(RunningExample).validation_changeset_checks(running)
@@ -83,9 +86,11 @@ defmodule TransformerTestSupport.Run.Steps do
 
     # as_cast checks
     params = mockable(RunningExample).step_value!(running, :params)
+    excluded_fields = CC.unique_fields(user_checks)
     
     running
     |> mockable(RunningExample).as_cast
+    |> AsCast.subtract(excluded_fields)
     |> AsCast.assertions(params)
     |> run_assertions(changeset, example_name)
 
@@ -93,6 +98,7 @@ defmodule TransformerTestSupport.Run.Steps do
     # field calculation checks
     running
     |> mockable(RunningExample).field_calculators
+    |> FieldCalculator.subtract(excluded_fields)
     |> FieldCalculator.assertions(changeset)
     |> run_assertions(changeset, example_name)
     
