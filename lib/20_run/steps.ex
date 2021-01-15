@@ -67,23 +67,30 @@ defmodule TransformerTestSupport.Run.Steps do
   end
 
   def check_validation_changeset__2(running, changeset_step) do
+
+    # Used throughout
     example_name = mockable(RunningExample).name(running)
     changeset = mockable(RunningExample).step_value!(running, changeset_step)
+
+    # Check changeset valid field
     workflow_name = mockable(RunningExample).workflow_name(running)
-
     run_validity_assertions(workflow_name, example_name, changeset)
-    
-    running
-    |> mockable(RunningExample).validation_changeset_checks
-    |> run_user_checks(example_name, changeset)
 
+    # User checks
+    user_checks = mockable(RunningExample).validation_changeset_checks(running)
+    run_user_checks(user_checks, example_name, changeset)
+
+
+    # as_cast checks
     params = mockable(RunningExample).step_value!(running, :params)
     
     running
     |> mockable(RunningExample).as_cast
     |> AsCast.assertions(params)
     |> run_assertions(changeset, example_name)
-    
+
+
+    # field calculation checks
     running
     |> mockable(RunningExample).field_calculators
     |> FieldCalculator.assertions(changeset)
