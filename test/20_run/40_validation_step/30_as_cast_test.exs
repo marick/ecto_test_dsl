@@ -24,7 +24,7 @@ defmodule Run.ValidationStep.AsCastTest do
     stub_history(params: params, make_changeset: changeset)
     stub(as_cast: AsCast.new(Schema, [field]))
     given Schema.changeset(%Schema{}, params), return: cast_value
-    Steps.check_validation_changeset__2(:running, :make_changeset)
+    Steps.check_validation_changeset(:running, :make_changeset)
   end
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result

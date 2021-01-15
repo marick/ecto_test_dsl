@@ -173,7 +173,7 @@ defmodule Variants.EctoClassic.Insert.SuccessWorkflowTest do
                        date_string: "has an invalid format")
     end
       
-    
+    @tag :skip
     test "mistakes in test data" do 
       assertion_fails(~r/:unexpected_syntax_errors.*The changeset is invalid/,
         fn -> 

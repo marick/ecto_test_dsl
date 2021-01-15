@@ -16,7 +16,7 @@ defmodule Run.ValidationStep.ChangesetValidityTest do
   defp run([changeset, {:workflow, workflow_name}]) do
     stub(workflow_name: workflow_name)
     stub_history(make_changeset: changeset)
-    Steps.check_validation_changeset__2(:running, :make_changeset)
+    Steps.check_validation_changeset(:running, :make_changeset)
   end
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result

@@ -16,7 +16,6 @@ defmodule TransformerTestSupport.Run.RunningExample do
   end    
 
   def original_params(running), do: running.example.params
-  def name(running), do: running.example.name
   def validation_changeset_checks(running),
     do: Map.get(running.example, :validation_changeset_checks, [])
 
@@ -38,6 +37,10 @@ defmodule TransformerTestSupport.Run.RunningExample do
   end
   defp module_under_test(running), do: metadata(running, :module_under_test)
 
+  def name(running), do: metadata(running, :name)
+  def as_cast(running), do: metadata(running, :as_cast)
+  def field_calculators(running), do: metadata(running, :field_calculators)
+
   def accept_params(running) do
     params = expanded_params(running)
     module = module_under_test(running)
@@ -45,8 +48,6 @@ defmodule TransformerTestSupport.Run.RunningExample do
   end
 
   def workflow_name(running), do: metadata(running, :workflow_name)
-  def as_cast(running), do: running.as_cast
-  def field_calculators(running), do: running.field_calculators
 
   # ----------------------------------------------------------------------------
   def format_params(running, params) do

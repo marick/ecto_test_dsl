@@ -33,7 +33,7 @@ defmodule Run.ValidationStep.FieldCalculationTest do
   defp run([changes: changes]) do
     changeset = ChangesetX.valid_changeset(changes: changes)
     stub_history(make_changeset: changeset)
-    Steps.check_validation_changeset__2(:running, :make_changeset)
+    Steps.check_validation_changeset(:running, :make_changeset)
   end
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result

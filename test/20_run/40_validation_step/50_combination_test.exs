@@ -31,7 +31,7 @@ defmodule Run.ValidationStep.CombinationTest do
     :ok
   end
 
-  defp run(), do: Steps.check_validation_changeset__2(:running, :make_changeset)
+  defp run(), do: Steps.check_validation_changeset(:running, :make_changeset)
   defp pass(), do: assert run() == :uninteresting_result
 
   test "validity assertion comes first" do
@@ -78,7 +78,4 @@ defmodule Run.ValidationStep.CombinationTest do
     stub_history(make_changeset: ChangesetX.valid_changeset([changes: %{age_plus: 0}]))
     pass()
   end
-
-
-  # age_plus: on_success(&(&1+1), applied_to: [:age])],
 end

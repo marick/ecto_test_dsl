@@ -62,18 +62,11 @@ defmodule TransformerTestSupport.Run.Steps do
     do: RunningExample.accept_params(running)
 
   def check_validation_changeset(running, changeset_step) do
-    changeset = RunningExample.step_value!(running, changeset_step)
-    check_validation_changeset_(changeset, running)
-    :uninteresting_result
-  end
-
-  def check_validation_changeset__2(running, changeset_step) do
-
     # Used throughout
     example_name = mockable(RunningExample).name(running)
     changeset = mockable(RunningExample).step_value!(running, changeset_step)
 
-
+    
     # Check changeset valid field
     workflow_name = mockable(RunningExample).workflow_name(running)
     run_validity_assertions(workflow_name, example_name, changeset)
@@ -172,17 +165,6 @@ defmodule TransformerTestSupport.Run.Steps do
 
 
   # ----------------------------------------------------------------------------
-
-  defchain check_validation_changeset_(changeset, running) do
-    adjust_assertion_message(
-      fn ->
-        for check <- ChangesetChecks.get_validation_checks(running),
-          do: apply_assertion(changeset, check)
-      end,
-      fn message ->
-        error_message(running.example, changeset, message)
-      end)
-  end
 
   defchain check_constraint_changeset_(changeset, running) do
     prior_work = Keyword.get(running.history, :previously, %{})
