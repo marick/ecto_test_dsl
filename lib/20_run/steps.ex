@@ -84,6 +84,11 @@ defmodule TransformerTestSupport.Run.Steps do
     |> AsCast.assertions(params)
     |> run_assertions(changeset, example_name)
     
+    running
+    |> mockable(RunningExample).field_calculators
+    |> FieldCalculator.assertions(changeset)
+    |> run_assertions(changeset, example_name)
+    
     :uninteresting_result
   end
 

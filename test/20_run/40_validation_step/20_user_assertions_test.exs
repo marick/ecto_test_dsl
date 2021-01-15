@@ -6,7 +6,9 @@ defmodule Run.ValidationStep.UserChecksTest do
   import T.RunningStubs
 
   setup do
-    stub(workflow_name: :success, name: :example, as_cast: AsCast.nothing)
+    stub(workflow_name: :success, name: :example,
+      as_cast: AsCast.nothing,
+      field_calculators: [])
     stub_history(params: %{})
     :ok
   end
