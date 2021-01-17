@@ -1,33 +1,32 @@
 defmodule TransformerTestSupport.Run.RunningExample do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AndRun
+  import T.ModuleX
 
   @enforce_keys [:example, :history]
   defstruct [:example, :history,
              script: :none_just_testing,
              tracer: :none]
 
-  def from(example, opts \\ []) do
-    %RunningExample{
-      example: example,
-      script: Keyword.get(opts, :script, []),
-      history: Keyword.get(opts, :history, History.new(example))
-    }
-  end    
+  getters :example, [setup_instructions: []]
 
-  def original_params(running), do: running.example.params
-  def validation_changeset_checks(running),
-    do: Map.get(running.example, :validation_changeset_checks, [])
+  getters :example, :metadata, [
+    :as_cast, :field_calculators, :name, :workflow_name,
+    validation_changeset_checks: [],
+  ]
 
-  def setup_instructions(running),
-    do: Map.get(running.example, :setup_instructions, [])
+  private_getters :example, [:params]
+  publicize(:original_params, renames: :params)
 
-  def neighborhood(running),
-    do: Keyword.get(running.history, :previously, %{})
+  private_getters :example, :metadata, [:module_under_test]
+
+  private_getters :history, [previously: %{}]
+  publicize(:neighborhood, renames: :previously)
 
   def step_value!(running, step_name),
     do: History.fetch!(running.history, step_name)
 
+  # Phase these out
   defp metadata(running), do: running.example.metadata
   def metadata(running, kind), do: metadata(running) |> Map.get(kind)
 
@@ -35,19 +34,24 @@ defmodule TransformerTestSupport.Run.RunningExample do
   def expanded_params(running) do
     Keyword.get(running.history, :params, original_params(running))
   end
-  defp module_under_test(running), do: metadata(running, :module_under_test)
 
-  def name(running), do: metadata(running, :name)
-  def as_cast(running), do: metadata(running, :as_cast)
-  def field_calculators(running), do: metadata(running, :field_calculators)
+  # ----------------------------------------------------------------------------
+
+  def from(example, opts \\ []) do
+    %RunningExample{
+      example: example,
+      script: Keyword.get(opts, :script, []),
+      history: Keyword.get(opts, :history, History.new(example))
+    }
+  end
+
+  # ----------------------------------------------------------------------------
 
   def accept_params(running) do
     params = expanded_params(running)
     module = module_under_test(running)
     apply metadata(running, :changeset_with), [module, params]
   end
-
-  def workflow_name(running), do: metadata(running, :workflow_name)
 
   # ----------------------------------------------------------------------------
   def format_params(running, params) do
