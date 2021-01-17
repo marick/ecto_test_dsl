@@ -25,18 +25,6 @@ defmodule TransformerTestSupport.SmartGet.Example do
     do: Map.get(example.metadata, field)
 
 
-  def workflow_script(example, opts) do
-    stop = Keyword.get(opts, :stop_after, :"this should not ever be a step name")
-
-    attach_functions = fn step_names ->
-      step_functions = step_functions(example)
-      for name <- step_names, do: {name, step_functions[name]}
-    end
-
-    step_list!(example)
-    |> EnumX.take_until(&(&1 == stop))
-    |> attach_functions.()
-  end
 
   
 
@@ -54,20 +42,4 @@ defmodule TransformerTestSupport.SmartGet.Example do
   def repo(example), do: metadata(example, :repo)
   
 
-  defp step_list!(example) do
-    workflows = workflows(example)
-    workflow_name = workflow_name(example)
-    
-    step_list = 
-      Map.get(workflows, workflow_name, :missing_workflow)
-
-    # This should be a bug in one of the tests in tests, most likely using
-    # the Trivial variant instead of one with actual steps.
-    # Or the variant's validity checks are wrong.
-    elaborate_refute(step_list == :missing_workflow,
-      "Example #{inspect name(example)} seems to have an incorrect workflow name.",
-      left: workflow_name, right: Map.keys(workflows))
-
-    step_list
-  end
 end
