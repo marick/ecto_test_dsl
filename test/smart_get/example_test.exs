@@ -1,6 +1,5 @@
 defmodule SmartGet.ExampleTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.SmartGet.Example
   alias TransformerTestSupport.TestDataServer
 
 
@@ -16,7 +15,7 @@ defmodule SmartGet.ExampleTest do
 
   test "getting an example can use either module name or data" do
     from_module_name =
-      Example.get(Examples, :example)
+      TestData.example(Examples, :example)
     from_test_data =
       TestDataServer.test_data(Examples).examples
       |> Keyword.get(:example)

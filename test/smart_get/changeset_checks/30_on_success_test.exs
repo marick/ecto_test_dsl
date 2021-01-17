@@ -2,7 +2,6 @@ defmodule SmartGet.ChangesetChecks.OnSuccessTest do
   use TransformerTestSupport.Case
   use T.Drink.AndRun
   alias T.SmartGet.ChangesetChecks, as: Checks
-  alias T.SmartGet.Example
   use T.Parse.All
 
   
@@ -40,7 +39,7 @@ defmodule SmartGet.ChangesetChecks.OnSuccessTest do
       assert [:valid,
               {:__custom_changeset_check, date_check}, 
               {:__custom_changeset_check, days_since_check}] = 
-        Example.get(Examples, :example)
+        TestData.example(Examples, :example)
         |> RunningExample.from
         |> Checks.get_validation_checks
 
@@ -98,7 +97,7 @@ defmodule SmartGet.ChangesetChecks.OnSuccessTest do
 
   test "no check added when a validation failure is expected" do
     assert [:invalid] =
-      Example.get(Examples, :error)
+      TestData.example(Examples, :error)
       |> RunningExample.from
       |> Checks.get_validation_checks
   end

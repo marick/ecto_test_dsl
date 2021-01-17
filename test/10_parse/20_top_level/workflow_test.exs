@@ -16,7 +16,7 @@ defmodule Parse.TopLevel.WorkflowTest do
   end
 
   test "workflows are attached to examples" do
-    SmartGet.Example.get(Examples, :ok)
+    TestData.example(Examples, :ok)
     |> SmartGet.Example.workflow_name
     |> assert_equal(:success)
   end

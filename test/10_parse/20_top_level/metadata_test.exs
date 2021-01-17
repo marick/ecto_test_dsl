@@ -16,7 +16,7 @@ defmodule Parse.TopLevel.MetadataTest do
 
     metadata =
       test_data
-      |> SmartGet.Example.get(:example)
+      |> TestData.example(:example)
       |> Map.get(:metadata)
 
     metadata

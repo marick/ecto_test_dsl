@@ -52,7 +52,7 @@ defmodule TransformerTestSupport.Neighborhood.Create do
     unless_already_present(een, so_far, fn ->
       workflow_results = 
         een.module
-        |> Example.get(een.name)
+        |> TestData.example(een.name)
         |> Run.example(previously: so_far)
 
       dependently_created = Keyword.get(workflow_results, :previously)

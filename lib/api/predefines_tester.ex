@@ -7,10 +7,10 @@ defmodule TransformerTestSupport.Predefines.Tester do
       alias TransformerTestSupport, as: T
 
       alias T.TestDataServer
-      alias T.SmartGet
       alias T.Run
       alias T.TraceServer
       alias T.KeywordX
+      alias T.Nouns.TestData
         
       @name_of_test_data Module.split(__MODULE__)
       |> Enum.drop(-1) |> Module.safe_concat
@@ -18,7 +18,7 @@ defmodule TransformerTestSupport.Predefines.Tester do
       def test_data(), do: TestDataServer.test_data(@name_of_test_data)
       
       def example(name),
-        do: SmartGet.Example.get(@name_of_test_data, name)
+        do: TestData.example(@name_of_test_data, name)
       
       def params(example_name) do
         check_workflow(example_name, stop_after: :params)

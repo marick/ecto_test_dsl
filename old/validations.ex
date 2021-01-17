@@ -22,7 +22,7 @@ defmodule TransformerTestSupport.Validations do
   end
     
   def validate_changeset(changeset, example_name, test_data) do
-    example = SmartGet.Example.get(test_data, example_name)
+    example = TestData.example(test_data, example_name)
     validate_changeset_against_example(changeset, example_name, example)
   end
 

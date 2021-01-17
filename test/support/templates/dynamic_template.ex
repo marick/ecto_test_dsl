@@ -30,7 +30,7 @@ defmodule Template.Dynamic do
     test_data
     |> TopLevel.workflow(workflow_name, only_example: example_opts)
     |> TopLevel.propagate_metadata
-    |> Example.get(:only_example)
+    |> TestData.example(:only_example)
   end
 end
 
