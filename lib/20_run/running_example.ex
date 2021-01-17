@@ -11,7 +11,7 @@ defmodule TransformerTestSupport.Run.RunningExample do
   getters :example, [setup_instructions: []]
 
   getters :example, :metadata, [
-    :as_cast, :field_calculators, :name, :workflow_name,
+    :as_cast, :field_calculators, :insert_with, :name, :repo, :workflow_name, 
     validation_changeset_checks: [],
   ]
 

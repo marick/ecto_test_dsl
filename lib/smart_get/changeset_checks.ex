@@ -1,6 +1,5 @@
 defmodule TransformerTestSupport.SmartGet.ChangesetChecks do
   use TransformerTestSupport.Drink.Me
-  alias T.SmartGet.Example
   alias T.Run.ChangesetChecks, as: CC
   alias T.Neighborhood.FieldCalculation
   alias T.Nouns.AsCast

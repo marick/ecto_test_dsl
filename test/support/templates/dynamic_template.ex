@@ -1,6 +1,5 @@
 defmodule Template.Dynamic do
   use TransformerTestSupport.Drink.Me
-  alias T.SmartGet.Example
   alias T.Parse.TopLevel
 
 

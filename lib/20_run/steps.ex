@@ -32,7 +32,7 @@ defmodule TransformerTestSupport.Run.Steps do
   def start_sandbox(example) do
     alias Ecto.Adapters.SQL.Sandbox
 
-    repo = Example.repo(example)
+    repo = RunningExample.repo(example)
     if repo do  # Convenient for testing, where we might be faking the repo functions.
       Sandbox.checkout(repo) # it's OK if it's already checked out.
     end
@@ -137,8 +137,8 @@ defmodule TransformerTestSupport.Run.Steps do
 
   def insert(running, changeset_step) do
     changeset = RunningExample.step_value!(running, changeset_step)
-    repo = Example.repo(running.example)
-    apply Example.metadata!(running.example, :insert_with), [repo, changeset]
+    repo = RunningExample.repo(running)
+    apply RunningExample.insert_with(running), [repo, changeset]
   end
 
   def check_insertion_result(running, insertion_step) do

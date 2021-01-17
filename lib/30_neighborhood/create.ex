@@ -1,7 +1,6 @@
 defmodule TransformerTestSupport.Neighborhood.Create do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AndRun
-  alias T.SmartGet.Example
 
   # ----------------------------------------------------------------------------
   # Working with a container of one or more example sources
@@ -23,12 +22,6 @@ defmodule TransformerTestSupport.Neighborhood.Create do
   # previously(..., insert: [<ex1>, <ex2>], ...)
   def from_a_tuple({:insert, sources}, example, prior_work) when is_list(sources) do
     from_a_list(sources, example, prior_work, &({:insert, &1}))
-  end
-
-  # previously(..., insert: <ex1>, ...)
-  def from_a_tuple({:insert, source}, example, prior_work) when is_atom(source) do
-    example_module = Example.examples_module(example)
-    from_a_leaf({source, example_module}, prior_work)
   end
 
   # previously(..., insert: een{name, module}, ...)
