@@ -5,15 +5,16 @@ defmodule TransformerTestSupport.TestDataServer do
     do: GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
 
   @doc """
-  Lazy getter that triggers the creation of the data contained in `param_module`.
+  Lazy getter that triggers the creation of the data contained in `test_data_module`.
   """
-  def test_data(param_module) do
-    GenServer.call(__MODULE__, {:test_data, param_module})
+  def test_data(test_data_module) do
+    GenServer.call(__MODULE__, {:test_data, test_data_module})
   end
 
-  def put_value_into(value, param_module) do
-    GenServer.call(__MODULE__, {:put, param_module, value})
+  def put_value_into(value, test_data_module) do
+    GenServer.call(__MODULE__, {:put, test_data_module, value})
   end
+  
 
   # ----------------------------------------------------------------------------
 
@@ -21,21 +22,21 @@ defmodule TransformerTestSupport.TestDataServer do
   def init(init_arg), do: {:ok, init_arg}
 
   @impl GenServer
-  def handle_call({:put, param_module, value}, _from, state) do
-    new_state = Map.put(state, param_module, value)
+  def handle_call({:put, test_data_module, value}, _from, state) do
+    new_state = Map.put(state, test_data_module, value)
     {:reply, new_state, new_state}
   end
 
   @impl GenServer
-  def handle_call({:test_data, param_module}, _from, state) do
+  def handle_call({:test_data, test_data_module}, _from, state) do
     alias TransformerTestSupport.Parse.TopLevel
     
-    case Map.get(state, param_module) do
+    case Map.get(state, test_data_module) do
       nil ->
         test_data =
-          param_module.create_test_data()
+          test_data_module.create_test_data()
           |> TopLevel.propagate_metadata 
-        {:reply, test_data, Map.put(state, param_module, test_data)}
+        {:reply, test_data, Map.put(state, test_data_module, test_data)}
       test_data ->
         {:reply, test_data, state}
     end
