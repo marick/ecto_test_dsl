@@ -57,25 +57,26 @@ defmodule TransformerTestSupport.Run.Steps do
     Trace.say(params, :params)
     params
   end
+
+  # ----------------------------------------------------------------------------
   
   def accept_params(running), 
     do: RunningExample.accept_params(running)
 
-  def check_validation_changeset(running, changeset_step) do
+  # ----------------------------------------------------------------------------
+
+  def check_validation_changeset(running, which_changeset) do
     # Used throughout
     example_name = mockable(RunningExample).name(running)
-    changeset = mockable(RunningExample).step_value!(running, changeset_step)
-
+    changeset = mockable(RunningExample).step_value!(running, which_changeset)
     
     # Check changeset valid field
     workflow_name = mockable(RunningExample).workflow_name(running)
     run_validity_assertions(workflow_name, example_name, changeset)
 
-
     # User checks
     user_checks = mockable(RunningExample).validation_changeset_checks(running)
     run_user_checks(user_checks, example_name, changeset)
-
 
     # as_cast checks
     params = mockable(RunningExample).step_value!(running, :params)
@@ -86,7 +87,6 @@ defmodule TransformerTestSupport.Run.Steps do
     |> AsCast.subtract(excluded_fields)
     |> AsCast.assertions(params)
     |> run_assertions(changeset, example_name)
-
 
     # field calculation checks
     if mockable(RunningExample).workflow_name(running) != :validation_error do 
@@ -100,7 +100,7 @@ defmodule TransformerTestSupport.Run.Steps do
     :uninteresting_result
   end
 
-  def run_validity_assertions(workflow_name, example_name, changeset) do
+  defp run_validity_assertions(workflow_name, example_name, changeset) do
     {assertion, error_snippet} =
       if workflow_name == :validation_error,
         do:   {Assertions.from(:invalid), "an invalid"},
@@ -115,13 +115,13 @@ defmodule TransformerTestSupport.Run.Steps do
       fn _ -> message end)
   end
 
-  def run_user_checks(checks, example_name, changeset) do
+  defp run_user_checks(checks, example_name, changeset) do
     checks
     |> Assertions.from
     |> run_assertions(changeset, example_name)
   end
 
-  def run_assertions(assertions, changeset, name) do
+  defp run_assertions(assertions, changeset, name) do
     adjust_assertion_message(
       fn ->
         for a <- assertions, do: a.(changeset)
@@ -137,8 +137,8 @@ defmodule TransformerTestSupport.Run.Steps do
   
   # ----------------------------------------------------------------------------
 
-  def insert(running, changeset_step) do
-    changeset = RunningExample.step_value!(running, changeset_step)
+  def insert(running, which_changeset) do
+    changeset = RunningExample.step_value!(running, which_changeset)
     repo = RunningExample.repo(running)
     apply RunningExample.insert_with(running), [repo, changeset]
   end
@@ -154,8 +154,8 @@ defmodule TransformerTestSupport.Run.Steps do
     end
   end
   
-  def check_constraint_changeset(running, changeset_step) do
-    case RunningExample.step_value!(running, changeset_step) do
+  def check_constraint_changeset(running, which_changeset) do
+    case RunningExample.step_value!(running, which_changeset) do
       {:error, changeset} -> 
         check_constraint_changeset_(changeset, running)
       tuple -> 
