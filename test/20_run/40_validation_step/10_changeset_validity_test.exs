@@ -23,6 +23,9 @@ defmodule Run.ValidationStep.ChangesetValidityTest do
 
   test "expecting valid changeset; got it",
     do: [ChangesetX.valid_changeset,   workflow: :success] |> pass()
+  test "note that constraint error workflow expects a valid changeset",
+    # Because we haven't gotten to the point of the error yet.
+    do: [ChangesetX.valid_changeset,   workflow: :constraint_error] |> pass()
   test "expecting invalid changeset; got it",
     do: [ChangesetX.invalid_changeset, workflow: :validation_error] |> pass()
 

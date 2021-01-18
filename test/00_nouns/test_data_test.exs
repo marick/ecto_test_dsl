@@ -1,4 +1,4 @@
-defmodule SmartGet.ExampleTest do
+defmodule Nouns.TestDataTest do
   use TransformerTestSupport.Case
   alias TransformerTestSupport.TestDataServer
 
