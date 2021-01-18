@@ -144,13 +144,14 @@ defmodule TransformerTestSupport.Run.Steps do
   end
 
   def check_insertion_result(running, insertion_step) do
-    case RunningExample.step_value!(running, insertion_step) do
+    name = mockable(RunningExample).name(running)
+    case mockable(RunningExample).step_value!(running, insertion_step) do
       {:ok, _result} -> 
         :uninteresting_result
-      {:error, changeset} -> 
+      wrong -> 
         elaborate_flunk(
-          error_message(running.example, changeset, "Unexpected insertion failure"),
-          left: changeset.errors)
+          context__2(name, "unexpected insertion failure"),
+          left: wrong)
     end
   end
   
@@ -199,6 +200,16 @@ defmodule TransformerTestSupport.Run.Steps do
   defp error_message(example, changeset, message) do
     """
     #{context(example, message)}
+    Changeset: #{inspect changeset}
+    """
+  end
+
+  defp context__2(name, message),
+    do: "Example `#{inspect name}`: #{message}"
+
+  defp error_message__2(name, changeset, message) do
+    """
+    #{context__2(name, message)}
     Changeset: #{inspect changeset}
     """
   end

@@ -193,7 +193,7 @@ defmodule Variants.EctoClassic.Insert.SuccessWorkflowTest do
     end
 
     test "unexpected failure" do
-      assertion_fails(~r/Unexpected insertion failure/,
+      assertion_fails(~r/unexpected insertion failure/,
         fn -> 
           Examples.Tester.check_workflow(:insertion_will_unexpectedly_fail)
         end)

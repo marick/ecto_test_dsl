@@ -12,7 +12,7 @@ defmodule TransformerTestSupport.Run.RunningExample do
 
   getters :example, :metadata, [
     :as_cast, :field_calculators, :insert_with, :name, :repo, :workflow_name, 
-    validation_changeset_checks: [],
+    validation_changeset_checks: [], constraint_changeset_checks: []
   ]
 
   private_getters :example, [:params]
