@@ -25,7 +25,8 @@ defmodule Run.ValidationStep.FieldCalculationTest do
     stub(workflow_name: :success, name: :example,
       validation_changeset_checks: [],
       as_cast: AsCast.nothing,
-      module_under_test: Schema)
+      module_under_test: Schema,
+      neighborhood: %{})
     stub_history(params: %{})
     :ok
   end

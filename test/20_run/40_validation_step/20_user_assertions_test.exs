@@ -8,7 +8,8 @@ defmodule Run.ValidationStep.UserChecksTest do
   setup do
     stub(workflow_name: :success, name: :example,
       as_cast: AsCast.nothing,
-      field_calculators: [])
+      field_calculators: [],
+      neighborhood: %{})
     stub_history(params: %{})
     :ok
   end

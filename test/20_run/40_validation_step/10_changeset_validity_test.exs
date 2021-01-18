@@ -8,7 +8,8 @@ defmodule Run.ValidationStep.ChangesetValidityTest do
   setup do
     stub(workflow_name: :success, name: :example,
       as_cast: AsCast.nothing, validation_changeset_checks: [],
-      field_calculators: [])
+      field_calculators: [],
+      neighborhood: %{})
     stub_history(params: %{})
     :ok
   end

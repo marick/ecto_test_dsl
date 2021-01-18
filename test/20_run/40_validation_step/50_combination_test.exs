@@ -26,7 +26,8 @@ defmodule Run.ValidationStep.CombinationTest do
       validation_changeset_checks: [],
       as_cast: AsCast.nothing,
       field_calculators: [], 
-      module_under_test: Schema)
+      module_under_test: Schema,
+      neighborhood: %{})
     stub_history(params: %{})
     :ok
   end

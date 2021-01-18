@@ -9,7 +9,8 @@ defmodule Run.ValidationStep.AsCastTest do
   setup do
     stub(workflow_name: :success, name: :example,
       validation_changeset_checks: [],
-      field_calculators: [])
+      field_calculators: [],
+      neighborhood: %{})
     :ok
   end
 

@@ -8,11 +8,14 @@ defmodule TransformerTestSupport.Run.RunningExample do
              script: :none_just_testing,
              tracer: :none]
 
-  getters :example, [setup_instructions: []]
+  getters :example, [
+    setup_instructions: [],
+    validation_changeset_checks: [],
+    constraint_changeset_checks: []
+  ]
 
   getters :example, :metadata, [
     :as_cast, :field_calculators, :insert_with, :name, :repo, :workflow_name, 
-    validation_changeset_checks: [], constraint_changeset_checks: []
   ]
 
   private_getters :example, [:params]
