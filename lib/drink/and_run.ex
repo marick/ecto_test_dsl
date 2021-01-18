@@ -4,6 +4,7 @@ defmodule TransformerTestSupport.Drink.AndRun do
       alias TransformerTestSupport.Nouns.History
       alias TransformerTestSupport.Run
       alias TransformerTestSupport.Run.RunningExample
+      alias TransformerTestSupport.Run.ChangesetAssertions
     end
   end
 end

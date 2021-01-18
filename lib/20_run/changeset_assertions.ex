@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Run.Assertions do
+defmodule TransformerTestSupport.Run.ChangesetAssertions do
   use TransformerTestSupport.Drink.Me
   use TransformerTestSupport.Drink.AssertionJuice
 

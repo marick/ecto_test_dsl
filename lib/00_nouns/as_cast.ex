@@ -1,9 +1,9 @@
 defmodule TransformerTestSupport.Nouns.AsCast do
   use TransformerTestSupport.Drink.Me
   use T.Drink.AssertionJuice
+  use T.Drink.AndRun
   alias Ecto.Changeset
   alias T.Nouns.AsCast
-  alias T.Run.Assertions
 
   @moduledoc """
   A reference to a schema field.
@@ -60,7 +60,7 @@ defmodule TransformerTestSupport.Nouns.AsCast do
   def assertions(%AsCast{} = data, params) do
     data
     |> changeset_checks(params)
-    |> Assertions.from
+    |> ChangesetAssertions.from
     |> Enum.map(&(friendlier_location &1, data.field_names))
   end
 

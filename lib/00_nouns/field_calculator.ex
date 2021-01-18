@@ -1,9 +1,8 @@
 defmodule TransformerTestSupport.Nouns.FieldCalculator do
   use TransformerTestSupport.Drink.Me
-  use TransformerTestSupport.Drink.AssertionJuice
+  use T.Drink.AssertionJuice
+  use T.Drink.AndRun
 
-  alias T.Run.Assertions
-  
   @moduledoc """
   A description of how a field's value can be calculated in terms of
   other fields (and constants).
@@ -52,7 +51,7 @@ defmodule TransformerTestSupport.Nouns.FieldCalculator do
   end
 
   defp check_style_assertion(check, from) do 
-    raw_assertion = Assertions.from(check)
+    raw_assertion = ChangesetAssertions.from(check)
     fn changeset ->
       adjust_assertion_error(fn ->
         raw_assertion.(changeset)

@@ -6,7 +6,6 @@ defmodule TransformerTestSupport.Run.Steps do
   alias T.SmartGet.{Example,ChangesetChecks}
   use FlowAssertions.Ecto
   alias FlowAssertions.Ecto.ChangesetA
-  alias T.Run.Assertions
   import Mockery.Macro
   alias T.Run.ChangesetChecks, as: CC
 
@@ -107,8 +106,8 @@ defmodule TransformerTestSupport.Run.Steps do
   defp run_validity_assertions(workflow_name, example_name, changeset) do
     {assertion, error_snippet} =
       if workflow_name == :validation_error,
-        do:   {Assertions.from(:invalid), "an invalid"},
-        else: {Assertions.from(:valid), "a valid"}
+        do:   {ChangesetAssertions.from(:invalid), "an invalid"},
+        else: {ChangesetAssertions.from(:valid), "a valid"}
 
     message =
       "Example `#{inspect example_name}`: workflow `#{inspect workflow_name}` expects #{error_snippet} changeset"
@@ -121,7 +120,7 @@ defmodule TransformerTestSupport.Run.Steps do
 
   defp run_user_checks(checks, example_name, changeset) do
     checks
-    |> Assertions.from
+    |> ChangesetAssertions.from
     |> run_assertions(changeset, example_name)
   end
 

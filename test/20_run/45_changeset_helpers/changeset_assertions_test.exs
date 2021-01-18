@@ -1,11 +1,11 @@
-defmodule Run.ChangesetHelpers.AssertionsTest do
+defmodule Run.ChangesetHelpers.ChangesetAssertionsTest do
   use TransformerTestSupport.Case
-  alias T.Run.Assertions
+  alias T.Run.ChangesetAssertions
   alias Ecto.Changeset
 
   describe "creation and running" do
     test "a symbol" do 
-      assertion = Assertions.from(:valid)
+      assertion = ChangesetAssertions.from(:valid)
       
       valid = %Changeset{valid?: true}
       assert assertion.(valid) == :ok
@@ -20,7 +20,7 @@ defmodule Run.ChangesetHelpers.AssertionsTest do
     end
 
     test "a symbol plus arg" do
-      assertion = Assertions.from({:changes, [a: "a", b: "b"]})
+      assertion = ChangesetAssertions.from({:changes, [a: "a", b: "b"]})
 
       changeset  = fn changes -> %Changeset{changes: changes} end
 
@@ -37,7 +37,7 @@ defmodule Run.ChangesetHelpers.AssertionsTest do
     end
 
     test "list" do
-      [valid, changes] = Assertions.from([:valid, changes: [a: "a", b: "b"]])
+      [valid, changes] = ChangesetAssertions.from([:valid, changes: [a: "a", b: "b"]])
       
       assertion_fails("The changeset is invalid",
         fn ->
