@@ -11,6 +11,7 @@ defmodule Run.ConstraintStep.UserAssertionsTest do
     alias Ecto.Changeset
     schema "bogus" do 
       field :name, :string
+      field :other, :string
     end
   end
   
@@ -49,4 +50,21 @@ defmodule Run.ConstraintStep.UserAssertionsTest do
         [fails, changeset] |> run()
       end)
   end
+
+  test "missing fields" do # just for the heck of it"
+    changeset =
+      Changeset.change(%Schema{}, %{name: "fred", other: "3"})
+      |> Changeset.add_error(:name, "duplicate name")
+
+    fails = [change: [name: "fred", other: "3"],
+             error: [other: "other message"]]
+                     
+    assertion_fails(~r/Example `:example`/,
+      [message: ~r/There are no errors for field `:other`/,
+       expr: [changeset: [{:error, [other: "other message"]}, "..."]]],
+      fn ->
+        [fails, changeset] |> run()
+      end)
+  end
+  
 end

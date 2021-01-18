@@ -26,23 +26,6 @@ defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
   @example Sketch.example(:name, :constraint_error, [
         constraint_changeset(error: [name: ~r/duplicate/])])
   
-  test "an acceptable error changeset" do
-    changeset =
-      Changeset.change(%Schema{})
-      |> Changeset.add_error(:name, "is a duplicate")
-
-    assert run(@example, {:error, changeset}) == :uninteresting_result
-  end
-
-  test "a missing error" do
-    changeset =
-      Changeset.change(%Schema{})
-    
-    assertion_fails(~r/There are no errors for field `:name`/,
-      fn ->
-        run(@example, {:error, changeset})
-      end)
-  end
 
   @tag :skip
   test "an additional error" do
