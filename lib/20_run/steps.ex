@@ -172,6 +172,13 @@ defmodule TransformerTestSupport.Run.Steps do
   end
 
   defp error_case(running, {:error, changeset}) do
+    example_name = mockable(RunningExample).name(running)
+
+    # Just user checks for constraint errors
+    user_checks = mockable(RunningExample).constraint_changeset_checks(running)
+    run_user_checks(user_checks, example_name, changeset)
+    
+    :uninteresting_result
   end
 
   defp error_case(running, other) do
