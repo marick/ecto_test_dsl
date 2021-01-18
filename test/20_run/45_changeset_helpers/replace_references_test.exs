@@ -4,33 +4,6 @@ defmodule Run.ChangesetHelpers.ReplaceReferencesTest do
   use T.Parse.All
 
   # ----------------------------------------------------------------------------
-  test "tested_replace_check_values" do
-    expect = fn original, expected ->
-      predicate = &is_binary/1
-      replacer = &String.upcase/1
-      assert tested_replace_check_values(original, predicate, replacer) == expected
-    end
-
-    unchanged = fn original -> original |> expect.(original) end
-
-    unchanged.([:valid])
-    unchanged.([:valid,
-                changes: [a: 3, b: 4],
-                changes: [:a, :b],
-                change: :a,
-                error_free: [:a, :b]])
-
-    [changes: [a: 3, b: "four"]] |> expect.([changes: [a: 3, b: "FOUR"]])
-  end
-
-  test "replace_fieldrefs" do
-    checks =   [:valid, changes: [a: 3, b: id_of(:other)]]
-    expected = [:valid, changes: [a: 3, b: 3838]]
-    actual = replace_field_refs(checks, %{een(:other) => %{id: 3838}})
-    assert actual == expected
-  end
-
-
 
   test "unique_fields" do
     expect = fn changeset_checks, expected ->

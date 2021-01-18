@@ -77,7 +77,7 @@ defmodule TransformerTestSupport.Run.Steps do
     neighborhood = mockable(RunningExample).neighborhood(running)
     user_checks =
       mockable(RunningExample).validation_changeset_checks(running)
-      |> Run.ChangesetChecks.replace_field_refs(neighborhood)
+      |> Neighborhood.Expand.changeset_checks(neighborhood)
     
     run_user_checks(user_checks, example_name, changeset)
 
