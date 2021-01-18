@@ -62,7 +62,7 @@ defmodule Run.ValidationStep.FieldCalculationTest do
   end
 
   @tag :skip
-  test "a special error when a supposed-to-be-changed field is not present" do
+  test "a supposed-to-be-calculated field is not present" do
     stub(field_calculators: [age_plus: on_success(&(&1+1), applied_to: [:age])])
 
     input = [changes: %{age: 3}]
