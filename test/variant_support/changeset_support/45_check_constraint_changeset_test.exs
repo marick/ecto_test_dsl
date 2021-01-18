@@ -26,14 +26,6 @@ defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
   @example Sketch.example(:name, :constraint_error, [
         constraint_changeset(error: [name: ~r/duplicate/])])
   
-  test "unexpected :ok" do
-    assertion_fails(~r/Example `:name`: Expected an error tuple/,
-      [left: {:ok, "return value"}],
-      fn ->
-        run(@example, {:ok, "return value"})
-      end)
-  end
-
   test "an acceptable error changeset" do
     changeset =
       Changeset.change(%Schema{})

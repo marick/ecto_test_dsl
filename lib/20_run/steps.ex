@@ -166,6 +166,20 @@ defmodule TransformerTestSupport.Run.Steps do
     end
   end
 
+  def check_constraint_changeset__2(running, which_changeset) do
+    error_case(running,
+      mockable(RunningExample).step_value!(running, which_changeset))
+  end
+
+  defp error_case(running, {:error, changeset}) do
+  end
+
+  defp error_case(running, other) do
+    name = mockable(RunningExample).name(running)
+    elaborate_flunk(
+      context__2(name, "expected an error tuple containing a changeset"),
+      left: other)
+  end
 
   # ----------------------------------------------------------------------------
 
