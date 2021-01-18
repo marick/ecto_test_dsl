@@ -33,42 +33,48 @@ defmodule TransformerTestSupport.Nouns.FieldCalculator do
   end
 
   def assertions(named_calculators, changeset) when is_list(named_calculators) do
-    named_calculators
-    |> changeset_checks(changeset)
-    |> Enum.zip(named_calculators)
-    |> Enum.map(&translate_one_check/1)
+    valid_prerequisites = valid_prerequisites(changeset)
+
+    for {name, calculator} <- named_calculators do
+      case relevant?(calculator, valid_prerequisites) do
+        true ->
+          args = translate_args(calculator.args, changeset)
+          try do
+            expected = apply(calculator.calculation, args)
+            check_style_assertion({:change, [{name, expected}]}, calculator.from)
+          rescue ex ->
+            exception_style_assertion(ex, calculator.from, args, name)
+          end
+        false ->
+          check_style_assertion({:no_changes, name}, calculator.from)
+      end
+    end
   end
 
-  defp translate_one_check({check, {_, %__MODULE__{from: from}}}) do
+  defp check_style_assertion(check, from) do 
     raw_assertion = Assertions.from(check)
     fn changeset ->
-      adjust_assertion_error(fn -> 
+      adjust_assertion_error(fn ->
         raw_assertion.(changeset)
       end,
         expr: from)
     end
   end
 
-  def changeset_checks(named_calculators, changeset) do
-    valid_prerequisites = valid_prerequisites(changeset)
-    
-    for {name, calculator} <- named_calculators do
-      case relevant?(calculator, valid_prerequisites) do
-        true ->
-          args = translate_args(calculator.args, changeset)
-          try do 
-            {:change, [{name, apply(calculator.calculation, args)}]}
-          rescue ex ->
-            msg =
-              "Exception raised while calculating value for `#{inspect name}`\n  " <>
-              ex.message
-              elaborate_flunk(msg,
-                expr: calculator.from, 
-                left: ["Here are the actual arguments used": args])
-          end
-        false -> 
-          {:no_changes, name}
+  defp exception_style_assertion(ex, from, arglist, name) do 
+    line1 =
+      "Exception raised while calculating value for `#{inspect name}`\n  "
+    line2 =
+      case Map.get(ex, :message) do
+        nil ->
+          inspect(ex)
+        message ->
+          message
       end
+    fn _changeset -> 
+      elaborate_flunk(line1 <> line2,
+        expr: from, 
+        left: ["Here are the actual arguments used": arglist])
     end
   end
 

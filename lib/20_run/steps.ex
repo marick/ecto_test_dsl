@@ -89,11 +89,13 @@ defmodule TransformerTestSupport.Run.Steps do
 
 
     # field calculation checks
-    running
-    |> mockable(RunningExample).field_calculators
-    |> FieldCalculator.subtract(excluded_fields)
-    |> FieldCalculator.assertions(changeset)
-    |> run_assertions(changeset, example_name)
+    if mockable(RunningExample).workflow_name(running) != :validation_error do 
+      running
+      |> mockable(RunningExample).field_calculators
+      |> FieldCalculator.subtract(excluded_fields)
+      |> FieldCalculator.assertions(changeset)
+      |> run_assertions(changeset, example_name)
+    end
     
     :uninteresting_result
   end
