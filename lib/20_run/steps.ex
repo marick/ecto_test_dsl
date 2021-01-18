@@ -75,7 +75,11 @@ defmodule TransformerTestSupport.Run.Steps do
     run_validity_assertions(workflow_name, example_name, changeset)
 
     # User checks
-    user_checks = mockable(RunningExample).validation_changeset_checks(running)
+    neighborhood = mockable(RunningExample).neighborhood(running)
+    user_checks =
+      mockable(RunningExample).validation_changeset_checks(running)
+      |> Run.ChangesetChecks.replace_field_refs(neighborhood)
+    
     run_user_checks(user_checks, example_name, changeset)
 
     # as_cast checks

@@ -53,4 +53,27 @@ defmodule Run.ValidationStep.UserChecksTest do
     [                          [                          ],
      ChangesetX.valid_changeset(changes: %{name: "Bossie"})] |> pass()
   end
+
+  test "references to neighbors are supported" do
+    other_een = een(:other_example)
+    stub(neighborhood: %{other_een => %{id: 333}})
+
+    checks = [changes: [ref_id: FieldRef.new(id: other_een)]]
+    passes = [checks, ChangesetX.valid_changeset(changes: %{ref_id: 333})]
+    fails =  [checks, ChangesetX.valid_changeset(changes: %{ref_id: "NOT"})]
+
+    passes |> pass()
+
+    assertion_fails(~r/Example `:example`/,
+      [message: ~r/Field `:ref_id` has the wrong value"/,
+       message: ~r/Changeset:.*changes: %{ref_id: "NOT"}/,
+       expr: [changeset: [{:changes, [ref_id: 333]}, "..."]],
+       left: "NOT",
+       right: 333],
+      fn ->
+        run(fails)
+      end)
+    
+  end
+  
 end
