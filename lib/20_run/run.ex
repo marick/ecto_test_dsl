@@ -62,7 +62,7 @@ defmodule TransformerTestSupport.Run do
     do: Map.fetch!(example.metadata, field)
   defp workflows(example), do: metadata!(example, :workflows)
   defp workflow_name(example), do: metadata!(example, :workflow_name)
-  def step_functions(example), do: metadata!(example, :steps)
-  def name(example), do: metadata!(example, :name)
+  defp step_functions(example), do: metadata!(example, :steps)
+  defp name(example), do: metadata!(example, :name)
   
 end
