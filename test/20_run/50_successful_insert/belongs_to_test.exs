@@ -1,14 +1,15 @@
-defmodule SmartGet.ChangesetChecks.ExampleReferenceTest do
+defmodule Run.SuccessfulInsert.BelongsToTest do
   use TransformerTestSupport.Case
   use T.Drink.AndRun
   use T.Parse.All
+  import FlowAssertions.Ecto.SchemaA
 
   defmodule Schema do
     use Ecto.Schema
     import Ecto.Changeset
     
     schema "irrelevant" do
-      field :name, :string       # This is used as the primary key.
+      field :name, :string
       belongs_to :peer, __MODULE__
     end
 
@@ -20,19 +21,10 @@ defmodule SmartGet.ChangesetChecks.ExampleReferenceTest do
 
   defmodule Examples do 
     use Template.EctoClassic.Insert
-    alias Ecto.Changeset
-
-    def insert(_repo, changeset) do
-      id = Map.get(%{"no peer" => 111, "has peer" => 222}, changeset.changes.name)
-      changeset
-      |> Changeset.put_change(:id, id)
-      |> Changeset.apply_action(:insert)
-    end
 
     def create_test_data do
-      started(
-        module_under_test: Schema,
-        insert_with: &insert/2) |> 
+      started(module_under_test: Schema) |>
+      SimpleFakeRepo.with_ids(name: %{"no peer" => 111, "has peer" => 222}) |> 
 
       workflow(                                 :success,
         no_peer: [params(name: "no peer")],
@@ -43,10 +35,12 @@ defmodule SmartGet.ChangesetChecks.ExampleReferenceTest do
     end
   end
 
-  IO.inspect "NEXT TEST"
-  @tag :skip
-  test "references" do
-    IO.inspect Examples.Tester.inserted(:has_peer)
+  test "Inserting a value that `belongs_to` a previous value gets its `id`" do
+    Examples.Tester.inserted(:has_peer)
+    |> assert_fields(name: "has peer",
+                     id: 222,
+                     peer_id: 111)
+    |> refute_assoc_loaded(:peer)
   end
 
 end
