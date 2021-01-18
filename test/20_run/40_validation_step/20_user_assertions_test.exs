@@ -65,7 +65,7 @@ defmodule Run.ValidationStep.UserChecksTest do
     passes |> pass()
 
     assertion_fails(~r/Example `:example`/,
-      [message: ~r/Field `:ref_id` has the wrong value"/,
+      [message: ~r/Field `:ref_id` has the wrong value/,
        message: ~r/Changeset:.*changes: %{ref_id: "NOT"}/,
        expr: [changeset: [{:changes, [ref_id: 333]}, "..."]],
        left: "NOT",

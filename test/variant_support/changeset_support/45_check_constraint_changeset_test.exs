@@ -31,7 +31,7 @@ defmodule VariantSupport.Changeset.CheckConstraintChangesetTest do
       Changeset.change(%Schema{})
       |> Changeset.add_error(:name, "is a duplicate")
 
-    assert run(@example, {:error, changeset}) == changeset
+    assert run(@example, {:error, changeset}) == :uninteresting_result
   end
 
   test "a missing error" do

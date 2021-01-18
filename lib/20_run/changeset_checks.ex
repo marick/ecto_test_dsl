@@ -1,9 +1,6 @@
 defmodule TransformerTestSupport.Run.ChangesetChecks do
   use TransformerTestSupport.Drink.Me
 
-
-  # ----------------------------------------------------------------------------
-
   def unique_fields(changeset_checks) do
     changeset_checks
     |> Enum.filter(&is_tuple/1)

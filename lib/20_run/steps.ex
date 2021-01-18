@@ -3,9 +3,7 @@ defmodule TransformerTestSupport.Run.Steps do
   use TransformerTestSupport.Drink.AssertionJuice
   use TransformerTestSupport.Drink.AndRun
 
-  alias T.SmartGet.{Example,ChangesetChecks}
   use FlowAssertions.Ecto
-  alias FlowAssertions.Ecto.ChangesetA
   import Mockery.Macro
   alias T.Run.ChangesetChecks, as: CC
 
@@ -130,10 +128,7 @@ defmodule TransformerTestSupport.Run.Steps do
         for a <- assertions, do: a.(changeset)
       end,
       fn message ->
-          """
-          "Example `#{inspect name}`: #{message}"
-          Changeset: #{inspect changeset}
-          """
+        error_message(name, message, changeset)
       end)
   end
 
@@ -153,23 +148,12 @@ defmodule TransformerTestSupport.Run.Steps do
         :uninteresting_result
       wrong -> 
         elaborate_flunk(
-          context__2(name, "unexpected insertion failure"),
+          context(name, "unexpected insertion failure"),
           left: wrong)
     end
   end
   
   def check_constraint_changeset(running, which_changeset) do
-    case RunningExample.step_value!(running, which_changeset) do
-      {:error, changeset} -> 
-        check_constraint_changeset_(changeset, running)
-      tuple -> 
-        elaborate_flunk(
-          context(running.example, "Expected an error tuple containing a changeset"),
-          left: tuple)
-    end
-  end
-
-  def check_constraint_changeset__2(running, which_changeset) do
     error_case(running,
       mockable(RunningExample).step_value!(running, which_changeset))
   end
@@ -187,53 +171,18 @@ defmodule TransformerTestSupport.Run.Steps do
   defp error_case(running, other) do
     name = mockable(RunningExample).name(running)
     elaborate_flunk(
-      context__2(name, "expected an error tuple containing a changeset"),
+      context(name, "expected an error tuple containing a changeset"),
       left: other)
   end
 
   # ----------------------------------------------------------------------------
-
-  defchain check_constraint_changeset_(changeset, running) do
-    prior_work = Keyword.get(running.history, :previously, %{})
-    adjust_assertion_message(
-      fn ->
-        for check <- ChangesetChecks.get_constraint_checks(running.example, previously: prior_work),
-          do: apply_assertion(changeset, check)
-      end,
-      fn message ->
-        error_message(running.example, changeset, message)
-      end)
-  end
-  defp apply_assertion(changeset, {:__custom_changeset_check, f}),
-    do: f.(changeset)
   
-  defp apply_assertion(changeset, {check_type, arg}),
-    do: apply ChangesetA, assert_name(check_type), [changeset, arg]
-  
-  defp apply_assertion(changeset, check_type),
-    do: apply ChangesetA, assert_name(check_type), [changeset]
-  
-  defp assert_name(check_type),
-    do: "assert_#{to_string check_type}" |> String.to_atom
-
-  # ----------------------------------------------------------------------------
-  
-  defp context(example, message),
-    do: "Example `#{inspect Example.name(example)}`: #{message}."
-
-  defp error_message(example, changeset, message) do
-    """
-    #{context(example, message)}
-    Changeset: #{inspect changeset}
-    """
-  end
-
-  defp context__2(name, message),
+  defp context(name, message),
     do: "Example `#{inspect name}`: #{message}"
 
-  defp error_message__2(name, changeset, message) do
+  defp error_message(name, message, changeset) do
     """
-    #{context__2(name, message)}
+    #{context(name, message)}
     Changeset: #{inspect changeset}
     """
   end

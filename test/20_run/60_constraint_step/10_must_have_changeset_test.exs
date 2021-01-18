@@ -12,7 +12,7 @@ defmodule Run.ConstraintStep.MustHaveChangesetTest do
 
   defp run(insertion_results) do
     stub_history(insert_changeset: insertion_results)
-    Steps.check_constraint_changeset__2(:running, :insert_changeset)
+    Steps.check_constraint_changeset(:running, :insert_changeset)
   end
 
   test "error structure must exist" do
