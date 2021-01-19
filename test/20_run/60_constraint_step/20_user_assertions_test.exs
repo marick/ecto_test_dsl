@@ -12,12 +12,13 @@ defmodule Run.ConstraintStep.UserAssertionsTest do
     schema "bogus" do 
       field :name, :string
       field :other, :string
+      field :ref_id, :id
     end
   end
   
 
   setup do
-    stub(name: :example)
+    stub(name: :example, neighborhood: %{})
     :ok
   end
 
@@ -67,4 +68,31 @@ defmodule Run.ConstraintStep.UserAssertionsTest do
       end)
   end
   
+  test "references to neighbors are supported" do
+    other_een = een(:other_example)
+    stub(neighborhood: %{other_een => %{id: 333}})
+
+    checks = [change: [name: "fred", ref_id: FieldRef.new(id: other_een)],
+              error: [ref_id: "some message"]]
+
+    make_changeset = fn ref_id -> 
+      Changeset.change(%Schema{}, %{name: "fred", ref_id: ref_id})
+      |> Changeset.add_error(:ref_id, "some message")
+    end
+
+    passes = [checks, make_changeset.(333)]
+    fails =  [checks, make_changeset.("NOT")]
+
+    passes |> pass()
+
+    assertion_fails(~r/Example `:example`/,
+      [message: ~r/Field `:ref_id` has the wrong value/,
+       message: ~r/Changeset:.*ref_id: "NOT"}/,
+       expr: [changeset: [{:change, [{:name, "fred"}, {:ref_id, 333}]}, "..."]],
+       left: "NOT",
+       right: 333],
+      fn ->
+        run(fails)
+      end)
+  end
 end

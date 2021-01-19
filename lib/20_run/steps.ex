@@ -160,10 +160,12 @@ defmodule TransformerTestSupport.Run.Steps do
 
   defp error_case(running, {:error, changeset}) do
     example_name = mockable(RunningExample).name(running)
+    neighborhood = mockable(RunningExample).neighborhood(running)
 
     # Just user checks for constraint errors
-    user_checks = mockable(RunningExample).constraint_changeset_checks(running)
-    run_user_checks(user_checks, example_name, changeset)
+    mockable(RunningExample).constraint_changeset_checks(running)
+    |> Neighborhood.Expand.changeset_checks(neighborhood)
+    |> run_user_checks(example_name, changeset)
     
     :uninteresting_result
   end

@@ -73,7 +73,5 @@ defmodule Run.ValidationStep.UserChecksTest do
       fn ->
         run(fails)
       end)
-    
   end
-  
 end
