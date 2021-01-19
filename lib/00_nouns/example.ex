@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.SmartGet.Example do
+defmodule TransformerTestSupport.Nouns.Example do
   use TransformerTestSupport.Drink.Me
   import T.ModuleX
   
@@ -8,5 +8,5 @@ defmodule TransformerTestSupport.SmartGet.Example do
   specific knowledge.)
   """
 
-  getters :metadata, [:name, :workflow_name]
+  getters :metadata, [:name, :workflow_name, :repo]
 end

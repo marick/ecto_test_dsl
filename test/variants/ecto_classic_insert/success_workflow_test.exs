@@ -4,7 +4,6 @@ defmodule Variants.EctoClassic.Insert.SuccessWorkflowTest do
   import FlowAssertions.AssertionA
   
   use TransformerTestSupport.Variants.EctoClassic.Insert
-  alias TransformerTestSupport.SmartGet
 
   defmodule Species do
     use Ecto.Schema

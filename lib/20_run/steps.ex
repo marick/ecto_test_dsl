@@ -29,7 +29,7 @@ defmodule TransformerTestSupport.Run.Steps do
   def start_sandbox(example) do
     alias Ecto.Adapters.SQL.Sandbox
 
-    repo = RunningExample.repo(example)
+    repo = Example.repo(example)
     if repo do  # Convenient for testing, where we might be faking the repo functions.
       Sandbox.checkout(repo) # it's OK if it's already checked out.
     end
@@ -76,7 +76,6 @@ defmodule TransformerTestSupport.Run.Steps do
     user_checks =
       mockable(RunningExample).validation_changeset_checks(running)
       |> Neighborhood.Expand.changeset_checks(neighborhood)
-    
     run_user_checks(user_checks, example_name, changeset)
 
     # as_cast checks

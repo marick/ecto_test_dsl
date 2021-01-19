@@ -1,7 +1,6 @@
 defmodule TransformerTestSupport.Trace do
   use TransformerTestSupport.Drink.Me
   alias T.TraceServer
-  alias T.SmartGet.Example
 
   # -----Functions that can be called anywhere----------------------------------
   # Note that these do not return values.

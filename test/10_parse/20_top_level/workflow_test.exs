@@ -1,6 +1,5 @@
 defmodule Parse.TopLevel.WorkflowTest do
   use TransformerTestSupport.Case
-  alias TransformerTestSupport.SmartGet
   alias T.Parse.TopLevel
   use T.Parse.All
 
@@ -17,7 +16,7 @@ defmodule Parse.TopLevel.WorkflowTest do
 
   test "workflows are attached to examples" do
     TestData.example(Examples, :ok)
-    |> SmartGet.Example.workflow_name
+    |> Example.workflow_name
     |> assert_equal(:success)
   end
   

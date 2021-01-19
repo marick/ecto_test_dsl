@@ -9,7 +9,6 @@ defmodule TransformerTestSupport.Predefines do
       use T.Parse.All
       
       alias T.{Get,Validations}
-      alias T.SmartGet
     end
   end
 end
