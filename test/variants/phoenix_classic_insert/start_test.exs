@@ -1,10 +1,10 @@
-defmodule Variants.EctoClassic.StartTest do
+defmodule Variants.PhoenixClassic.StartTest do
   use TransformerTestSupport.Case
   use T.Predefines
-  alias T.Variants.EctoClassic.Insert, as: Variant
+  alias T.Variants.PhoenixClassic.Insert, as: Variant
 
   defmodule Examples do
-    use Template.EctoClassic.Insert
+    use Template.PhoenixClassic.Insert
   end
 
   @minimal_start [

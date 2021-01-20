@@ -1,9 +1,9 @@
-defmodule Variants.EctoClassic.Insert.WithOverridesTest do
+defmodule Variants.PhoenixClassic.Insert.WithOverridesTest do
   use TransformerTestSupport.Case
   alias Ecto.Changeset
   
   defmodule Examples do
-    use T.Variants.EctoClassic.Insert
+    use T.Variants.PhoenixClassic.Insert
     
     def changeset_maker(SomeSchema, _params) do
       ChangesetX.valid_changeset(changes: %{field: "value"})

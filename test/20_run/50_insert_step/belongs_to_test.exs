@@ -20,7 +20,7 @@ defmodule Run.SuccessfulInsert.BelongsToTest do
   end
 
   defmodule Examples do 
-    use Template.EctoClassic.Insert
+    use Template.PhoenixClassic.Insert
 
     def create_test_data do
       started(module_under_test: Schema) |>

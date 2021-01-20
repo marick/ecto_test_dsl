@@ -1,7 +1,6 @@
 defmodule TransformerTestSupport.Run.RunningExampleTest do
   use TransformerTestSupport.Drink.Me
   
-  alias T.Variants.EctoClassic
   alias Ecto.Changeset
 
   defmodule Schema do 
@@ -20,7 +19,7 @@ defmodule TransformerTestSupport.Run.RunningExampleTest do
   end
 
   defmodule Examples do
-    use EctoClassic.Insert
+    use T.Variants.PhoenixClassic.Insert
 
     def fake_insert(changeset),
       do: {:ok, "created `#{changeset.changes.name}`"}

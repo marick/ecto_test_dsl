@@ -2,7 +2,7 @@ defmodule Parse.InternalFunctions.ExampleReferenceAffectsParamsTest do
   use TransformerTestSupport.Case
 
   defmodule Examples do
-    use Template.EctoClassic.Insert
+    use Template.PhoenixClassic.Insert
 
     def create_test_data() do
       started() |>

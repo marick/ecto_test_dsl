@@ -1,7 +1,7 @@
-defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
+defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
   use TransformerTestSupport.Drink.Me
   alias T.Run.Steps
-  alias T.Variants.EctoClassic.Insert, as: ThisVariant
+  alias T.Variants.PhoenixClassic.Insert, as: ThisVariant
   alias T.Parse.Start
   alias T.Parse.Callbacks
 
@@ -108,7 +108,7 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
     workflows = Map.keys(@workflows)
     elaborate_assert(
       workflow in workflows,
-      "The EctoClassic.Insert variant only allows these workflows: #{inspect workflows}",
+      "The PhoenixClassic.Insert variant only allows these workflows: #{inspect workflows}",
       left: workflow
     )
   end
@@ -120,11 +120,11 @@ defmodule TransformerTestSupport.Variants.EctoClassic.Insert do
   defmacro __using__(_) do
     quote do
       use TransformerTestSupport.Predefines
-      alias TransformerTestSupport.Variants.EctoClassic
+      alias TransformerTestSupport.Variants.PhoenixClassic
       alias __MODULE__, as: ExamplesModule
 
       def start(opts) do
-        EctoClassic.Insert.start([{:examples_module, ExamplesModule} | opts])
+        PhoenixClassic.Insert.start([{:examples_module, ExamplesModule} | opts])
       end
 
       defmodule Tester do

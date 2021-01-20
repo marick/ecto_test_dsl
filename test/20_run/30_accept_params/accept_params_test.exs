@@ -16,7 +16,7 @@ defmodule Run.AcceptParamsTest do
   end
 
   defmodule Examples do
-    use Template.EctoClassic.Insert
+    use Template.PhoenixClassic.Insert
   end
 
   test "the only result" do

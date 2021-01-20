@@ -1,6 +1,6 @@
 defmodule Neighborhood.CreateTest do
   use TransformerTestSupport.Drink.Me
-  alias T.Variants.EctoClassic
+  alias T.Variants.PhoenixClassic
   alias T.Run.Steps
 
   defmodule Schema do
@@ -22,7 +22,7 @@ defmodule Neighborhood.CreateTest do
   end
 
   defmodule Examples do
-    use EctoClassic.Insert
+    use PhoenixClassic.Insert
 
     def fake_insert(changeset),
       do: {:ok, Schema.named(changeset.changes.name)}

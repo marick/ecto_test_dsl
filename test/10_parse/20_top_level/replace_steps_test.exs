@@ -16,7 +16,7 @@ defmodule Parse.TopLevel.ReplaceStepTest do
   end
 
   defmodule Examples do
-    use Template.EctoClassic.Insert
+    use Template.PhoenixClassic.Insert
 
     def fake_validate(_changeset), do: "substitute result"
 
