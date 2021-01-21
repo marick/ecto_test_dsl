@@ -2,6 +2,7 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
   use TransformerTestSupport.Drink.Me
   alias T.Run.Steps
   alias T.Variants.PhoenixClassic.Insert, as: ThisVariant
+  import T.Variants.Macros
   alias T.Parse.Start
   alias T.Parse.Callbacks
 
@@ -13,86 +14,69 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
     format: :phoenix
   ]
   
-  
   def start(opts) do
     opts = Keyword.merge(@default_start_opts, opts)
     Start.start_with_variant(ThisVariant, opts)
   end
 
-  # ------------------- Hook functions -----------------------------------------
+  # ------------------- Step functions -----------------------------------------
 
-  defp previously(running) do
-    Steps.previously(running)
-  end
+  defsteps [
+    :previously,
+    :params,
+    {:check_validation_changeset, [:make_changeset]},
+    {:check_constraint_changeset, [:insert_changeset]}
+  ], from: Steps
 
-  defp params(running) do
-    Steps.params(running)
-  end
-
-  defp make_changeset(running) do 
+  def make_changeset(running) do 
     Steps.accept_params(running)
   end
   
-  defp check_validation_changeset(running) do 
-    Steps.check_validation_changeset(running, :make_changeset)
-  end
-
-  defp insert_changeset(running) do
+  def insert_changeset(running) do
     Steps.insert(running, :make_changeset)
   end
   
-  defp check_insertion(running) do
+  def check_insertion(running) do
     Steps.check_insertion_result(running, :insert_changeset)
   end
   
-  defp check_constraint_changeset(running) do
-    Steps.check_constraint_changeset(running, :insert_changeset)
-  end
-  
-  def initial_step_definitions() do
+
+  def workflows() do
     %{
-      previously: &previously/1,
-      params: &params/1,
-      make_changeset: &make_changeset/1,
-      check_validation_changeset: &check_validation_changeset/1,
-      insert_changeset: &insert_changeset/1,
-      check_insertion: &check_insertion/1,
-      check_constraint_changeset: &check_constraint_changeset/1
+      success: [
+        :previously,
+        :params,
+        :make_changeset, 
+        :check_validation_changeset,
+        :insert_changeset, 
+        :check_insertion
+      ],
+      validation_error: [
+        :previously,
+        :params,
+        :make_changeset, 
+        :check_validation_changeset, 
+      ],
+      constraint_error: [
+        :previously,
+        :params,
+        :make_changeset, 
+        :check_validation_changeset, 
+        :insert_changeset, 
+        :check_constraint_changeset
+      ],
+      
+      # Conveniences
+      validation_success: [
+        :previously,
+        :params,
+        :make_changeset, 
+        :check_validation_changeset, 
+      ],
     }
   end
 
-  @workflows %{
-    success: [
-      :previously,
-      :params,
-      :make_changeset, 
-      :check_validation_changeset,
-      :insert_changeset, 
-      :check_insertion
-    ],
-    validation_error: [
-      :previously,
-      :params,
-      :make_changeset, 
-      :check_validation_changeset, 
-    ],
-    constraint_error: [
-      :previously,
-      :params,
-      :make_changeset, 
-      :check_validation_changeset, 
-      :insert_changeset, 
-      :check_constraint_changeset
-    ],
-
-    # Conveniences
-    validation_success: [
-      :previously,
-      :params,
-      :make_changeset, 
-      :check_validation_changeset, 
-    ],
-  }
+  # ------------------- Hook functions -----------------------------------------
 
   @required_keys [:examples_module, :repo] ++ Keyword.keys(@default_start_opts)
   @optional_keys []
@@ -100,12 +84,10 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
   def run_start_hook(top_level) do
     top_level
     |> Callbacks.validate_top_level_keys(@required_keys, @optional_keys)
-    |> Map.put(:steps, initial_step_definitions())
-    |> Map.put(:workflows, @workflows)
   end
 
   def assert_workflow_hook(_, workflow) do
-    workflows = Map.keys(@workflows)
+    workflows = Map.keys(workflows())
     elaborate_assert(
       workflow in workflows,
       "The PhoenixClassic.Insert variant only allows these workflows: #{inspect workflows}",

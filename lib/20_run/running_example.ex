@@ -15,7 +15,8 @@ defmodule TransformerTestSupport.Run.RunningExample do
   ]
 
   getters :example, :metadata, [
-    :as_cast, :field_calculators, :insert_with, :name, :repo, :workflow_name, 
+    :as_cast, :field_calculators, :insert_with, :name, :repo, :workflow_name,
+    :variant
   ]
 
   private_getters :example, [:params]
