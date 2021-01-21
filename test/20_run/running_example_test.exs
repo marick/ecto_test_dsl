@@ -21,16 +21,15 @@ defmodule TransformerTestSupport.Run.RunningExampleTest do
   defmodule Examples do
     use T.Variants.PhoenixClassic.Insert
 
-    def fake_insert(changeset),
+    def fake_insert(_repo, changeset),
       do: {:ok, "created `#{changeset.changes.name}`"}
 
     def create_test_data do 
       start(
         module_under_test: Schema,
-        repo: :unused
+        repo: :unused,
+        insert_with: &fake_insert/2
       ) |>
-      
-      replace_steps(insert_changeset: step(&fake_insert/1, :make_changeset)) |>
       
       workflow(                                         :success,
         young: [params(name: "young")],

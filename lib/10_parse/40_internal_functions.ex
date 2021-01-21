@@ -39,13 +39,5 @@ defmodule TransformerTestSupport.Parse.InternalFunctions do
       do: on_success(f, applied_to: [field])
 
   
-  # ----------------------------------------------------------------------------
-
-  # Used to create arguments for TopLevel.replace_steps
-  def step(f, key) do
-    fn running ->
-      Keyword.fetch!(running.history, key) |> f.()
-    end
-  end
   
 end

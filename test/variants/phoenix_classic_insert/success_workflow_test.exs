@@ -65,7 +65,7 @@ defmodule Variants.PhoenixClassic.Insert.SuccessWorkflowTest do
 
     @failure_instruction "Please fail insertion"
 
-    def fake_insert(changeset) do
+    def fake_insert(_repo, changeset) do
       alias Ecto.Changeset
       if Map.get(changeset.changes, :optional_comment) == @failure_instruction do
         changeset =
@@ -80,11 +80,9 @@ defmodule Variants.PhoenixClassic.Insert.SuccessWorkflowTest do
     def create_test_data do
       start(
         module_under_test: Schema,
-        repo: Unused
-      ) |>
-
-      replace_steps(
-        insert_changeset: step(&fake_insert/1, :make_changeset)) |> 
+        repo: Unused,
+        insert_with: &fake_insert/2
+      ) |> 
 
       field_transformations(
         as_cast: Schema.fields_to_cast(),

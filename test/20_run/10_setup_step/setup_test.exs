@@ -24,7 +24,7 @@ defmodule Neighborhood.CreateTest do
   defmodule Examples do
     use PhoenixClassic.Insert
 
-    def fake_insert(changeset),
+    def fake_insert(_ecto, changeset),
       do: {:ok, Schema.named(changeset.changes.name)}
 
     def make(name),
@@ -35,11 +35,10 @@ defmodule Neighborhood.CreateTest do
     def create_test_data do 
       start(
         module_under_test: Schema,
-        repo: Unused
+        repo: Unused,
+        insert_with: &fake_insert/2
       ) |>
 
-      replace_steps(insert_changeset: step(&fake_insert/1, :make_changeset)) |> 
-      
       workflow(                                         :success, [
         make(:leaf),
         make(:leaf2),

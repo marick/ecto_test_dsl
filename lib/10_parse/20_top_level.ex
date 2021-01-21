@@ -49,12 +49,6 @@ defmodule TransformerTestSupport.Parse.TopLevel do
   end
 
   # ----------------------------------------------------------------------------
-  def replace_steps(test_data, replacements) do
-    replacements = Enum.into(replacements, %{})
-    DeepMerge.deep_merge(test_data, %{steps: replacements})
-  end
-
-  # ----------------------------------------------------------------------------
   @doc """
   May be useful for debugging
   """
