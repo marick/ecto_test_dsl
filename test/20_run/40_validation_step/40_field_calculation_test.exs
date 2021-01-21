@@ -33,8 +33,8 @@ defmodule Run.ValidationStep.FieldCalculationTest do
 
   defp run([changes: changes]) do
     changeset = ChangesetX.valid_changeset(changes: changes)
-    stub_history(make_changeset: changeset)
-    Steps.check_validation_changeset(:running, :make_changeset)
+    stub_history(changeset_from_params: changeset)
+    Steps.check_validation_changeset(:running, :changeset_from_params)
   end
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result
@@ -114,9 +114,9 @@ defmodule Run.ValidationStep.FieldCalculationTest do
     stub(workflow_name: :validation_error)
     
     changeset = ChangesetX.invalid_changeset(changes: %{age: "wrong"})
-    stub_history(make_changeset: changeset)
+    stub_history(changeset_from_params: changeset)
 
-    actual = Steps.check_validation_changeset(:running, :make_changeset)
+    actual = Steps.check_validation_changeset(:running, :changeset_from_params)
     assert actual == :uninteresting_result
   end
 end

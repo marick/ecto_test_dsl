@@ -45,9 +45,9 @@ defmodule TransformerTestSupport.Run.RunningExampleTest do
 
     test "stopping early after a step" do
       assert [
-        make_changeset: made, params: %{"name" => "young"},
+        changeset_from_params: made, params: %{"name" => "young"},
           previously: %{}, previously: %{}, example: _] = 
-        Examples.Tester.example(:young) |> Run.example(stop_after: :make_changeset)
+        Examples.Tester.example(:young) |> Run.example(stop_after: :changeset_from_params)
       
       made
       |> assert_shape(%Changeset{})

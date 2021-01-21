@@ -32,7 +32,7 @@ defmodule Run.ValidationStep.CombinationTest do
     :ok
   end
 
-  defp run(), do: Steps.check_validation_changeset(:running, :make_changeset)
+  defp run(), do: Steps.check_validation_changeset(:running, :changeset_from_params)
   defp pass(), do: assert run() == :uninteresting_result
 
   test "validity assertion comes first" do
@@ -43,7 +43,7 @@ defmodule Run.ValidationStep.CombinationTest do
     # Valid changeset
     expect_field_failure = ChangesetX.valid_changeset(wrong_value)
                                      #^^^^^
-    stub_history(make_changeset: expect_field_failure)
+    stub_history(changeset_from_params: expect_field_failure)
     
     assertion_fails(~r/Example `:example`: Field `:age_plus` has the wrong value/, 
       fn ->
@@ -53,7 +53,7 @@ defmodule Run.ValidationStep.CombinationTest do
     # Invalid changeset
     expect_validity_failure = ChangesetX.invalid_changeset(wrong_value)
                                         #^^^^^^^
-    stub_history(make_changeset: expect_validity_failure)
+    stub_history(changeset_from_params: expect_validity_failure)
 
     assertion_fails(~r/expects a valid changeset/, 
       fn ->
@@ -67,7 +67,7 @@ defmodule Run.ValidationStep.CombinationTest do
     # ... in favor of:
     stub(validation_changeset_checks: [changes:  [age: 0]])
 
-    stub_history(make_changeset: ChangesetX.valid_changeset([changes: %{age: 0}])) 
+    stub_history(changeset_from_params: ChangesetX.valid_changeset([changes: %{age: 0}])) 
     pass()
   end
 
@@ -76,7 +76,7 @@ defmodule Run.ValidationStep.CombinationTest do
 
     stub(validation_changeset_checks: [changes:  [age_plus: 0]])
 
-    stub_history(make_changeset: ChangesetX.valid_changeset([changes: %{age_plus: 0}]))
+    stub_history(changeset_from_params: ChangesetX.valid_changeset([changes: %{age_plus: 0}]))
     pass()
   end
 end

@@ -24,16 +24,13 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
   defsteps [
     :previously,
     :params,
-    {:check_validation_changeset, [:make_changeset]},
+    :changeset_from_params,
+    {:check_validation_changeset, [:changeset_from_params]},
     {:check_constraint_changeset, [:insert_changeset]}
   ], from: Steps
 
-  def make_changeset(running) do 
-    Steps.accept_params(running)
-  end
-  
   def insert_changeset(running) do
-    Steps.insert(running, :make_changeset)
+    Steps.insert(running, :changeset_from_params)
   end
   
   def check_insertion(running) do
@@ -46,7 +43,7 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
       success: [
         :previously,
         :params,
-        :make_changeset, 
+        :changeset_from_params, 
         :check_validation_changeset,
         :insert_changeset, 
         :check_insertion
@@ -54,13 +51,13 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
       validation_error: [
         :previously,
         :params,
-        :make_changeset, 
+        :changeset_from_params, 
         :check_validation_changeset, 
       ],
       constraint_error: [
         :previously,
         :params,
-        :make_changeset, 
+        :changeset_from_params, 
         :check_validation_changeset, 
         :insert_changeset, 
         :check_constraint_changeset
@@ -70,7 +67,7 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
       validation_success: [
         :previously,
         :params,
-        :make_changeset, 
+        :changeset_from_params, 
         :check_validation_changeset, 
       ],
     }
@@ -114,8 +111,8 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
         alias T.Run.Steps
 
         def validation_changeset(example_name) do
-          check_workflow(example_name, stop_after: :make_changeset)
-          |> Keyword.get(:make_changeset)
+          check_workflow(example_name, stop_after: :changeset_from_params)
+          |> Keyword.get(:changeset_from_params)
         end
 
         def inserted(example_name) do

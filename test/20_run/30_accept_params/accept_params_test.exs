@@ -26,7 +26,7 @@ defmodule Run.AcceptParamsTest do
           params: %{age: 1})
 
     %RunningExample{example: example, history: [params: %{"age" => "1"}]}
-    |> Steps.accept_params
+    |> Steps.changeset_from_params
     |> assert_equal(:changeset_result)
   end
 end

@@ -15,9 +15,9 @@ defmodule Run.ValidationStep.UserChecksTest do
   end
 
   defp run([checks, changeset]) do 
-    stub_history(make_changeset: changeset)
+    stub_history(changeset_from_params: changeset)
     stub(validation_changeset_checks: checks)
-    Steps.check_validation_changeset(:running, :make_changeset)
+    Steps.check_validation_changeset(:running, :changeset_from_params)
   end
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result

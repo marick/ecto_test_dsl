@@ -26,10 +26,10 @@ defmodule Run.ValidationStep.AsCastTest do
 
   defp run([field, {:params, params}, {:cast_to, cast_value}, {:changes, changes}]) do
     changeset = ChangesetX.valid_changeset(changes: changes)
-    stub_history(params: params, make_changeset: changeset)
+    stub_history(params: params, changeset_from_params: changeset)
     stub(as_cast: AsCast.new(Schema, [field]))
     given Schema.changeset(%Schema{}, params), return: cast_value
-    Steps.check_validation_changeset(:running, :make_changeset)
+    Steps.check_validation_changeset(:running, :changeset_from_params)
   end
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result
@@ -68,7 +68,7 @@ defmodule Run.ValidationStep.AsCastTest do
     changeset =
       Schema.changeset(%Schema{}, %{"age" => "6"})
       |> Changeset.add_error(:date, "the wrong error message")
-    stub_history(make_changeset: changeset)
+    stub_history(changeset_from_params: changeset)
     
     assertion_fails(~r/Example `:example`: Field :date does not have a matching error message/, 
       [expr: [[as_cast: [:date]],
@@ -77,7 +77,7 @@ defmodule Run.ValidationStep.AsCastTest do
        left: ["the wrong error message"],
        right: "is invalid"],
       fn ->
-        Steps.check_validation_changeset(:running, :make_changeset)
+        Steps.check_validation_changeset(:running, :changeset_from_params)
       end)
   end
 end

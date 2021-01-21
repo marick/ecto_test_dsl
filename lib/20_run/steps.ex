@@ -57,8 +57,8 @@ defmodule TransformerTestSupport.Run.Steps do
 
   # ----------------------------------------------------------------------------
   
-  def accept_params(running), 
-    do: RunningExample.accept_params(running)
+  def changeset_from_params(running), 
+    do: RunningExample.changeset_from_params(running)
 
   # ----------------------------------------------------------------------------
 

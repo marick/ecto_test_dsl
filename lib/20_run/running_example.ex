@@ -51,7 +51,7 @@ defmodule TransformerTestSupport.Run.RunningExample do
 
   # ----------------------------------------------------------------------------
 
-  def accept_params(running) do
+  def changeset_from_params(running) do
     params = expanded_params(running)
     module = module_under_test(running)
     apply metadata(running, :changeset_with), [module, params]
