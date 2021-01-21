@@ -134,7 +134,7 @@ defmodule TransformerTestSupport.Run.Steps do
   
   # ----------------------------------------------------------------------------
 
-  def insert(running, which_changeset) do
+  def insert_changeset(running, which_changeset) do
     changeset = RunningExample.step_value!(running, which_changeset)
     repo = RunningExample.repo(running)
     apply RunningExample.insert_with(running), [repo, changeset]

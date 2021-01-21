@@ -5,7 +5,6 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
   import T.Variants.Macros
   alias T.Parse.Start
   alias T.Parse.Callbacks
-
   import FlowAssertions.Define.BodyParts
 
   @default_start_opts [
@@ -26,27 +25,27 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
     :params,
     :changeset_from_params,
     {:check_validation_changeset, [:changeset_from_params]},
+    
+    {:insert_changeset,           [:changeset_from_params]},
+    {:check_insertion_result,     [:insert_changeset]},
     {:check_constraint_changeset, [:insert_changeset]}
   ], from: Steps
 
-  def insert_changeset(running) do
-    Steps.insert(running, :changeset_from_params)
-  end
-  
-  def check_insertion(running) do
-    Steps.check_insertion_result(running, :insert_changeset)
-  end
-  
-
   def workflows() do
+    start_to_changeset = [
+      :previously,
+      :params,
+      :changeset_from_params,
+    ]
+
+    start_to_validation_success = start_to_changeset ++ [
+      :check_validation_changeset, 
+    ]
+    
     %{
-      success: [
-        :previously,
-        :params,
-        :changeset_from_params, 
-        :check_validation_changeset,
+      success: start_to_validation_success ++ [
         :insert_changeset, 
-        :check_insertion
+        :check_insertion_result
       ],
       validation_error: [
         :previously,
@@ -54,22 +53,12 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
         :changeset_from_params, 
         :check_validation_changeset, 
       ],
-      constraint_error: [
-        :previously,
-        :params,
-        :changeset_from_params, 
-        :check_validation_changeset, 
+      constraint_error: start_to_validation_success ++ [
         :insert_changeset, 
         :check_constraint_changeset
       ],
       
-      # Conveniences
-      validation_success: [
-        :previously,
-        :params,
-        :changeset_from_params, 
-        :check_validation_changeset, 
-      ],
+      validation_success: start_to_validation_success
     }
   end
 
@@ -117,7 +106,7 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
 
         def inserted(example_name) do
           {:ok, value} = 
-            check_workflow(example_name, stop_after: :check_insertion)
+            check_workflow(example_name, stop_after: :check_insertion_result)
             |> Keyword.get(:insert_changeset)
           value
         end
