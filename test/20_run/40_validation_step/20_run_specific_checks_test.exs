@@ -7,7 +7,6 @@ defmodule Run.ValidationStep.RunSpecificChecksTest do
 
   setup do
     stub(name: :example, neighborhood: %{})
-    stub_history(params: %{})
     :ok
   end
 

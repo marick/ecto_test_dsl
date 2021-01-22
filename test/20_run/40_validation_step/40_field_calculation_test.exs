@@ -6,35 +6,17 @@ defmodule Run.ValidationStep.FieldCalculationTest do
   import T.RunningStubs
   import T.Parse.InternalFunctions
 
-  defmodule Schema do
-    use Ecto.Schema
-    alias Ecto.Changeset
-    schema "bogus" do 
-      field :age, :integer
-      field :age_plus, :integer
-    end
-    
-    def changeset(struct, params) do
-      cast_value = struct |> Changeset.cast(params, [:age])
-      Changeset.put_change(cast_value, :age_plus, cast_value.changes.age + 1)
-    end
-  end
-
-
   setup do
-    stub(workflow_name: :success, name: :example,
+    stub(name: :example,
       validation_changeset_checks: [],
-      as_cast: AsCast.nothing,
-      module_under_test: Schema,
       neighborhood: %{})
-    stub_history(params: %{})
     :ok
   end
 
   defp run([changes: changes]) do
     changeset = ChangesetX.valid_changeset(changes: changes)
     stub_history(changeset_from_params: changeset)
-    Steps.check_validation_changeset(:running, :changeset_from_params)
+    Steps.field_calculation_checks(:running, :changeset_from_params)
   end
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result
@@ -63,13 +45,13 @@ defmodule Run.ValidationStep.FieldCalculationTest do
   end
 
   @tag :skip
+  # Someday produce a better error messsage as shown below
   test "a supposed-to-be-calculated field is not present" do
     stub(field_calculators: [age_plus: on_success(&(&1+1), applied_to: [:age])])
 
-    input = [changes: %{age: 3}]
+    changeset_values = [changes: %{age: 3}]
 
-        run(input)
-    
+        run(changeset_values)
 
     assertion_fails(~r/Example `:example`: Field `:age_plus` is missing/, 
       [message: ~r/The changeset has all the prerequisites to calculate `:age_plus`/,
@@ -77,46 +59,58 @@ defmodule Run.ValidationStep.FieldCalculationTest do
        left: %{age: 3},
        right: ["calculated value": [age_plus: 4]]],
       fn ->
-        run(input)
+        run(changeset_values)
       end)
   end
 
   test "the calculation blows up with a message" do
     stub(field_calculators: [age_plus: on_success(Date.from_iso8601!(:age))])
 
-    input = [changes: %{age: "2001-01-3", age_plus: 7 }]
+    changeset_values = [changes: %{age: "2001-01-3", age_plus: 7 }]
 
     assertion_fails(~r/Example `:example`: Exception raised while calculating value for `:age_plus`/, 
       [message: ~r/cannot parse "2001-01-3" as date, reason: :invalid_format/,
        expr: "on_success(Date.from_iso8601!(:age))",
        left: ["Here are the actual arguments used": ["2001-01-3"]]],
       fn ->
-        run(input)
+        run(changeset_values)
       end)
   end
 
   test "the calculation blows up with no message" do
     stub(field_calculators: [age_plus: on_success(Date.from_iso8601!(:age))])
 
-    input = [changes: %{age: 6, age_plus: 7 }]
+    changeset_values = [changes: %{age: 6, age_plus: 7 }]
 
     assertion_fails(~r/Example `:example`: Exception raised while calculating value for `:age_plus`/, 
       [message: ~r/%FunctionClauseError/,
        expr: "on_success(Date.from_iso8601!(:age))",
        left: ["Here are the actual arguments used": [6]]],
       fn ->
-        run(input)
+        run(changeset_values)
       end)
   end
 
-  test "no check added when a validation failure is expected" do
-    stub(field_calculators: [age_plus: on_success(Date.from_iso8601!(:age))])
-    stub(workflow_name: :validation_error)
+  test "a user assertion overrides field calculation" do
+    stub(field_calculators: [age_plus: on_success(&(&1+1), applied_to: [:age])])
+    stub(validation_changeset_checks: [changes:  [age_plus: 0]])
     
-    changeset = ChangesetX.invalid_changeset(changes: %{age: "wrong"})
-    stub_history(changeset_from_params: changeset)
+    [changes: %{age_plus: 7 }] |> pass()
+  end
 
-    actual = Steps.check_validation_changeset(:running, :changeset_from_params)
-    assert actual == :uninteresting_result
+
+  test "... but does not interfere with field calculations" do
+    stub(field_calculators: [age_plus: on_success(&(&1+1), applied_to: [:age])])
+    stub(validation_changeset_checks: [changes: [age: 0]])
+
+    changeset_values = [changes: %{age: 0, age_plus: 38383}]
+
+    assertion_fails(~r/Example `:example`: Field `:age_plus` has the wrong value/,
+      [expr: "on_success(<fn>, applied_to: [:age])",
+       left: 38383,
+       right: 1],
+      fn ->
+        run(changeset_values)
+      end)
   end
 end

@@ -7,7 +7,6 @@ defmodule Run.ValidationStep.ValidityTest do
 
   setup do
     stub(workflow_name: :workflow, name: :example)
-    stub_history(params: %{})
     :ok
   end
 

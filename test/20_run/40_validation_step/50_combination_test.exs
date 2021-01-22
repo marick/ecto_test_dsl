@@ -32,45 +32,49 @@ defmodule Run.ValidationStep.CombinationTest do
     :ok
   end
 
-  defp run(), do: Steps.check_validation_changeset(:running, :changeset_from_params)
-  defp pass(), do: assert run() == :uninteresting_result
+#  defp run(), do: Steps.check_validation_changeset(:running, :changeset_from_params)
+#  defp pass(), do: assert run() == :uninteresting_result
 
   IO.inspect "This is now a sequencing test for EctoClassic.Insert"
   
   @tag :skip
   test "validity assertion comes first" do
-    wrong_value = [changes: %{age: 6, age_plus: "WRONG"}]
-    stub(field_calculators: [age_plus: on_success(&(&1+1), applied_to: [:age])])
+    # wrong_value = [changes: %{age: 6, age_plus: "WRONG"}]
+    # stub(field_calculators: [age_plus: on_success(&(&1+1), applied_to: [:age])])
 
 
-    # Valid changeset
-    expect_field_failure = ChangesetX.valid_changeset(wrong_value)
-                                     #^^^^^
-    stub_history(changeset_from_params: expect_field_failure)
+    # # Valid changeset
+    # expect_field_failure = ChangesetX.valid_changeset(wrong_value)
+    #                                  #^^^^^
+    # stub_history(changeset_from_params: expect_field_failure)
     
-    assertion_fails(~r/Example `:example`: Field `:age_plus` has the wrong value/, 
-      fn ->
-        run()
-      end)
+    # assertion_fails(~r/Example `:example`: Field `:age_plus` has the wrong value/, 
+    #   fn ->
+    #     run()
+    #   end)
 
-    # Invalid changeset
-    expect_validity_failure = ChangesetX.invalid_changeset(wrong_value)
-                                        #^^^^^^^
-    stub_history(changeset_from_params: expect_validity_failure)
+    # # Invalid changeset
+    # expect_validity_failure = ChangesetX.invalid_changeset(wrong_value)
+    #                                     #^^^^^^^
+    # stub_history(changeset_from_params: expect_validity_failure)
 
-    assertion_fails(~r/expects a valid changeset/, 
-      fn ->
-        run()
-      end)
+    # assertion_fails(~r/expects a valid changeset/, 
+    #   fn ->
+    #     run()
+    #   end)
+  end
+
+  @tag :skip
+  test "no check added when a validation failure is expected" do
+  #   stub(field_calculators: [age_plus: on_success(Date.from_iso8601!(:age))])
+  #   stub(workflow_name: :validation_error)
+    
+  #   changeset = ChangesetX.invalid_changeset(changes: %{age: "wrong"})
+  #   stub_history(changeset_from_params: changeset)
+
+  #   actual = Steps.field_calculation_checks(:running, :changeset_from_params)
+  #   assert actual == :uninteresting_result
   end
 
 
-  test "a user assertion overrides field calculation" do
-    stub(field_calculators: [age_plus: on_success(&(&1+1), applied_to: [:age])])
-
-    stub(validation_changeset_checks: [changes:  [age_plus: 0]])
-
-    stub_history(changeset_from_params: ChangesetX.valid_changeset([changes: %{age_plus: 0}]))
-    pass()
-  end
 end

@@ -100,6 +100,18 @@ defmodule TransformerTestSupport.Run.Steps do
     :uninteresting_result
   end
 
+  def field_calculation_checks(running, which_changeset) do
+    {example_name, changeset} = common(running, which_changeset)
+    
+    running
+    |> mockable(RunningExample).field_calculators
+    |> FieldCalculator.subtract(excluded_fields(running))
+    |> FieldCalculator.assertions(changeset)
+    |> run_assertions(changeset, example_name)
+    
+    :uninteresting_result
+  end
+
   defp common(running, which_changeset) do
     example_name = mockable(RunningExample).name(running)
     changeset = mockable(RunningExample).step_value!(running, which_changeset)
@@ -118,28 +130,6 @@ defmodule TransformerTestSupport.Run.Steps do
     # as_cast checks
     CC.unique_fields(user_checks)
   end    
-  
-
-  def check_validation_changeset(running, which_changeset) do
-    # Used throughout
-    example_name = mockable(RunningExample).name(running)
-    changeset = mockable(RunningExample).step_value!(running, which_changeset)
-
-    user_checks = user_checks(running)
-    # as_cast checks
-    excluded_fields = CC.unique_fields(user_checks)
-    
-    # field calculation checks
-    if mockable(RunningExample).workflow_name(running) != :validation_error do 
-      running
-      |> mockable(RunningExample).field_calculators
-      |> FieldCalculator.subtract(excluded_fields)
-      |> FieldCalculator.assertions(changeset)
-      |> run_assertions(changeset, example_name)
-    end
-    
-    :uninteresting_result
-  end
 
   defp run_user_checks(checks, example_name, changeset) do
     checks
