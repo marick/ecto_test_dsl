@@ -35,6 +35,9 @@ defmodule Run.ValidationStep.CombinationTest do
   defp run(), do: Steps.check_validation_changeset(:running, :changeset_from_params)
   defp pass(), do: assert run() == :uninteresting_result
 
+  IO.inspect "This is now a sequencing test for EctoClassic.Insert"
+  
+  @tag :skip
   test "validity assertion comes first" do
     wrong_value = [changes: %{age: 6, age_plus: "WRONG"}]
     stub(field_calculators: [age_plus: on_success(&(&1+1), applied_to: [:age])])

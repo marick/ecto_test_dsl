@@ -45,11 +45,37 @@ defmodule TransformerTestSupport.Run.Steps do
   end
 
   # ----------------------------------------------------------------------------
-  
+
   def changeset_from_params(running), 
     do: RunningExample.changeset_from_params(running)
 
   # ----------------------------------------------------------------------------
+
+  def assert_valid_changeset(running, which_changeset) do 
+    validity_assertions(running, which_changeset,
+      ChangesetAssertions.from(:valid), "a valid")
+  end
+    
+  def refute_valid_changeset(running, which_changeset) do 
+    validity_assertions(running, which_changeset,
+      ChangesetAssertions.from(:invalid), "an invalid")
+  end
+    
+  defp validity_assertions(running, which_changeset, assertion, error_snippet) do
+    example_name = mockable(RunningExample).name(running)
+    changeset = mockable(RunningExample).step_value!(running, which_changeset)
+    workflow_name = mockable(RunningExample).workflow_name(running)
+
+    message =
+      "Example `#{inspect example_name}`: workflow `#{inspect workflow_name}` expects #{error_snippet} changeset"
+    adjust_assertion_message(
+      fn ->
+        assertion.(changeset)
+      end,
+      fn _ -> message end)
+
+    :uninteresting_result
+  end
 
   def check_validation_changeset(running, which_changeset) do
     # Used throughout
@@ -58,7 +84,6 @@ defmodule TransformerTestSupport.Run.Steps do
     
     # Check changeset valid field
     workflow_name = mockable(RunningExample).workflow_name(running)
-    run_validity_assertions(workflow_name, example_name, changeset)
 
     # User checks
     neighborhood = mockable(RunningExample).neighborhood(running)
@@ -87,21 +112,6 @@ defmodule TransformerTestSupport.Run.Steps do
     end
     
     :uninteresting_result
-  end
-
-  defp run_validity_assertions(workflow_name, example_name, changeset) do
-    {assertion, error_snippet} =
-      if workflow_name == :validation_error,
-        do:   {ChangesetAssertions.from(:invalid), "an invalid"},
-        else: {ChangesetAssertions.from(:valid), "a valid"}
-
-    message =
-      "Example `#{inspect example_name}`: workflow `#{inspect workflow_name}` expects #{error_snippet} changeset"
-    adjust_assertion_message(
-      fn ->
-        assertion.(changeset)
-      end,
-      fn _ -> message end)
   end
 
   defp run_user_checks(checks, example_name, changeset) do
