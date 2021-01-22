@@ -77,21 +77,34 @@ defmodule TransformerTestSupport.Run.Steps do
     :uninteresting_result
   end
 
-  def check_validation_changeset(running, which_changeset) do
+  def example_specific_changeset_checks(running, which_changeset) do
     # Used throughout
     example_name = mockable(RunningExample).name(running)
     changeset = mockable(RunningExample).step_value!(running, which_changeset)
     
     # Check changeset valid field
-    workflow_name = mockable(RunningExample).workflow_name(running)
-
-    # User checks
     neighborhood = mockable(RunningExample).neighborhood(running)
-    user_checks =
-      mockable(RunningExample).validation_changeset_checks(running)
-      |> Neighborhood.Expand.changeset_checks(neighborhood)
-    run_user_checks(user_checks, example_name, changeset)
+    mockable(RunningExample).validation_changeset_checks(running)
+    |> Neighborhood.Expand.changeset_checks(neighborhood)
+    |> ChangesetAssertions.from
+    |> run_assertions(changeset, example_name)
 
+    :uninteresting_result
+  end
+
+  defp user_checks(running) do 
+    neighborhood = mockable(RunningExample).neighborhood(running)
+
+    mockable(RunningExample).validation_changeset_checks(running)
+    |> Neighborhood.Expand.changeset_checks(neighborhood)
+  end
+
+  def check_validation_changeset(running, which_changeset) do
+    # Used throughout
+    example_name = mockable(RunningExample).name(running)
+    changeset = mockable(RunningExample).step_value!(running, which_changeset)
+
+    user_checks = user_checks(running)
     # as_cast checks
     params = mockable(RunningExample).step_value!(running, :params)
     excluded_fields = CC.unique_fields(user_checks)

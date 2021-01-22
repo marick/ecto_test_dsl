@@ -1,4 +1,4 @@
-defmodule Run.ValidationStep.UserChecksTest do
+defmodule Run.ValidationStep.RunSpecificChecksTest do
   use TransformerTestSupport.Case
   use T.Drink.AndRun
   alias Run.Steps
@@ -17,7 +17,7 @@ defmodule Run.ValidationStep.UserChecksTest do
   defp run([checks, changeset]) do 
     stub_history(changeset_from_params: changeset)
     stub(validation_changeset_checks: checks)
-    Steps.check_validation_changeset(:running, :changeset_from_params)
+    Steps.example_specific_changeset_checks(:running, :changeset_from_params)
   end
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result
