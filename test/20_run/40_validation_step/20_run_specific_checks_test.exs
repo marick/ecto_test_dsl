@@ -6,10 +6,7 @@ defmodule Run.ValidationStep.RunSpecificChecksTest do
   import T.RunningStubs
 
   setup do
-    stub(workflow_name: :success, name: :example,
-      as_cast: AsCast.nothing,
-      field_calculators: [],
-      neighborhood: %{})
+    stub(name: :example, neighborhood: %{})
     stub_history(params: %{})
     :ok
   end

@@ -64,15 +64,6 @@ defmodule Run.ValidationStep.CombinationTest do
       end)
   end
 
-  test "a user assertion overrides `as_cast`" do
-    stub(as_cast: AsCast.new(Schema, [:age]))
-    stub_history(params: %{"age" => "5858"})   # Cast value will be ignored
-    # ... in favor of:
-    stub(validation_changeset_checks: [changes:  [age: 0]])
-
-    stub_history(changeset_from_params: ChangesetX.valid_changeset([changes: %{age: 0}])) 
-    pass()
-  end
 
   test "a user assertion overrides field calculation" do
     stub(field_calculators: [age_plus: on_success(&(&1+1), applied_to: [:age])])

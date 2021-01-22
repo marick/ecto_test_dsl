@@ -16,6 +16,7 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
     {:assert_valid_changeset,            [:changeset_from_params]},
     {:refute_valid_changeset,            [:changeset_from_params]},
     {:example_specific_changeset_checks, [:changeset_from_params]},
+    {:as_cast_checks,                    [:changeset_from_params]},
     {:check_validation_changeset,        [:changeset_from_params]},
     
     {:insert_changeset,           [:changeset_from_params]},
@@ -33,6 +34,7 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
     from_start_through_validation = from_start_through_changeset ++ [
       :assert_valid_changeset,
       :example_specific_changeset_checks,
+      :as_cast_checks,
       :check_validation_changeset, 
     ]
     
@@ -41,6 +43,7 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
       validation_error: from_start_through_changeset ++ [
         :refute_valid_changeset,
         :example_specific_changeset_checks,
+        :as_cast_checks,
         :check_validation_changeset,
       ],
       

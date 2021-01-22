@@ -7,9 +7,8 @@ defmodule Run.ValidationStep.AsCastTest do
   alias Ecto.Changeset
 
   setup do
-    stub(workflow_name: :success, name: :example,
+    stub(name: :example,
       validation_changeset_checks: [],
-      field_calculators: [],
       neighborhood: %{})
     :ok
   end
@@ -29,7 +28,7 @@ defmodule Run.ValidationStep.AsCastTest do
     stub_history(params: params, changeset_from_params: changeset)
     stub(as_cast: AsCast.new(Schema, [field]))
     given Schema.changeset(%Schema{}, params), return: cast_value
-    Steps.check_validation_changeset(:running, :changeset_from_params)
+    Steps.as_cast_checks(:running, :changeset_from_params)
   end
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result
@@ -62,7 +61,7 @@ defmodule Run.ValidationStep.AsCastTest do
   end
 
   test "If the `cast` produces an error, that's checked" do
-    stub(as_cast: AsCast.new(Schema, [:date]), workflow_name: :validation_error)
+    stub(as_cast: AsCast.new(Schema, [:date]))
     stub_history(params: %{"date" => "2001-0"})
 
     changeset =
@@ -77,7 +76,40 @@ defmodule Run.ValidationStep.AsCastTest do
        left: ["the wrong error message"],
        right: "is invalid"],
       fn ->
-        Steps.check_validation_changeset(:running, :changeset_from_params)
+        Steps.as_cast_checks(:running, :changeset_from_params)
       end)
   end
+
+  test "a user assertion overrides `as_cast`" do
+    stub(as_cast: AsCast.new(Schema, [:age]))
+    stub_history(params: %{"age" => "5858"})   # Cast value will be ignored
+    # ... in favor of:
+    stub(validation_changeset_checks: [changes:  [age: 0]])
+
+    stub_history(changeset_from_params: ChangesetX.valid_changeset([changes: %{age: 0}]))
+
+    assert Steps.as_cast_checks(:running, :changeset_from_params) == :uninteresting_result
+  end
+  
+  test "but other as_cast values are checked" do
+    stub(as_cast: AsCast.new(Schema, [:age, :date]))
+    stub_history(params: %{"age" => "5858", "date" => "2001-1"})
+    stub(validation_changeset_checks: [changes:  [age: 0]])
+
+    changeset =
+      Schema.changeset(%Schema{}, %{"age" => "6"})
+      |> Changeset.add_error(:date, "the wrong error message")
+    stub_history(changeset_from_params: changeset)
+
+    assertion_fails(~r/Example `:example`: Field :date does not have a matching error message/, 
+      [expr: [[as_cast: [:date]],
+              "expanded to",
+              [changeset: [{:errors, [date: "is invalid"]}, "..."]]],
+       left: ["the wrong error message"],
+       right: "is invalid"],
+      fn ->
+        Steps.as_cast_checks(:running, :changeset_from_params)
+      end)
+  end
+  
 end
