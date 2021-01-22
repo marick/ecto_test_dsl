@@ -1,4 +1,4 @@
-defmodule Run.ValidationStep.CombinationTest do
+defmodule Variants.PhoenixClassic.ValidationOrderTest do
   use TransformerTestSupport.Case
   use T.Drink.AndRun
   alias Run.Steps
