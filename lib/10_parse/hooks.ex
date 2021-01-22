@@ -4,23 +4,16 @@ defmodule TransformerTestSupport.Parse.Hooks do
 
   # ----------------------------------------------------------------------------
 
-  def has_hook?(nil, _hook_tuple), do: false
-  
-  def has_hook?(variant, hook_tuple), 
-    do: hook_tuple in variant.__info__(:functions)
-
-  def run_variant(test_data, hook_name, rest_args) do
-    hook_tuple = {hook_name, 1 + length(rest_args)}
-    variant = Map.get(test_data, :variant)  
-    case has_hook?(variant, hook_tuple) do
-      true ->
-        apply variant, hook_name, [test_data | rest_args]
-      false ->
-        test_data
-    end
+  def run_hook(%{variant: variant} = test_data, hook_name, rest_args) do
+    apply variant, :hook, [hook_name, test_data, rest_args]
   end
 
-  def run_start_hook(%{variant: variant} = test_data_so_far),
-    do: apply variant, :run_start_hook, [test_data_so_far]
+  # This allows tests not to create a `variant`. Does not apply to
+  # non-test code.
+  def run_hook(test_data, _hook_name, _rest_args), do: test_data
+
+  def run_hook(test_data, hook_name) do
+    run_hook(test_data, hook_name, [])
+  end
 end
   

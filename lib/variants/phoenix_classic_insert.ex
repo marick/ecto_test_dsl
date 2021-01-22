@@ -6,18 +6,6 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
   alias T.Parse.Start
   alias T.Parse.Callbacks
   import FlowAssertions.Define.BodyParts
-
-  @default_start_opts [
-    changeset_with: &Steps.changeset_with__default_insert/2,
-    insert_with: &Steps.insert_with__default/2,
-    format: :phoenix
-  ]
-  
-  def start(opts) do
-    opts = Keyword.merge(@default_start_opts, opts)
-    Start.start_with_variant(ThisVariant, opts)
-  end
-
   # ------------------- Step functions -----------------------------------------
 
   defsteps [
@@ -32,53 +20,70 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
   ], from: Steps
 
   def workflows() do
-    start_to_changeset = [
+    from_start_through_changeset = [
       :previously,
       :params,
       :changeset_from_params,
     ]
 
-    start_to_validation_success = start_to_changeset ++ [
+    from_start_through_validation = from_start_through_changeset ++ [
       :check_validation_changeset, 
     ]
     
     %{
-      success: start_to_validation_success ++ [
-        :insert_changeset, 
-        :check_insertion_result
-      ],
-      validation_error: [
-        :previously,
-        :params,
-        :changeset_from_params, 
-        :check_validation_changeset, 
-      ],
-      constraint_error: start_to_validation_success ++ [
+      validation_success: from_start_through_validation,
+      validation_error: from_start_through_changeset,
+      
+      constraint_error: from_start_through_validation ++ [
         :insert_changeset, 
         :check_constraint_changeset
       ],
-      
-      validation_success: start_to_validation_success
+      success: from_start_through_validation ++ [
+        :insert_changeset, 
+        :check_insertion_result
+      ],
     }
   end
 
-  # ------------------- Hook functions -----------------------------------------
-
-  @required_keys [:examples_module, :repo] ++ Keyword.keys(@default_start_opts)
-  @optional_keys []
-
-  def run_start_hook(top_level) do
-    top_level
-    |> Callbacks.validate_top_level_keys(@required_keys, @optional_keys)
+  def default_start_opts, do: [
+    changeset_with: &Steps.changeset_with__default_insert/2,
+    insert_with: &Steps.insert_with__default/2,
+    format: :phoenix
+  ]
+  
+  def start(opts) do
+    opts = Keyword.merge(default_start_opts(), opts)
+    Start.start_with_variant(ThisVariant, opts)
   end
 
-  def assert_workflow_hook(_, workflow) do
+  def assert_valid_keys(top_level) do
+    required_keys = [:examples_module, :repo] ++ Keyword.keys(default_start_opts())
+    optional_keys = []
+    
+    top_level
+    |> Callbacks.validate_top_level_keys(required_keys, optional_keys)
+  end
+
+  def assert_valid_workflow_name(workflow_name) do 
     workflows = Map.keys(workflows())
     elaborate_assert(
-      workflow in workflows,
+      workflow_name in workflows,
       "The PhoenixClassic.Insert variant only allows these workflows: #{inspect workflows}",
-      left: workflow
+      left: workflow_name
     )
+  end
+  
+    
+  # ------------------- Hook functions -----------------------------------------
+
+  def hook(:start, top_level, []) do 
+    assert_valid_keys(top_level)
+    top_level
+  end
+
+  def hook(:workflow, top_level, [workflow_name]) do
+    assert_valid_workflow_name(workflow_name)
+    top_level
   end
 
   # ----------------------------------------------------------------------------

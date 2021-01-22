@@ -26,7 +26,7 @@ defmodule TransformerTestSupport.Parse.TopLevel do
 
   # ----------------------------------------------------------------------------
   def workflow(test_data, workflow, raw_examples) when is_list(raw_examples) do
-    Hooks.run_variant(test_data, :assert_workflow_hook, [workflow])
+    Hooks.run_hook(test_data, :workflow, [workflow])
 
     updated_examples =
       Normalize.as(:example_pairs, raw_examples)

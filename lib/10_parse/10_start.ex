@@ -21,6 +21,6 @@ defmodule TransformerTestSupport.Parse.Start do
 
     @starting_test_data
     |> Map.merge(map_data)
-    |> Hooks.run_start_hook
+    |> Hooks.run_hook(:start)
   end
-end  
+end
