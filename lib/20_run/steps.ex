@@ -7,17 +7,6 @@ defmodule TransformerTestSupport.Run.Steps do
   import Mockery.Macro
   alias T.Run.ChangesetChecks, as: CC
 
-  # Default functions
-
-  def changeset_with__default_insert(module_under_test, params) do
-    default_struct = struct(module_under_test)
-    module_under_test.changeset(default_struct, params)
-  end
-
-  def insert_with__default(repo, changeset),
-    do: repo.insert(changeset)
-  
-
   # ----------------------------------------------------------------------------
 
   # I can't offhand think of any case where one `previously` might need to
