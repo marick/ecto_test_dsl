@@ -11,8 +11,8 @@ defmodule Run.CheckInsertionResultStep.CheckInsertionResult do
   end
 
   defp run(insertion_results) do
-    stub_history(insert_changeset: insertion_results)
-    Steps.check_insertion_result(:running, :insert_changeset)
+    stub_history(try_changeset_insertion: insertion_results)
+    Steps.check_insertion_result(:running, :try_changeset_insertion)
   end
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result

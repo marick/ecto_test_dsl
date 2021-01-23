@@ -23,9 +23,9 @@ defmodule Run.ConstraintStep.UserAssertionsTest do
   end
 
   defp run([checks, changeset]) do
-    stub_history(insert_changeset: {:error, changeset})
+    stub_history(try_changeset_insertion: {:error, changeset})
     stub(constraint_changeset_checks: checks)
-    Steps.check_constraint_changeset(:running, :insert_changeset)
+    Steps.check_constraint_changeset(:running, :try_changeset_insertion)
   end
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result

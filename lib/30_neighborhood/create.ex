@@ -49,7 +49,7 @@ defmodule TransformerTestSupport.Neighborhood.Create do
         |> Run.example(previously: so_far)
 
       dependently_created = Keyword.get(workflow_results, :previously)
-      {:ok, insert_result} = Keyword.get(workflow_results, :insert_changeset)
+      {:ok, insert_result} = Keyword.get(workflow_results, :try_changeset_insertion)
       
       Map.put(dependently_created, een, insert_result)
     end)
