@@ -171,14 +171,14 @@ defmodule Variants.PhoenixClassic.Insert.SuccessWorkflowTest do
                        date_string: "has an invalid format")
     end
       
-    @tag :skip
-    test "mistakes in test data" do 
-      assertion_fails(~r/:unexpected_syntax_errors.*The changeset is invalid/,
+    test "mistakes in test data" do
+      assertion_fails(~r/workflow `:success` expects a valid changeset/,
         fn -> 
           Examples.Tester.check_workflow(:unexpected_syntax_errors)
         end)
 
-      assertion_fails(~r/:override_incorrectly.*has the wrong value/,
+      assertion_fails(~r/Field `:days_since_2000` has the wrong value/,
+        [left: 1, right: 5],
         fn -> 
           Examples.Tester.check_workflow(:override_incorrectly)
         end)

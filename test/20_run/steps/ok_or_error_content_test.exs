@@ -1,4 +1,4 @@
-defmodule Run.ValidationStep.OkOrErrorContentTest do
+defmodule Run.Steps.OkOrErrorContentTest do
   use TransformerTestSupport.Case
   use T.Drink.AndRun
   alias Run.Steps

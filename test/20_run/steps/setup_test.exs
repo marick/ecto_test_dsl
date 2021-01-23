@@ -1,4 +1,4 @@
-defmodule Neighborhood.CreateTest do
+defmodule Run.Steps.SetupTest do
   use TransformerTestSupport.Drink.Me
   alias T.Variants.PhoenixClassic
   alias T.Run.Steps

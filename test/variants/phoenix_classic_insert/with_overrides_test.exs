@@ -1,4 +1,4 @@
-defmodule Variants.PhoenixClassic.Insert.WithOverridesTest do
+defmodule Variants.PhoenixClassic.WithOverridesTest do
   use TransformerTestSupport.Case
   alias Ecto.Changeset
   

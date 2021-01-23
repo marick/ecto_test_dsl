@@ -1,4 +1,4 @@
-defmodule Run.SuccessfulInsert.BelongsToTest do
+defmodule Run.Support.BelongsToTest do
   use TransformerTestSupport.Case
   use T.Drink.AndRun
   use T.Parse.All

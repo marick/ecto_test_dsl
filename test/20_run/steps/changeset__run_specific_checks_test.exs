@@ -1,4 +1,4 @@
-defmodule Run.ValidationStep.RunSpecificChecksTest do
+defmodule Run.Steps.SpecificChecksTest do
   use TransformerTestSupport.Case
   use T.Drink.AndRun
   alias Run.Steps

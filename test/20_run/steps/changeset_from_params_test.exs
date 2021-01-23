@@ -1,4 +1,4 @@
-defmodule Run.AcceptParamsTest do
+defmodule Run.Steps.ChangesetFromParamsTest do
   use TransformerTestSupport.Case
   use T.Drink.AndRun
   alias T.Run.Steps

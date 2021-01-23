@@ -1,4 +1,4 @@
-defmodule Run.ValidationStep.AsCastTest do
+defmodule Run.Steps.AsCastTest do
   use TransformerTestSupport.Case
   use T.Drink.AndRun
   alias Run.Steps

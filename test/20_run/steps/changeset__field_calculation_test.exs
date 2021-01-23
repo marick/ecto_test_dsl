@@ -1,4 +1,4 @@
-defmodule Run.ValidationStep.FieldCalculationTest do
+defmodule Run.Steps.FieldCalculationTest do
   use TransformerTestSupport.Case
   use T.Drink.AndRun
   alias Run.Steps

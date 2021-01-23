@@ -1,4 +1,4 @@
-defmodule Run.FormatParamsTest do
+defmodule Run.Support.FormatParamsTest do
   use TransformerTestSupport.Case
   alias T.Run.RunningExample
 

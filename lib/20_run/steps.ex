@@ -131,12 +131,6 @@ defmodule TransformerTestSupport.Run.Steps do
     CC.unique_fields(user_checks)
   end    
 
-  defp run_user_checks(checks, example_name, changeset) do
-    checks
-    |> ChangesetAssertions.from
-    |> run_assertions(changeset, example_name)
-  end
-
   defp run_assertions(assertions, changeset, name) do
     adjust_assertion_message(
       fn ->

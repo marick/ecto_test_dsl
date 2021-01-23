@@ -1,4 +1,4 @@
-defmodule Run.ValidationStep.ValidityTest do
+defmodule Run.Steps.ValidityTest do
   use TransformerTestSupport.Case
   use T.Drink.AndRun
   alias Run.Steps
