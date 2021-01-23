@@ -18,8 +18,6 @@ defmodule TransformerTestSupport.Run do
     Example.workflow_steps(example)
     |> EnumX.take_until(&(&1 == stop))
   end
-
-
   
   defp run_steps(running_start) do
     running_start.script
@@ -31,7 +29,7 @@ defmodule TransformerTestSupport.Run do
     case opts do
       [uses: rest_args] -> 
         module = RunningExample.variant(running)
-        value = apply(module, step_name, [running, rest_args])
+        value = apply_or_flunk(module, step_name, [running, rest_args])
         Map.update!(running, :history, &(History.add(&1, step_name, value)))
       _ ->
         flunk("`#{inspect [step_name, opts]}` has bad options. `uses` is required.")
@@ -40,5 +38,16 @@ defmodule TransformerTestSupport.Run do
 
   defp run_step(step_name, running) do
     run_step([step_name, uses: []], running)
+  end
+
+  defp apply_or_flunk(module, step_name, args) do 
+    unless function_exported?(module, step_name, length(args)) do
+      missing = "`#{to_string step_name}/#{inspect length(args)}`"
+      flunk """
+            Variant is missing step #{missing}".
+            Did you leave it out of the list of steps (typically in `defsteps`)?
+            """
+    end
+    apply(module, step_name, args)
   end
 end

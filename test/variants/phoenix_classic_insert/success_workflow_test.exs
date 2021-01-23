@@ -2,6 +2,7 @@ defmodule Variants.PhoenixClassic.Insert.SuccessWorkflowTest do
   use TransformerTestSupport.Case
   use T.Parse.All
   import FlowAssertions.AssertionA
+  alias Ecto.Changeset
   
   use TransformerTestSupport.Variants.PhoenixClassic.Insert
 
@@ -190,7 +191,9 @@ defmodule Variants.PhoenixClassic.Insert.SuccessWorkflowTest do
     end
 
     test "unexpected failure" do
-      assertion_fails(~r/unexpected insertion failure/,
+      assertion_fails(~r/Example `:insertion_will_unexpectedly_fail`/,
+        [message: ~r/Value is not an `:ok` tuple/, 
+        left: fn {:error, %Changeset{}} -> true end],
         fn -> 
           Examples.Tester.check_workflow(:insertion_will_unexpectedly_fail)
         end)

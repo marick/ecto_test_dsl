@@ -20,8 +20,8 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
     :field_calculation_checks,
     
     :try_changeset_insertion,
-    :check_insertion_result,
-    :check_constraint_changeset,
+    :ok_content,
+    :error_content,
   ], from: Steps
 
   def workflows() do
@@ -47,12 +47,14 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
       ],
       
       constraint_error: from_start_through_validation ++ [
-        [:try_changeset_insertion,    uses: [:changeset_from_params]],
-        [:check_constraint_changeset, uses: [:try_changeset_insertion]],
+        [:try_changeset_insertion,           uses: [:changeset_from_params]],
+        [:error_content,                     uses: [:try_changeset_insertion]],
+        [:refute_valid_changeset,            uses: [:error_content]],
+        [:example_specific_changeset_checks, uses: [:error_content]],
       ],
       success: from_start_through_validation ++ [
         [:try_changeset_insertion,   uses: [:changeset_from_params]],
-        [:check_insertion_result,    uses:  [:try_changeset_insertion]],
+        [:ok_content,                uses: [:try_changeset_insertion]],
       ],
     }
   end
@@ -132,7 +134,7 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
 
         def inserted(example_name) do
           {:ok, value} = 
-            check_workflow(example_name, stop_after: :check_insertion_result)
+            check_workflow(example_name, stop_after: :ok_content)
             |> Keyword.get(:try_changeset_insertion)
           value
         end

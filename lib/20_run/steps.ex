@@ -62,7 +62,7 @@ defmodule TransformerTestSupport.Run.Steps do
   end
     
   defp validity_assertions(running, which_changeset, assertion, error_snippet) do
-    {example_name, changeset} = common(running, which_changeset)
+    {example_name, changeset} = frequent_values(running, which_changeset)
     workflow_name = mockable(RunningExample).workflow_name(running)
 
     message =
@@ -77,7 +77,7 @@ defmodule TransformerTestSupport.Run.Steps do
   end
 
   def example_specific_changeset_checks(running, which_changeset) do
-    {example_name, changeset} = common(running, which_changeset)
+    {example_name, changeset} = frequent_values(running, which_changeset)
     
     user_checks(running)
     |> ChangesetAssertions.from
@@ -87,7 +87,7 @@ defmodule TransformerTestSupport.Run.Steps do
   end
 
   def as_cast_checks(running, which_changeset) do
-    {example_name, changeset} = common(running, which_changeset)
+    {example_name, changeset} = frequent_values(running, which_changeset)
 
     params = mockable(RunningExample).step_value!(running, :params)
     
@@ -101,7 +101,7 @@ defmodule TransformerTestSupport.Run.Steps do
   end
 
   def field_calculation_checks(running, which_changeset) do
-    {example_name, changeset} = common(running, which_changeset)
+    {example_name, changeset} = frequent_values(running, which_changeset)
     
     running
     |> mockable(RunningExample).field_calculators
@@ -112,7 +112,7 @@ defmodule TransformerTestSupport.Run.Steps do
     :uninteresting_result
   end
 
-  defp common(running, which_changeset) do
+  defp frequent_values(running, which_changeset) do
     example_name = mockable(RunningExample).name(running)
     changeset = mockable(RunningExample).step_value!(running, which_changeset)
     {example_name, changeset}
@@ -146,50 +146,33 @@ defmodule TransformerTestSupport.Run.Steps do
         error_message(name, message, changeset)
       end)
   end
-
   
   # ----------------------------------------------------------------------------
 
   def try_changeset_insertion(running, which_changeset) do
     changeset = RunningExample.step_value!(running, which_changeset)
     repo = RunningExample.repo(running)
-    apply RunningExample.insert_with(running), [repo, changeset]
+    apply(RunningExample.insert_with(running), [repo, changeset])
   end
 
-  def check_insertion_result(running, insertion_step) do
-    name = mockable(RunningExample).name(running)
-    case mockable(RunningExample).step_value!(running, insertion_step) do
-      {:ok, _result} -> 
-        :uninteresting_result
-      wrong -> 
-        elaborate_flunk(
-          context(name, "unexpected insertion failure"),
-          left: wrong)
-    end
-  end
-  
-  def check_constraint_changeset(running, which_changeset) do
-    error_case(running,
-      mockable(RunningExample).step_value!(running, which_changeset))
+  def ok_content(running, which_step) do
+    extract_content(running, :ok_content, which_step)
   end
 
-  defp error_case(running, {:error, changeset}) do
+  def error_content(running, which_step) do
+    extract_content(running, :error_content, which_step)
+  end
+
+  defp extract_content(running, extractor, which_step) do
     example_name = mockable(RunningExample).name(running)
-    neighborhood = mockable(RunningExample).neighborhood(running)
-
-    # Just user checks for constraint errors
-    mockable(RunningExample).constraint_changeset_checks(running)
-    |> Neighborhood.Expand.changeset_checks(neighborhood)
-    |> run_user_checks(example_name, changeset)
-    
-    :uninteresting_result
-  end
-
-  defp error_case(running, other) do
-    name = mockable(RunningExample).name(running)
-    elaborate_flunk(
-      context(name, "expected an error tuple containing a changeset"),
-      left: other)
+    value = mockable(RunningExample).step_value!(running, which_step)
+    adjust_assertion_message(
+      fn ->
+        apply(FlowAssertions.MiscA, extractor, [value])
+      end,
+      fn message ->
+        context(example_name, message)
+      end)
   end
 
   # ----------------------------------------------------------------------------
