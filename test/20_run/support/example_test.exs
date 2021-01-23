@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Run.RunningExampleTest do
+defmodule TransformerTestSupport.Run.Support.ExampleTest do
   use TransformerTestSupport.Drink.Me
   
   alias Ecto.Changeset
@@ -43,7 +43,7 @@ defmodule TransformerTestSupport.Run.RunningExampleTest do
     use TransformerTestSupport.Case
     alias TransformerTestSupport.Run
 
-    test "stopping early after a step" do
+    test "`example` can stop early in a workflow" do
       assert [
         changeset_from_params: made, params: %{"name" => "young"},
           previously: %{}, previously: %{}, example: _] = 
@@ -56,7 +56,7 @@ defmodule TransformerTestSupport.Run.RunningExampleTest do
 
     @presupplied "presupplied, not created"
 
-    test "A starting previously-state can be passed in" do
+    test "a neighborhood (from a nested `previously`) can be passed in" do
       expect = fn example_name, expected ->
         actual =  
           Examples.Tester.example(example_name)
