@@ -9,7 +9,7 @@ defmodule TransformerTestSupport.Run do
       history: History.new(example, opts)
     )
 
-    Trace.apply(&run_steps/1, running) |> Trace.in_out
+    Trace.apply(&run_steps/1, [running])
   end
 
   def workflow_script(example, opts) do
@@ -48,6 +48,6 @@ defmodule TransformerTestSupport.Run do
             Did you leave it out of the list of steps (typically in `defsteps`)?
             """
     end
-    apply(module, step_name, args)
+    Trace.apply(module, step_name, args)
   end
 end

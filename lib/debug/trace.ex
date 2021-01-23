@@ -16,22 +16,9 @@ defmodule TransformerTestSupport.Trace do
     :no_meaningful_value
   end
 
-  # -----------Wrappers around functions--------------------------------------
+  # -----------Wrappers around function application-------------------------------
 
-  # The conceit here is that you "Trace.apply" a function to a value,
-  # then pass the "result" to Trace.in_out or Trace.value_of.
-  #
-  #     Trace.apply(&run_steps/1, running) |> Trace.in_out
-  # 
-  # 
-  # In fact, Trace.apply just wraps its argument, and the end of the
-  # pipeline in fact calls the function.
-  #
-  # Note that these return the values of the wrapped functions.
-
-  def apply(f, running), do: {f, running}
-
-  def in_out({f, running}) do
+  def apply(f, [running]) when is_function(f) do
     stash = trace_enter(running)
     capture_assertion_failure(fn ->
       result = TraceServer.nested(fn -> f.(running) end)
@@ -40,10 +27,10 @@ defmodule TransformerTestSupport.Trace do
     end)
   end
 
-  def as_nested_value({f, running}, label) do
-    say(label)
+  def apply(module, step_name, args) do
+    say(step_name)
     TraceServer.nested(fn ->
-      result = f.(running)
+      result = Kernel.apply module, step_name, args
       unless result == :uninteresting_result,
         do: say(result, :result)
       result
