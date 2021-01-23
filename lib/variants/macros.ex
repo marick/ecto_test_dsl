@@ -1,20 +1,19 @@
 defmodule TransformerTestSupport.Variants.Macros do
 
-  defp one_step({step_name, arg_suffix}, step_module) do
+  defp one_step(step_name, step_module) do
     quote do
-      def unquote(step_name)(running) do
-        args = [running | unquote(arg_suffix)]
+      def unquote(step_name)(running, rest_args) do
+        args = [running | rest_args]
         apply(unquote(step_module), unquote(step_name), args)
       end
     end
   end
 
-  defp one_step(step_name, step_module),
-    do: one_step({step_name, []}, step_module)
-
   defmacro defsteps(steps, from: step_module) do
-    for namelike <- steps do
-      one_step(namelike, step_module)
+    for name <- steps do
+      one_step(name, step_module)
     end
   end
+
+
 end

@@ -21,21 +21,24 @@ defmodule TransformerTestSupport.Run do
 
 
   
-  defp run_steps(running) do
-    case running.script do
-      [] ->
-        running.history
-      [step_name | rest] ->
-        function =
-          Function.capture(RunningExample.variant(running), step_name, 1)
-        value =
-          Trace.apply(function, running) |> Trace.as_nested_value(step_name)
+  defp run_steps(running_start) do
+    running_start.script
+    |> Enum.reduce(running_start, &run_step/2)
+    |> Map.get(:history)
+  end
 
-        running
-        |> Map.update!(:history, &(History.add(&1, step_name, value)))
-        |> Map.put(:script, rest)
-        |> run_steps
+  defp run_step([step_name | opts], running) do
+    case opts do
+      [uses: rest_args] -> 
+        module = RunningExample.variant(running)
+        value = apply(module, step_name, [running, rest_args])
+        Map.update!(running, :history, &(History.add(&1, step_name, value)))
+      _ ->
+        flunk("`#{inspect [step_name, opts]}` has bad options. `uses` is required.")
     end
   end
 
+  defp run_step(step_name, running) do
+    run_step([step_name, uses: []], running)
+  end
 end
