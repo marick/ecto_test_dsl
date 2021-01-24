@@ -3,7 +3,6 @@ defmodule Variants.PhoenixClassic.ValidationOrderTest do
   use T.Drink.AndRun
   alias Run.Steps
   use Mockery
-  import T.RunningStubs
   import T.Parse.InternalFunctions
 
   defmodule Schema do

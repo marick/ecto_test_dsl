@@ -1,7 +1,7 @@
 defmodule TransformerTestSupport.Run.RunningExampleTest do
   use TransformerTestSupport.Drink.Me
   
-  alias Ecto.Changeset
+#  alias Ecto.Changeset
 
   defmodule Schema do 
     use Ecto.Schema
