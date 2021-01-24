@@ -3,23 +3,28 @@ defmodule Neighborhood.ExpandTest do
   alias T.Neighborhood.Expand
   import T.Parse.InternalFunctions, only: [id_of: 1]
 
-  defp try_params(original, neighborhood, expected) do 
-    actual = Expand.params(original, with: neighborhood)
-    assert expected == actual
-  end
-  
   test "params" do
     original = %{a: 1}
     neighborhood = %{}
     expected = original
-    try_params(original, neighborhood, expected)
+    actual = Expand.params(original, with: neighborhood)
+    assert expected == actual
       
     original = %{a: FieldRef.new(id: een(:neighbor))}
     neighborhood = %{een(:neighbor) => %{id: 5}}
     expected = %{a: 5}
-    try_params(original, neighborhood, expected)
+    actual = Expand.params(original, with: neighborhood)
+    assert expected == actual
   end
 
+  test "field checks" do
+    fields = [name: 1, species_id: id_of(:other)]
+    expected = %{name: 1, species_id: 3838}
+    actual = Expand.field_checks(fields, with: %{een(:other) => %{id: 3838}})
+    assert actual == expected
+  end
+
+  # ----------------------------------------------------------------------------
 
   test "changeset_checks" do
     checks =   [:valid, changes: [a: 3, b: id_of(:other)]]

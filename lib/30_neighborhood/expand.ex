@@ -2,17 +2,25 @@ defmodule TransformerTestSupport.Neighborhood.Expand do
   use TransformerTestSupport.Drink.Me
 
   def params(params, with: neighborhood) do
-    for {param_name, param_value} <- params do
-      case param_value do
-        %FieldRef{} = ref ->
-          {param_name, FieldRef.dereference(ref, in: neighborhood)}
-        _ ->
-          {param_name, param_value}
-      end
-    end
-    |> Map.new
+    expand_one_level(params, neighborhood)
   end
 
+  def field_checks(checks, with: neighborhood) do
+    expand_one_level(checks, neighborhood)
+  end
+
+  defp expand_one_level(kws, neighborhood) do
+    for {name, value} <- kws, into: %{} do
+      case value do
+        %FieldRef{} = ref ->
+          {name, FieldRef.dereference(ref, in: neighborhood)}
+        _ ->
+          {name, value}
+      end
+    end
+  end
+
+  # ----------------------------------------------------------------------------
 
   def changeset_checks(checks, examples) do
     tested_replace_check_values(checks,
