@@ -6,6 +6,7 @@ defmodule TransformerTestSupport.Run.Steps do
   use FlowAssertions.Ecto
   import Mockery.Macro
   alias T.Run.ChangesetChecks, as: CC
+  alias T.Neighborhood.Expand
 
   # ----------------------------------------------------------------------------
 
@@ -88,10 +89,20 @@ defmodule TransformerTestSupport.Run.Steps do
 
 
   def field_checks(running, which_step) do
-    expected = mockable(RunningExample).field_checks(running)
+    neighborhood = mockable(RunningExample).neighborhood(running)
+    example_name = mockable(RunningExample).name(running)
+    expected =
+      mockable(RunningExample).field_checks(running)
+      |> Expand.field_checks(with: neighborhood)
     value = mockable(RunningExample).step_value!(running, which_step)
 
-    apply FlowAssertions.MapA, :assert_fields, [value, expected]
+    adjust_assertion_message(
+      fn ->
+        apply FlowAssertions.MapA, :assert_fields, [value, expected]
+      end,
+      fn message ->
+        context(example_name, message)
+      end)
     :uninteresting_result
   end
 

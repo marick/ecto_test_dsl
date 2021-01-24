@@ -4,6 +4,7 @@ defmodule Run.Steps.FieldChecksTest do
   alias Run.Steps
   use Mockery
   import T.RunningStubs
+  import T.Parse.InternalFunctions
 
   setup do
     stub(name: :example, neighborhood: %{})
@@ -22,51 +23,37 @@ defmodule Run.Steps.FieldChecksTest do
     [ [name: "Bossie"], %{name: "Bossie"}] |> pass()
   end
     
-  # test "expected change is missing" do
-  #   setup = [                          [changes:  [name: "Bossie", age: 12]],
-  #            ChangesetX.valid_changeset(changes: %{name: "Bossie"})]
-  #   assertion_fails(~r/Example `:example`/,
-  #     [message: ~r/Field `:age` is missing/,
-  #      message: ~r/Changeset:.*changes: %{name: "Bossie"}/,
-  #      expr: [changeset: [{:changes, [name: "Bossie", age: 12]}, "..."]],
-  #      left: %{name: "Bossie"},
-  #      right: [name: "Bossie", age: 12]],
-  #     fn ->
-  #       run(setup)
-  #     end)
-  # end
+  test "expected change has wrong value" do
+    input = [ [name: "Bossie"], %{name: ""}]
+    
+    assertion_fails(~r/Example `:example`/,
+      [message: ~r/Field `:name` has the wrong value/,
+       left: "",
+       right: "Bossie"],
+      fn ->
+        run(input)
+      end)
+  end
 
-  # test "error cases are fine" do
-  #   stub(workflow_name: :validation_error)   # overrides
+  test "extra values are OK" do
+    [ [name: "Bossie"], %{name: "Bossie", age: 5}] |> pass
+  end
 
-  #   [                            [changes:  [name: "Bossie"]],
-  #    ChangesetX.invalid_changeset(changes: %{name: "Bossie"})] |> pass()
-  # end
+  test "references to neighbors are supported" do
+    other_een = een(:other_example)
+    stub(neighborhood: %{other_een => %{id: 333}})
 
+    passes = [ [other_id: id_of(:other_example)], %{other_id: 333}]
+    fails = [ [other_id: id_of(:other_example)], %{other_id: "NOT"}]
 
-  # test "empty check list is" do
-  #   [                          [                          ],
-  #    ChangesetX.valid_changeset(changes: %{name: "Bossie"})] |> pass()
-  # end
+    passes |> pass()
 
-  # test "references to neighbors are supported" do
-  #   other_een = een(:other_example)
-  #   stub(neighborhood: %{other_een => %{id: 333}})
-
-  #   checks = [changes: [ref_id: FieldRef.new(id: other_een)]]
-  #   passes = [checks, ChangesetX.valid_changeset(changes: %{ref_id: 333})]
-  #   fails =  [checks, ChangesetX.valid_changeset(changes: %{ref_id: "NOT"})]
-
-  #   passes |> pass()
-
-  #   assertion_fails(~r/Example `:example`/,
-  #     [message: ~r/Field `:ref_id` has the wrong value/,
-  #      message: ~r/Changeset:.*changes: %{ref_id: "NOT"}/,
-  #      expr: [changeset: [{:changes, [ref_id: 333]}, "..."]],
-  #      left: "NOT",
-  #      right: 333],
-  #     fn ->
-  #       run(fails)
-  #     end)
-  # end
+    assertion_fails(~r/Example `:example`/,
+      [message: ~r/Field `:other_id` has the wrong value/,
+       left: "NOT",
+       right: 333],
+      fn ->
+        run(fails)
+      end)
+  end
 end
