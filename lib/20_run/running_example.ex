@@ -11,7 +11,8 @@ defmodule TransformerTestSupport.Run.RunningExample do
   getters :example, [
     setup_instructions: [],
     validation_changeset_checks: [],
-    constraint_changeset_checks: []
+    constraint_changeset_checks: [],
+    field_checks: [],
   ]
 
   getters :example, :metadata, [

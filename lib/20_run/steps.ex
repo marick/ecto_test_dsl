@@ -86,6 +86,15 @@ defmodule TransformerTestSupport.Run.Steps do
     :uninteresting_result
   end
 
+
+  def field_checks(running, which_step) do
+    expected = mockable(RunningExample).field_checks(running)
+    value = mockable(RunningExample).step_value!(running, which_step)
+
+    apply FlowAssertions.MapA, :assert_fields, [value, expected]
+    :uninteresting_result
+  end
+
   def as_cast_checks(running, which_changeset) do
     {example_name, changeset} = frequent_values(running, which_changeset)
 
