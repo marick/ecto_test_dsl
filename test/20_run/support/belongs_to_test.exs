@@ -20,7 +20,7 @@ defmodule Run.Support.BelongsToTest do
   end
 
   defmodule Examples do 
-    use Template.PhoenixClassic.Insert
+    use Template.PhoenixGranular.Insert
 
     def create_test_data do
       started(module_under_test: Schema) |>

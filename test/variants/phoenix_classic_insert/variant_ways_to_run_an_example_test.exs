@@ -19,7 +19,7 @@ defmodule EctoTestDSL.Run.RunningExampleTest do
   end
 
   defmodule Examples do
-    use T.Variants.PhoenixClassic.Insert
+    use T.Variants.PhoenixGranular.Insert
 
     def fake_insert(_repo, changeset),
       do: {:ok, "created `#{changeset.changes.name}`"}

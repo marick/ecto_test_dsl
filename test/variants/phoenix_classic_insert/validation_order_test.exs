@@ -1,4 +1,4 @@
-defmodule Variants.PhoenixClassic.ValidationOrderTest do
+defmodule Variants.PhoenixGranular.ValidationOrderTest do
   use EctoTestDSL.Case
   use T.Drink.AndRun
   alias Run.Steps
@@ -31,7 +31,7 @@ defmodule Variants.PhoenixClassic.ValidationOrderTest do
   
 
   defmodule Examples do
-    use EctoTestDSL.Variants.PhoenixClassic.Insert
+    use EctoTestDSL.Variants.PhoenixGranular.Insert
     
     def create_test_data do 
       start(

@@ -4,7 +4,7 @@ defmodule Parse.TopLevel.WorkflowTest do
   use T.Parse.All
 
   defmodule Examples do
-    use Template.PhoenixClassic.Insert
+    use Template.PhoenixGranular.Insert
     
     def create_test_data() do
       started()

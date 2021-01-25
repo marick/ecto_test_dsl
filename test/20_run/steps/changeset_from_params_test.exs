@@ -16,7 +16,7 @@ defmodule Run.Steps.ChangesetFromParamsTest do
   end
 
   defmodule Examples do
-    use Template.PhoenixClassic.Insert
+    use Template.PhoenixGranular.Insert
   end
 
   test "the only result" do

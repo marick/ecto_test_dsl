@@ -1,7 +1,7 @@
-defmodule EctoTestDSL.Variants.PhoenixClassic.Insert do
+defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
   use EctoTestDSL.Drink.Me
   alias T.Run.Steps
-  alias T.Variants.PhoenixClassic.Insert, as: ThisVariant
+  alias T.Variants.PhoenixGranular.Insert, as: ThisVariant
   import T.Variants.Macros
   alias T.Parse.Start
   alias T.Parse.Callbacks
@@ -104,7 +104,7 @@ defmodule EctoTestDSL.Variants.PhoenixClassic.Insert do
     workflows = Map.keys(workflows())
     elaborate_assert(
       workflow_name in workflows,
-      "The PhoenixClassic.Insert variant only allows these workflows: #{inspect workflows}",
+      "The PhoenixGranular.Insert variant only allows these workflows: #{inspect workflows}",
       left: workflow_name
     )
   end
@@ -116,11 +116,11 @@ defmodule EctoTestDSL.Variants.PhoenixClassic.Insert do
   defmacro __using__(_) do
     quote do
       use EctoTestDSL.Predefines
-      alias EctoTestDSL.Variants.PhoenixClassic
+      alias EctoTestDSL.Variants.PhoenixGranular
       alias __MODULE__, as: ExamplesModule
 
       def start(opts) do
-        PhoenixClassic.Insert.start([{:examples_module, ExamplesModule} | opts])
+        PhoenixGranular.Insert.start([{:examples_module, ExamplesModule} | opts])
       end
 
       defmodule Tester do

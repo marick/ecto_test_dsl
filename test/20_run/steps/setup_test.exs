@@ -1,6 +1,6 @@
 defmodule Run.Steps.SetupTest do
   use EctoTestDSL.Drink.Me
-  alias T.Variants.PhoenixClassic
+  alias T.Variants.PhoenixGranular
   alias T.Run.Steps
 
   defmodule Schema do
@@ -22,7 +22,7 @@ defmodule Run.Steps.SetupTest do
   end
 
   defmodule Examples do
-    use PhoenixClassic.Insert
+    use PhoenixGranular.Insert
 
     def fake_insert(_ecto, changeset),
       do: {:ok, Schema.named(changeset.changes.name)}

@@ -1,10 +1,10 @@
-defmodule Variants.PhoenixClassic.StartTest do
+defmodule Variants.PhoenixGranular.StartTest do
   use EctoTestDSL.Case
   use T.Predefines
-  alias T.Variants.PhoenixClassic.Insert, as: Variant
+  alias T.Variants.PhoenixGranular.Insert, as: Variant
 
   defmodule Examples do
-    use Template.PhoenixClassic.Insert
+    use Template.PhoenixGranular.Insert
   end
 
   @minimal_start [
