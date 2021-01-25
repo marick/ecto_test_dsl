@@ -1,5 +1,5 @@
 defmodule Variants.PhoenixClassic.WithOverridesTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   alias Ecto.Changeset
   
   defmodule Examples do

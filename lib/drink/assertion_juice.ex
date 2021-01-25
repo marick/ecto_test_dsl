@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Drink.AssertionJuice do
+defmodule EctoTestDSL.Drink.AssertionJuice do
   defmacro __using__(_) do
     quote do
       import ExUnit.Assertions

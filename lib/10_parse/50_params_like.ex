@@ -1,6 +1,6 @@
-defmodule TransformerTestSupport.Parse.ParamsLike do
-  use TransformerTestSupport.Drink.Me
-  use TransformerTestSupport.Drink.AssertionJuice
+defmodule EctoTestDSL.Parse.ParamsLike do
+  use EctoTestDSL.Drink.Me
+  use EctoTestDSL.Drink.AssertionJuice
   
   @moduledoc """
   """

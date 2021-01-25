@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Runner do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Runner do
+  use EctoTestDSL.Drink.Me
 
   # ----------------------------------------------------------------------------
   defmacro check_examples_with(module, opts \\ []) do

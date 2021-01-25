@@ -1,10 +1,10 @@
 defmodule Variants.PhoenixClassic.Insert.SuccessWorkflowTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   use T.Parse.All
   import FlowAssertions.AssertionA
   alias Ecto.Changeset
   
-  use TransformerTestSupport.Variants.PhoenixClassic.Insert
+  use EctoTestDSL.Variants.PhoenixClassic.Insert
 
   defmodule Species do
     use Ecto.Schema
@@ -62,7 +62,7 @@ defmodule Variants.PhoenixClassic.Insert.SuccessWorkflowTest do
   end
 
   defmodule Examples do
-    use TransformerTestSupport.Variants.PhoenixClassic.Insert
+    use EctoTestDSL.Variants.PhoenixClassic.Insert
 
     @failure_instruction "Please fail insertion"
 

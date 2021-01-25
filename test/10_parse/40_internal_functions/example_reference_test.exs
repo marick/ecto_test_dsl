@@ -1,5 +1,5 @@
 defmodule Parse.InternalFunctions.ExampleReferenceTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   use T.Predefines
 
   describe "basic parsing" do 

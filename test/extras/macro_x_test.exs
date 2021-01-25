@@ -1,6 +1,6 @@
 defmodule MacroXTest do
   use ExUnit.Case
-  alias TransformerTestSupport.MacroX
+  alias EctoTestDSL.MacroX
 
   describe "decomposing a function call" do
     defp expect(input, expected) do

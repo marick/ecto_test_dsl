@@ -1,5 +1,5 @@
 defmodule Variants.PhoenixClassic.ValidationOrderTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   use T.Drink.AndRun
   alias Run.Steps
   use Mockery
@@ -31,7 +31,7 @@ defmodule Variants.PhoenixClassic.ValidationOrderTest do
   
 
   defmodule Examples do
-    use TransformerTestSupport.Variants.PhoenixClassic.Insert
+    use EctoTestDSL.Variants.PhoenixClassic.Insert
     
     def create_test_data do 
       start(

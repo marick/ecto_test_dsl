@@ -1,5 +1,5 @@
 defmodule Parse.InternalFunctions.ExampleReferenceAffectsSetupTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   use T.Predefines
 
   defmodule Examples do 

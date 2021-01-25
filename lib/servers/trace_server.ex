@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.TraceServer do
+defmodule EctoTestDSL.TraceServer do
   use GenServer
 
   @init %{

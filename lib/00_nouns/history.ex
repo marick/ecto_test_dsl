@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Nouns.History do
+defmodule EctoTestDSL.Nouns.History do
   
   def new(example, opts \\ []) do 
     [previously: Keyword.get(opts, :previously, %{}),

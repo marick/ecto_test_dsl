@@ -1,7 +1,7 @@
-defmodule TransformerTestSupport.Case do
+defmodule EctoTestDSL.Case do
   defmacro __using__(_) do
     quote do 
-      use TransformerTestSupport.Drink.Me
+      use EctoTestDSL.Drink.Me
       use ExUnit.Case, async: true
       use FlowAssertions
       use FlowAssertions.Ecto

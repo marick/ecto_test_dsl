@@ -1,5 +1,5 @@
 defmodule Parse.InternalFunctions.ExampleReferenceAffectsParamsTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
 
   defmodule Examples do
     use Template.PhoenixClassic.Insert

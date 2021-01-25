@@ -1,5 +1,5 @@
 defmodule Parse.PreviouslyTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   use T.Parse.All
 
   def expect(input, expected) do

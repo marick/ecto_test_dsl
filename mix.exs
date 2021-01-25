@@ -1,7 +1,7 @@
-defmodule TransformerTestSupport.MixProject do
+defmodule EctoTestDSL.MixProject do
   use Mix.Project
 
-  @github "https://github.com/marick/transformer_test_support"
+  @github "https://github.com/marick/ecto_test_dsl"
   @version "0.1.0"
 
   def project do
@@ -14,7 +14,7 @@ defmodule TransformerTestSupport.MixProject do
       writing your own assertions). 
       """,
       
-      app: :transformer_test_support,
+      app: :ecto_test_dsl,
       version: @version,
       elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -22,7 +22,7 @@ defmodule TransformerTestSupport.MixProject do
       deps: deps(),
 
       # Docs
-      name: "Transformer Test Support",
+      name: "Ecto Test DSL",
       source_url: @github,
       docs: [
         main: "readme",

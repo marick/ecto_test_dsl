@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Trace do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Trace do
+  use EctoTestDSL.Drink.Me
   alias T.TraceServer
 
   # -----Functions that can be called anywhere----------------------------------

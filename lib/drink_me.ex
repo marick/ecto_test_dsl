@@ -1,7 +1,7 @@
-defmodule TransformerTestSupport.Drink.Me do
+defmodule EctoTestDSL.Drink.Me do
   defmacro __using__(_) do
     quote do
-      alias TransformerTestSupport, as: T
+      alias EctoTestDSL, as: T
       import T.Nouns.EEN.Macros
       alias T.Nouns.{EEN,FieldRef,FieldCalculator,AsCast,TestData,Example}
       alias T.{Parse,Run,Neighborhood}

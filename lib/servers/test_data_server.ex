@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.TestDataServer do
+defmodule EctoTestDSL.TestDataServer do
   use GenServer
 
   def start(),
@@ -29,7 +29,7 @@ defmodule TransformerTestSupport.TestDataServer do
 
   @impl GenServer
   def handle_call({:test_data, test_data_module}, _from, state) do
-    alias TransformerTestSupport.Parse.TopLevel
+    alias EctoTestDSL.Parse.TopLevel
     
     case Map.get(state, test_data_module) do
       nil ->

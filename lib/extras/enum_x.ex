@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.EnumX do
+defmodule EctoTestDSL.EnumX do
   def take_until(enumerable, f) do
     case Enum.find_index(enumerable, f) do
       nil -> enumerable

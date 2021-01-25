@@ -1,5 +1,5 @@
 defmodule Run.Support.BelongsToTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   use T.Drink.AndRun
   use T.Parse.All
   import FlowAssertions.Ecto.SchemaA

@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Parse.ImpliedSetup do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Parse.ImpliedSetup do
+  use EctoTestDSL.Drink.Me
   use Magritte
 
 

@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Nouns.EEN do
+defmodule EctoTestDSL.Nouns.EEN do
 
   @moduledoc """
   An Extended Example Name. 
@@ -20,7 +20,7 @@ defmodule TransformerTestSupport.Nouns.EEN do
 
 
   defmodule Macros do
-    alias TransformerTestSupport.Nouns.EEN
+    alias EctoTestDSL.Nouns.EEN
   
     defmacro een([{example_name, module}]) do 
       quote do

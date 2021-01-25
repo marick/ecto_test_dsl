@@ -1,5 +1,5 @@
 defmodule KeywordXTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
 
   test "translate_keys" do
     expect = fn [kws, key_map], expected ->

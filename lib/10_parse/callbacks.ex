@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Parse.Callbacks do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Parse.Callbacks do
+  use EctoTestDSL.Drink.Me
   use T.Drink.AssertionJuice
   alias T.Parse.Start
 

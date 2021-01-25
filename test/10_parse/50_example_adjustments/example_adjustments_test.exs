@@ -1,6 +1,6 @@
 defmodule Parse.NormalizeTest do
-  use TransformerTestSupport.Case
-  alias TransformerTestSupport.Parse.Normalize
+  use EctoTestDSL.Case
+  alias EctoTestDSL.Parse.Normalize
 
   test "params become maps" do
     assert Normalize.as(:params, [a: 1, b: 2]) == %{a: 1, b: 2}

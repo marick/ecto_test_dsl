@@ -1,5 +1,5 @@
 defmodule Variants.PhoenixClassic.StartTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   use T.Predefines
   alias T.Variants.PhoenixClassic.Insert, as: Variant
 

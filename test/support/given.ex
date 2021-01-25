@@ -1,7 +1,7 @@
 defmodule Given do
   import Mockery
   alias ExUnit.Assertions
-  alias TransformerTestSupport.MacroX
+  alias EctoTestDSL.MacroX
 
   defmodule Util do
     def key({module, function_description, arglist}) do

@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Variants.PhoenixClassic.Insert do
+  use EctoTestDSL.Drink.Me
   alias T.Run.Steps
   alias T.Variants.PhoenixClassic.Insert, as: ThisVariant
   import T.Variants.Macros
@@ -115,8 +115,8 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
 
   defmacro __using__(_) do
     quote do
-      use TransformerTestSupport.Predefines
-      alias TransformerTestSupport.Variants.PhoenixClassic
+      use EctoTestDSL.Predefines
+      alias EctoTestDSL.Variants.PhoenixClassic
       alias __MODULE__, as: ExamplesModule
 
       def start(opts) do
@@ -124,7 +124,7 @@ defmodule TransformerTestSupport.Variants.PhoenixClassic.Insert do
       end
 
       defmodule Tester do
-        use TransformerTestSupport.Predefines.Tester
+        use EctoTestDSL.Predefines.Tester
         alias T.Run.Steps
 
         def validation_changeset(example_name) do

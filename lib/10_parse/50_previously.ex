@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Parse.Previously do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Parse.Previously do
+  use EctoTestDSL.Drink.Me
 
   # ----------------------------------------------------------------------------
   # Working with a container of one or more example sources

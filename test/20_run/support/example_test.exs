@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Run.Support.ExampleTest do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Run.Support.ExampleTest do
+  use EctoTestDSL.Drink.Me
   
   alias Ecto.Changeset
 
@@ -40,8 +40,8 @@ defmodule TransformerTestSupport.Run.Support.ExampleTest do
   end
 
   defmodule Tests do
-    use TransformerTestSupport.Case
-    alias TransformerTestSupport.Run
+    use EctoTestDSL.Case
+    alias EctoTestDSL.Run
 
     test "`example` can stop early in a workflow" do
       assert [

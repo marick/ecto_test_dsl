@@ -1,10 +1,10 @@
-defmodule TransformerTestSupport.Predefines do
+defmodule EctoTestDSL.Predefines do
   @moduledoc """
   """
 
   defmacro __using__(_) do
     quote do
-      alias TransformerTestSupport, as: T
+      alias EctoTestDSL, as: T
       alias T.Impl
       use T.Parse.All
       

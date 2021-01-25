@@ -1,5 +1,5 @@
 defmodule Run.Support.ReplaceReferencesTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   import T.Run.ChangesetChecks
   use T.Parse.All
 

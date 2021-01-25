@@ -1,6 +1,6 @@
-defmodule TransformerTestSupport.Neighborhood.Create do
-  use TransformerTestSupport.Drink.Me
-  use TransformerTestSupport.Drink.AndRun
+defmodule EctoTestDSL.Neighborhood.Create do
+  use EctoTestDSL.Drink.Me
+  use EctoTestDSL.Drink.AndRun
 
   # ----------------------------------------------------------------------------
   # Working with a container of one or more example sources

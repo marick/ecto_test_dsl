@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Parse.Normalize do
+defmodule EctoTestDSL.Parse.Normalize do
   
   @moduledoc """
   """

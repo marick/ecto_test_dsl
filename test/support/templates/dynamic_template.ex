@@ -1,5 +1,5 @@
 defmodule Template.Dynamic do
-  use TransformerTestSupport.Drink.Me
+  use EctoTestDSL.Drink.Me
   alias T.Parse.TopLevel
 
 

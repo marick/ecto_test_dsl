@@ -1,5 +1,5 @@
 defmodule Neighborhood.ExpandTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   alias T.Neighborhood.Expand
   import T.Parse.InternalFunctions, only: [id_of: 1]
 

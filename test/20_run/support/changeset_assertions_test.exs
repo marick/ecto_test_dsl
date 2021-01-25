@@ -1,5 +1,5 @@
 defmodule Run.Support.ChangesetAssertionsTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   alias T.Run.ChangesetAssertions
   alias Ecto.Changeset
 

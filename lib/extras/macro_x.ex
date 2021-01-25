@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.MacroX do
+defmodule EctoTestDSL.MacroX do
 
     # Note that this doesn't resolve aliases, which requires the __ENV__ at
     # macroexpansion time. Haven't figured out how to make use of that

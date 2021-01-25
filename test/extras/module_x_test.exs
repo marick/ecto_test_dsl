@@ -6,7 +6,7 @@ defmodule ModuleXTest do
 
   defmodule GetterTest do
     use ExUnit.Case
-    import TransformerTestSupport.ModuleX
+    import EctoTestDSL.ModuleX
 
     getters [:t1, :t2]
     
@@ -32,7 +32,7 @@ defmodule ModuleXTest do
 
   defmodule DefaultingTest do
     use ExUnit.Case
-    import TransformerTestSupport.ModuleX
+    import EctoTestDSL.ModuleX
 
     getters([:t1, t2: :default])
     
@@ -59,7 +59,7 @@ defmodule ModuleXTest do
 
   defmodule PrivateGetterTest do
     use ExUnit.Case
-    import TransformerTestSupport.ModuleX
+    import EctoTestDSL.ModuleX
 
     private_getters [:t1, t2: 33]
     
@@ -83,7 +83,7 @@ defmodule ModuleXTest do
 
   defmodule MixerTest do
     use ExUnit.Case
-    import TransformerTestSupport.ModuleX
+    import EctoTestDSL.ModuleX
 
     getters :example, :history, [:params, changeset: %{}]
 

@@ -1,5 +1,5 @@
 defmodule Parse.ParamsTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   use T.Predefines
 
   defmodule Examples do

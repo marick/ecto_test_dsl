@@ -1,5 +1,5 @@
 defmodule Parse.CallbacksTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   alias T.Parse.Callbacks
   alias T.Messages
   

@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Variants.Macros do
+defmodule EctoTestDSL.Variants.Macros do
 
   defp one_step(step_name, step_module) do
     quote do

@@ -1,7 +1,7 @@
-defmodule TransformerTestSupport.Run.Steps do
-  use TransformerTestSupport.Drink.Me
-  use TransformerTestSupport.Drink.AssertionJuice
-  use TransformerTestSupport.Drink.AndRun
+defmodule EctoTestDSL.Run.Steps do
+  use EctoTestDSL.Drink.Me
+  use EctoTestDSL.Drink.AssertionJuice
+  use EctoTestDSL.Drink.AndRun
 
   use FlowAssertions.Ecto
   import Mockery.Macro

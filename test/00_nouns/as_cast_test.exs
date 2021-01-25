@@ -1,5 +1,5 @@
 defmodule Nouns.AsCastTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   alias T.Nouns.AsCast
 
   defmodule Association do

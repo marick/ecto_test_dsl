@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.Messages do
+defmodule EctoTestDSL.Messages do
   
 
   def should_be_valid(name),

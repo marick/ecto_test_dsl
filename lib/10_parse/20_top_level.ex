@@ -1,6 +1,6 @@
-defmodule TransformerTestSupport.Parse.TopLevel do
-  use TransformerTestSupport.Drink.Me
-  use TransformerTestSupport.Drink.AssertionJuice
+defmodule EctoTestDSL.Parse.TopLevel do
+  use EctoTestDSL.Drink.Me
+  use EctoTestDSL.Drink.AssertionJuice
   
   import DeepMerge, only: [deep_merge: 2]
   alias T.Nouns.AsCast

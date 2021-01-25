@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Run do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Run do
+  use EctoTestDSL.Drink.Me
   use T.Drink.AndRun
   use T.Drink.AssertionJuice
 

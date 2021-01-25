@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Run.RunningExampleTest do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Run.RunningExampleTest do
+  use EctoTestDSL.Drink.Me
   
 #  alias Ecto.Changeset
 
@@ -40,7 +40,7 @@ defmodule TransformerTestSupport.Run.RunningExampleTest do
   end
 
   defmodule Tests do
-    use TransformerTestSupport.Case
+    use EctoTestDSL.Case
 
     @tag :skip
     test "different entry points in Example.Tester"

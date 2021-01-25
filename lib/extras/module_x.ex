@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.ModuleX do
+defmodule EctoTestDSL.ModuleX do
   # This software is public domain, covered by the UnLicense.
   
   @moduledoc """
@@ -83,7 +83,7 @@ defmodule TransformerTestSupport.ModuleX do
     end
   end
     
-  alias TransformerTestSupport.ModuleX.Util
+  alias EctoTestDSL.ModuleX.Util
 
   # ---------GETTERS----------------------------------------------------------
 

@@ -1,7 +1,7 @@
-defmodule TransformerTestSupport.RunningStubs do
+defmodule EctoTestDSL.RunningStubs do
   use Mockery
   use Given
-  alias TransformerTestSupport.Run.RunningExample
+  alias EctoTestDSL.Run.RunningExample
 
   defmacro stub(kws) do
     for {key, val} <- kws do

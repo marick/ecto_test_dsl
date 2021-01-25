@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Nouns.AsCast do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Nouns.AsCast do
+  use EctoTestDSL.Drink.Me
   use T.Drink.AssertionJuice
   use T.Drink.AndRun
   alias Ecto.Changeset

@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Neighborhood.Expand do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Neighborhood.Expand do
+  use EctoTestDSL.Drink.Me
 
   def params(params, with: neighborhood) do
     expand_one_level(params, neighborhood)

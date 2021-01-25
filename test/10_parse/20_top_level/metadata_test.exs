@@ -1,5 +1,5 @@
 defmodule Parse.TopLevel.MetadataTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   use T.Predefines
   use T.Parse.All
   alias T.Parse.TopLevel

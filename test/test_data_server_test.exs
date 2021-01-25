@@ -1,6 +1,6 @@
 defmodule TestDataServerTest do
-  use TransformerTestSupport.Case
-  alias TransformerTestSupport.TestDataServer
+  use EctoTestDSL.Case
+  alias EctoTestDSL.TestDataServer
 
   
   defmodule Examples do

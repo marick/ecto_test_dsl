@@ -1,5 +1,5 @@
 defmodule Run.Support.FormatParamsTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   alias T.Run.RunningExample
 
   @params %{

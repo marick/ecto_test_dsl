@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Variants.Trivial do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Variants.Trivial do
+  use EctoTestDSL.Drink.Me
   alias T.Variants.Trivial, as: ThisVariant
   alias T.Parse.Start
   
@@ -25,13 +25,13 @@ defmodule TransformerTestSupport.Variants.Trivial do
 
   defmacro __using__(_) do
     quote do
-      use TransformerTestSupport.Predefines
-      alias TransformerTestSupport.Variants.Trivial
+      use EctoTestDSL.Predefines
+      alias EctoTestDSL.Variants.Trivial
 
       def start(opts), do: Trivial.start(opts)
 
       defmodule Tester do
-        use TransformerTestSupport.Predefines.Tester
+        use EctoTestDSL.Predefines.Tester
       end
     end
   end

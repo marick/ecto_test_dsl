@@ -1,6 +1,6 @@
-defmodule TransformerTestSupport.Run.RunningExample do
-  use TransformerTestSupport.Drink.Me
-  use TransformerTestSupport.Drink.AndRun
+defmodule EctoTestDSL.Run.RunningExample do
+  use EctoTestDSL.Drink.Me
+  use EctoTestDSL.Drink.AndRun
   import T.ModuleX
 
   @enforce_keys [:example, :history]

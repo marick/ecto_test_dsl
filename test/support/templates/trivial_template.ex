@@ -1,7 +1,7 @@
 defmodule Template.Trivial do
   defmacro __using__(_) do
     quote do 
-      use TransformerTestSupport.Variants.Trivial
+      use EctoTestDSL.Variants.Trivial
       
       def started() do
         start(

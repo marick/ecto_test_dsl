@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Parse.Start do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Parse.Start do
+  use EctoTestDSL.Drink.Me
   alias T.Nouns.AsCast
   alias T.Parse.Hooks
 

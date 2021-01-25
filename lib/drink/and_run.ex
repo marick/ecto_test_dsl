@@ -1,10 +1,10 @@
-defmodule TransformerTestSupport.Drink.AndRun do
+defmodule EctoTestDSL.Drink.AndRun do
   defmacro __using__(_) do
     quote do
-      alias TransformerTestSupport.Nouns.History
-      alias TransformerTestSupport.Run
-      alias TransformerTestSupport.Run.RunningExample
-      alias TransformerTestSupport.Run.ChangesetAssertions
+      alias EctoTestDSL.Nouns.History
+      alias EctoTestDSL.Run
+      alias EctoTestDSL.Run.RunningExample
+      alias EctoTestDSL.Run.ChangesetAssertions
     end
   end
 end

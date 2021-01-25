@@ -1,6 +1,6 @@
-defmodule TransformerTestSupport.Run.ChangesetAssertions do
-  use TransformerTestSupport.Drink.Me
-  use TransformerTestSupport.Drink.AssertionJuice
+defmodule EctoTestDSL.Run.ChangesetAssertions do
+  use EctoTestDSL.Drink.Me
+  use EctoTestDSL.Drink.AssertionJuice
 
   @moduledoc """
   A function that might throw an AssertionError about a given changeset.

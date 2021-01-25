@@ -1,5 +1,5 @@
 defmodule Parse.Nouns.ImpliedSetupTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   alias T.Parse.ImpliedSetup
 
   test "to_empty" do

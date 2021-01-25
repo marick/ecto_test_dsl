@@ -1,5 +1,5 @@
 defmodule Parse.InternalFunctions.FieldCalculationTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   use T.Predefines
 
   def function_in_module(x), do: x - 3

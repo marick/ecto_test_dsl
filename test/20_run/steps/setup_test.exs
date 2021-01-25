@@ -1,5 +1,5 @@
 defmodule Run.Steps.SetupTest do
-  use TransformerTestSupport.Drink.Me
+  use EctoTestDSL.Drink.Me
   alias T.Variants.PhoenixClassic
   alias T.Run.Steps
 
@@ -56,7 +56,7 @@ defmodule Run.Steps.SetupTest do
   end
 
   defmodule ActualTests do
-    use TransformerTestSupport.Case
+    use EctoTestDSL.Case
 
     # Note: this won't necessarily prevent races if any other tests
     # use these names.

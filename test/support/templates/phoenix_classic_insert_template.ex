@@ -1,7 +1,7 @@
 defmodule Template.PhoenixClassic.Insert do
   defmacro __using__(_) do
     quote do
-      use TransformerTestSupport.Variants.PhoenixClassic.Insert
+      use EctoTestDSL.Variants.PhoenixClassic.Insert
       
       def started(opts \\ []) do
         opts =

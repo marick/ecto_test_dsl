@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Run.ChangesetChecks do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Run.ChangesetChecks do
+  use EctoTestDSL.Drink.Me
 
   def unique_fields(changeset_checks) do
     changeset_checks

@@ -1,6 +1,6 @@
 defmodule TraceServerTest do
-  use TransformerTestSupport.Drink.Me
-  use TransformerTestSupport.Drink.AndRun
+  use EctoTestDSL.Drink.Me
+  use EctoTestDSL.Drink.AndRun
   
   use ExUnit.Case, async: false
   alias T.TraceServer

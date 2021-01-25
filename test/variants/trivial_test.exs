@@ -1,5 +1,5 @@
 defmodule Variants.TrivialTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   use T.Predefines
   alias T.Nouns.AsCast
 

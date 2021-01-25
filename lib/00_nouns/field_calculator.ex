@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Nouns.FieldCalculator do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Nouns.FieldCalculator do
+  use EctoTestDSL.Drink.Me
   use T.Drink.AssertionJuice
   use T.Drink.AndRun
 

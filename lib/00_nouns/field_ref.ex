@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Nouns.FieldRef do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Nouns.FieldRef do
+  use EctoTestDSL.Drink.Me
 
   @moduledoc """
   A reference to a field within an example

@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.MapX do
+defmodule EctoTestDSL.MapX do
   import FlowAssertions.Define.BodyParts, only: [elaborate_flunk: 2]
 
   # This is tested indirectly

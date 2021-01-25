@@ -1,7 +1,7 @@
-defmodule TransformerTestSupport.Nouns.TestData do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Nouns.TestData do
+  use EctoTestDSL.Drink.Me
   use T.Drink.AssertionJuice
-  alias TransformerTestSupport.TestDataServer
+  alias EctoTestDSL.TestDataServer
   
   @moduledoc """
   All that's known of test data outside of parsing is how to get an

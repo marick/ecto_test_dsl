@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Sketch do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Sketch do
+  use EctoTestDSL.Drink.Me
   alias T.Nouns.AsCast
   
   def example(name, workflow, example_fields \\ []) do

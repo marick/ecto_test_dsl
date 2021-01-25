@@ -1,5 +1,5 @@
 defmodule Nouns.FieldRefTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
 
   test "creation" do
     expect = fn een, kvs ->

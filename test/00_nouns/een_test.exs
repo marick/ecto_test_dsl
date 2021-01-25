@@ -1,5 +1,5 @@
 defmodule Nouns.EENTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
 
   test "there are three special ways to create an EEN" do
     expect = fn een, kvs ->

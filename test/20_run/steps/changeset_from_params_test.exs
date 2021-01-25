@@ -1,5 +1,5 @@
 defmodule Run.Steps.ChangesetFromParamsTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   use T.Drink.AndRun
   alias T.Run.Steps
   alias Template.Dynamic

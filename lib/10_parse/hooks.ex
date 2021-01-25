@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Parse.Hooks do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Parse.Hooks do
+  use EctoTestDSL.Drink.Me
 
 
   # ----------------------------------------------------------------------------

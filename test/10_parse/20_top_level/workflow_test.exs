@@ -1,5 +1,5 @@
 defmodule Parse.TopLevel.WorkflowTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   alias T.Parse.TopLevel
   use T.Parse.All
 

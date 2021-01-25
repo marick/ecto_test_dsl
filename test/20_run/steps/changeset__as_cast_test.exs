@@ -1,5 +1,5 @@
 defmodule Run.Steps.AsCastTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   use T.Drink.AndRun
   alias Run.Steps
   use Mockery

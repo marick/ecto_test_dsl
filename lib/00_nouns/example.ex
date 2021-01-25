@@ -1,5 +1,5 @@
-defmodule TransformerTestSupport.Nouns.Example do
-  use TransformerTestSupport.Drink.Me
+defmodule EctoTestDSL.Nouns.Example do
+  use EctoTestDSL.Drink.Me
   use T.Drink.AssertionJuice
   import T.ModuleX
   

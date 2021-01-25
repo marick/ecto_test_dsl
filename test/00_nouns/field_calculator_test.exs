@@ -1,5 +1,5 @@
 defmodule Nouns.FieldCalculatorTest do
-  use TransformerTestSupport.Case
+  use EctoTestDSL.Case
   alias T.Nouns.FieldCalculator
   use T.Parse.All
 

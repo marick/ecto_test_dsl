@@ -1,4 +1,4 @@
-defmodule TransformerTestSupport.ChangesetX do
+defmodule EctoTestDSL.ChangesetX do
   alias Ecto.Changeset
 
 
