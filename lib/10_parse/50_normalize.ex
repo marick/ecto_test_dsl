@@ -7,9 +7,6 @@ defmodule EctoTestDSL.Parse.Normalize do
     Enum.map(example_pairs, &(as :example_pair, &1))
   end
 
-  def as(:example_pairs, _) do
-  end
-
   def as(:example_pair, {name, example}),
     do: {name, as(:example, example)}
 
