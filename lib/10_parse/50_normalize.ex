@@ -1,5 +1,5 @@
 defmodule EctoTestDSL.Parse.Normalize do
-  
+  alias EctoTestDSL.Parse.ParamsLike  
   @moduledoc """
   """
 
@@ -21,7 +21,7 @@ defmodule EctoTestDSL.Parse.Normalize do
   end
 
   # Functions are expanded in a second pass. I is lazy.
-  def as(:params, %__ParamsLike__{} = like), do: like
+  def as(:params, %ParamsLike{} = like), do: like
   def as(:params, map), do: ensure_map(map)
 
   # N^2 baby!
