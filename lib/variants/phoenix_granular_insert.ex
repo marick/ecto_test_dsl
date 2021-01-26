@@ -10,14 +10,17 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
   # ------------------- Step functions -----------------------------------------
 
   defsteps [
-    :previously,
-    :params,
-    :changeset_from_params,
     :assert_valid_changeset,
     :refute_valid_changeset,
     :example_specific_changeset_checks,
     :as_cast_checks,
     :field_calculation_checks,
+  ], from: Steps.Changeset
+
+  defsteps [
+    :previously,
+    :params,
+    :changeset_from_params,
     
     :try_changeset_insertion,
     :ok_content,
