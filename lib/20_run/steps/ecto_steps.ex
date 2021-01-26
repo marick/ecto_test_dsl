@@ -3,7 +3,6 @@ defmodule EctoTestDSL.Run.Steps.Ecto do
   use EctoTestDSL.Drink.AssertionJuice
   use EctoTestDSL.Drink.AndRun
 
-  import Mockery.Macro
   import T.Run.Steps.Util
 
   # ----------------------------------------------------------------------------

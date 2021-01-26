@@ -3,7 +3,6 @@ defmodule EctoTestDSL.Run.Steps.Changeset do
   use EctoTestDSL.Drink.AssertionJuice
   use EctoTestDSL.Drink.AndRun
 
-  import Mockery.Macro
   alias T.Run.ChangesetChecks, as: CC
   import T.Run.Steps.Util
 

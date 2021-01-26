@@ -9,6 +9,7 @@ defmodule EctoTestDSL.Drink.Me do
       alias T.Trace
 
       alias T.{ChangesetX, EnumX, KeywordX, MapX}
+      import Mockery.Macro
     end
   end
 end
