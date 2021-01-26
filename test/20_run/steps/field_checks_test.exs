@@ -1,7 +1,7 @@
 defmodule Run.Steps.FieldChecksTest do
   use EctoTestDSL.Case
   use T.Drink.AndRun
-  alias Run.Steps
+  alias Run.Steps.Ecto, as: Steps
   use Mockery
   import T.RunningStubs
   import T.Parse.InternalFunctions

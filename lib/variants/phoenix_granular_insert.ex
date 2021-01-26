@@ -18,13 +18,15 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
   ], from: Steps.Changeset
 
   defsteps [
-    :previously,
-    :params,
-    :changeset_from_params,
-    
     :try_changeset_insertion,
     :ok_content,
     :error_content,
+  ], from: Steps.Ecto
+
+  defsteps [
+    :previously,
+    :params,
+    :changeset_from_params,
   ], from: Steps
 
   def workflows() do
