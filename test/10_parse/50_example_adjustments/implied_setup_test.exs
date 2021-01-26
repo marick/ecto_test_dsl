@@ -1,7 +1,6 @@
 defmodule Parse.Nouns.ImpliedSetupTest do
   use EctoTestDSL.Case
   alias T.Parse.ImpliedSetup
-
   test "to_empty" do
     expect = fn [initial, new], expected ->
       ImpliedSetup.testable__append_to_setup(initial, new)

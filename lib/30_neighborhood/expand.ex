@@ -1,15 +1,7 @@
 defmodule EctoTestDSL.Neighborhood.Expand do
   use EctoTestDSL.Drink.Me
 
-  def params(params, with: neighborhood) do
-    expand_one_level(params, neighborhood)
-  end
-
-  def field_checks(checks, with: neighborhood) do
-    expand_one_level(checks, neighborhood)
-  end
-
-  defp expand_one_level(kws, neighborhood) do
+  def keyword_values(kws, with: neighborhood) do
     for {name, value} <- kws, into: %{} do
       case value do
         %FieldRef{} = ref ->

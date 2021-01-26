@@ -3,12 +3,6 @@ defmodule EctoTestDSL.Run.Steps do
   use EctoTestDSL.Drink.AssertionJuice
   use EctoTestDSL.Drink.AndRun
 
-  use FlowAssertions.Ecto
-  import Mockery.Macro
-  alias T.Run.ChangesetChecks, as: CC
-  alias T.Neighborhood.Expand
-  import T.Run.Steps.Util
-
   # ----------------------------------------------------------------------------
 
   # I can't offhand think of any case where one `previously` might need to
@@ -40,7 +34,7 @@ defmodule EctoTestDSL.Run.Steps do
     original_params = RunningExample.original_params(running)
     params = 
       RunningExample.format_params(running,
-        Neighborhood.Expand.params(original_params, with: neighborhood))
+        Neighborhood.Expand.keyword_values(original_params, with: neighborhood))
 
     Trace.say(params, :params)
     params

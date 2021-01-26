@@ -14,7 +14,6 @@ defmodule EctoTestDSL.Parse.ExampleFunctions do
 
 
   # ----------------------------------------------------------------------------
-  # Nothing is 
   
   def previously(opts) do
     {:setup_instructions, opts}

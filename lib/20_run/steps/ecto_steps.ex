@@ -3,10 +3,7 @@ defmodule EctoTestDSL.Run.Steps.Ecto do
   use EctoTestDSL.Drink.AssertionJuice
   use EctoTestDSL.Drink.AndRun
 
-  use FlowAssertions.Ecto
   import Mockery.Macro
-  alias T.Run.ChangesetChecks, as: CC
-  alias T.Neighborhood.Expand
   import T.Run.Steps.Util
 
   # ----------------------------------------------------------------------------
@@ -42,7 +39,7 @@ defmodule EctoTestDSL.Run.Steps.Ecto do
     example_name = mockable(RunningExample).name(running)
     expected =
       mockable(RunningExample).field_checks(running)
-      |> Expand.field_checks(with: neighborhood)
+      |> Neighborhood.Expand.keyword_values(with: neighborhood)
     value = mockable(RunningExample).step_value!(running, which_step)
 
     adjust_assertion_message(

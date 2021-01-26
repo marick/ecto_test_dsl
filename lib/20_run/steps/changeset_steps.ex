@@ -3,10 +3,8 @@ defmodule EctoTestDSL.Run.Steps.Changeset do
   use EctoTestDSL.Drink.AssertionJuice
   use EctoTestDSL.Drink.AndRun
 
-  use FlowAssertions.Ecto
   import Mockery.Macro
   alias T.Run.ChangesetChecks, as: CC
-  alias T.Neighborhood.Expand
   import T.Run.Steps.Util
 
   def assert_valid_changeset(running, which_changeset) do 
