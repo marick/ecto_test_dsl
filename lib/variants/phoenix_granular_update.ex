@@ -18,7 +18,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
   ], from: Steps.Changeset
 
   defsteps [
-    # :try_changeset_insertion,
+    :params_selected
     # :ok_content,
     # :error_content,
   ], from: Steps.Ecto
@@ -30,38 +30,10 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
   ], from: Steps
 
   def workflows() do
-    # from_start_through_changeset = [
-    #   :previously,
-    #   :params,
-    #   :changeset_from_params,
-    # ]
-
-    # from_start_through_validation = from_start_through_changeset ++ [
-    #   [:assert_valid_changeset,            uses: [:changeset_from_params]],
-    #   [:example_specific_changeset_checks, uses: [:changeset_from_params]],
-    #   [:as_cast_checks,                    uses: [:changeset_from_params]],
-    #   [:field_calculation_checks,          uses: [:changeset_from_params]],
-    # ]
-    
-    %{
-      # validation_success: from_start_through_validation,
-      # validation_error: from_start_through_changeset ++ [
-      #   [:refute_valid_changeset,            uses: [:changeset_from_params]],
-      #   [:example_specific_changeset_checks, uses: [:changeset_from_params]],
-      #   [:as_cast_checks,                    uses: [:changeset_from_params]],
-      # ],
-      
-      # constraint_error: from_start_through_validation ++ [
-      #   [:try_changeset_insertion,           uses: [:changeset_from_params]],
-      #   [:error_content,                     uses: [:try_changeset_insertion]],
-      #   [:refute_valid_changeset,            uses: [:error_content]],
-      #   [:example_specific_changeset_checks, uses: [:error_content]],
-      # ],
       # success: from_start_through_validation ++ [
       #   [:try_changeset_insertion,   uses: [:changeset_from_params]],
       #   [:ok_content,                uses: [:try_changeset_insertion]],
       # ],
-    }
   end
 
   # ------------------- Startup -----------------------------------------
@@ -72,10 +44,14 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
   end
 
   defp default_start_opts, do: [
+    select_with: &default_select_with/3,
     # changeset_with: &default_changeset_with/2,
-    # insert_with: &default_insert_with/2,
     format: :phoenix
   ]
+
+  def default_select_with(repo, queryable, example), 
+    do: repo.get!(queryable, example.id)
+  
 
   # def default_changeset_with(module_under_test, params) do
   #   default_struct = struct(module_under_test)
@@ -92,7 +68,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
     top_level
   end
 
-  def hook(:workflow, top_level, [workflow_name]) do
+  def hook(:workflow, top_level, [_workflow_name]) do
     # assert_valid_workflow_name(workflow_name)
     top_level
   end
