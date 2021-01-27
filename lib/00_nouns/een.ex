@@ -28,7 +28,7 @@ defmodule EctoTestDSL.Nouns.EEN do
       end
     end
     
-    defmacro een(example_name) when is_atom(example_name) do
+    defmacro een(example_name) do
       quote do
         EEN.new(unquote(example_name), __MODULE__)
       end
