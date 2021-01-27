@@ -18,7 +18,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
   ], from: Steps.Changeset
 
   defsteps [
-    :params_selected
+    :params_from_selecting
     # :ok_content,
     # :error_content,
   ], from: Steps.Ecto
@@ -29,11 +29,13 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
     # :changeset_from_params,
   ], from: Steps
 
-  def workflows() do
-      # success: from_start_through_validation ++ [
-      #   [:try_changeset_insertion,   uses: [:changeset_from_params]],
-      #   [:ok_content,                uses: [:try_changeset_insertion]],
-      # ],
+  def workflows() do 
+    %{
+      success: [
+        :previously,
+        :params_from_selecting,
+      ],
+    }
   end
 
   # ------------------- Startup -----------------------------------------

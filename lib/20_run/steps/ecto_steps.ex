@@ -50,4 +50,10 @@ defmodule EctoTestDSL.Run.Steps.Ecto do
       end)
     :uninteresting_result
   end
+
+  def params_from_selecting(running) do
+    neighborhood = mockable(RunningExample).neighborhood(running)
+    desired = mockable(RunningExample).params_from_selecting(running)
+    Map.get(neighborhood, desired)
+  end
 end

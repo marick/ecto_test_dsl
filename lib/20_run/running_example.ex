@@ -9,6 +9,8 @@ defmodule EctoTestDSL.Run.RunningExample do
              tracer: :none]
 
   getters :example, [
+    :params_from_selecting,
+    
     setup_instructions: [],
     validation_changeset_checks: [],
     constraint_changeset_checks: [],
