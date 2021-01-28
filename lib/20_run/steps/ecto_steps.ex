@@ -8,8 +8,9 @@ defmodule EctoTestDSL.Run.Steps.Ecto do
   # ----------------------------------------------------------------------------
 
   def try_changeset_insertion(running, which_changeset) do
-    changeset = RunningExample.step_value!(running, which_changeset)
-    repo = RunningExample.repo(running)
+    from(running, use: [:repo])
+    from_history(running, changeset: which_changeset)    
+
     apply(RunningExample.insert_with(running), [repo, changeset])
   end
 
@@ -22,38 +23,33 @@ defmodule EctoTestDSL.Run.Steps.Ecto do
   end
 
   defp extract_content(running, extractor, which_step) do
-    example_name = mockable(RunningExample).name(running)
-    value = mockable(RunningExample).step_value!(running, which_step)
+    from(running, use: [:name])
+    from_history(running, value: which_step)
     adjust_assertion_message(
       fn ->
         apply(FlowAssertions.MiscA, extractor, [value])
       end,
-      fn message ->
-        context(example_name, message)
-      end)
+      identify_example(name))
   end
 
   def field_checks(running, which_step) do
-    neighborhood = mockable(RunningExample).neighborhood(running)
-    example_name = mockable(RunningExample).name(running)
+    from(running, use: [:neighborhood, :name, :field_checks])
+    from_history(running, selected: which_step)
+    
     expected =
-      mockable(RunningExample).field_checks(running)
-      |> Neighborhood.Expand.keyword_values(with: neighborhood)
-    value = mockable(RunningExample).step_value!(running, which_step)
+      Neighborhood.Expand.keyword_values(field_checks, with: neighborhood)
 
     adjust_assertion_message(
       fn ->
-        apply FlowAssertions.MapA, :assert_fields, [value, expected]
+        apply FlowAssertions.MapA, :assert_fields, [selected, expected]
       end,
-      fn message ->
-        context(example_name, message)
-      end)
+      identify_example(name))
+
     :uninteresting_result
   end
 
   def params_from_selecting(running) do
-    neighborhood = mockable(RunningExample).neighborhood(running)
-    desired = mockable(RunningExample).params_from_selecting(running)
-    Map.get(neighborhood, desired)
+    from(running, use: [:neighborhood, :params_from_selecting])
+    Map.get(neighborhood, params_from_selecting)
   end
 end
