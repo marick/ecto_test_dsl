@@ -1,8 +1,8 @@
-defmodule Parse.TopLevel.MetadataTest do
+defmodule Parse.FinishParse.MetadataTest do
   use EctoTestDSL.Case
   use T.Predefines
   use T.Parse.All
-  alias T.Parse.TopLevel
+  alias T.Parse.FinishParse
 
   defmodule Examples do
     use Template.Trivial
@@ -12,7 +12,7 @@ defmodule Parse.TopLevel.MetadataTest do
     test_data = 
       Examples.started()
       |> workflow(:workflow, example: [params(age: 1)])
-      |> TopLevel.propagate_metadata
+      |> FinishParse.propagate_metadata
 
     metadata =
       test_data

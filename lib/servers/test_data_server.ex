@@ -29,13 +29,13 @@ defmodule EctoTestDSL.TestDataServer do
 
   @impl GenServer
   def handle_call({:test_data, test_data_module}, _from, state) do
-    alias EctoTestDSL.Parse.TopLevel
+    alias EctoTestDSL.Parse.FinishParse
     
     case Map.get(state, test_data_module) do
       nil ->
         test_data =
           test_data_module.create_test_data()
-          |> TopLevel.propagate_metadata 
+          |> FinishParse.finish
         {:reply, test_data, Map.put(state, test_data_module, test_data)}
       test_data ->
         {:reply, test_data, state}
