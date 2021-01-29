@@ -1,6 +1,7 @@
 defmodule Parse.InternalFunctions.ExampleReferenceAffectsSetupTest do
   use EctoTestDSL.Case
   use T.Predefines
+  alias T.Parse.FinishParse
 
   defmodule Examples do 
     use Template.Trivial
@@ -14,6 +15,7 @@ defmodule Parse.InternalFunctions.ExampleReferenceAffectsSetupTest do
         |> workflow(:invalid, similar: [
               params_like(:ok, except: [a: id_of(species: ExampleModule)])
            ])
+        |> FinishParse.finish
 
       assert example(test_data, :similar).setup_instructions ==
           [insert: een(species: ExampleModule)]
@@ -27,6 +29,7 @@ defmodule Parse.InternalFunctions.ExampleReferenceAffectsSetupTest do
                     b: id_of(:thing)),
              previously(insert: :noog)
         ])
+        |> FinishParse.finish
 
       assert example(test_data, :name).setup_instructions ==
           [insert: een(:noog, :default_trivial_examples_module),

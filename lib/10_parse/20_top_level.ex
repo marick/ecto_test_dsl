@@ -5,7 +5,7 @@ defmodule EctoTestDSL.Parse.TopLevel do
   import DeepMerge, only: [deep_merge: 2]
   alias T.Nouns.AsCast
   alias T.Parse.Hooks
-  alias T.Parse.{Previously,ParamsLike,Normalize,ImpliedSetup}
+  alias T.Parse.{ParamsLike,Normalize}
 
   # ----------------------------------------------------------------------------
   def field_transformations(test_data, opts) do
@@ -32,8 +32,6 @@ defmodule EctoTestDSL.Parse.TopLevel do
       Normalize.as(:example_pairs, raw_examples)
       |> attach_workflow_metadata(workflow)
       |> ParamsLike.expand(test_data.examples)
-      |> Previously.ensure_references(test_data.examples_module)
-      |> ImpliedSetup.add
 
     Map.update!(test_data, :examples, &(updated_examples ++ &1))
   end

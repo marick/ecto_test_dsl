@@ -11,6 +11,7 @@ defmodule Parse.PreviouslyTest do
     |> assert_equal(expected)
   end
 
+  @tag :skip
   test "expansion of `previously` arguments" do
     previously(insert: :a)         |> expect([insert: een(a: Examples)])
     previously(insert: [:a, :b]) |> expect([insert: een(a: Examples),

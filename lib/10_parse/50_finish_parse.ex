@@ -2,6 +2,7 @@ defmodule EctoTestDSL.Parse.FinishParse do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AssertionJuice
   import DeepMerge, only: [deep_merge: 2]
+  alias T.Parse.{Previously,ImpliedSetup}
   use Magritte
 
   @moduledoc """
@@ -10,6 +11,7 @@ defmodule EctoTestDSL.Parse.FinishParse do
   def finish(test_data) do
     examples = test_data.examples
 
+    test_data = 
     Enum.reduce(examples, test_data, fn {name, example}, acc ->
       improved = 
         example
@@ -17,6 +19,13 @@ defmodule EctoTestDSL.Parse.FinishParse do
 
       put_in(acc, [:examples, name], improved)
     end)
+
+    updated_examples =
+      test_data.examples
+      |> Previously.ensure_references(test_data.examples_module)
+      |> ImpliedSetup.add
+
+    Map.put(test_data, :examples, updated_examples)
   end
 
 
