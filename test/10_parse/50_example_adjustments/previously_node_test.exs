@@ -1,7 +1,7 @@
 defmodule Parse.Node.PreviouslyNodeTest do
   use EctoTestDSL.Case
   alias EctoTestDSL.Parse.Node.Previously
-  alias EctoTestDSL.Parse.Node
+  alias EctoTestDSL.Parse.Node.EENable
 
   test "creation" do
     expect = fn arg, expected_signifiers ->
@@ -26,7 +26,7 @@ defmodule Parse.Node.PreviouslyNodeTest do
     one = Previously.new([:a, b: List])
     rest = [ Previously.new([:c]) ]
 
-    actual = Node.merge(one, rest)
+    actual = EENable.merge(one, rest)
     expected = Previously.new([:a, {:b, List}, :c])
     assert actual == expected
   end
@@ -34,7 +34,7 @@ defmodule Parse.Node.PreviouslyNodeTest do
   test "ensuring eens" do
     expect = fn input, expected ->
       Previously.new(input)
-      |> Node.ensure_eens(__MODULE__)
+      |> EENable.ensure_eens(__MODULE__)
       |> assert_field(eens: expected)
     end
 
@@ -44,8 +44,8 @@ defmodule Parse.Node.PreviouslyNodeTest do
 
   test "revealing eens" do
     Previously.new([:a, {:b,  List}, een(:c)])
-    |> Node.ensure_eens(__MODULE__)
-    |> Node.eens
+    |> EENable.ensure_eens(__MODULE__)
+    |> EENable.eens
     |> assert_equal([een(a: __MODULE__), een(b: List), een(:c)])
   end
 end

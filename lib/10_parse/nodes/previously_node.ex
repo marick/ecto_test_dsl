@@ -14,7 +14,7 @@ defmodule EctoTestDSL.Parse.Node.Previously do
 
   defp parse_one({:insert, atom}, acc) when is_atom(atom),
     do: parse_one({:insert, [atom]}, acc)
-  defp parse_one({:insert, %T.Nouns.EEN{} = een}, acc),
+  defp parse_one({:insert, %EEN{} = een}, acc),
     do: parse_one({:insert, [een]}, acc)
   defp parse_one({:insert, list}, acc) when is_list(list),
     do: acc ++ list
@@ -26,7 +26,7 @@ defmodule EctoTestDSL.Parse.Node.Previously do
 
   def new(signifiers), do: %__MODULE__{signifiers: signifiers}
 
-  defimpl Node, for: Node.Previously do
+  defimpl Node.EENable, for: Node.Previously do
     def merge(one, more) do
       [one | more]
       |> Enum.map(&(&1.signifiers))
