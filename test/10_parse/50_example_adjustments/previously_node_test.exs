@@ -4,9 +4,9 @@ defmodule Parse.Node.PreviouslyNodeTest do
   alias EctoTestDSL.Parse.Node.EENable
 
   test "creation" do
-    expect = fn arg, expected_signifiers ->
+    expect = fn arg, expected_parsed ->
       actual = Previously.parse(arg)
-      assert actual.signifiers == expected_signifiers
+      assert actual.parsed == expected_parsed
     end
 
     [insert: :a]                    |> expect.([:a])

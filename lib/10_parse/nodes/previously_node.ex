@@ -4,7 +4,7 @@ defmodule EctoTestDSL.Parse.Node.Previously do
   alias T.Parse.Node
   use Magritte
   
-  defstruct [:signifiers, :eens]
+  defstruct [:parsed, :eens]
 
   def parse(kws) do
     kws
@@ -24,12 +24,12 @@ defmodule EctoTestDSL.Parse.Node.Previously do
       left: wrong)
   end    
 
-  def new(signifiers), do: %__MODULE__{signifiers: signifiers}
+  def new(parsed), do: %__MODULE__{parsed: parsed}
 
   defimpl Node.EENable, for: Node.Previously do
     def merge(one, more) do
       [one | more]
-      |> Enum.map(&(&1.signifiers))
+      |> Enum.map(&(&1.parsed))
       |> Enum.concat
       |> Node.Previously.new
     end
@@ -43,7 +43,7 @@ defmodule EctoTestDSL.Parse.Node.Previously do
         name           -> EEN.new(name, default_module)
       end
 
-      node.signifiers
+      node.parsed
       |> Enum.map(ensure_one)
       |> Map.put(node, :eens, ...)
     end
