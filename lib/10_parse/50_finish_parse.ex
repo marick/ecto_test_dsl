@@ -42,7 +42,6 @@ defmodule EctoTestDSL.Parse.FinishParse do
       example
       |> put_existing(:setup_instructions, put_existing_f)
       |> get_existing(:setup_instructions, [], &Node.EENable.eens/1)
-      |> IO.inspect
     
     example
   end

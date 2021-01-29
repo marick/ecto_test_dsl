@@ -4,7 +4,7 @@ defmodule Parse.Node.ParamsNodeTest do
   import T.Parse.InternalFunctions
 
   test "creation" do
-    assert Node.Params.parse(:anything) == %Node.Params{kws: :anything}
+    assert Node.Params.parse(:anything) == %Node.Params{parsed: :anything}
   end
 
   test "merging" do
@@ -18,17 +18,19 @@ defmodule Parse.Node.ParamsNodeTest do
     bc = Node.Params.parse(b: 1, d: 2)
     expected = Node.Params.parse(a: 1, b: 1, d: 2)
     assert Node.EENable.merge(ab, bc) == expected
-    
   end
   
-  test "ensuring eens is a no-op" do
-    params = Node.Params.parse(:anything)
-    assert Node.EENable.ensure_eens(params, :ignored) == params
+  test "ensuring eens makes no changes" do
+    params = Node.Params.parse(a: 1, b: id_of(:fred))
+    actual = Node.EENable.ensure_eens(params, :ignored)
+    assert actual.parsed == params.parsed
   end
 
   test "revealing eens" do
-    # params = Node.Params.parse(a: 1, b: id_of(:fred))
-    # actual = Node.EENable.eens(params)
-    # assert actual = EEN.new(:fred: 
+    actual = 
+      Node.Params.parse(a: 1, b: id_of(:fred))
+      |> Node.EENable.ensure_eens(:ignored_module)
+      |> Node.EENable.eens
+    assert actual == [een(fred: __MODULE__)]
   end
 end

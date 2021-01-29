@@ -13,13 +13,6 @@ defmodule EctoTestDSL.Parse.ImpliedSetup do
     |> testable__append_to_setup(example, ...)
   end
   
-  def add_setup_required_by_refs__2(example) do
-    Map.get(example, :params, [])
-    |> FieldRef.relevant_pairs
-    |> KeywordX.map_values(fn xref -> xref.een end)
-    |> testable__append_to_setup(example, ...)
-  end
-  
   def testable__append_to_setup(example, new) do
     old = Map.get(example, :setup_instructions, [])
 
