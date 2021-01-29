@@ -12,7 +12,7 @@ defmodule Parse.FinishParse.MetadataTest do
     test_data = 
       Examples.started()
       |> workflow(:workflow, example: [params(age: 1)])
-      |> FinishParse.propagate_metadata
+      |> FinishParse.finish
 
     metadata =
       test_data
