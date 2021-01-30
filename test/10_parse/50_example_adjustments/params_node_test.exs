@@ -20,17 +20,10 @@ defmodule Parse.Node.ParamsNodeTest do
     assert Node.EENable.merge(ab, bc) == expected
   end
   
-  test "ensuring eens makes no changes" do
+  test "ensuring eens is pretty much a no-op" do
     params = Node.Params.parse(a: 1, b: id_of(:fred))
     actual = Node.EENable.ensure_eens(params, :ignored)
-    assert actual.parsed == params.parsed
-  end
-
-  test "revealing eens" do
-    actual = 
-      Node.Params.parse(a: 1, b: id_of(:fred))
-      |> Node.EENable.ensure_eens(:ignored_module)
-      |> Node.EENable.eens
-    assert actual == [een(fred: __MODULE__)]
+    assert actual.with_ensured_eens == actual.parsed
+    assert Node.EENable.eens(actual) == [een(:fred)]
   end
 end

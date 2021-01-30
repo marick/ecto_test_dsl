@@ -4,7 +4,7 @@ defmodule EctoTestDSL.Parse.Node.Previously do
   alias T.Parse.Node
   use Magritte
   
-  defstruct [:parsed, :eens]
+  defstruct [:parsed, :with_ensured_eens, :eens]
 
   def parse(kws) do
     kws
@@ -43,9 +43,8 @@ defmodule EctoTestDSL.Parse.Node.Previously do
         name           -> EEN.new(name, default_module)
       end
 
-      node.parsed
-      |> Enum.map(ensure_one)
-      |> Map.put(node, :eens, ...)
+      ensured = Enum.map(node.parsed, ensure_one)
+      %{node | with_ensured_eens: ensured, eens: ensured}
     end
   end
 end

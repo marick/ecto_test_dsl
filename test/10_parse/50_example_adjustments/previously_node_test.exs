@@ -31,21 +31,22 @@ defmodule Parse.Node.PreviouslyNodeTest do
     assert actual == expected
   end
 
+
+  
   test "ensuring eens" do
-    expect = fn input, expected ->
+    run = fn input ->
       Previously.new(input)
-      |> EENable.ensure_eens(__MODULE__)
-      |> assert_field(eens: expected)
+      |> EENable.ensure_eens(SomeModule)
     end
 
-    [:a, b: List]           |> expect.([een(a: __MODULE__), een(b: List)])
-    [een(:a), een(b: List)] |> expect.([een(:a, __MODULE__), een(b: List)])
-  end
+    actual = run.([:a, b: List])
+    expected = [een(a: SomeModule), een(b: List)]
+    assert actual.with_ensured_eens == expected
+    assert actual.eens == expected
 
-  test "revealing eens" do
-    Previously.new([:a, {:b,  List}, een(:c)])
-    |> EENable.ensure_eens(__MODULE__)
-    |> EENable.eens
-    |> assert_equal([een(a: __MODULE__), een(b: List), een(:c)])
+    actual = run.([een(:a), een(b: List)])
+    expected = [een(a: __MODULE__), een(b: List)]
+    assert actual.with_ensured_eens == expected
+    assert actual.eens == expected
   end
 end
