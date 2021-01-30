@@ -13,7 +13,7 @@ defmodule Parse.Node.NodeGroupTest do
       |> assert_equal(expected_eens)  
     end
     
-    test "creates N" do
+    test "creates a master list of eens and updates example fields" do
       example = 
         %{setup_instructions: Node.Previously.parse(insert: :a),
           params: Node.Params.parse(a: 1, b_id: id_of(:other_example))}

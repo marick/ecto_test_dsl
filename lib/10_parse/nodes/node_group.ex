@@ -5,8 +5,7 @@ defmodule EctoTestDSL.Parse.Node.Group do
 
   def handle_eens(example, default_module) do
     new_example = update_eenable(example, default_module)
-    eens = Enum.concat([Node.EENable.eens(new_example.setup_instructions),
-                        Node.EENable.eens(new_example.params)])
+    eens = accumulated_eens(new_example)
 
     Map.put(new_example, :eens, eens)
   end
