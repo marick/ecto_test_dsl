@@ -51,4 +51,26 @@ defmodule Parse.Node.NodeGroupTest do
       |> assert_field(                 eens: [d.een_a])
     end
   end
+
+
+  describe "simplification" do
+    test "simplifies simplifiable nodes" do
+
+      example = %{
+        params: Node.Params.parse(a: 1, some_id: id_of(:b)),
+        irrelevant: :node,
+        setup_instructions: Node.Previously.parse(insert: :a)
+      }
+      
+      example
+      |> Node.Group.handle_eens(SomeModule)
+      |> Node.Group.simplify
+      |> assert_fields(
+           params: %{a: 1, some_id: id_of(:b)},
+           irrelevant: :node,
+           eens: in_any_order([een(a: SomeModule), een(b: __MODULE__)])
+         )
+    end
+  end
+  
 end

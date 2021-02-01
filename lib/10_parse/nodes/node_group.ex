@@ -4,12 +4,20 @@ defmodule EctoTestDSL.Parse.Node.Group do
 
   def handle_eens(example, default_module) do
     new_example = 
-      update_for_protocol(example, Node.EENAble,
+      update_for_protocol(example, Node.EENable,
         &(Node.EENable.ensure_eens(&1, default_module)))
     
     eens = accumulated_eens(new_example)
     Map.put(new_example, :eens, eens)
   end
+
+  def simplify(example) do
+    example
+    |> update_for_protocol(Node.Simplifiable, &Node.Simplifiable.simplify/1)
+  end
+
+
+  # ----------------------------------------------------------------------------
 
   defp keys_for_protocol(example, protocol) do 
     example
@@ -22,7 +30,7 @@ defmodule EctoTestDSL.Parse.Node.Group do
       Map.update!(acc, key, f)
     end
 
-    keys_for_protocol(example, Node.EENable)
+    keys_for_protocol(example, protocol)
     |> Enum.reduce(example, reducer)
   end
 
