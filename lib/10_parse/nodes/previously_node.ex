@@ -47,6 +47,11 @@ defmodule EctoTestDSL.Parse.Node.Previously do
       %{node | with_ensured_eens: ensured, eens: ensured}
     end
   end
+
+  defimpl Node.Deletable, for: Node.Previously do
+  def a_protocol_must_have_at_least_one_function(_node),
+      do: raise "should never be called"
+  end
 end
 
 

@@ -13,8 +13,15 @@ defmodule EctoTestDSL.Parse.Node.Group do
 
   def simplify(example) do
     example
+    |> delete_keys_with_protocol(Node.Deletable)
     |> update_for_protocol(Node.Simplifiable, &Node.Simplifiable.simplify/1)
   end
+
+  defp delete_keys_with_protocol(example, protocol), 
+    do: Map.drop(example, keys_for_protocol(example, protocol))
+  
+  
+  
 
 
   # ----------------------------------------------------------------------------

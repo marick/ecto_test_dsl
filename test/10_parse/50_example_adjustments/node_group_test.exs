@@ -62,14 +62,18 @@ defmodule Parse.Node.NodeGroupTest do
         setup_instructions: Node.Previously.parse(insert: :a)
       }
       
-      example
-      |> Node.Group.handle_eens(SomeModule)
-      |> Node.Group.simplify
-      |> assert_fields(
-           params: %{a: 1, some_id: id_of(:b)},
-           irrelevant: :node,
-           eens: in_any_order([een(a: SomeModule), een(b: __MODULE__)])
-         )
+      new_example =
+        example
+        |> Node.Group.handle_eens(SomeModule)
+        |> Node.Group.simplify
+
+
+      assert_fields(new_example, 
+        params: %{a: 1, some_id: id_of(:b)},
+        irrelevant: :node,
+        eens: in_any_order([een(a: SomeModule), een(b: __MODULE__)]))
+
+      refute Map.has_key?(new_example, :setup_instructions)
     end
   end
   
