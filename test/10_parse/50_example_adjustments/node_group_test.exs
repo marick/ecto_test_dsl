@@ -6,11 +6,13 @@ defmodule Parse.Node.NodeGroupTest do
 
 
   describe "handle_eens" do
-    defchain assert_field_has_been_eenified(example, field, expected_eens) do 
-      Map.get(example, field)
-      |> Node.EENable.eens
-      # This shows field has had ensure_eens called on it
-      |> assert_equal(expected_eens)  
+    defchain assert_eenified(example, kws) do
+      for {field, expected_eens} <- kws do 
+        Map.get(example, field)
+        |> Node.EENable.eens
+        # This shows field has had ensure_eens called on it
+        |> assert_equal(expected_eens)
+      end
     end
 
     defp handle_eens(kws) do
@@ -19,32 +21,34 @@ defmodule Parse.Node.NodeGroupTest do
     end
 
     setup do
-      [een_a: een(a: SomeModule),
-       een_b: een(other_example: __MODULE__)
-      ]
+      data = %{
+        previously_a: Node.Previously.parse(insert: :a),  # produces...
+        een_a: een(a: SomeModule),
+        
+        refers_to_b: Node.Params.parse(a: 1, b_id: id_of(:other_example)),
+        een_b: een(other_example: __MODULE__),
+      }
+      [data: data]
     end
     
-    test "creates a master list of eens and updates example fields",
-      %{een_a: een_a, een_b: een_b} do
+    test "creates a master list of eens and updates example fields", %{data: d} do
+      handle_eens(       setup_instructions:  d.previously_a, params:  d.refers_to_b)
 
-      handle_eens(setup_instructions: Node.Previously.parse(insert: :a),
-                  params: Node.Params.parse(a: 1, b_id: id_of(:other_example)))
-      |> assert_field_has_been_eenified(:setup_instructions, [een_a])
-      |> assert_field_has_been_eenified(:params,             [een_b])
-      |> assert_field(eens: in_any_order([een_a, een_b]))
+      |> assert_eenified(setup_instructions: [d.een_a],       params: [d.een_b]     )
+      |> assert_field(eens: in_any_order(    [d.een_a,                 d.een_b]    ))
     end
 
-    test "missing fields are not a problem", %{een_a: een_a} do
-      handle_eens(setup_instructions: Node.Previously.parse(insert: :a))
-      |> assert_field_has_been_eenified(:setup_instructions, [een_a])
-      |> assert_field(eens: [een_a])
+    test "missing fields are not a problem", %{data: d} do
+      handle_eens(       setup_instructions:  d.previously_a)   # no params data
+ 
+      |> assert_eenified(setup_instructions: [d.een_a])
+      |> assert_field(                 eens: [d.een_a])
     end
     
-    test "only eenable fields are processed", %{een_a: een_a} do
-      handle_eens(setup_instructions: Node.Previously.parse(insert: :a),
-                  some_random_key: "some irrelevant value")
-      |> assert_field_has_been_eenified(:setup_instructions, [een_a])
-      |> assert_field(eens: [een_a])
+    test "only eenable fields are processed", %{data: d} do
+      handle_eens(       setup_instructions:  d.previously_a, other_key: "and_value")
+      |> assert_eenified(setup_instructions: [d.een_a])
+      |> assert_field(                 eens: [d.een_a])
     end
   end
 end
