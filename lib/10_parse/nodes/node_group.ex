@@ -1,6 +1,5 @@
 defmodule EctoTestDSL.Parse.Node.Group do
   use EctoTestDSL.Drink.Me
-#  use T.Drink.AssertionJuice
   alias T.Parse.Node
 
   def handle_eens(example, default_module) do
@@ -10,27 +9,28 @@ defmodule EctoTestDSL.Parse.Node.Group do
     Map.put(new_example, :eens, eens)
   end
 
+  defp eenable_keys(example) do
+    example
+    |> KeywordX.filter_by_value(&Node.EENable.impl_for/1)
+    |> Enum.map(fn {key, _value} -> key end)
+  end
 
   defp update_eenable(example, default_module) do
-    keys = [:setup_instructions, :params]
-    
-    ensure_eens = &(Node.EENable.ensure_eens(&1, default_module))
     reducer = fn key, acc ->
-      Map.update!(acc, key, ensure_eens)
+      Map.update!(acc, key, &(Node.EENable.ensure_eens(&1, default_module)))
     end
 
-    keys
+    eenable_keys(example)
     |> Enum.reduce(example, reducer)
   end
 
-  def accumulated_eens(example) do 
-    keys = [:setup_instructions, :params]
-
+  defp accumulated_eens(example) do 
     getter = fn key -> 
       Map.get(example, key) |> Node.EENable.eens
     end
 
-    Enum.flat_map(keys, getter)
+    eenable_keys(example)
+    |> Enum.flat_map(getter)
   end
 end
 
