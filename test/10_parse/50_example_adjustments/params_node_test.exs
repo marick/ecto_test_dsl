@@ -26,4 +26,11 @@ defmodule Parse.Node.ParamsNodeTest do
     assert actual.with_ensured_eens == actual.parsed
     assert Node.EENable.eens(actual) == [een(:fred)]
   end
+
+  test "converting to simplified form" do
+    %Node.Params{with_ensured_eens: [a: 1, b: id_of(:fred)]}
+    |> Node.Simplifiable.simplify
+    |> assert_equal(%{a: 1, b: id_of(:fred)})
+  end
+
 end

@@ -14,3 +14,7 @@ defprotocol Node.RunTimeSubstitutable do
   def substitute(node, neighborhood)
 end
 
+defprotocol Node.Simplifiable do 
+  def simplify(node)
+end
+
