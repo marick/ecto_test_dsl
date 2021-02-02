@@ -16,11 +16,16 @@ defmodule EctoTestDSL.Parse.FinishParse do
       improved = 
         example
         |> propagate_metadata(test_data)
+        |> handle_params
         |> handle_eens(test_data.examples_module)
+        |> simplify
         # |> ImpliedSetup.add_setup_required_by_refs__2
         # |> IO.inspect
 
-      put_in(acc, [:examples, name], improved)
+      temp1 = Map.put(improved, :setup_instructions, Map.get(example, :setup_instructions, []))
+      temp2 = Map.put(temp1, :params, improved.params__temp)
+
+      put_in(acc, [:examples, name], temp2)
     end)
 
     updated_examples =
@@ -31,19 +36,24 @@ defmodule EctoTestDSL.Parse.FinishParse do
     Map.put(test_data, :examples, updated_examples)
   end
 
-  def handle_eens(example, examples_module) do
-    put_existing_f = fn setup ->
-      setup
-      |> Node.Previously.parse
-      |> Node.EENable.ensure_eens(examples_module)
-    end
+  def handle_params(example) do
+    Map.put(example, :params__temp, Node.Params.parse(example.params))
+  end
 
-    new_example = 
-      example
-      |> put_existing(:setup_instructions, put_existing_f)
-      |> get_existing(:setup_instructions, [], &Node.EENable.eens/1)
-    
+  def handle_eens(example, examples_module) do
+    setup_instructions = Map.get(example, :setup_instructions, [])
+
     example
+    |> Map.put(:previously__temp, Node.Previously.parse(setup_instructions))
+    |> Node.Group.handle_eens(examples_module)
+  end
+
+  def simplify(example) do
+    x = Node.Group.simplify(example)
+    # IO.puts("--------------")
+    # IO.inspect x.params
+    # IO.inspect x.params__temp
+    x
   end
 
   def put_existing(example, key, f) do
