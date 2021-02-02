@@ -1,6 +1,7 @@
 defmodule EctoTestDSL.Parse.Node.ParamsLike do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AssertionJuice
+  alias T.Parse.Node
   
   @moduledoc """
   """
@@ -8,9 +9,13 @@ defmodule EctoTestDSL.Parse.Node.ParamsLike do
   # This doesn't really need to be a struct, but having a named
   # thing is simpler than having an anonymous function floating around.
 
-  defstruct [:resolver]
+  defstruct [:resolver, :previous_name, overrides: []]
 
-  def new(previous_name, except: override_kws) do
+  def parse(previous_name, except: override_kws) do
+    new(previous_name, override_kws)
+  end
+  
+  def  new(previous_name, override_kws) do
     overrides = Enum.into(override_kws, %{})
     resolver = fn named_examples ->
       case Keyword.get(named_examples, previous_name) do
@@ -23,11 +28,11 @@ defmodule EctoTestDSL.Parse.Node.ParamsLike do
       end
     end
 
-    %__MODULE__{resolver: resolver}
+    %__MODULE__{resolver: resolver, overrides: override_kws, previous_name: previous_name}
   end
 
-  def resolve(%__MODULE__{resolver: resolver}, existing_named_examples),
-    do: resolver.(existing_named_examples)
+  def resolve(%__MODULE__{} = pl, existing_named_examples),
+    do: pl.resolver.(existing_named_examples)
 
   def resolve(already_resolved, _) when is_map(already_resolved),
     do: already_resolved
@@ -53,4 +58,13 @@ defmodule EctoTestDSL.Parse.Node.ParamsLike do
     resolve = &(resolve(&1, existing_named_examples))
     Map.update(example, :params, %{}, resolve)
   end
+
+
+  defimpl Node.ParseTimeSubstitutable, for: Node.ParamsLike do
+    def substitute(node, examples) do
+      Node.ParamsLike.resolve(node, examples)
+    end
+  end
+
+  
 end
