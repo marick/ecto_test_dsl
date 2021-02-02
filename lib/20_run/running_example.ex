@@ -13,7 +13,6 @@ defmodule EctoTestDSL.Run.RunningExample do
     params__2: [],
 
     eens: [],
-    setup_instructions: [],
     validation_changeset_checks: [],
     constraint_changeset_checks: [],
     field_checks: [],

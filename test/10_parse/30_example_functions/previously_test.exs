@@ -7,7 +7,7 @@ defmodule Parse.PreviouslyTest do
     |> workflow(:success, example: [input])
     |> Map.get(:examples)
     |> Keyword.get(:example)
-    |> Map.get(:setup_instructions)
+    |> Map.get(:previously)
     |> assert_equal(expected)
   end
 

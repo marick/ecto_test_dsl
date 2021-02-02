@@ -32,23 +32,23 @@ defmodule Parse.Node.NodeGroupTest do
     end
     
     test "creates a master list of eens and updates example fields", %{data: d} do
-      handle_eens(       setup_instructions:  d.previously_a, params:  d.refers_to_b)
+      handle_eens(               previously:  d.previously_a, params:  d.refers_to_b)
 
-      |> assert_eenified(setup_instructions: [d.een_a],       params: [d.een_b]     )
+      |> assert_eenified(        previously: [d.een_a],       params: [d.een_b]     )
       |> assert_field(eens: in_any_order(    [d.een_a,                 d.een_b]    ))
     end
 
     test "missing fields are not a problem", %{data: d} do
-      handle_eens(       setup_instructions:  d.previously_a)   # no params data
+      handle_eens(       previously:  d.previously_a)   # no params data
  
-      |> assert_eenified(setup_instructions: [d.een_a])
-      |> assert_field(                 eens: [d.een_a])
+      |> assert_eenified(previously: [d.een_a])
+      |> assert_field(         eens: [d.een_a])
     end
     
     test "only eenable fields are processed", %{data: d} do
-      handle_eens(       setup_instructions:  d.previously_a, other_key: "and_value")
-      |> assert_eenified(setup_instructions: [d.een_a])
-      |> assert_field(                 eens: [d.een_a])
+      handle_eens(       previously:  d.previously_a, other_key: "and_value")
+      |> assert_eenified(previously: [d.een_a])
+      |> assert_field(         eens: [d.een_a])
     end
   end
 
@@ -59,7 +59,7 @@ defmodule Parse.Node.NodeGroupTest do
       example = %{
         params: Node.Params.parse(a: 1, some_id: id_of(:b)),
         irrelevant: :node,
-        setup_instructions: Node.Previously.parse(insert: :a)
+        previously: Node.Previously.parse(insert: :a)
       }
       
       new_example =
@@ -73,7 +73,7 @@ defmodule Parse.Node.NodeGroupTest do
         irrelevant: :node,
         eens: in_any_order([een(a: SomeModule), een(b: __MODULE__)]))
 
-      refute Map.has_key?(new_example, :setup_instructions)
+      refute Map.has_key?(new_example, :previously)
     end
   end
   

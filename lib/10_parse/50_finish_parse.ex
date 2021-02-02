@@ -17,7 +17,7 @@ defmodule EctoTestDSL.Parse.FinishParse do
         example
         |> propagate_metadata(test_data)
         |> Map.update!(:params, &Node.Params.parse/1)
-        |> Map.update(:setup_instructions, [], &Node.Previously.parse/1)
+        |> Map.update(:previously, [], &Node.Previously.parse/1)
         |> Node.Group.handle_eens(examples_module)
         |> Node.Group.simplify
 

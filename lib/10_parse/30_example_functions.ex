@@ -16,7 +16,7 @@ defmodule EctoTestDSL.Parse.ExampleFunctions do
   # ----------------------------------------------------------------------------
   
   def previously(opts) do
-    {:setup_instructions, opts}
+    {:previously, opts}
   end
 
   def changeset(opts), do: {:validation_changeset_checks, opts}
