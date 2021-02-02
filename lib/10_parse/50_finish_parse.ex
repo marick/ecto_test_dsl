@@ -11,7 +11,6 @@ defmodule EctoTestDSL.Parse.FinishParse do
   def finish(test_data) do
     examples = test_data.examples
 
-    test_data = 
     Enum.reduce(examples, test_data, fn {name, example}, acc ->
       improved = 
         example
@@ -19,20 +18,9 @@ defmodule EctoTestDSL.Parse.FinishParse do
         |> handle_params
         |> handle_eens(test_data.examples_module)
         |> simplify
-        # |> ImpliedSetup.add_setup_required_by_refs__2
-        # |> IO.inspect
-
-      temp1 = Map.put(improved, :setup_instructions, Map.get(example, :setup_instructions, []))
-
-      put_in(acc, [:examples, name], temp1)
+      
+      put_in(acc, [:examples, name], improved)
     end)
-
-    updated_examples =
-      test_data.examples
-      |> Previously.ensure_references(test_data.examples_module)
-      |> ImpliedSetup.add
-
-    Map.put(test_data, :examples, updated_examples)
   end
 
   def handle_params(example) do

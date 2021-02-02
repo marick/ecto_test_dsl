@@ -2,6 +2,7 @@ defmodule EctoTestDSL.Run.Steps do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AssertionJuice
   use EctoTestDSL.Drink.AndRun
+  import T.Run.Steps.Util
 
   # ----------------------------------------------------------------------------
 
@@ -21,10 +22,8 @@ defmodule EctoTestDSL.Run.Steps do
   end
 
   def previously(running) do
-    neighborhood = RunningExample.neighborhood(running)
-    instructions = RunningExample.setup_instructions(running)
-
-    Neighborhood.Create.from_a_list(instructions, running.example, neighborhood)
+    from(running, use: [:neighborhood, :eens])
+    Enum.reduce(eens, neighborhood, &Neighborhood.Create.from_a_leaf/2)
   end
 
   # ----------------------------------------------------------------------------

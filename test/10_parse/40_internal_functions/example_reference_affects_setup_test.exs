@@ -7,7 +7,7 @@ defmodule Parse.InternalFunctions.ExampleReferenceAffectsSetupTest do
     use Template.Trivial
   end
 
-  describe "id_of" do 
+  describe "id_of" do
     test "instances of `id_of` generate a setup" do
       test_data = 
         Examples.started()
@@ -17,13 +17,12 @@ defmodule Parse.InternalFunctions.ExampleReferenceAffectsSetupTest do
            ])
         |> FinishParse.finish
 
-      assert example(test_data, :similar).setup_instructions ==
-          [insert: een(species: ExampleModule)]
+      assert example(test_data, :similar).eens == [een(species: ExampleModule)]
     end
 
     test "adds on to existing setup" do
       test_data = 
-        Examples.started()
+        Examples.started(examples_module: ExampleModule)
         |> workflow(:invalid, name: [
              params(a: id_of(species: ExampleModule),
                     b: id_of(:thing)),
@@ -31,10 +30,11 @@ defmodule Parse.InternalFunctions.ExampleReferenceAffectsSetupTest do
         ])
         |> FinishParse.finish
 
-      assert example(test_data, :name).setup_instructions ==
-          [insert: een(:noog, :default_trivial_examples_module),
-           insert: een(species: ExampleModule),
-           insert: een(thing: __MODULE__)]
+      assert_good_enough(
+        example(test_data, :name).eens,
+        in_any_order([een(:noog, ExampleModule),
+                      een(species: ExampleModule),
+                      een(thing: __MODULE__)]))
     end
   end
 end
