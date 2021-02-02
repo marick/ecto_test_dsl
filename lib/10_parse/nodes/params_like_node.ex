@@ -1,4 +1,4 @@
-defmodule EctoTestDSL.Parse.ParamsLike do
+defmodule EctoTestDSL.Parse.Node.ParamsLike do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AssertionJuice
   

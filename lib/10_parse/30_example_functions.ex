@@ -1,7 +1,7 @@
 defmodule EctoTestDSL.Parse.ExampleFunctions do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AssertionJuice
-  alias Parse.ParamsLike
+  alias T.Parse.Node.ParamsLike
 
   # ----------------------------------------------------------------------------
   def params(opts \\ []),

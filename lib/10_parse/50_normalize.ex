@@ -1,5 +1,5 @@
 defmodule EctoTestDSL.Parse.Normalize do
-  alias EctoTestDSL.Parse.ParamsLike  
+  alias EctoTestDSL.Parse.Node.ParamsLike  
   @moduledoc """
   """
 

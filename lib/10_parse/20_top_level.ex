@@ -5,7 +5,8 @@ defmodule EctoTestDSL.Parse.TopLevel do
   import DeepMerge, only: [deep_merge: 2]
   alias T.Nouns.AsCast
   alias T.Parse.Hooks
-  alias T.Parse.{ParamsLike,Normalize}
+  alias T.Parse.Node.ParamsLike
+  alias T.Parse.Normalize
 
   # ----------------------------------------------------------------------------
   def field_transformations(test_data, opts) do

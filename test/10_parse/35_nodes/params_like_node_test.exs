@@ -1,4 +1,4 @@
-defmodule Parse.ParamsLikeTest do
+defmodule EctoTestDSL.Parse.Node.ParamsLikeNodeTest do
   use EctoTestDSL.Case
   use T.Predefines
 
