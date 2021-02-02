@@ -46,7 +46,7 @@ defmodule EctoTestDSL.Run.Support.ExampleTest do
     test "`example` can stop early in a workflow" do
       assert [
         changeset_from_params: made, params: %{"name" => "young"},
-          previously: %{}, previously: %{}, example: _] = 
+          repo_setup: %{}, repo_setup: %{}, example: _] = 
         Examples.Tester.example(:young) |> Run.example(stop_after: :changeset_from_params)
       
       made
@@ -56,13 +56,13 @@ defmodule EctoTestDSL.Run.Support.ExampleTest do
 
     @presupplied "presupplied, not created"
 
-    test "a neighborhood (from a nested `previously`) can be passed in" do
+    test "a neighborhood (from a nested `repo_setup`) can be passed in" do
       expect = fn example_name, expected ->
         actual =  
           Examples.Tester.example(example_name)
-          |> Run.example(previously:
+          |> Run.example(repo_setup:
                 %{een(young: Examples) => "presupplied, not created"})
-        assert Keyword.get(actual, :previously) == expected
+        assert Keyword.get(actual, :repo_setup) == expected
       end
 
       :dependent |> expect.(%{een(young: Examples) => @presupplied})

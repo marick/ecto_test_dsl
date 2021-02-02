@@ -6,7 +6,7 @@ defmodule EctoTestDSL.Run.Steps do
 
   # ----------------------------------------------------------------------------
 
-  # I can't offhand think of any case where one `previously` might need to
+  # I can't offhand think of any case where one `repo_setup` might need to
   # use the results of another that isn't part of the same dependency tree.
   # That might change if I add a workflowy-wide or test-data-wide setup.
 
@@ -21,7 +21,7 @@ defmodule EctoTestDSL.Run.Steps do
     end
   end
 
-  def previously(running) do
+  def repo_setup(running) do
     from(running, use: [:neighborhood, :eens])
     Enum.reduce(eens, neighborhood, &Neighborhood.Create.from_an_een/2)
   end

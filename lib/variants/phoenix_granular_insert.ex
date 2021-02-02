@@ -24,14 +24,14 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
   ], from: Steps.Ecto
 
   defsteps [
-    :previously,
+    :repo_setup,
     :params,
     :changeset_from_params,
   ], from: Steps
 
   def workflows() do
     from_start_through_changeset = [
-      :previously,
+      :repo_setup,
       :params,
       :changeset_from_params,
     ]

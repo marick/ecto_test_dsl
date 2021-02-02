@@ -4,8 +4,8 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
   alias T.Variants.PhoenixGranular.Update, as: ThisVariant
   import T.Variants.Macros
   alias T.Parse.Start
-  alias T.Parse.Callbacks
-  import FlowAssertions.Define.BodyParts
+  # alias T.Parse.Callbacks
+  # import FlowAssertions.Define.BodyParts
 
   # ------------------- Step functions -----------------------------------------
 
@@ -24,7 +24,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
   ], from: Steps.Ecto
 
   defsteps [
-    # :previously,
+    # :repo_setup,
     # :params,
     # :changeset_from_params,
   ], from: Steps
@@ -32,7 +32,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
   def workflows() do 
     %{
       success: [
-        :previously,
+        :repo_setup,
         :params_from_selecting,
       ],
     }

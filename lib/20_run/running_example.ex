@@ -29,8 +29,8 @@ defmodule EctoTestDSL.Run.RunningExample do
 
   private_getters :example, :metadata, [:module_under_test]
 
-  private_getters :history, [previously: %{}]
-  publicize(:neighborhood, renames: :previously)
+  private_getters :history, [repo_setup: %{}]
+  publicize(:neighborhood, renames: :repo_setup)
 
   def step_value!(running, step_name),
     do: History.fetch!(running.history, step_name)

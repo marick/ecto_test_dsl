@@ -7,9 +7,9 @@ defmodule EctoTestDSL.Neighborhood.Create do
       workflow_results = 
         een.module
         |> TestData.example(een.name)
-        |> Run.example(previously: so_far)
+        |> Run.example(repo_setup: so_far)
 
-      dependently_created = Keyword.get(workflow_results, :previously)
+      dependently_created = Keyword.get(workflow_results, :repo_setup)
       {:ok, insert_result} = Keyword.get(workflow_results, :try_changeset_insertion)
       
       Map.put(dependently_created, een, insert_result)

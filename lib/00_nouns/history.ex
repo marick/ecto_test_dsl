@@ -1,7 +1,7 @@
 defmodule EctoTestDSL.Nouns.History do
   
   def new(example, opts \\ []) do 
-    [previously: Keyword.get(opts, :previously, %{}),
+    [repo_setup: Keyword.get(opts, :repo_setup, %{}),
      example: example]
   end
 

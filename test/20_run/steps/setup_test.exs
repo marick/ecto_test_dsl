@@ -71,7 +71,7 @@ defmodule Run.Steps.SetupTest do
     def setup_for(example_name) do
       start_names_with_zero()
       Examples.Tester.check_workflow(example_name)
-      |> Keyword.get(:previously)
+      |> Keyword.get(:repo_setup)
     end
 
     # Note: `setup_for` and `expect` are a bit tricksy. Each example is
