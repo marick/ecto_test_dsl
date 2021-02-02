@@ -23,9 +23,8 @@ defmodule EctoTestDSL.Parse.FinishParse do
         # |> IO.inspect
 
       temp1 = Map.put(improved, :setup_instructions, Map.get(example, :setup_instructions, []))
-      temp2 = Map.put(temp1, :params, improved.params__temp)
 
-      put_in(acc, [:examples, name], temp2)
+      put_in(acc, [:examples, name], temp1)
     end)
 
     updated_examples =
@@ -37,7 +36,7 @@ defmodule EctoTestDSL.Parse.FinishParse do
   end
 
   def handle_params(example) do
-    Map.put(example, :params__temp, Node.Params.parse(example.params))
+    Map.put(example, :params, Node.Params.parse(example.params))
   end
 
   def handle_eens(example, examples_module) do
