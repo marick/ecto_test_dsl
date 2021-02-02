@@ -2,46 +2,7 @@ defmodule EctoTestDSL.Neighborhood.Create do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AndRun
 
-  # ----------------------------------------------------------------------------
-  # Working with a container of one or more example sources
-
-
-  # previously(...), previously(...)
-  def from_a_list(sources, example, prior_work),
-    do: from_a_list(sources, example, prior_work, &(&1))
-
-  # previously(insert: ..., insert: ...)
-  def from_a_list(sources, example, prior_work, transform) do
-    Enum.reduce(sources, prior_work,
-      fn source, acc -> from_a_tuple(transform.(source), example, acc) end)
-  end
-
-  # ----------------------------------------------------------------------------
-  # Working with an {:insert, ...} tuple.
-
-  # previously(..., insert: [<ex1>, <ex2>], ...)
-  def from_a_tuple({:insert, sources}, example, prior_work) when is_list(sources) do
-    from_a_list(sources, example, prior_work, &({:insert, &1}))
-  end
-
-  # previously(..., insert: een{name, module}, ...)
-  def from_a_tuple({:insert, %EEN{} = een}, _to_help_example, so_far),
-    do: from_a_leaf(een, so_far)
-
-  # previously(..., insert: {name, module}, ...)
-  def from_a_tuple({:insert, extended_example_name}, _to_help_example, so_far),
-    do: from_a_leaf(extended_example_name, so_far)
-
-  # ----------------------------------------------------------------------------
-
-  # At last, just the example name and module.
-  def from_a_leaf({example_name, example_module}, so_far) do
-    EEN.new(example_name, example_module)
-    |> from_a_leaf(so_far)
-  end
-  
-  # At last, just the example name and module.
-  def from_a_leaf(%EEN{} = een, so_far) do
+  def from_an_een(%EEN{} = een, so_far) do
     unless_already_present(een, so_far, fn ->
       workflow_results = 
         een.module

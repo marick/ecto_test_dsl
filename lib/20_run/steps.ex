@@ -23,14 +23,13 @@ defmodule EctoTestDSL.Run.Steps do
 
   def previously(running) do
     from(running, use: [:neighborhood, :eens])
-    Enum.reduce(eens, neighborhood, &Neighborhood.Create.from_a_leaf/2)
+    Enum.reduce(eens, neighborhood, &Neighborhood.Create.from_an_een/2)
   end
 
   # ----------------------------------------------------------------------------
   def params(running) do
-    neighborhood = RunningExample.neighborhood(running)
+    from(running, use: [:neighborhood, :original_params])
 
-    original_params = RunningExample.original_params(running)
     params = 
       RunningExample.format_params(running,
         Neighborhood.Expand.keyword_values(original_params, with: neighborhood))
@@ -43,6 +42,4 @@ defmodule EctoTestDSL.Run.Steps do
 
   def changeset_from_params(running), 
     do: RunningExample.changeset_from_params(running)
-
-
 end
