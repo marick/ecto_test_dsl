@@ -1,5 +1,15 @@
-defmodule Parse.InternalFunctions.ExampleReferenceAffectsParamsTest do
+defmodule Integration.ParamLikeAndIdOfTest do
   use EctoTestDSL.Case
+
+  defmodule Species do
+    use Ecto.Schema
+
+    schema "bogus" do 
+      field :name, :string
+    end
+  end
+
+  
 
   defmodule Examples do
     use Template.PhoenixGranular.Insert
@@ -7,7 +17,7 @@ defmodule Parse.InternalFunctions.ExampleReferenceAffectsParamsTest do
     def create_test_data() do
       started() |>
 
-      workflow(:success,
+      workflow(:validation_success,
         species: [params(name: "bovine")],
 
         animal:  [
@@ -32,12 +42,15 @@ defmodule Parse.InternalFunctions.ExampleReferenceAffectsParamsTest do
   defp params_for(example_name), do: get_for(example_name, :params)
 
   @expected_field_ref FieldRef.new(id: een(:species, Examples))
-  
+
+  @tag :skip
   test "`id_of` and `params`" do
+    Examples.Tester.params(:animal) |> IO.inspect
     params_for(:animal)
     |> assert_field(species_id: @expected_field_ref)
   end
 
+  @tag :skip
   test "`id_of` and `params_like`" do
     params_for(:animal_like_1)
     |> assert_field(name: "bossie",

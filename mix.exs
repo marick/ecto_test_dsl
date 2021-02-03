@@ -42,7 +42,7 @@ defmodule EctoTestDSL.MixProject do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test),
-    do: ["lib", "test/support", "examples"
+    do: ["lib", "test/support", "examples", "test/integration"
         ]
   defp elixirc_paths(_), do: ["lib"]
 
