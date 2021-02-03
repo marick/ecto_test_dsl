@@ -59,7 +59,6 @@ defmodule EctoTestDSL.Parse.Node.ParamsLike do
     Map.update(example, :params, %{}, resolve)
   end
 
-
   defimpl Node.ParseTimeSubstitutable, for: Node.ParamsLike do
     def substitute(node, examples) do
       Node.ParamsLike.resolve(node, examples)

@@ -36,7 +36,7 @@ defmodule EctoTestDSL.Parse.TopLevel do
     updated_examples = 
       ParamsLike.expand(updated_examples, test_data.examples)
 
-    Map.update!(test_data, :examples, &(updated_examples ++ &1))
+    Map.update!(test_data, :examples, &(&1 ++ updated_examples))
   end
 
   def workflow(_, _, _supposed_examples),
