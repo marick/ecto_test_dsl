@@ -75,12 +75,12 @@ defmodule Integration.GranularInsertion.Workflow.Test do
 
   describe "insertions" do
     test "retrieving inserted value" do
-      insert_returns {:ok, "some schema structure"}
+      insert_returns {:ok, "some schema structure"}, in: Examples
       assert "some schema structure" = Examples.Tester.inserted(:complete)
     end
 
     test "unexpected failure" do
-      insert_returns {:error, "some changeset"}
+      insert_returns {:error, "some changeset"}, in: Examples
       
       assertion_fails(~r/Example `:insertion_will_unexpectedly_fail`/,
         [message: ~r/Value is not an `:ok` tuple/, 
@@ -92,7 +92,7 @@ defmodule Integration.GranularInsertion.Workflow.Test do
   end
 
   test "end-to-end success" do
-    insert_returns {:ok, "irrelevant"}
+    insert_returns {:ok, "irrelevant"}, in: Examples
 
     Examples.Tester.check_workflow(:complete)
     Examples.Tester.check_workflow(:only_required)

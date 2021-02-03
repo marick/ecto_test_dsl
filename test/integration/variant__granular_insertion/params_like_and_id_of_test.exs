@@ -1,27 +1,23 @@
 defmodule Integration.ParamLikeAndIdOfTest do
   use EctoTestDSL.Case
-
-  defmodule Species do
-    use Ecto.Schema
-
-    schema "bogus" do 
-      field :name, :string
-    end
-  end
-
-  
+  alias Integration.{Animal,Species}
+  use Integration.Support
 
   defmodule Examples do
-    use Template.PhoenixGranular.Insert
-
+    use EctoTestDSL.Variants.PhoenixGranular.Insert
+    use Integration.Support
+    
     def create_test_data() do
-      started() |>
+      start(
+        module_under_test: Animal.Schema,
+        repo: Unused,
+        insert_with: &tunable_insert/2,
+        format: :raw
+      ) |>
 
       workflow(:validation_success,
-        species: [params(name: "bovine")],
-
         animal:  [
-          params(name: "bossie", species_id: id_of(:species))
+          params(name: "bossie", species_id: id_of(bovine: Species.Examples))
         ],
         animal_like_1: [
           params_like(:animal, except: [exception: 1])
@@ -33,34 +29,28 @@ defmodule Integration.ParamLikeAndIdOfTest do
     end
   end
 
-  defp get_for(example_name, key) do 
-    Examples.create_test_data.examples
-    |> Keyword.get(example_name)
-    |> Map.get(key)
+  @species_id 3333
+
+  setup do 
+    insert_returns {:ok, %{id: @species_id}}, in: Species.Examples
+    :ok
   end
-  
-  defp params_for(example_name), do: get_for(example_name, :params)
 
-  @expected_field_ref FieldRef.new(id: een(:species, Examples))
-
-  @tag :skip
   test "`id_of` and `params`" do
-    Examples.Tester.params(:animal) |> IO.inspect
-    params_for(:animal)
-    |> assert_field(species_id: @expected_field_ref)
+    Examples.Tester.params(:animal)
+    |> assert_fields(name: "bossie",
+                     species_id: @species_id)
   end
 
-  @tag :skip
   test "`id_of` and `params_like`" do
-    params_for(:animal_like_1)
+    Examples.Tester.params(:animal_like_1)
     |> assert_field(name: "bossie",
-                    species_id: @expected_field_ref,
+                    species_id: @species_id,
                     exception: 1)
 
-    params_for(:animal_like_2)
+    Examples.Tester.params(:animal_like_2)
     |> assert_field(name: "bossie",
-                    species_id: @expected_field_ref,
+                    species_id: @species_id,
                     exception: 222)
-
   end
 end  
