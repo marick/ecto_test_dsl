@@ -32,7 +32,9 @@ defmodule EctoTestDSL.Parse.TopLevel do
     updated_examples =
       Normalize.as(:example_pairs, raw_examples)
       |> attach_workflow_metadata(workflow)
-      |> ParamsLike.expand(test_data.examples)
+
+    updated_examples = 
+      ParamsLike.expand(updated_examples, test_data.examples)
 
     Map.update!(test_data, :examples, &(updated_examples ++ &1))
   end
