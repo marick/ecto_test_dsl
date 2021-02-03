@@ -64,6 +64,4 @@ defmodule EctoTestDSL.Parse.Node.ParamsLike do
       Node.ParamsLike.resolve(node, examples)
     end
   end
-
-  
 end

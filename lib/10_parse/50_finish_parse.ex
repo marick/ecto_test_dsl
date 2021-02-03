@@ -16,9 +16,9 @@ defmodule EctoTestDSL.Parse.FinishParse do
       improved = 
         example
         |> propagate_metadata(test_data)
+        |> Node.Group.parse_time_substitutions(acc.examples)
         |> Map.update!(:params, &Node.Params.parse/1)
         |> Map.update(:previously, [], &Node.Previously.parse/1)
-        |> Node.Group.parse_time_substitutions(acc.examples)
         |> Node.Group.handle_eens(examples_module)
         |> Node.Group.simplify
 
