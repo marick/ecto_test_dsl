@@ -10,10 +10,6 @@ defprotocol Node.ParseTimeSubstitutable do
   def substitute(node, examples)
 end
 
-defprotocol Node.RunTimeSubstitutable do 
-  def substitute(node, neighborhood)
-end
-
 defprotocol Node.Exportable do 
   def export(node)
 end
