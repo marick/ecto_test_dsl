@@ -4,14 +4,14 @@ defmodule EctoTestDSL.Parse.Node.Params do
   alias T.Parse.Node
   use Magritte
   
-  defstruct [:parsed, :with_ensured_eens, :eens]
+  defstruct parsed: %{}, with_ensured_eens: %{}, eens: []
 
-  def parse(kws), do: new(kws)
+  def parse(kws), do: kws |> Enum.into(%{}) |> new
   def new(kws), do: %__MODULE__{parsed: kws}
 
   defimpl Node.EENable, for: Node.Params do
     def merge(%{parsed: earlier}, %{parsed: later}) do
-      Node.Params.new(Keyword.merge(earlier, later))
+      Node.Params.new(Map.merge(earlier, later))
     end
 
     def eens(%{eens: eens}), do: eens

@@ -4,7 +4,8 @@ defmodule Parse.Node.ParamsNodeTest do
   import T.Parse.InternalFunctions
 
   test "creation" do
-    assert Node.Params.parse(:anything) == %Node.Params{parsed: :anything}
+    actual = Node.Params.parse([key: "value"]) 
+    assert actual == %Node.Params{parsed: %{key: "value"}}
   end
 
   test "merging" do
