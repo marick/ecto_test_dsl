@@ -24,9 +24,9 @@ defmodule Parse.Node.PreviouslyNodeTest do
 
   test "merging" do
     one = Previously.new([:a, b: List])
-    rest = [ Previously.new([:c]) ]
+    two = Previously.new([:c])
 
-    actual = EENable.merge(one, rest)
+    actual = EENable.merge(one, two)
     expected = Previously.new([:a, {:b, List}, :c])
     assert actual == expected
   end
