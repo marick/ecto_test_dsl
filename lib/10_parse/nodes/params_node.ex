@@ -26,8 +26,8 @@ defmodule EctoTestDSL.Parse.Node.Params do
     end
   end
 
-  defimpl Node.Simplifiable, for: Node.Params do
-    def simplify(node) do
+  defimpl Node.Exportable, for: Node.Params do
+    def export(node) do
       node.with_ensured_eens |> Enum.into(%{})
     end
   end

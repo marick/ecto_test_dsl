@@ -52,29 +52,23 @@ defmodule Parse.Node.NodeGroupTest do
     end
   end
 
-
-  describe "simplification" do
-    test "simplifies simplifiable nodes" do
-
-      example = %{
-        params: Node.Params.parse(a: 1, some_id: id_of(:b)),
-        irrelevant: :node,
-        previously: Node.Previously.parse(insert: :a)
-      }
+  test "exporting nodes" do
+    example = %{
+      params: Node.Params.parse(a: 1, some_id: id_of(:b)),
+      irrelevant: :node,
+      previously: Node.Previously.parse(insert: :a)
+    }
       
-      new_example =
-        example
-        |> Node.Group.handle_eens(SomeModule)
-        |> Node.Group.simplify
+    new_example =
+      example
+      |> Node.Group.handle_eens(SomeModule)
+      |> Node.Group.export
 
+    assert_fields(new_example, 
+      params: %{a: 1, some_id: id_of(:b)},
+      irrelevant: :node,
+      eens: in_any_order([een(a: SomeModule), een(b: __MODULE__)]))
 
-      assert_fields(new_example, 
-        params: %{a: 1, some_id: id_of(:b)},
-        irrelevant: :node,
-        eens: in_any_order([een(a: SomeModule), een(b: __MODULE__)]))
-
-      refute Map.has_key?(new_example, :previously)
-    end
+    refute Map.has_key?(new_example, :previously)
   end
-  
 end

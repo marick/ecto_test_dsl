@@ -14,10 +14,11 @@ defprotocol Node.RunTimeSubstitutable do
   def substitute(node, neighborhood)
 end
 
-defprotocol Node.Simplifiable do 
-  def simplify(node)
+defprotocol Node.Exportable do 
+  def export(node)
 end
 
+# This node can be thrown away during the export process
 defprotocol Node.Deletable do
   def a_protocol_must_have_at_least_one_function(node)
 end

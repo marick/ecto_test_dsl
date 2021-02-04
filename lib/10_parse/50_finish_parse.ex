@@ -11,7 +11,7 @@ defmodule EctoTestDSL.Parse.FinishParse do
   def finish(test_data) do
     test_data.examples
     |> transform_examples(test_data)
-    |> KeywordX.map_over_values(&Node.Group.simplify/1)
+    |> KeywordX.map_over_values(&Node.Group.export/1)
     |> Map.put(test_data, :examples, ...)
   end
 

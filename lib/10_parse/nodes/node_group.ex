@@ -16,10 +16,10 @@ defmodule EctoTestDSL.Parse.Node.Group do
     Map.put(new_example, :eens, eens)
   end
 
-  def simplify(example) do
+  def export(example) do
     example
     |> delete_keys_with_protocol(Node.Deletable)
-    |> update_for_protocol(Node.Simplifiable, &Node.Simplifiable.simplify/1)
+    |> update_for_protocol(Node.Exportable, &Node.Exportable.export/1)
   end
 
   defp delete_keys_with_protocol(example, protocol), 
