@@ -4,6 +4,34 @@ defmodule Parse.Node.NodeGroupTest do
   alias T.Parse.Node
   import T.Parse.InternalFunctions
 
+  describe "creating an example from a keyword list" do
+    setup do
+      [expect: fn kws, expected ->
+        assert Node.Group.squeeze_into_map(kws) == expected
+      end]
+    end
+    
+    test "ordinary symbols", %{expect: expect} do
+      [key: :value] |> expect.(%{key: :value})
+      [key: :value, other: :value] |> expect.(%{key: :value, other: :value})
+      
+      assertion_fails("`:key` may not be repeated",
+        [left: :value1, right: :value2],
+        fn -> 
+          Node.Group.squeeze_into_map(key: :value1, key: :value2)
+        end)
+    end
+
+    test "Node.EENable", %{expect: expect} do
+      first = Node.Params.parse(species: "bovine")
+      [key: first] |> expect.(%{key: first})
+
+      second = Node.Params.parse(start_time: "now")
+      expected = Node.Params.parse(species: "bovine", start_time: "now")
+      [key: first, key: second] |> expect.(expected)
+    end
+  end
+  
 
   describe "handle_eens" do
     defchain assert_eenified(example, kws) do

@@ -1,10 +1,25 @@
 defmodule EctoTestDSL.Parse.Node.Group do
   use EctoTestDSL.Drink.Me
+  use T.Drink.AssertionJuice
   alias T.Parse.Node
 
-  def handle_duplicates(list_form) do
-    list_form
-    |> Enum.into(%{})
+  def squeeze_into_map(kws) do
+    reducer = fn {name, value}, acc ->
+      case {Map.get(acc, name), Node.EENable.impl_for(value)} do
+        {nil, _} ->
+          Map.put(acc, name, value)
+
+        {previously, nil} -> 
+          elaborate_flunk("`#{inspect name}` may not be repeated",
+            left: previously,
+            right: value)
+
+        {previously, _} ->
+          Node.EENable.merge(previously, value)
+      end
+    end
+
+    Enum.reduce(kws, %{}, reducer)
   end
 
   def parse_time_substitutions(example, previous_examples) do

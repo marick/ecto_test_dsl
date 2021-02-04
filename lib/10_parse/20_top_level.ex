@@ -34,7 +34,7 @@ defmodule EctoTestDSL.Parse.TopLevel do
       cooked =
         raw_example
         |> testable_flatten
-        |> Node.Group.handle_duplicates
+        |> Node.Group.squeeze_into_map
         |> deep_merge(metadata)
       {name, cooked}
     end
