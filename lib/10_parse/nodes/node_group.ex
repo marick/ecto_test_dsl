@@ -2,6 +2,11 @@ defmodule EctoTestDSL.Parse.Node.Group do
   use EctoTestDSL.Drink.Me
   alias T.Parse.Node
 
+  def handle_duplicates(list_form) do
+    list_form
+    |> Enum.into(%{})
+  end
+
   def parse_time_substitutions(example, previous_examples) do
     update_for_protocol(example, Node.ParseTimeSubstitutable,
       &(Node.ParseTimeSubstitutable.substitute(&1, previous_examples)))

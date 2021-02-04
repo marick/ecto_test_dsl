@@ -5,8 +5,7 @@ defmodule EctoTestDSL.Parse.TopLevel do
   import DeepMerge, only: [deep_merge: 2]
   alias T.Nouns.AsCast
   alias T.Parse.Hooks
-  alias T.Parse.Node.ParamsLike
-  alias T.Parse.Normalize
+  alias T.Parse.Node
 
   # ----------------------------------------------------------------------------
   def field_transformations(test_data, opts) do
@@ -35,7 +34,7 @@ defmodule EctoTestDSL.Parse.TopLevel do
       cooked =
         raw_example
         |> testable_flatten
-        |> Enum.into(%{})
+        |> Node.Group.handle_duplicates
         |> deep_merge(metadata)
       {name, cooked}
     end
