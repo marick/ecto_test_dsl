@@ -16,12 +16,10 @@ defmodule EctoTestDSL.Parse.FinishParse do
   end
 
   defp transform_examples(examples, metadata) do
-    examples    
-    |> Enum.reduce(examples, fn {name, example}, acc ->
+    Enum.reduce(examples, examples, fn {name, example}, acc ->
       example
       |> propagate_metadata(metadata)
       |> Node.Group.parse_time_substitutions(acc)
-      |> Map.update(:previously, [], &Node.Previously.parse/1)
       |> Node.Group.handle_eens(metadata.examples_module)
       # Note: it is important for each example to be put in the
       # keyword list as it's finished because later examples can
