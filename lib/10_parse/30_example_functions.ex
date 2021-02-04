@@ -1,14 +1,14 @@
 defmodule EctoTestDSL.Parse.ExampleFunctions do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AssertionJuice
-  alias T.Parse.Node.ParamsLike
+  alias T.Parse.Node
 
   # ----------------------------------------------------------------------------
   def params(opts \\ []),
-    do: {:params, Enum.into(opts, %{})}
+    do: {:params, Node.Params.parse(opts)}
   
   def params_like(example_name, opts),
-    do: {:params, ParamsLike.parse(example_name, opts)}
+    do: {:params, Node.ParamsLike.parse(example_name, opts)}
   def params_like(example_name), 
     do: params_like(example_name, except: [])
 

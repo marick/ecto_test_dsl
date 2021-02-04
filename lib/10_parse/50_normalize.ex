@@ -14,12 +14,12 @@ defmodule EctoTestDSL.Parse.Normalize do
     example
     |> flatten_keywords
     |> ensure_map
-    |> Map.update(:params, %{}, &(as(:params, &1)))
+    # |> Map.update(:params, %{}, &(as(:params, &1)))
   end
 
-  # Functions are expanded in a second pass. I is lazy.
-  def as(:params, %ParamsLike{} = like), do: like
-  def as(:params, map), do: ensure_map(map)
+  # # Functions are expanded in a second pass. I is lazy.
+  # def as(:params, %ParamsLike{} = like), do: like
+  # def as(:params, map), do: ensure_map(map)
 
   # N^2 baby!
   def flatten_keywords(kws) do
