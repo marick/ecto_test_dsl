@@ -49,5 +49,17 @@ defmodule Parse.TopLevel.WorkflowTest do
 
   @tag :skip
   test "duplicate names are rejected"
-  
+
+  describe "flattening raw examples" do 
+    test "there's a keyword" do
+      input = [__flatten: [a: 1, b: 2], c: 3, __flatten: [d: 4]]
+      expected = [a: 1, b: 2, c: 3, d: 4]
+      assert TopLevel.testable_flatten(input) == expected
+    end
+    
+    test "flattening preserves order for intermediate processing" do
+      input = [__flatten: [a: 1, b: 2], c: 3, __flatten: [d: 4]]
+      assert TopLevel.testable_flatten(input) == [a: 1, b: 2, c: 3, d: 4]
+    end
+  end
 end  

@@ -29,22 +29,35 @@ defmodule EctoTestDSL.Parse.TopLevel do
   def workflow(test_data, workflow, raw_examples) when is_list(raw_examples) do
     Hooks.run_hook(test_data, :workflow, [workflow])
 
-    updated_examples =
-      Normalize.as(:example_pairs, raw_examples)
-      |> attach_workflow_metadata(workflow)
+    proper_examples = for {name, raw_example} <- raw_examples do
+      metadata =
+        %{metadata: %{workflow_name: workflow, name: name}}
+      cooked =
+        raw_example
+        |> testable_flatten
+        |> Enum.into(%{})
+        |> deep_merge(metadata)
+      {name, cooked}
+    end
 
-    Map.update!(test_data, :examples, &(&1 ++ updated_examples))
+    Map.update!(test_data, :examples, &(&1 ++ proper_examples))
   end
 
   def workflow(_, _, _supposed_examples),
     do: flunk "Examples must be given in a keyword list"
 
-  defp attach_workflow_metadata(pairs, workflow) do
-    for {name, example} <- pairs do
-      metadata = %{metadata: %{workflow_name: workflow, name: name}}
-      {name, deep_merge(example, metadata)}
-    end
+  # N^2 baby!
+  def testable_flatten(kws) do
+    Enum.reduce(kws, [], fn current, acc ->
+      case current do
+        {:__flatten, list} ->
+          acc ++ list
+        current ->
+          acc ++ [current]
+      end
+    end)
   end
+  
 
   # ----------------------------------------------------------------------------
   @doc """
