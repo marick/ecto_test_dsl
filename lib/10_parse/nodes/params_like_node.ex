@@ -12,7 +12,7 @@ defmodule EctoTestDSL.Parse.Node.ParamsLike do
     new(previous_name, override_kws)
   end
   
-  def  new(previous_name, override_kws) do
+  def new(previous_name, override_kws) do
     overrides = Enum.into(override_kws, %{})
     %__MODULE__{overrides: overrides, previous_name: previous_name}
   end
@@ -27,7 +27,7 @@ defmodule EctoTestDSL.Parse.Node.ParamsLike do
           elaborate_flunk("There is no previous example `#{ex}`",
             right: Map.keys(node.overrides))
         previous ->
-          Map.merge(previous.params, node.overrides)
+          Node.EENable.merge(previous.params, Node.Params.new(node.overrides))
       end
     end
   end

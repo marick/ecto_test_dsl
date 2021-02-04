@@ -3,7 +3,7 @@ defmodule EctoTestDSL.Parse.Node.ParamsLikeNodeTest do
   alias T.Parse.Node
 
   test "substitution" do
-    previous_examples = [previous: %{params: %{a: 1, b: 2}}]
+    previous_examples = [previous: %{params: Node.Params.new(%{a: 1, b: 2})}]
 
     run = fn [name, exceptions] -> 
       Node.ParamsLike.new(name, exceptions)
@@ -11,7 +11,7 @@ defmodule EctoTestDSL.Parse.Node.ParamsLikeNodeTest do
     end
 
     expect = fn input, expected ->
-      assert run.(input) == expected
+      assert run.(input) == Node.Params.new(expected)
     end
 
     [:previous, []] |> expect.(%{a: 1, b: 2})
