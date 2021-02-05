@@ -28,6 +28,11 @@ defmodule Integration.ParamLikeAndIdOfTest do
         ],
         animal_like_2: [
           params_like(:animal_like_1, except: [exception: 222])
+        ],
+
+        multi_params: [
+          params(name: "bossie"),
+          params(species_id: id_of(bovine: Species.Examples))
         ]
       )
     end
@@ -60,5 +65,11 @@ defmodule Integration.ParamLikeAndIdOfTest do
     |> assert_field(name: "bossie",
                     species_id: @species_id,
                     exception: 222)
+  end
+
+  test "multiple params" do
+    Examples.Tester.params(:multi_params)
+    |> assert_fields(name: "bossie",
+                     species_id: @species_id)
   end
 end  

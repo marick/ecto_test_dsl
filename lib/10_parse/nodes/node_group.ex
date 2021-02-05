@@ -15,7 +15,7 @@ defmodule EctoTestDSL.Parse.Node.Group do
             right: value)
 
         {previously, _} ->
-          Node.EENable.merge(previously, value)
+          Map.put(acc, name, Node.EENable.merge(previously, value))
       end
     end
 

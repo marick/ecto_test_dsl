@@ -27,7 +27,7 @@ defmodule Parse.Node.NodeGroupTest do
       [key: first] |> expect.(%{key: first})
 
       second = Node.Params.parse(start_time: "now")
-      expected = Node.Params.parse(species: "bovine", start_time: "now")
+      expected = %{key: Node.Params.parse(species: "bovine", start_time: "now")}
       [key: first, key: second] |> expect.(expected)
     end
   end
