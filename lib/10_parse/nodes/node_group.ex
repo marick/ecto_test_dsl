@@ -5,7 +5,7 @@ defmodule EctoTestDSL.Parse.Node.Group do
 
   def squeeze_into_map(kws) do
     reducer = fn {name, value}, acc ->
-      case {Map.get(acc, name), Node.EENable.impl_for(value)} do
+      case {Map.get(acc, name), Node.Mergeable.impl_for(value)} do
         {nil, _} ->
           Map.put(acc, name, value)
 
@@ -18,7 +18,7 @@ defmodule EctoTestDSL.Parse.Node.Group do
           elaborate_assert(previously.__struct__ == value.__struct__,
             "You've repeated `#{inspect name}`, but with incompatible values",
             left: previously, right: value)
-          Map.put(acc, name, Node.EENable.merge(previously, value))
+          Map.put(acc, name, Node.Mergeable.merge(previously, value))
       end
     end
 

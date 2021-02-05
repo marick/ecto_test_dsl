@@ -1,9 +1,12 @@
 alias EctoTestDSL.Parse.Node
 
 defprotocol Node.EENable do
-  def merge(node, more)
   def ensure_eens(node, default_module)
   def eens(node)
+end
+
+defprotocol Node.Mergeable do
+  def merge(node, more)
 end
 
 defprotocol Node.ParseTimeSubstitutable do 

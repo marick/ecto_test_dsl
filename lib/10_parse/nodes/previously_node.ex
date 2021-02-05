@@ -26,6 +26,15 @@ defmodule EctoTestDSL.Parse.Node.Previously do
 
   def new(parsed), do: %__MODULE__{parsed: parsed}
 
+  defimpl Node.Mergeable, for: Node.Previously do
+    def merge(one, two) do
+      [one, two]
+      |> Enum.map(&(&1.parsed))
+      |> Enum.concat
+      |> Node.Previously.new
+    end
+  end
+
   defimpl Node.EENable, for: Node.Previously do
     def merge(one, two) do
       [one, two]

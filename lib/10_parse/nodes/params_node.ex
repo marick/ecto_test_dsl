@@ -9,11 +9,13 @@ defmodule EctoTestDSL.Parse.Node.Params do
   def parse(kws), do: kws |> Enum.into(%{}) |> new
   def new(kws), do: %__MODULE__{parsed: kws}
 
-  defimpl Node.EENable, for: Node.Params do
+  defimpl Node.Mergeable, for: Node.Params do
     def merge(%Node.Params{parsed: earlier}, %Node.Params{parsed: later}) do
       Node.Params.new(Map.merge(earlier, later))
     end
+  end
 
+  defimpl Node.EENable, for: Node.Params do
     def eens(%{eens: eens}), do: eens
 
     def ensure_eens(node, _default_module) do

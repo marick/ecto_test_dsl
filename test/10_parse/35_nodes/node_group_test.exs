@@ -22,7 +22,7 @@ defmodule Parse.Node.NodeGroupTest do
         end)
     end
 
-    test "Node.EENable", %{expect: expect} do
+    test "merging", %{expect: expect} do
       first = Node.Params.parse(species: "bovine")
       [key: first] |> expect.(%{key: first})
 
@@ -31,8 +31,7 @@ defmodule Parse.Node.NodeGroupTest do
       [key: first, key: second] |> expect.(expected)
     end
 
-
-    test "two different values cannot be combined" do
+    test "two different values cannot be merged" do
       first = Node.ParamsLike.parse(:some_example, except: [])
       second = Node.Params.parse(start_time: "now")
       

@@ -13,12 +13,12 @@ defmodule Parse.Node.ParamsNodeTest do
     cd = Node.Params.parse(c: 1, d: 2)
     expected = Node.Params.parse(a: 1, b: 2, c: 1, d: 2)
 
-    assert Node.EENable.merge(ab, cd) == expected
+    assert Node.Mergeable.merge(ab, cd) == expected
 
     # overrides are acceptable
     bc = Node.Params.parse(b: 1, d: 2)
     expected = Node.Params.parse(a: 1, b: 1, d: 2)
-    assert Node.EENable.merge(ab, bc) == expected
+    assert Node.Mergeable.merge(ab, bc) == expected
   end
   
   test "ensuring eens is pretty much a no-op" do
