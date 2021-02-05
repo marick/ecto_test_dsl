@@ -15,6 +15,9 @@ defmodule EctoTestDSL.Parse.Node.Group do
             right: value)
 
         {previously, _} ->
+          elaborate_assert(previously.__struct__ == value.__struct__,
+            "You've repeated `#{inspect name}`, but with incompatible values",
+            left: previously, right: value)
           Map.put(acc, name, Node.EENable.merge(previously, value))
       end
     end

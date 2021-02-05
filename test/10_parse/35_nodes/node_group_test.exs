@@ -30,6 +30,18 @@ defmodule Parse.Node.NodeGroupTest do
       expected = %{key: Node.Params.parse(species: "bovine", start_time: "now")}
       [key: first, key: second] |> expect.(expected)
     end
+
+
+    test "two different values cannot be combined" do
+      first = Node.ParamsLike.parse(:some_example, except: [])
+      second = Node.Params.parse(start_time: "now")
+      
+      assertion_fails("You've repeated `:key`, but with incompatible values",
+        [left: first, right: second],
+        fn -> 
+          Node.Group.squeeze_into_map(key: first, key: second)
+        end)
+    end
   end
   
 
