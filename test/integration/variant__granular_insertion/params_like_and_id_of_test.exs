@@ -21,7 +21,9 @@ defmodule Integration.ParamLikeAndIdOfTest do
           ## Below, we generate form params from the primary key in a "species" row.
           ## Which means we have to do an `Ecto.insert` before we can
           ## create parameters to use in a test. 
-          params(name: "bossie", species_id: id_of(bovine: Species.Examples))
+          params(name: "bossie", date_string: "2001-01-01", age: 5,
+            species_id: id_of(bovine: Species.Examples)),
+          changeset(changes: [species_id: id_of(bovine: Species.Examples)])
         ],
         animal_like_1: [
           params_like(:animal, except: [exception: 1])
@@ -49,27 +51,36 @@ defmodule Integration.ParamLikeAndIdOfTest do
     :ok
   end
 
-  test "`id_of` and `params`" do
-    Examples.Tester.params(:animal)
-    |> assert_fields(name: "bossie",
-                     species_id: @species_id)  ##<<<< Like this!
+
+  describe "params" do 
+    test "`id_of` and `params`" do
+      Examples.Tester.params(:animal)
+      |> assert_fields(name: "bossie",
+                       species_id: @species_id)  ##<<<< Like this!
+    end
+    
+    test "`id_of` and `params_like`" do
+      Examples.Tester.params(:animal_like_1)
+      |> assert_field(name: "bossie",
+                      species_id: @species_id,
+                      exception: 1)
+      
+      Examples.Tester.params(:animal_like_2)
+      |> assert_field(name: "bossie",
+                      species_id: @species_id,
+                      exception: 222)
+    end
+    
+    test "multiple params" do
+      Examples.Tester.params(:multi_params)
+      |> assert_fields(name: "bossie",
+                       species_id: @species_id)
+    end
   end
 
-  test "`id_of` and `params_like`" do
-    Examples.Tester.params(:animal_like_1)
-    |> assert_field(name: "bossie",
-                    species_id: @species_id,
-                    exception: 1)
-
-    Examples.Tester.params(:animal_like_2)
-    |> assert_field(name: "bossie",
-                    species_id: @species_id,
-                    exception: 222)
+  test "validation changeset" do
+    Examples.Tester.validation_changeset(:animal)
+    |> assert_changes(species_id: 3333)
   end
-
-  test "multiple params" do
-    Examples.Tester.params(:multi_params)
-    |> assert_fields(name: "bossie",
-                     species_id: @species_id)
-  end
+    
 end  

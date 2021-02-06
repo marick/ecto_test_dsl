@@ -18,8 +18,11 @@ defmodule EctoTestDSL.Parse.ExampleFunctions do
   def previously(opts), 
     do: {:previously, Node.Previously.parse(opts)}
 
-  def changeset(opts), do: {:validation_changeset_checks, opts}
-  def constraint_changeset(opts), do: {:constraint_changeset_checks, opts}
+  def changeset(opts),
+    do: {:validation_changeset_checks, Node.ChangesetChecks.parse(opts)}
+  def constraint_changeset(opts),
+    do: {:constraint_changeset_checks, Node.ChangesetChecks.parse(opts)}
+
   def fields(opts), do: {:field_checks, opts}
 
   def params_from_selecting(een, _opts \\ [except: []]) do
