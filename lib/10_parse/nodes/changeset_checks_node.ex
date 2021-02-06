@@ -41,11 +41,11 @@ defmodule EctoTestDSL.Parse.Node.ChangesetChecks do
     defp lower_level(_value              ),            do: [   ]
   end
 
-  # defimpl Node.Exportable, for: CC do
-  #   def export(node) do
-  #     node.with_ensured_eens |> Enum.into(%{})
-  #   end
-  # end
+  defimpl Node.Exportable, for: CC do
+    def export(node) do
+      node.with_ensured_eens
+    end
+  end
 end
 
 

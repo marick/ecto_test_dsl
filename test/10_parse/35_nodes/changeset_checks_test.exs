@@ -39,7 +39,10 @@ defmodule Parse.Node.ChangesetChecksTest do
     end
   end
 
-  test "export" do
+  test "export" do         # also add some top-level tests for merging and eens
+    CC.parse(data: [species_id: id_of(:bovine)])
+    |> Node.EENable.ensure_eens(:ignored)
+    |> Node.Exportable.export
+    |> assert_equal(data: [species_id: id_of(:bovine)])
   end
-
 end
