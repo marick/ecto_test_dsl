@@ -7,6 +7,8 @@ defmodule EctoTestDSL.Drink.Me do
       alias T.{Parse,Run,Neighborhood}
       alias T.Messages
       alias T.Trace
+      use PI
+      import ShorterMaps
 
       alias T.{ChangesetX, EnumX, KeywordX, MapX}
       import Mockery.Macro

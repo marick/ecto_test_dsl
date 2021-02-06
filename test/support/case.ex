@@ -9,6 +9,7 @@ defmodule EctoTestDSL.Case do
       import FlowAssertions.AssertionA
       import FlowAssertions.Define.Tabular
       alias T.Run
+      import ShorterMaps
     end
   end
 end

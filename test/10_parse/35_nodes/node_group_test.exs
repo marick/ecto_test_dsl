@@ -11,7 +11,7 @@ defmodule Parse.Node.NodeGroupTest do
       end]
     end
     
-    test "ordinary symbols", %{expect: expect} do
+    test "ordinary symbols", ~M{expect} do
       [key: :value] |> expect.(%{key: :value})
       [key: :value, other: :value] |> expect.(%{key: :value, other: :value})
       
@@ -22,7 +22,7 @@ defmodule Parse.Node.NodeGroupTest do
         end)
     end
 
-    test "merging", %{expect: expect} do
+    test "merging", ~M{expect} do
       first = Node.Params.parse(species: "bovine")
       [key: first] |> expect.(%{key: first})
 

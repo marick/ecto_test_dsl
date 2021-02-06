@@ -70,7 +70,9 @@ defmodule EctoTestDSL.MixProject do
       {:ex_machina, "~> 2.3", only: :test},
       {:magritte, "~> 0.1.2"},
       {:mockery, "~> 2.3.0", runtime: false},
-      {:ex_contract, "~> 0.1.1"}
+      {:ex_contract, "~> 0.1.1"},
+      {:shorter_maps, "~> 2.2"},      
+      {:ex_pi, "~> 1.0"}
       
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
