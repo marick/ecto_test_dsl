@@ -25,6 +25,7 @@ defmodule EctoTestDSL.Run.Steps.Ecto do
   defp extract_content(running, extractor, which_step) do
     from(running, use: [:name])
     from_history(running, value: which_step)
+
     adjust_assertion_message(
       fn ->
         apply(FlowAssertions.MiscA, extractor, [value])
@@ -35,7 +36,7 @@ defmodule EctoTestDSL.Run.Steps.Ecto do
   def field_checks(running, which_step) do
     from(running, use: [:neighborhood, :name, :field_checks])
     from_history(running, selected: which_step)
-    
+
     expected =
       Neighborhood.Expand.keyword_values(field_checks, with: neighborhood)
 

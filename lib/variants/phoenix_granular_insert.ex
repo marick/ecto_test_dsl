@@ -21,6 +21,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
     :try_changeset_insertion,
     :ok_content,
     :error_content,
+    :field_checks
   ], from: Steps.Ecto
 
   defsteps [
@@ -60,6 +61,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
       success: from_start_through_validation ++ [
         [:try_changeset_insertion,   uses: [:changeset_from_params]],
         [:ok_content,                uses: [:try_changeset_insertion]],
+        [:field_checks,              uses: [:ok_content]],
       ],
     }
   end
