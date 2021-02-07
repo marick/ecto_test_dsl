@@ -10,7 +10,7 @@ defmodule EctoTestDSL.Drink.Me do
       use PI
       import ShorterMaps
 
-      alias T.{ChangesetX, EnumX, KeywordX, MapX}
+      alias T.{ChangesetX, EnumX, KeywordX, MapX, KeyVal}
       import Mockery.Macro
     end
   end

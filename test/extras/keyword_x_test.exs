@@ -33,28 +33,14 @@ defmodule KeywordXTest do
     [[a: 5, c: 3, d: 8], %{a: :b, c: :c}] |> expect.({[b: 5, c: 3], [d: 8]})
   end
 
-  test "`filter/reject_by_value` preserves structure, deletes unwanted values" do
-    assert KeywordX.filter_by_value([a: 1, b: "b"], &is_integer/1) == [a: 1]
-    assert KeywordX.reject_by_value([a: 1, b: "b"], &is_integer/1) == [b: "b"]
-  end
-
-  test "`filter_by_key` preserves structure, deletes unwanted keys" do
-    assert KeywordX.filter_by_key([a: 1, b: "b"], &(&1 == :a)) == [a: 1]
-    assert KeywordX.reject_by_key([a: 1, b: "b"], &(&1 == :a)) == [b: "b"]
-  end
-
   test "delete" do
     assert KeywordX.delete([a: 1, b: 2],  :a     ) == [b: 2]
     assert KeywordX.delete([a: 1, b: 2], [:a    ]) == [b: 2]
     assert KeywordX.delete([a: 1, b: 2], [:a, :b]) == [    ]
   end
 
-  test "`map_values` loses keys, transforms values" do
-    assert KeywordX.map_values([a: 1, b: 2], &(-&1)) == [-1, -2]
-  end
-
-  test "`map_over_values` retains keys, transforms values" do
-    assert KeywordX.map_over_values([a: 1, b: 2], &(-&1)) == [a: -1, b: -2]
+  test "`functor_map` retains keys, transforms values" do
+    assert KeywordX.functor_map([a: 1, b: 2], &(-&1)) == [a: -1, b: -2]
   end
 
 

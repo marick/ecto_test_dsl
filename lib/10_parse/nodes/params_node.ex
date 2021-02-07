@@ -22,7 +22,7 @@ defmodule EctoTestDSL.Parse.Node.Params do
       eens = 
         node.parsed
         |> FieldRef.relevant_pairs
-        |> KeywordX.map_values(fn xref -> xref.een end)
+        |> KeyVal.fetch_map(fn xref -> xref.een end)
 
       %{node | eens: eens, with_ensured_eens: node.parsed}
     end

@@ -34,7 +34,7 @@ defmodule EctoTestDSL.Nouns.AsCast do
     changeset = cast_results(data, params)
 
     mentioned = fn changeset_part ->
-      KeywordX.filter_by_key(changeset_part, &(&1 in data.field_names))
+      KeyVal.filter_by_key(changeset_part, &(&1 in data.field_names))
     end
 
     changes =
@@ -43,10 +43,10 @@ defmodule EctoTestDSL.Nouns.AsCast do
       EnumX.difference(data.field_names, Keyword.keys(changes))
     errors =
       mentioned.(changeset.errors)
-      |> KeywordX.map_over_values(&(elem &1, 0))
+      |> KeywordX.functor_map(&(elem &1, 0))
 
     [changes: changes, no_changes: unchanged, errors: errors]
-    |> KeywordX.reject_by_value(&Enum.empty?/1)
+    |> KeyVal.reject_by_value(&Enum.empty?/1)
   end
 
 

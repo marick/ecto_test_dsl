@@ -56,7 +56,7 @@ defmodule EctoTestDSL.Parse.Node.Group do
 
   defp keys_for_protocol(example, protocol) do 
     example
-    |> KeywordX.filter_by_value(&protocol.impl_for/1)
+    |> KeyVal.filter_by_value(&protocol.impl_for/1)
     |> Enum.map(fn {key, _value} -> key end)
   end
 
