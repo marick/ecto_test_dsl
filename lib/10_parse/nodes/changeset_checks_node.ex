@@ -21,11 +21,6 @@ defmodule EctoTestDSL.Parse.Node.ChangesetChecks do
     def eens(%{eens: eens}), do: eens
 
     def ensure_eens(node, _default_module) do
-      
-        # node.parsed
-        # |> FieldRef.relevant_pairs
-        # |> KeywordX.map_values(fn xref -> xref.een end)
-
       eens = Enum.flat_map(node.parsed, &top_level/1)
       %{node | eens: eens, with_ensured_eens: node.parsed}
     end
