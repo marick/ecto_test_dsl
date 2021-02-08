@@ -1,6 +1,7 @@
 # A variant of `ex_pi`
 
-This variant of `ex_pi` differs from the original in that:
+This variant of `ex_pi` differs from the
+[original](https://hex.pm/packages/ex_pi) in that:
 
 
 1. The pretty-printing macro is `pp` (with an extra `p`) because `pi`
