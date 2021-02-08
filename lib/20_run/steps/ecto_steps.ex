@@ -35,14 +35,14 @@ defmodule EctoTestDSL.Run.Steps.Ecto do
 
   def field_checks(running, which_step) do
     from(running, use: [:neighborhood, :name, :field_checks])
-    from_history(running, selected: which_step)
+    from_history(running, to_be_checked: which_step)
 
     expected =
       Neighborhood.Expand.keyword_values(field_checks, with: neighborhood)
 
     adjust_assertion_message(
       fn ->
-        apply FlowAssertions.MapA, :assert_fields, [selected, expected]
+        assert_fields(to_be_checked, expected)
       end,
       identify_example(name))
 

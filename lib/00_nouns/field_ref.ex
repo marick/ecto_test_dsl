@@ -10,11 +10,7 @@ defmodule EctoTestDSL.Nouns.FieldRef do
 
   def new([{field, een}]), do: %__MODULE__{een: een, field: field}
 
-  def match?(%__MODULE__{} = _value), do: true
-  def match?(_), do: false
-
-  def relevant_pairs(pairs), do: KeyVal.filter_by_value(pairs, &match?/1)
-
+  def matches?(value), do: match?(%FieldRef{}, value)
 
   def dereference(%FieldRef{} = ref, in: neighborhood) do
     neighborhood

@@ -20,7 +20,6 @@ defmodule Variants.TrivialTest do
           examples: [],
           as_cast: AsCast.nothing,
           field_calculators: [],
-          field_transformations: [],
           steps: %{},
           workflows: %{}
          }

@@ -7,7 +7,7 @@ defmodule EctoTestDSL.Parse.Node.Common do
 
   def extract_eens(~M{parsed}) do
     parsed
-    |> FieldRef.relevant_pairs
+    |> KeyVal.filter_by_value(&FieldRef.matches?/1)
     |> KeyVal.fetch_map(fn xref -> xref.een end)
   end
 

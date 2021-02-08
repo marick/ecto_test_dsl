@@ -20,8 +20,7 @@ defmodule Variants.PhoenixGranular.StartTest do
          format: :phoenix,
          module_under_test: SomeSchema,
          variant: Variant,
-         examples: [],
-         field_transformations: []
+         examples: []
       )
   end
   

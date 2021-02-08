@@ -9,7 +9,6 @@ defmodule EctoTestDSL.Parse.Start do
   @starting_test_data %{
     format: :raw,
     examples: [],
-    field_transformations: [],     # Delete
     as_cast: AsCast.nothing,
     field_calculators: []
   }

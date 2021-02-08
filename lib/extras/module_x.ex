@@ -24,7 +24,7 @@ defmodule EctoTestDSL.ModuleX do
       # top1(all) => 1
       # top2(all) => 2
 
-      # Three levels of nesting is allowed.
+      # Three levels of nesting are allowed.
 
       getters(:down, :down, [:lowest])
       # lowest(all) => 3

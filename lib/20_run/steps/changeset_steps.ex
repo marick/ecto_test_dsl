@@ -17,11 +17,11 @@ defmodule EctoTestDSL.Run.Steps.Changeset do
   end
     
   defp validity_assertions(running, which_changeset, assertion, error_snippet) do
-    {example_name, changeset} = frequent_values(running, which_changeset)
-    workflow_name = mockable(RunningExample).workflow_name(running)
-
+    from(running, use: [:name, :workflow_name])
+    from_history(running, changeset: which_changeset)
+      
     message =
-      "Example `#{inspect example_name}`: workflow `#{inspect workflow_name}` expects #{error_snippet} changeset"
+      "Example `#{inspect name}`: workflow `#{inspect workflow_name}` expects #{error_snippet} changeset"
     adjust_assertion_message(
       fn ->
         assertion.(changeset)
@@ -31,53 +31,49 @@ defmodule EctoTestDSL.Run.Steps.Changeset do
     :uninteresting_result
   end
 
+  # ----------------------------------------------------------------------------
+
   def example_specific_changeset_checks(running, which_changeset) do
-    {example_name, changeset} = frequent_values(running, which_changeset)
+    from(running, use: [:name])
+    from_history(running, changeset: which_changeset)
     
     user_checks(running)
     |> ChangesetAssertions.from
-    |> run_assertions(changeset, example_name)
+    |> run_assertions(changeset, name)
 
     :uninteresting_result
   end
 
-
+  # ----------------------------------------------------------------------------
   def as_cast_checks(running, which_changeset) do
-    {example_name, changeset} = frequent_values(running, which_changeset)
+    from(running, use: [:name, :as_cast])
+    from_history(running, [:params, changeset: which_changeset])
 
-    params = mockable(RunningExample).step_value!(running, :params)
-    
-    running
-    |> mockable(RunningExample).as_cast
+    as_cast
     |> AsCast.subtract(excluded_fields(running))
     |> AsCast.assertions(params)
-    |> run_assertions(changeset, example_name)
+    |> run_assertions(changeset, name)
 
     :uninteresting_result
   end
 
   def field_calculation_checks(running, which_changeset) do
-    {example_name, changeset} = frequent_values(running, which_changeset)
+    from(running, use: [:name, :field_calculators])
+    from_history(running, changeset: which_changeset)
     
-    running
-    |> mockable(RunningExample).field_calculators
+    field_calculators
     |> FieldCalculator.subtract(excluded_fields(running))
     |> FieldCalculator.assertions(changeset)
-    |> run_assertions(changeset, example_name)
+    |> run_assertions(changeset, name)
     
     :uninteresting_result
   end
 
-  defp frequent_values(running, which_changeset) do
-    example_name = mockable(RunningExample).name(running)
-    changeset = mockable(RunningExample).step_value!(running, which_changeset)
-    {example_name, changeset}
-  end
+  # ----------------------------------------------------------------------------
+  defp user_checks(running) do
+    from(running, use: [:neighborhood, :validation_changeset_checks])
 
-  defp user_checks(running) do 
-    neighborhood = mockable(RunningExample).neighborhood(running)
-
-    mockable(RunningExample).validation_changeset_checks(running)
+    validation_changeset_checks
     |> Neighborhood.Expand.changeset_checks(neighborhood)
   end
 
@@ -96,8 +92,6 @@ defmodule EctoTestDSL.Run.Steps.Changeset do
         error_message(name, message, changeset)
       end)
   end
-
-  # ----------------------------------------------------------------------------
   
   def error_message(name, message, changeset) do
     """
@@ -105,5 +99,4 @@ defmodule EctoTestDSL.Run.Steps.Changeset do
     Changeset: #{inspect changeset}
     """
   end
-  
 end

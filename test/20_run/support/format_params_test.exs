@@ -20,7 +20,7 @@ defmodule Run.Support.FormatParamsTest do
       example = %{metadata: Enum.into(format, %{format: :raw})}
       running = RunningExample.from(example)
 
-      RunningExample.format_params(running, @params)
+      RunningExample.formatted_params_for_history(running, @params)
       |> assert_fields(expected)
     end
 

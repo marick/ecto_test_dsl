@@ -10,38 +10,29 @@ defmodule EctoTestDSL.Run.RunningExample do
 
   getters :example, [
     :params_from_selecting,
-    params__2: [],
 
     eens: [],
     validation_changeset_checks: [],
     constraint_changeset_checks: [],
-    field_checks: [],
+    field_checks: %{},
   ]
 
   getters :example, :metadata, [
     :as_cast, :field_calculators, :insert_with, :name, :repo, :workflow_name,
-    :variant
+    :variant, :format
   ]
 
-  private_getters :example, [:params]
-  publicize(:original_params, renames: :params)
-
-  private_getters :example, :metadata, [:module_under_test]
-
-  private_getters :history, [repo_setup: %{}]
-  publicize(:neighborhood, renames: :repo_setup)
+  private_getters :example, :metadata, [:module_under_test, :changeset_with]
 
   def step_value!(running, step_name),
     do: History.fetch!(running.history, step_name)
 
-  # Phase these out
-  defp metadata(running), do: running.example.metadata
-  def metadata(running, kind), do: metadata(running) |> Map.get(kind)
+  def neighborhood(running),
+    do: Keyword.fetch!(running.history, :repo_setup)
 
-  # There are a number of older tests that don't think about history
-  def expanded_params(running) do
-    Keyword.get(running.history, :params, original_params(running))
-  end
+  def original_params(running), do: running.example.params
+  def expanded_params(running), do: Keyword.fetch!(running.history, :params)
+
 
   # ----------------------------------------------------------------------------
 
@@ -58,17 +49,17 @@ defmodule EctoTestDSL.Run.RunningExample do
   def changeset_from_params(running) do
     params = expanded_params(running)
     module = module_under_test(running)
-    apply metadata(running, :changeset_with), [module, params]
+    apply changeset_with(running), [module, params]
   end
 
   # ----------------------------------------------------------------------------
-  def format_params(running, params) do
+  def formatted_params_for_history(running, params) do
     formatters = %{
       raw: &raw_format/1,
       phoenix: &phoenix_format/1
     }
 
-    format = running.example.metadata.format
+    format = format(running)
     case Map.get(formatters, format) do
       nil -> 
         raise """
@@ -94,6 +85,4 @@ defmodule EctoTestDSL.Run.RunningExample do
     do: phoenix_format(value)
   defp value_to_string(value),
     do: to_string(value)
-  
-  
 end

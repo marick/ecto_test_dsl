@@ -11,27 +11,27 @@ defmodule EctoTestDSL.Run.Steps.Util do
   end
 
   # ----------------------------------------------------------------------------
-  defmacro from(running, use: keys) do 
-    varlist = for key <- keys,
-      do: Macro.var(key, nil)
-    calls = for key <- keys,
-      do: field_access(key, running)
+  defmacro from(running, use: keys) do
+    varlist = Enum.map(keys, &one_var/1)    
+    calls = Enum.map(keys, &(field_access(&1, running)))
     emit(varlist, calls)
   end
 
   defmacro from_history(running, kws) do
-    varlist = for {var_name, _step_name} <- kws,
-      do: Macro.var(var_name, nil)
-    calls = for {_var_name, step_name} <- kws,
-      do: history_access(step_name, running)
+    varlist = Enum.map(kws, &one_var/1)
+    calls = Enum.map(kws, &(history_access &1, running))
     emit(varlist, calls)
   end
 
+  defp one_var({var_name, _step_name}), do: Macro.var(var_name, nil)
+  defp one_var( var_name),              do: Macro.var(var_name, nil)
+
   defp field_access(key, running) do
-    quote do
-      mockable(RunningExample).unquote(key)(unquote(running))
-    end
+    quote do: mockable(RunningExample).unquote(key)(unquote(running))
   end
+
+  defp history_access({_var_name, step_name}, running),
+    do: history_access(step_name, running)
 
   defp history_access(step_name, running) do
     quote do 
