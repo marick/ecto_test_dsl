@@ -23,7 +23,7 @@ defmodule EctoTestDSL.Parse.ExampleFunctions do
   def constraint_changeset(opts),
     do: {:constraint_changeset_checks, Node.ChangesetChecks.parse(opts)}
 
-  def fields(opts), do: {:field_checks, opts}
+  def fields(opts), do: {:field_checks, Node.Fields.parse(opts)}
 
   def params_from_selecting(een, _opts \\ [except: []]) do
     {:params_from_selecting, een}

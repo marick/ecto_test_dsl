@@ -10,6 +10,7 @@ defmodule Parse.FinishParse.GatheringEensTest do
     def params_ref, do: id_of(params: Example1)
     def params_like_ref, do: id_of(params_like: Example2)
     def changeset_checks_ref, do: id_of(changeset_checks: Example3)
+    def fields_ref, do: id_of(fields: Example4)
 
     def create_test_data do
       Examples.started() |> 
@@ -17,7 +18,8 @@ defmodule Parse.FinishParse.GatheringEensTest do
         workflow(:success,
           example: [
             params(params_id: params_ref()),
-            changeset(changes: [x: changeset_checks_ref()])
+            changeset(changes: [x: changeset_checks_ref()]),
+            fields(x: fields_ref())
           ],
 
           later: [
@@ -33,7 +35,8 @@ defmodule Parse.FinishParse.GatheringEensTest do
     test "direct references" do
       expected = [
         Examples.params_ref.een,
-        Examples.changeset_checks_ref.een
+        Examples.changeset_checks_ref.een,
+        Examples.fields_ref.een,
       ]
       
       Examples.Tester.example(:example).eens
