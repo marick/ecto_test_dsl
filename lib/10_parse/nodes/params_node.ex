@@ -15,7 +15,9 @@ defmodule EctoTestDSL.Parse.Node.Params do
 
   defimpl Node.EENable, for: Node.Params do
     def eens(%{eens: eens}), do: eens
-    def ensure_eens(node, _default_module), do: Node.Common.ensure_eens(node)
+    def ensure_eens(node, _default_module) do
+      Node.Common.with_ensured(node, Node.Common.extract_eens(node), node.parsed)
+    end
   end
 
   defimpl Node.Exportable, for: Node.Params do

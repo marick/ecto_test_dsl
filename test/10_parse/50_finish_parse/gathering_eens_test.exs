@@ -11,6 +11,7 @@ defmodule Parse.FinishParse.GatheringEensTest do
     def params_like_ref, do: id_of(params_like: Example2)
     def changeset_checks_ref, do: id_of(changeset_checks: Example3)
     def fields_ref, do: id_of(fields: Example4)
+    def field_like_exception, do: id_of(fields_like: Example5)
 
     def create_test_data do
       Examples.started() |> 
@@ -23,10 +24,10 @@ defmodule Parse.FinishParse.GatheringEensTest do
           ],
 
           later: [
-            params_like(:example, except: [params_like_id: params_like_ref()])
+            params_like(:example, except: [params_like_id: params_like_ref()]),
+            fields_like(:success, except: [params_like_id: field_like_exception()])
           ]
         )
-
     end
   end
 
@@ -46,7 +47,9 @@ defmodule Parse.FinishParse.GatheringEensTest do
     test "indirect (`like`)references" do
       expected = [
         Examples.params_ref.een,
-        Examples.params_like_ref.een
+        Examples.params_like_ref.een,
+        een(success: Examples),
+        Examples.field_like_exception.een
       ]
       
       Examples.Tester.example(:later).eens

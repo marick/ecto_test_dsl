@@ -15,12 +15,13 @@ defmodule EctoTestDSL.Parse.Node.Fields do
 
   defimpl Node.EENable, for: Node.Fields do
     def eens(%{eens: eens}), do: eens
-    def ensure_eens(node, _default_module), do: Node.Common.ensure_eens(node)
+    def ensure_eens(node, _default_module) do
+      Node.Common.with_ensured(node, Node.Common.extract_eens(node), node.parsed)
+    end
+      
   end
 
   defimpl Node.Exportable, for: Node.Fields do
     def export(node), do: node.with_ensured_eens
   end
 end
-
-

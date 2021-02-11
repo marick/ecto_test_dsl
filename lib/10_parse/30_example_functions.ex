@@ -25,6 +25,9 @@ defmodule EctoTestDSL.Parse.ExampleFunctions do
 
   def fields(opts), do: {:field_checks, Node.Fields.parse(opts)}
 
+  def fields_like(een_or_name, opts \\ []),
+    do: {:fields_like, Node.FieldsLike.parse(een_or_name, opts)}
+
   def params_from_selecting(een, _opts \\ [except: []]) do
     {:params_from_selecting, een}
   end
