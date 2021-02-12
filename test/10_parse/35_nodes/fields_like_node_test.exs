@@ -43,10 +43,12 @@ defmodule EctoTestDSL.Parse.Node.FieldsLikeNodeTest do
     end
   end
 
-  @tag :skip
   test "export" do
-    # %Node.FieldsLike{with_ensured_eens: %{a: 1, b: id_of(:fred)}}
-    # |> Node.Exportable.export
-    # |> assert_equal(%{a: 1, b: id_of(:fred)})
+    input = %Node.FieldsLike{with_ensured_eens: %{reference_een: "...some een...",
+                                                  opts: "...some opts..."}}
+
+    expected = %T.Run.Node.FieldsLike{een: "...some een...", opts: "...some opts..."}
+
+    assert Node.Exportable.export(input) == expected
   end
 end  

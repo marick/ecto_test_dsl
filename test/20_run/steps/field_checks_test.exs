@@ -8,6 +8,7 @@ defmodule Run.Steps.FieldChecksTest do
 
   setup do
     stub(name: :example, neighborhood: %{})
+    stub(fields_like: :nothing)  # Fields_like is checked in fields_like_test.exs
     :ok
   end
 

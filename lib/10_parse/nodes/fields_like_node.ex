@@ -2,6 +2,7 @@ defmodule EctoTestDSL.Parse.Node.FieldsLike do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AssertionJuice
   alias T.Parse.Node
+  alias T.Run
   
   @moduledoc """
   """
@@ -38,4 +39,13 @@ defmodule EctoTestDSL.Parse.Node.FieldsLike do
       end      
     end
   end
+
+
+  defimpl Node.Exportable, for: Node.FieldsLike do
+    def export(node) do
+      exportable = node.with_ensured_eens
+      Run.Node.FieldsLike.new(exportable.reference_een, exportable.opts)
+    end
+  end
+  
 end

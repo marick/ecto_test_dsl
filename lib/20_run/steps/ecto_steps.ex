@@ -2,6 +2,7 @@ defmodule EctoTestDSL.Run.Steps.Ecto do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AssertionJuice
   use EctoTestDSL.Drink.AndRun
+  alias FlowAssertions.MapA
 
   import T.Run.Steps.Util
 
@@ -34,20 +35,32 @@ defmodule EctoTestDSL.Run.Steps.Ecto do
   end
 
   def field_checks(running, which_step) do
-    from(running, use: [:neighborhood, :name, :field_checks])
+    from(running, use: [:neighborhood, :name, :field_checks, :fields_like])
     from_history(running, to_be_checked: which_step)
 
-    expected =
-      Neighborhood.Expand.keyword_values(field_checks, with: neighborhood)
-
-    adjust_assertion_message(
-      fn ->
-        assert_fields(to_be_checked, expected)
-      end,
+    adjust_assertion_message(fn -> 
+      do_field_checks(field_checks, to_be_checked, neighborhood)
+      do_fields_like(fields_like, to_be_checked, neighborhood)
+    end,
       identify_example(name))
 
     :uninteresting_result
   end
+
+  defp do_field_checks(field_checks, to_be_checked, neighborhood) do
+    unless Enum.empty?(field_checks) do 
+      expected =
+        Neighborhood.Expand.keyword_values(field_checks, with: neighborhood)
+      assert_fields(to_be_checked, expected)
+    end
+  end
+
+  defp do_fields_like(:nothing, _, _), do: :ok
+  defp do_fields_like(fields_like, to_be_checked, neighborhood) do
+    reference_value = Map.get(neighborhood, fields_like.een)
+    MapA.assert_same_map(to_be_checked, reference_value, fields_like.opts)
+  end
+    
 
   def params_from_selecting(running) do
     from(running, use: [:neighborhood, :params_from_selecting])
