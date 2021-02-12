@@ -58,9 +58,20 @@ defmodule EctoTestDSL.Run.Steps.Ecto do
   defp do_fields_like(:nothing, _, _), do: :ok
   defp do_fields_like(fields_like, to_be_checked, neighborhood) do
     reference_value = Map.get(neighborhood, fields_like.een)
-    MapA.assert_same_map(to_be_checked, reference_value, fields_like.opts)
+    opts = expand_expected(fields_like.opts, neighborhood)
+
+    MapA.assert_same_map(to_be_checked, reference_value, opts)
   end
-    
+
+  defp expand_expected(opts, neighborhood) do
+    case Keyword.get(opts, :except) do
+      nil ->
+        opts
+      kws ->
+        excepts = Neighborhood.Expand.keyword_values(kws, with: neighborhood)
+        Keyword.replace(opts, :except, excepts)
+    end
+  end
 
   def params_from_selecting(running) do
     from(running, use: [:neighborhood, :params_from_selecting])

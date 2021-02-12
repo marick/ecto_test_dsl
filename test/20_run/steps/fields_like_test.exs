@@ -12,65 +12,111 @@ defmodule Run.Steps.FieldsLikeTest do
     :ok
   end
 
-  @reference_een een(:other)
-
-  defp run(~M{under_test, reference_value, opts}) do 
-    stub_history(inserted_value: under_test)
-    stub(neighborhood: %{@reference_een => reference_value})
-    stub(fields_like: Run.Node.FieldsLike.new(@reference_een, opts))
-    Steps.field_checks(:running, :inserted_value)
+  defp run(~M{under_test, opts}) do 
+    stub_history(updated_value: under_test)
+    stub(fields_like: Run.Node.FieldsLike.new(een(:inserted), opts))
+    Steps.field_checks(:running, :updated_value)
   end
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result
 
-  describe "various ways of passing" do
+  describe "fields_like" do
     test "just an een: pass" do
-      %{under_test: %{a: 5},
-        reference_value: %{a: 5},
-        opts: []}
-      |> pass()
+      stub(neighborhood: %{een(:inserted) => %{a: 5}})
+      %{under_test:                          %{a: 5}, opts: []} |> pass()
     end
 
     test "just an een: fail" do
-      %{under_test: %{a: 5},
-        reference_value: %{a: 4},
-        opts: []}
-      |> run()
+      stub(neighborhood: %{een(:inserted) => %{a: 4}})
+      input = %{under_test:                  %{a: 5}, opts: []}
+
+      assertion_fails(~r/Example `:example`/,
+        [message: ~r/Assertion with == failed/,
+         left:  %{a: 5},
+         right: %{a: 4}],
+        fn ->
+          run(input)
+        end)
+    end
+
+    test "just an een: extra fields" do
+      stub(neighborhood: %{een(:inserted) => %{a: 5}})
+      input = %{under_test:                  %{a: 5, b: 4}, opts: []}
+
+      assertion_fails(~r/Example `:example`/,
+        [message: ~r/Assertion with == failed/,
+         left:  %{a: 5, b: 4},
+         right: %{a: 5}],
+        fn ->
+          run(input)
+        end)
     end
     
+    test "`ignoring` works" do
+      stub(neighborhood: %{een(:inserted) => %{a: 5}})
+      input = %{
+        under_test:                          %{a: 5, lock_value: 58},
+        opts:                           [ignoring: [:lock_value]]
+      }
+
+      input |> pass()
+    end
+
+    test "`except` works" do
+      stub(neighborhood: %{een(:inserted) => %{a: 5, special: "old"}})
+
+      input = %{
+                           under_test:       %{a: 5, special: "new"},
+        opts:                              [except: [special: "new"]]
+      }
+
+      input |> pass()
+    end
+    
+    test "`except` fills in foreign keys" do
+      stub(neighborhood: %{een(:inserted) => %{a: 5, species_id: 12},
+                           een(:bovine)   => %{              id: 12}})
+
+      input = %{
+                            under_test:      %{a: 5, species_id: 12},
+                                     opts: [except: [species_id: id_of(:bovine)]]
+      }
+
+      input |> pass()
+    end
   end
-    
-  # test "expected change has wrong value" do
-  #   input = [ %{name: "Bossie"}, %{name: ""}]
-    
-  #   assertion_fails(~r/Example `:example`/,
-  #     [message: ~r/Field `:name` has the wrong value/,
-  #      left: "",
-  #      right: "Bossie"],
-  #     fn ->
-  #       run(input)
-  #     end)
-  # end
 
-  # test "extra values are OK" do
-  #   [ %{name: "Bossie"}, %{name: "Bossie", age: 5}] |> pass
-  # end
+  describe "both `fields` and `fields_like` can be used" do
 
-  # test "references to neighbors are supported" do
-  #   other_een = een(:other_example)
-  #   stub(neighborhood: %{other_een => %{id: 333}})
+    setup do 
+      stub(field_checks: [a: "right"])
+      stub(fields_like: Run.Node.FieldsLike.new(een(:inserted), [comparing: [:b]]))
+      :ok
+    end
 
-  #   passes = [ %{other_id: id_of(:other_example)}, %{other_id: 333}]
-  #   fails =  [ %{other_id: id_of(:other_example)}, %{other_id: "NOT"}]
 
-  #   passes |> pass()
+    test "that `fields` can fail" do 
+      stub(neighborhood: %{een(:inserted) => %{a: "right", b: "right"}})
+      stub_history(updated_value:            %{a: "wrong", b: "right"})
 
-  #   assertion_fails(~r/Example `:example`/,
-  #     [message: ~r/Field `:other_id` has the wrong value/,
-  #      left: "NOT",
-  #      right: 333],
-  #     fn ->
-  #       run(fails)
-  #     end)
-  # end
+    assertion_fails(~r/Field `:a` has the wrong value/,
+      [left:  "wrong",
+       right: "right"],
+        fn ->
+          Steps.field_checks(:running, :updated_value)
+        end)
+    end
+
+    test "that `fields_like` can fail" do 
+      stub(neighborhood: %{een(:inserted) => %{a: "right", b: "right"}})
+      stub_history(updated_value:            %{a: "right", b: "wrong"})
+
+      assertion_fails(~r/Assertion with == failed/,
+      [left:  %{b: "wrong"},
+       right: %{b: "right"}],
+        fn ->
+          Steps.field_checks(:running, :updated_value)
+        end)
+    end
+  end
 end
