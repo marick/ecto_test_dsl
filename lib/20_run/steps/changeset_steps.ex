@@ -9,6 +9,9 @@ defmodule EctoTestDSL.Run.Steps.Changeset do
   def changeset_from_params(running), 
     do: RunningExample.changeset_from_params(running)
 
+  def changeset_for_update(running, which_struct), 
+    do: RunningExample.changeset_for_update(running, which_struct)
+
   # ----------------------------------------------------------------------------
 
   def assert_valid_changeset(running, which_changeset) do 

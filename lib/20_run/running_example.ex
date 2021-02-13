@@ -23,7 +23,9 @@ defmodule EctoTestDSL.Run.RunningExample do
     :variant, :format
   ]
 
-  private_getters :example, :metadata, [:module_under_test, :changeset_with]
+  private_getters :example, :metadata, [
+    :module_under_test, :changeset_with, :changeset_for_update_with
+  ]
 
   def step_value!(running, step_name),
     do: History.fetch!(running.history, step_name)
@@ -55,6 +57,13 @@ defmodule EctoTestDSL.Run.RunningExample do
     params = expanded_params(running)
     module = module_under_test(running)
     apply changeset_with(running), [module, params]
+  end
+
+  def changeset_for_update(running, history_value) do
+    struct = step_value!(running, history_value)
+    params = expanded_params(running)
+    module = module_under_test(running)
+    apply changeset_for_update_with(running), [module, struct, params]
   end
 
   # ----------------------------------------------------------------------------
