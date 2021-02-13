@@ -38,8 +38,4 @@ defmodule EctoTestDSL.Run.Steps do
     params
   end
 
-  # ----------------------------------------------------------------------------
-
-  def changeset_from_params(running), 
-    do: RunningExample.changeset_from_params(running)
 end

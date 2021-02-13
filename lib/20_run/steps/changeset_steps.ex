@@ -6,6 +6,11 @@ defmodule EctoTestDSL.Run.Steps.Changeset do
   alias T.Run.ChangesetChecks, as: CC
   import T.Run.Steps.Util
 
+  def changeset_from_params(running), 
+    do: RunningExample.changeset_from_params(running)
+
+  # ----------------------------------------------------------------------------
+
   def assert_valid_changeset(running, which_changeset) do 
     validity_assertions(running, which_changeset,
       ChangesetAssertions.from(:valid), "a valid")
