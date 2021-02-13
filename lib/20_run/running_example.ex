@@ -47,6 +47,10 @@ defmodule EctoTestDSL.Run.RunningExample do
 
   # ----------------------------------------------------------------------------
 
+  # These are mostly one-to-one to step functions. The only benefit of
+  # putting them here is that it makes tests with stubs a little bit
+  # less cluttered with mostly-irrelevant detail.
+
   def changeset_from_params(running) do
     params = expanded_params(running)
     module = module_under_test(running)
