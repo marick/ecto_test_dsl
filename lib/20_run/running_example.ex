@@ -20,11 +20,8 @@ defmodule EctoTestDSL.Run.RunningExample do
 
   getters :example, :metadata, [
     :as_cast, :field_calculators, :insert_with, :name, :repo, :workflow_name,
-    :variant, :format
-  ]
-
-  private_getters :example, :metadata, [
-    :module_under_test, :changeset_with, :changeset_for_update_with
+    :variant, :format, :module_under_test, :changeset_with,
+    :changeset_for_update_with
   ]
 
   def step_value!(running, step_name),
@@ -45,25 +42,6 @@ defmodule EctoTestDSL.Run.RunningExample do
       script: Keyword.get(opts, :script, []),
       history: Keyword.get(opts, :history, History.new(example))
     }
-  end
-
-  # ----------------------------------------------------------------------------
-
-  # These are mostly one-to-one to step functions. The only benefit of
-  # putting them here is that it makes tests with stubs a little bit
-  # less cluttered with mostly-irrelevant detail.
-
-  def changeset_from_params(running) do
-    params = expanded_params(running)
-    module = module_under_test(running)
-    apply changeset_with(running), [module, params]
-  end
-
-  def changeset_for_update(running, history_value) do
-    struct = step_value!(running, history_value)
-    params = expanded_params(running)
-    module = module_under_test(running)
-    apply changeset_for_update_with(running), [module, struct, params]
   end
 
   # ----------------------------------------------------------------------------

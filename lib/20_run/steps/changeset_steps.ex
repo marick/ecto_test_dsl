@@ -6,12 +6,18 @@ defmodule EctoTestDSL.Run.Steps.Changeset do
   alias T.Run.ChangesetChecks, as: CC
   import T.Run.Steps.Util
 
-  def changeset_from_params(running), 
-    do: RunningExample.changeset_from_params(running)
+  def changeset_from_params(running) do 
+    from(running, use: [:expanded_params, :module_under_test, :changeset_with])
+    changeset_with.(module_under_test, expanded_params)
+  end
 
-  def changeset_for_update(running, which_struct), 
-    do: RunningExample.changeset_for_update(running, which_struct)
+  def changeset_for_update(running, which_struct) do
+    from(running,
+      use: [:expanded_params, :module_under_test, :changeset_for_update_with])
+    from_history(running, struct: which_struct)
 
+    changeset_for_update_with.(module_under_test, struct, expanded_params)
+  end
   # ----------------------------------------------------------------------------
 
   def assert_valid_changeset(running, which_changeset) do 
