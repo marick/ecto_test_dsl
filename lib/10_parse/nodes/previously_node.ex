@@ -1,8 +1,7 @@
-defmodule EctoTestDSL.Parse.Node.Previously do
+defmodule EctoTestDSL.Parse.Pnode.Previously do
   use EctoTestDSL.Drink.Me
+  use T.Parse.Drink.Me
   use T.Drink.AssertionJuice
-  alias T.Parse.Node
-  use Magritte
   
   defstruct [:parsed, :with_ensured_eens, :eens]
 
@@ -26,21 +25,21 @@ defmodule EctoTestDSL.Parse.Node.Previously do
 
   def new(parsed), do: %__MODULE__{parsed: parsed}
 
-  defimpl Node.Mergeable, for: Node.Previously do
+  defimpl Pnode.Mergeable, for: Pnode.Previously do
     def merge(one, two) do
       [one, two]
       |> Enum.map(&(&1.parsed))
       |> Enum.concat
-      |> Node.Previously.new
+      |> Pnode.Previously.new
     end
   end
 
-  defimpl Node.EENable, for: Node.Previously do
+  defimpl Pnode.EENable, for: Pnode.Previously do
     def merge(one, two) do
       [one, two]
       |> Enum.map(&(&1.parsed))
       |> Enum.concat
-      |> Node.Previously.new
+      |> Pnode.Previously.new
     end
 
     def eens(%{eens: eens}), do: eens
@@ -57,7 +56,7 @@ defmodule EctoTestDSL.Parse.Node.Previously do
     end
   end
 
-  defimpl Node.Deletable, for: Node.Previously do
+  defimpl Pnode.Deletable, for: Pnode.Previously do
   def a_protocol_must_have_at_least_one_function(_node),
       do: raise "should never be called"
   end

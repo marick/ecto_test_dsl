@@ -1,7 +1,7 @@
 defmodule Run.Support.ReplaceReferencesTest do
   use EctoTestDSL.Case
   import T.Run.ChangesetChecks
-  use T.Parse.All
+  use T.Parse.Exports
 
   # ----------------------------------------------------------------------------
 

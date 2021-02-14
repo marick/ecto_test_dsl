@@ -1,37 +1,37 @@
-defmodule Parse.Node.ParamsNodeTest do
+defmodule Parse.Pnode.ParamsNodeTest do
   use EctoTestDSL.Case
-  alias T.Parse.Node
+  use T.Parse.Drink.Me
   import T.Parse.InternalFunctions
 
   test "creation" do
-    actual = Node.Params.parse([key: "value"]) 
-    assert actual == %Node.Params{parsed: %{key: "value"}}
+    actual = Pnode.Params.parse([key: "value"]) 
+    assert actual == %Pnode.Params{parsed: %{key: "value"}}
   end
 
   test "merging" do
-    ab = Node.Params.parse(a: 1, b: 2)
-    cd = Node.Params.parse(c: 1, d: 2)
-    expected = Node.Params.parse(a: 1, b: 2, c: 1, d: 2)
+    ab = Pnode.Params.parse(a: 1, b: 2)
+    cd = Pnode.Params.parse(c: 1, d: 2)
+    expected = Pnode.Params.parse(a: 1, b: 2, c: 1, d: 2)
 
-    assert Node.Mergeable.merge(ab, cd) == expected
+    assert Pnode.Mergeable.merge(ab, cd) == expected
 
     # overrides are acceptable
-    bc = Node.Params.parse(b: 1, d: 2)
-    expected = Node.Params.parse(a: 1, b: 1, d: 2)
-    assert Node.Mergeable.merge(ab, bc) == expected
+    bc = Pnode.Params.parse(b: 1, d: 2)
+    expected = Pnode.Params.parse(a: 1, b: 1, d: 2)
+    assert Pnode.Mergeable.merge(ab, bc) == expected
   end
   
   test "ensuring eens is pretty much a no-op" do
-    params = Node.Params.parse(a: 1, b: id_of(:fred))
-    actual = Node.EENable.ensure_eens(params, :ignored)
+    params = Pnode.Params.parse(a: 1, b: id_of(:fred))
+    actual = Pnode.EENable.ensure_eens(params, :ignored)
     assert actual.with_ensured_eens == actual.parsed
-    assert Node.EENable.eens(actual) == [een(:fred)]
+    assert Pnode.EENable.eens(actual) == [een(:fred)]
   end
 
   test "export" do
-    %Node.Params{with_ensured_eens: %{a: 1, b: id_of(:fred)}}
-    |> Node.Exportable.export
-    |> T.Run.Node.Params.raw
+    %Pnode.Params{with_ensured_eens: %{a: 1, b: id_of(:fred)}}
+    |> Pnode.Exportable.export
+    |> Rnode.Params.raw
     |> assert_equal(%{a: 1, b: id_of(:fred)})
   end
 

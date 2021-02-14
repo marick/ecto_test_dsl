@@ -1,13 +1,13 @@
-defmodule Parse.Node.NodeGroupTest do
+defmodule Pnode.NodeGroupTest do
   use EctoTestDSL.Case
+  use T.Parse.Drink.Me
   import FlowAssertions.Define.Defchain
-  alias T.Parse.Node
   import T.Parse.InternalFunctions
 
   describe "creating an example from a keyword list" do
     setup do
       [expect: fn kws, expected ->
-        assert Node.Group.squeeze_into_map(kws) == expected
+        assert Pnode.Group.squeeze_into_map(kws) == expected
       end]
     end
     
@@ -18,27 +18,27 @@ defmodule Parse.Node.NodeGroupTest do
       assertion_fails("`:key` may not be repeated",
         [left: :value1, right: :value2],
         fn -> 
-          Node.Group.squeeze_into_map(key: :value1, key: :value2)
+          Pnode.Group.squeeze_into_map(key: :value1, key: :value2)
         end)
     end
 
     test "merging", ~M{expect} do
-      first = Node.Params.parse(species: "bovine")
+      first = Pnode.Params.parse(species: "bovine")
       [key: first] |> expect.(%{key: first})
 
-      second = Node.Params.parse(start_time: "now")
-      expected = %{key: Node.Params.parse(species: "bovine", start_time: "now")}
+      second = Pnode.Params.parse(start_time: "now")
+      expected = %{key: Pnode.Params.parse(species: "bovine", start_time: "now")}
       [key: first, key: second] |> expect.(expected)
     end
 
     test "two different values cannot be merged" do
-      first = Node.ParamsLike.parse(:some_example, except: [])
-      second = Node.Params.parse(start_time: "now")
+      first = Pnode.ParamsLike.parse(:some_example, except: [])
+      second = Pnode.Params.parse(start_time: "now")
       
       assertion_fails("You've repeated `:key`, but with incompatible values",
         [left: first, right: second],
         fn -> 
-          Node.Group.squeeze_into_map(key: first, key: second)
+          Pnode.Group.squeeze_into_map(key: first, key: second)
         end)
     end
   end
@@ -48,7 +48,7 @@ defmodule Parse.Node.NodeGroupTest do
     defchain assert_eenified(example, kws) do
       for {field, expected_eens} <- kws do 
         Map.get(example, field)
-        |> Node.EENable.eens
+        |> Pnode.EENable.eens
         # This shows field has had ensure_eens called on it
         |> assert_equal(expected_eens)
       end
@@ -56,15 +56,15 @@ defmodule Parse.Node.NodeGroupTest do
 
     defp handle_eens(kws) do
       example = Enum.into(kws, %{})
-      Node.Group.handle_eens(example, SomeModule)
+      Pnode.Group.handle_eens(example, SomeModule)
     end
 
     setup do
       data = %{
-        previously_a: Node.Previously.parse(insert: :a),  # produces...
+        previously_a: Pnode.Previously.parse(insert: :a),  # produces...
         een_a: een(a: SomeModule),
         
-        refers_to_b: Node.Params.parse(a: 1, b_id: id_of(:other_example)),
+        refers_to_b: Pnode.Params.parse(a: 1, b_id: id_of(:other_example)),
         een_b: een(other_example: __MODULE__),
       }
       [data: data]
@@ -93,18 +93,18 @@ defmodule Parse.Node.NodeGroupTest do
 
   test "exporting nodes" do
     example = %{
-      params: Node.Params.parse(a: 1, some_id: id_of(:b)),
+      params: Pnode.Params.parse(a: 1, some_id: id_of(:b)),
       irrelevant: :node,
-      previously: Node.Previously.parse(insert: :a)
+      previously: Pnode.Previously.parse(insert: :a)
     }
       
     new_example =
       example
-      |> Node.Group.handle_eens(SomeModule)
-      |> Node.Group.export
+      |> Pnode.Group.handle_eens(SomeModule)
+      |> Pnode.Group.export
 
     assert_fields(new_example, 
-      params: T.Run.Node.Params.new(%{a: 1, some_id: id_of(:b)}),
+      params: Rnode.Params.new(%{a: 1, some_id: id_of(:b)}),
       irrelevant: :node,
       eens: in_any_order([een(a: SomeModule), een(b: __MODULE__)]))
 

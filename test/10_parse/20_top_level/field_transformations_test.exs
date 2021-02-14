@@ -1,7 +1,7 @@
 defmodule Parse.TopLevel.FieldTransformationsTest do
   use EctoTestDSL.Case
   use T.Predefines
-  use T.Parse.All
+  use T.Parse.Exports
   alias T.Nouns.{AsCast,FieldCalculator}
 
   @empty %{

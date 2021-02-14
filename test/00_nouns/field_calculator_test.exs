@@ -1,7 +1,7 @@
 defmodule Nouns.FieldCalculatorTest do
   use EctoTestDSL.Case
   alias T.Nouns.FieldCalculator
-  use T.Parse.All
+  use T.Parse.Exports
 
   defmodule Association do
     use Ecto.Schema

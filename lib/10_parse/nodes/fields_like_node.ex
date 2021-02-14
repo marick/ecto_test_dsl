@@ -1,8 +1,7 @@
-defmodule EctoTestDSL.Parse.Node.FieldsLike do
+defmodule EctoTestDSL.Parse.Pnode.FieldsLike do
   use EctoTestDSL.Drink.Me
-  use EctoTestDSL.Drink.AssertionJuice
-  alias T.Parse.Node
-  alias T.Run
+  use T.Parse.Drink.Me
+  use T.Drink.AssertionJuice
   
   @moduledoc """
   """
@@ -19,11 +18,11 @@ defmodule EctoTestDSL.Parse.Node.FieldsLike do
 
   # ----------------------------------------------------------------------------
 
-  defimpl Node.EENable, for: Node.FieldsLike do
+  defimpl Pnode.EENable, for: Pnode.FieldsLike do
     def eens(%{eens: eens}), do: eens
     def ensure_eens(node, default_module) do
       parsed = node.parsed
-      reference_een = Node.Common.ensure_one_een(parsed.een_or_name, default_module)
+      reference_een = Pnode.Common.ensure_one_een(parsed.een_or_name, default_module)
 
       case Keyword.get(parsed.opts, :except) do
         nil ->
@@ -32,7 +31,7 @@ defmodule EctoTestDSL.Parse.Node.FieldsLike do
           %{node | eens: eens, with_ensured_eens: with_ensured_eens}
           
         except_value -> 
-          other_eens = Node.Common.extract_een_values(except_value)
+          other_eens = Pnode.Common.extract_een_values(except_value)
           eens = [reference_een | other_eens]
           with_ensured_eens = %{reference_een: reference_een, opts: parsed.opts}
           %{node | eens: eens, with_ensured_eens: with_ensured_eens}
@@ -41,10 +40,10 @@ defmodule EctoTestDSL.Parse.Node.FieldsLike do
   end
 
 
-  defimpl Node.Exportable, for: Node.FieldsLike do
+  defimpl Pnode.Exportable, for: Pnode.FieldsLike do
     def export(node) do
       exportable = node.with_ensured_eens
-      Run.Node.FieldsLike.new(exportable.reference_een, exportable.opts)
+      Rnode.FieldsLike.new(exportable.reference_een, exportable.opts)
     end
   end
   

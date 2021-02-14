@@ -1,17 +1,17 @@
-defmodule EctoTestDSL.Parse.Node.ParamsLikeNodeTest do
+defmodule EctoTestDSL.Parse.Pnode.ParamsLikeNodeTest do
   use EctoTestDSL.Case
-  alias T.Parse.Node
+  alias T.Parse.Pnode
 
   test "substitution" do
-    previous_examples = [previous: %{params: Node.Params.new(%{a: 1, b: 2})}]
+    previous_examples = [previous: %{params: Pnode.Params.new(%{a: 1, b: 2})}]
 
     run = fn [name, exceptions] -> 
-      Node.ParamsLike.new(name, exceptions)
-      |> Node.ParseTimeSubstitutable.substitute(previous_examples)
+      Pnode.ParamsLike.new(name, exceptions)
+      |> Pnode.ParseTimeSubstitutable.substitute(previous_examples)
     end
 
     expect = fn input, expected ->
-      assert run.(input) == Node.Params.new(expected)
+      assert run.(input) == Pnode.Params.new(expected)
     end
 
     [:previous, []] |> expect.(%{a: 1, b: 2})

@@ -5,6 +5,7 @@ defmodule Run.Steps.FieldsLikeTest do
   use Mockery
   import T.RunningStubs
   import T.Parse.InternalFunctions
+  alias T.Run.Rnode
 
   setup do
     stub(name: :example, neighborhood: %{})
@@ -14,7 +15,7 @@ defmodule Run.Steps.FieldsLikeTest do
 
   defp run(~M{under_test, opts}) do 
     stub_history(updated_value: under_test)
-    stub(fields_like: Run.Node.FieldsLike.new(een(:inserted), opts))
+    stub(fields_like: Rnode.FieldsLike.new(een(:inserted), opts))
     Steps.field_checks(:running, :updated_value)
   end
 
@@ -90,7 +91,7 @@ defmodule Run.Steps.FieldsLikeTest do
 
     setup do 
       stub(field_checks: [a: "right"])
-      stub(fields_like: Run.Node.FieldsLike.new(een(:inserted), [comparing: [:b]]))
+      stub(fields_like: Rnode.FieldsLike.new(een(:inserted), [comparing: [:b]]))
       :ok
     end
 

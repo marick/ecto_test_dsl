@@ -1,4 +1,4 @@
-defmodule EctoTestDSL.Run.Node.FieldsLike do
+defmodule EctoTestDSL.Run.Rnode.FieldsLike do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AssertionJuice
   

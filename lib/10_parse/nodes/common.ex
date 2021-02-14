@@ -1,4 +1,4 @@
-defmodule EctoTestDSL.Parse.Node.Common do
+defmodule EctoTestDSL.Parse.Pnode.Common do
   use EctoTestDSL.Drink.Me
   use T.Drink.AssertionJuice
 

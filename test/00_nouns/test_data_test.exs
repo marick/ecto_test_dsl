@@ -1,6 +1,7 @@
 defmodule Nouns.TestDataTest do
   use EctoTestDSL.Case
   alias EctoTestDSL.TestDataServer
+  alias T.Run.Rnode
 
 
   defmodule Examples do 
@@ -21,6 +22,6 @@ defmodule Nouns.TestDataTest do
       |> Keyword.get(:example)
 
     assert from_module_name == from_test_data
-    assert from_module_name.params == T.Run.Node.Params.new(%{a: 1})
+    assert from_module_name.params == Rnode.Params.new(%{a: 1})
   end
 end 

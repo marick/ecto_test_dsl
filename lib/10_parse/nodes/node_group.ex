@@ -1,11 +1,11 @@
-defmodule EctoTestDSL.Parse.Node.Group do
+defmodule EctoTestDSL.Parse.Pnode.Group do
   use EctoTestDSL.Drink.Me
+  use T.Parse.Drink.Me
   use T.Drink.AssertionJuice
-  alias T.Parse.Node
 
   def squeeze_into_map(kws) do
     reducer = fn {name, value}, acc ->
-      case {Map.get(acc, name), Node.Mergeable.impl_for(value)} do
+      case {Map.get(acc, name), Pnode.Mergeable.impl_for(value)} do
         {nil, _} ->
           Map.put(acc, name, value)
 
@@ -18,7 +18,7 @@ defmodule EctoTestDSL.Parse.Node.Group do
           elaborate_assert(previously.__struct__ == value.__struct__,
             "You've repeated `#{inspect name}`, but with incompatible values",
             left: previously, right: value)
-          Map.put(acc, name, Node.Mergeable.merge(previously, value))
+          Map.put(acc, name, Pnode.Mergeable.merge(previously, value))
       end
     end
 
@@ -26,14 +26,14 @@ defmodule EctoTestDSL.Parse.Node.Group do
   end
 
   def parse_time_substitutions(example, previous_examples) do
-    update_for_protocol(example, Node.ParseTimeSubstitutable,
-      &(Node.ParseTimeSubstitutable.substitute(&1, previous_examples)))
+    update_for_protocol(example, Pnode.ParseTimeSubstitutable,
+      &(Pnode.ParseTimeSubstitutable.substitute(&1, previous_examples)))
   end
 
   def handle_eens(example, default_module) do
     new_example = 
-      update_for_protocol(example, Node.EENable,
-        &(Node.EENable.ensure_eens(&1, default_module)))
+      update_for_protocol(example, Pnode.EENable,
+        &(Pnode.EENable.ensure_eens(&1, default_module)))
     
     eens = accumulated_eens(new_example)
     Map.put(new_example, :eens, eens)
@@ -41,8 +41,8 @@ defmodule EctoTestDSL.Parse.Node.Group do
 
   def export(example) do
     example
-    |> delete_keys_with_protocol(Node.Deletable)
-    |> update_for_protocol(Node.Exportable, &Node.Exportable.export/1)
+    |> delete_keys_with_protocol(Pnode.Deletable)
+    |> update_for_protocol(Pnode.Exportable, &Pnode.Exportable.export/1)
   end
 
   defp delete_keys_with_protocol(example, protocol), 
@@ -71,10 +71,10 @@ defmodule EctoTestDSL.Parse.Node.Group do
 
   defp accumulated_eens(example) do 
     getter = fn key -> 
-      Map.get(example, key) |> Node.EENable.eens
+      Map.get(example, key) |> Pnode.EENable.eens
     end
 
-    keys_for_protocol(example, Node.EENable)
+    keys_for_protocol(example, Pnode.EENable)
     |> Enum.flat_map(getter)
   end
 end

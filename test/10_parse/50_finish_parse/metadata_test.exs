@@ -1,7 +1,7 @@
 defmodule Parse.FinishParse.MetadataTest do
   use EctoTestDSL.Case
   use T.Predefines
-  use T.Parse.All
+  use T.Parse.Exports
   alias T.Parse.FinishParse
 
   defmodule Examples do

@@ -1,14 +1,14 @@
 defmodule EctoTestDSL.Parse.ExampleFunctions do
   use EctoTestDSL.Drink.Me
+  use T.Parse.Drink.Me
   use EctoTestDSL.Drink.AssertionJuice
-  alias T.Parse.Node
 
   # ----------------------------------------------------------------------------
   def params(opts \\ []),
-    do: {:params, Node.Params.parse(opts)}
+    do: {:params, Pnode.Params.parse(opts)}
   
   def params_like(example_name, opts),
-    do: {:params, Node.ParamsLike.parse(example_name, opts)}
+    do: {:params, Pnode.ParamsLike.parse(example_name, opts)}
   def params_like(example_name), 
     do: params_like(example_name, except: [])
 
@@ -16,17 +16,17 @@ defmodule EctoTestDSL.Parse.ExampleFunctions do
   # ----------------------------------------------------------------------------
   
   def previously(opts), 
-    do: {:previously, Node.Previously.parse(opts)}
+    do: {:previously, Pnode.Previously.parse(opts)}
 
   def changeset(opts),
-    do: {:validation_changeset_checks, Node.ChangesetChecks.parse(opts)}
+    do: {:validation_changeset_checks, Pnode.ChangesetChecks.parse(opts)}
   def constraint_changeset(opts),
-    do: {:constraint_changeset_checks, Node.ChangesetChecks.parse(opts)}
+    do: {:constraint_changeset_checks, Pnode.ChangesetChecks.parse(opts)}
 
-  def fields(opts), do: {:field_checks, Node.Fields.parse(opts)}
+  def fields(opts), do: {:field_checks, Pnode.Fields.parse(opts)}
 
   def fields_like(een_or_name, opts \\ []),
-    do: {:fields_like, Node.FieldsLike.parse(een_or_name, opts)}
+    do: {:fields_like, Pnode.FieldsLike.parse(een_or_name, opts)}
 
   def params_from_selecting(een, _opts \\ [except: []]) do
     {:params_from_selecting, een}

@@ -1,11 +1,11 @@
 defmodule EctoTestDSL.Parse.TopLevel do
   use EctoTestDSL.Drink.Me
-  use EctoTestDSL.Drink.AssertionJuice
+  use T.Parse.Drink.Me
+  use T.Drink.AssertionJuice
   
   import DeepMerge, only: [deep_merge: 2]
   alias T.Nouns.AsCast
   alias T.Parse.Hooks
-  alias T.Parse.Node
 
   # ----------------------------------------------------------------------------
   def field_transformations(test_data, opts) do
@@ -34,7 +34,7 @@ defmodule EctoTestDSL.Parse.TopLevel do
       cooked =
         raw_example
         |> testable_flatten
-        |> Node.Group.squeeze_into_map
+        |> Pnode.Group.squeeze_into_map
         |> deep_merge(metadata)
       {name, cooked}
     end

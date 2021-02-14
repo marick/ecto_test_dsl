@@ -1,7 +1,7 @@
-defmodule Parse.Node.ChangesetChecksTest do
+defmodule Parse.Pnode.ChangesetChecksTest do
   use EctoTestDSL.Case
-  alias T.Parse.Node
-  alias Node.ChangesetChecks, as: CC
+  use T.Parse.Drink.Me
+  alias Pnode.ChangesetChecks, as: CC
   import T.Parse.InternalFunctions
 
   test "creation" do
@@ -12,16 +12,16 @@ defmodule Parse.Node.ChangesetChecksTest do
   test "merging" do
     first = CC.parse(changed: [x: 5])
     second = CC.parse(errors: [:x], changed: [y: 8])
-    actual = Node.Mergeable.merge(first, second)
+    actual = Pnode.Mergeable.merge(first, second)
     assert actual.parsed == [changed: [x: 5], errors: [:x], changed: [y: 8]]
   end
 
   describe "een handling" do
     defp expect(checks, expected) do
       node = CC.parse(checks)
-      actual = Node.EENable.ensure_eens(node, :ignored)
+      actual = Pnode.EENable.ensure_eens(node, :ignored)
       assert actual.with_ensured_eens == node.parsed
-      assert Node.EENable.eens(actual) == expected
+      assert Pnode.EENable.eens(actual) == expected
     end
     
     test "makes no changes eens does nothing, since `id_of` produces true eens" do
@@ -41,8 +41,8 @@ defmodule Parse.Node.ChangesetChecksTest do
 
   test "export" do         # also add some top-level tests for merging and eens
     CC.parse(data: [species_id: id_of(:bovine)])
-    |> Node.EENable.ensure_eens(:ignored)
-    |> Node.Exportable.export
+    |> Pnode.EENable.ensure_eens(:ignored)
+    |> Pnode.Exportable.export
     |> assert_equal(data: [species_id: id_of(:bovine)])
   end
 end

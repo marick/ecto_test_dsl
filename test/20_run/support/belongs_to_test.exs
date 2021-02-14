@@ -1,7 +1,7 @@
 defmodule Run.Support.BelongsToTest do
   use EctoTestDSL.Case
   use T.Drink.AndRun
-  use T.Parse.All
+  use T.Parse.Exports
   import FlowAssertions.Ecto.SchemaA
 
   defmodule Schema do

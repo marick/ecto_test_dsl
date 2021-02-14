@@ -1,4 +1,4 @@
-defmodule EctoTestDSL.Parse.All do
+defmodule EctoTestDSL.Parse.Exports do
 
   @moduledoc """
   """

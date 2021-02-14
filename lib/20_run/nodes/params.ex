@@ -1,4 +1,4 @@
-defmodule EctoTestDSL.Run.Node.Params do
+defmodule EctoTestDSL.Run.Rnode.Params do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AssertionJuice
   

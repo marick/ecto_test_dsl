@@ -1,6 +1,6 @@
 defmodule Parse.PreviouslyTest do
   use EctoTestDSL.Case
-  use T.Parse.All
+  use T.Parse.Exports
 
   def expect(input, expected) do
     %{module_under_test: Schema, examples_module: Examples, examples: []}

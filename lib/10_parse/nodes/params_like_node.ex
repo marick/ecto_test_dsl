@@ -1,7 +1,7 @@
-defmodule EctoTestDSL.Parse.Node.ParamsLike do
+defmodule EctoTestDSL.Parse.Pnode.ParamsLike do
   use EctoTestDSL.Drink.Me
-  use EctoTestDSL.Drink.AssertionJuice
-  alias T.Parse.Node
+  use T.Parse.Drink.Me
+  use T.Drink.AssertionJuice
   
   @moduledoc """
   """
@@ -19,7 +19,7 @@ defmodule EctoTestDSL.Parse.Node.ParamsLike do
 
   # ----------------------------------------------------------------------------
 
-  defimpl Node.ParseTimeSubstitutable, for: Node.ParamsLike do
+  defimpl Pnode.ParseTimeSubstitutable, for: Pnode.ParamsLike do
     def substitute(node, named_examples) do
       case Keyword.get(named_examples, node.previous_name) do
         nil ->
@@ -27,7 +27,7 @@ defmodule EctoTestDSL.Parse.Node.ParamsLike do
           elaborate_flunk("There is no previous example `#{ex}`",
             right: Map.keys(node.overrides))
         previous ->
-          Node.Mergeable.merge(previous.params, Node.Params.new(node.overrides))
+          Pnode.Mergeable.merge(previous.params, Pnode.Params.new(node.overrides))
       end
     end
   end

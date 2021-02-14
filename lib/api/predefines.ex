@@ -6,7 +6,7 @@ defmodule EctoTestDSL.Predefines do
     quote do
       alias EctoTestDSL, as: T
       alias T.Impl
-      use T.Parse.All
+      use T.Parse.Exports
       
       alias T.{Get,Validations}
     end

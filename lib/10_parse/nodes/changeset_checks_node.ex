@@ -1,23 +1,22 @@
-defmodule EctoTestDSL.Parse.Node.ChangesetChecks do
+defmodule EctoTestDSL.Parse.Pnode.ChangesetChecks do
   use EctoTestDSL.Drink.Me
+  use T.Parse.Drink.Me
   use T.Drink.AssertionJuice
-  alias T.Parse.Node
-  alias Node.ChangesetChecks, as: CC
-  use Magritte
+  alias Pnode.ChangesetChecks, as: CC
   
   defstruct parsed: [], with_ensured_eens: [], eens: []
 
   def parse(kws), do: new(kws)
   def new(kws), do: %CC{parsed: kws}
 
-  defimpl Node.Mergeable, for: CC do
+  defimpl Pnode.Mergeable, for: CC do
     def merge(%CC{parsed: earlier}, %CC{parsed: later}) do
       # I actually do mean this rather than Keyword.merge
       CC.new(earlier ++ later)
     end
   end
 
-  defimpl Node.EENable, for: CC do
+  defimpl Pnode.EENable, for: CC do
     def eens(%{eens: eens}), do: eens
 
     def ensure_eens(node, _default_module) do
@@ -36,7 +35,7 @@ defmodule EctoTestDSL.Parse.Node.ChangesetChecks do
     defp lower_level(_value              ),            do: [   ]
   end
 
-  defimpl Node.Exportable, for: CC do
+  defimpl Pnode.Exportable, for: CC do
     def export(node) do
       node.with_ensured_eens
     end

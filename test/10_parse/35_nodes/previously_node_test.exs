@@ -1,11 +1,10 @@
-defmodule Parse.Node.PreviouslyNodeTest do
+defmodule Parse.Pnode.PreviouslyNodeTest do
   use EctoTestDSL.Case
-  alias EctoTestDSL.Parse.Node
-  alias EctoTestDSL.Parse.Node
+  alias EctoTestDSL.Parse.Pnode
 
   test "creation" do
     expect = fn arg, expected_parsed ->
-      actual = Node.Previously.parse(arg)
+      actual = Pnode.Previously.parse(arg)
       assert actual.parsed == expected_parsed
     end
 
@@ -18,16 +17,16 @@ defmodule Parse.Node.PreviouslyNodeTest do
     assertion_fails("`previously` takes arguments of form [insert: <atom>|<list>...]",
       [left: {:inser, :a}],
       fn ->
-        Node.Previously.parse([inser: :a])
+        Pnode.Previously.parse([inser: :a])
       end)
   end
 
   test "merging" do
-    one = Node.Previously.new([:a, b: List])
-    two = Node.Previously.new([:c])
+    one = Pnode.Previously.new([:a, b: List])
+    two = Pnode.Previously.new([:c])
 
-    actual = Node.Mergeable.merge(one, two)
-    expected = Node.Previously.new([:a, {:b, List}, :c])
+    actual = Pnode.Mergeable.merge(one, two)
+    expected = Pnode.Previously.new([:a, {:b, List}, :c])
     assert actual == expected
   end
 
@@ -35,8 +34,8 @@ defmodule Parse.Node.PreviouslyNodeTest do
   
   test "ensuring eens" do
     run = fn input ->
-      Node.Previously.new(input)
-      |> Node.EENable.ensure_eens(SomeModule)
+      Pnode.Previously.new(input)
+      |> Pnode.EENable.ensure_eens(SomeModule)
     end
 
     actual = run.([:a, b: List])

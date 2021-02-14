@@ -1,27 +1,27 @@
-defmodule EctoTestDSL.Parse.Node.Params do
+defmodule EctoTestDSL.Parse.Pnode.Params do
   use EctoTestDSL.Drink.Me
+  use T.Parse.Drink.Me
   use T.Drink.AssertionJuice
-  alias T.Parse.Node
   
   defstruct parsed: %{}, with_ensured_eens: %{}, eens: []
 
   def parse(kws), do: kws |> Enum.into(%{}) |> new
   def new(map), do: %__MODULE__{parsed: map}
 
-  defimpl Node.Mergeable, for: Node.Params do
+  defimpl Pnode.Mergeable, for: Pnode.Params do
     def merge(earlier, later),
-      do: Node.Common.merge_parsed(Node.Params, earlier, later)
+      do: Pnode.Common.merge_parsed(Pnode.Params, earlier, later)
   end
 
-  defimpl Node.EENable, for: Node.Params do
+  defimpl Pnode.EENable, for: Pnode.Params do
     def eens(%{eens: eens}), do: eens
     def ensure_eens(node, _default_module) do
-      Node.Common.with_ensured(node, Node.Common.extract_eens(node), node.parsed)
+      Pnode.Common.with_ensured(node, Pnode.Common.extract_eens(node), node.parsed)
     end
   end
 
-  defimpl Node.Exportable, for: Node.Params do
-    def export(node), do: Run.Node.Params.new(node.with_ensured_eens)
+  defimpl Pnode.Exportable, for: Pnode.Params do
+    def export(node), do: Rnode.Params.new(node.with_ensured_eens)
   end
 end
 

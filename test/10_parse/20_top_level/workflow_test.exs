@@ -1,7 +1,7 @@
 defmodule Parse.TopLevel.WorkflowTest do
   use EctoTestDSL.Case
   alias T.Parse.TopLevel
-  use T.Parse.All
+  use T.Parse.Exports
 
   defmodule Examples do
     use Template.PhoenixGranular.Insert
