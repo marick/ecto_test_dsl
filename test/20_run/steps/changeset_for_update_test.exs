@@ -30,7 +30,7 @@ defmodule Run.Steps.ChangesetForUpdateTest do
                       struct_for_update: %Schema{age: 33},
                       params: %{"age" => "1"}
                     ]}
-    |> Steps.Changeset.changeset_for_update(:struct_for_update)
+    |> Steps.changeset_for_update(:struct_for_update)
     |> assert_equal(:changeset_result)
   end
 end

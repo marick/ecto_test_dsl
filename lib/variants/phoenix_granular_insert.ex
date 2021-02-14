@@ -10,24 +10,21 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
   # ------------------- Step functions -----------------------------------------
 
   defsteps [
+    :repo_setup,
+    
+    :params,
+    
     :changeset_from_params,
     :assert_valid_changeset,
     :refute_valid_changeset,
     :example_specific_changeset_checks,
     :as_cast_checks,
     :field_calculation_checks,
-  ], from: Steps.Changeset
-
-  defsteps [
+    
     :try_changeset_insertion,
     :ok_content,
     :error_content,
     :field_checks
-  ], from: Steps.Ecto
-
-  defsteps [
-    :repo_setup,
-    :params,
   ], from: Steps
 
   def workflows() do

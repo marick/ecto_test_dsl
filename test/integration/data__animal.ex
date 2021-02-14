@@ -2,7 +2,8 @@ defmodule Integration.Animal do
   defmodule Schema do 
     use Ecto.Schema
     import Ecto.Changeset
-
+    alias Integration.Species.Schema, as: Species
+    
     schema "bogus" do
       field :age, :integer
       field :date_string, :string, virtual: true

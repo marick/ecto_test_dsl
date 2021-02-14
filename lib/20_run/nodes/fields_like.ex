@@ -1,7 +1,7 @@
 defmodule EctoTestDSL.Run.Node.FieldsLike do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AssertionJuice
-  alias T.Parse.Node
+#  alias T.Parse.Node
   
   @moduledoc """
   """

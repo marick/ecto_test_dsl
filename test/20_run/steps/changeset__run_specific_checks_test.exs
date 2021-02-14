@@ -1,7 +1,7 @@
 defmodule Run.Steps.SpecificChecksTest do
   use EctoTestDSL.Case
   use T.Drink.AndRun
-  alias Run.Steps.Changeset, as: Steps
+  alias Run.Steps
   use Mockery
   import T.RunningStubs
 

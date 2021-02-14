@@ -1,7 +1,7 @@
 defmodule Run.Steps.OkOrErrorContentTest do
   use EctoTestDSL.Case
   use T.Drink.AndRun
-  alias Run.Steps.Ecto, as: Steps
+  alias Run.Steps
   use Mockery
   import T.RunningStubs
 

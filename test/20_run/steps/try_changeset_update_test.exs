@@ -1,7 +1,7 @@
 defmodule Run.Steps.TryChangesetUpdateTest do
   use EctoTestDSL.Case
   use T.Drink.AndRun
-  alias Run.Steps.Ecto, as: Steps
+  alias Run.Steps
   import T.RunningStubs
 
   defmodule Schema do
