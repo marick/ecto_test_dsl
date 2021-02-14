@@ -35,7 +35,7 @@ defmodule EctoTestDSL.Run.Steps do
 
     params = 
       RunningExample.formatted_params_for_history(running,
-        Neighborhood.Expand.keyword_values(original_params, with: neighborhood))
+        Neighborhood.Expand.keyword_values(original_params.params, with: neighborhood))
 
     Trace.say(params, :params)
     params

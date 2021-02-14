@@ -104,7 +104,7 @@ defmodule Parse.Node.NodeGroupTest do
       |> Node.Group.export
 
     assert_fields(new_example, 
-      params: %{a: 1, some_id: id_of(:b)},
+      params: T.Run.Node.Params.new(%{a: 1, some_id: id_of(:b)}),
       irrelevant: :node,
       eens: in_any_order([een(a: SomeModule), een(b: __MODULE__)]))
 

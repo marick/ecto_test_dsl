@@ -21,7 +21,7 @@ defmodule EctoTestDSL.Parse.Node.Params do
   end
 
   defimpl Node.Exportable, for: Node.Params do
-    def export(node), do: node.with_ensured_eens
+    def export(node), do: Run.Node.Params.new(node.with_ensured_eens)
   end
 end
 

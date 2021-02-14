@@ -31,6 +31,7 @@ defmodule Parse.Node.ParamsNodeTest do
   test "export" do
     %Node.Params{with_ensured_eens: %{a: 1, b: id_of(:fred)}}
     |> Node.Exportable.export
+    |> T.Run.Node.Params.raw
     |> assert_equal(%{a: 1, b: id_of(:fred)})
   end
 

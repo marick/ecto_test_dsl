@@ -23,9 +23,6 @@ defmodule Parse.TopLevel.WorkflowTest do
   test "the parts a workflow adds" do
     ok = Examples.Tester.example(:ok)
     other = Examples.Tester.example(:other)
-    
-    assert ok.params == %{a: 1, b: 2}
-    assert other.params == %{a: 1, b: 22}
 
     assert ok.metadata.workflow_name == :success
     assert ok.metadata.name == :ok

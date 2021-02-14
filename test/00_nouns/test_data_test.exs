@@ -21,6 +21,6 @@ defmodule Nouns.TestDataTest do
       |> Keyword.get(:example)
 
     assert from_module_name == from_test_data
-    assert from_module_name.params == %{a: 1}
+    assert from_module_name.params == T.Run.Node.Params.new(%{a: 1})
   end
 end 
