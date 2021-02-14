@@ -21,7 +21,7 @@ defmodule EctoTestDSL.Run.RunningExample do
   getters :example, :metadata, [
     :as_cast, :field_calculators, :insert_with, :name, :repo, :workflow_name,
     :variant, :format, :module_under_test, :changeset_with,
-    :changeset_for_update_with
+    :changeset_for_update_with, :update_with
   ]
 
   def step_value!(running, step_name),

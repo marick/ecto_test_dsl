@@ -12,7 +12,18 @@ defmodule EctoTestDSL.Run.Steps.Ecto do
     from(running, use: [:repo])
     from_history(running, changeset: which_changeset)    
 
-    apply(RunningExample.insert_with(running), [repo, changeset])
+    RunningExample.insert_with(running).(repo, changeset)
+  end
+
+  IO.puts "struct_for_update"
+  def struct_for_update(_running) do
+  end
+
+  def try_changeset_update(running, which_changeset) do
+    from(running, use: [:repo, :update_with])
+    from_history(running, changeset: which_changeset)    
+
+    update_with.(repo, changeset)
   end
 
   def ok_content(running, which_step) do
@@ -73,6 +84,7 @@ defmodule EctoTestDSL.Run.Steps.Ecto do
     end
   end
 
+  IO.puts "not sure if this serves any purpose"
   def params_from_selecting(running) do
     from(running, use: [:neighborhood, :params_from_selecting])
     Map.get(neighborhood, params_from_selecting)
