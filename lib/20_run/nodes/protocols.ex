@@ -1,6 +1,6 @@
 alias EctoTestDSL.Run.Rnode
 
-defprotocol Rnode.RunTimeSubstitutable do
+defprotocol Rnode.Substitutable do
   def substitute(node, neighborhood)
 end
 

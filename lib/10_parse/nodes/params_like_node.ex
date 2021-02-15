@@ -19,7 +19,7 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsLike do
 
   # ----------------------------------------------------------------------------
 
-  defimpl Pnode.ParseTimeSubstitutable, for: Pnode.ParamsLike do
+  defimpl Pnode.Substitutable, for: Pnode.ParamsLike do
     def substitute(node, named_examples) do
       case Keyword.get(named_examples, node.previous_name) do
         nil ->

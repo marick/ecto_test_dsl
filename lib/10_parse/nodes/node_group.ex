@@ -26,8 +26,8 @@ defmodule EctoTestDSL.Parse.Pnode.Group do
   end
 
   def parse_time_substitutions(example, previous_examples) do
-    update_for_protocol(example, Pnode.ParseTimeSubstitutable,
-      &(Pnode.ParseTimeSubstitutable.substitute(&1, previous_examples)))
+    update_for_protocol(example, Pnode.Substitutable,
+      &(Pnode.Substitutable.substitute(&1, previous_examples)))
   end
 
   def handle_eens(example, default_module) do

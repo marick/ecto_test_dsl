@@ -9,7 +9,7 @@ defprotocol Pnode.Mergeable do
   def merge(node, more)
 end
 
-defprotocol Pnode.ParseTimeSubstitutable do 
+defprotocol Pnode.Substitutable do 
   def substitute(node, examples)
 end
 

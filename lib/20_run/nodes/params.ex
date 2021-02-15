@@ -13,7 +13,7 @@ defmodule EctoTestDSL.Run.Rnode.Params do
 
   def raw(params), do: params.params
 
-  defimpl Rnode.RunTimeSubstitutable, for: Rnode.Params do
+  defimpl Rnode.Substitutable, for: Rnode.Params do
     def substitute(%{params: params}, neighborhood) do
       Neighborhood.Expand.keyword_values(params, with: neighborhood)
     end

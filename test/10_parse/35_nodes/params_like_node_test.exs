@@ -7,7 +7,7 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsLikeNodeTest do
 
     run = fn [name, exceptions] -> 
       Pnode.ParamsLike.new(name, exceptions)
-      |> Pnode.ParseTimeSubstitutable.substitute(previous_examples)
+      |> Pnode.Substitutable.substitute(previous_examples)
     end
 
     expect = fn input, expected ->
