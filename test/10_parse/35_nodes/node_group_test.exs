@@ -1,8 +1,8 @@
 defmodule Pnode.NodeGroupTest do
   use EctoTestDSL.Case
-  use T.Parse.Drink.Me
+  use T.Drink.AndParse
+  use T.Parse.Exports
   import FlowAssertions.Define.Defchain
-  import T.Parse.InternalFunctions
 
   describe "creating an example from a keyword list" do
     setup do

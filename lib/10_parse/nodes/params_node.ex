@@ -1,6 +1,6 @@
 defmodule EctoTestDSL.Parse.Pnode.Params do
   use EctoTestDSL.Drink.Me
-  use T.Parse.Drink.Me
+  use T.Drink.AndParse
   use T.Drink.AssertionJuice
   
   defstruct parsed: %{}, with_ensured_eens: %{}, eens: []

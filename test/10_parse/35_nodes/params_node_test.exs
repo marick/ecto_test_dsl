@@ -1,7 +1,7 @@
 defmodule Parse.Pnode.ParamsNodeTest do
   use EctoTestDSL.Case
-  use T.Parse.Drink.Me
-  import T.Parse.InternalFunctions
+  use T.Drink.AndParse
+  use T.Parse.Exports
 
   test "creation" do
     actual = Pnode.Params.parse([key: "value"]) 

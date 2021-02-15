@@ -1,6 +1,6 @@
 defmodule EctoTestDSL.Parse.Pnode.Group do
   use EctoTestDSL.Drink.Me
-  use T.Parse.Drink.Me
+  use T.Drink.AndParse
   use T.Drink.AssertionJuice
 
   def squeeze_into_map(kws) do

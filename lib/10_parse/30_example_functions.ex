@@ -1,6 +1,6 @@
 defmodule EctoTestDSL.Parse.ExampleFunctions do
   use EctoTestDSL.Drink.Me
-  use T.Parse.Drink.Me
+  use T.Drink.AndParse
   use EctoTestDSL.Drink.AssertionJuice
 
   # ----------------------------------------------------------------------------

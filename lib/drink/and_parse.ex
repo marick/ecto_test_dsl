@@ -1,4 +1,4 @@
-defmodule EctoTestDSL.Parse.Drink.Me do
+defmodule EctoTestDSL.Drink.AndParse do
 
   @moduledoc """
   """

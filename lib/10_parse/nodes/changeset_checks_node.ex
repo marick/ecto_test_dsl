@@ -1,6 +1,6 @@
 defmodule EctoTestDSL.Parse.Pnode.ChangesetChecks do
   use EctoTestDSL.Drink.Me
-  use T.Parse.Drink.Me
+  use T.Drink.AndParse
   use T.Drink.AssertionJuice
   alias Pnode.ChangesetChecks, as: CC
   

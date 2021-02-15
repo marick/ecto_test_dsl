@@ -1,8 +1,8 @@
 defmodule Parse.Pnode.ChangesetChecksTest do
   use EctoTestDSL.Case
-  use T.Parse.Drink.Me
+  use T.Drink.AndParse
+  use T.Parse.Exports
   alias Pnode.ChangesetChecks, as: CC
-  import T.Parse.InternalFunctions
 
   test "creation" do
     actual = CC.parse(changed: [x: 5])
