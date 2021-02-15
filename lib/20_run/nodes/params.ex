@@ -1,6 +1,8 @@
 defmodule EctoTestDSL.Run.Rnode.Params do
   use EctoTestDSL.Drink.Me
-  use EctoTestDSL.Drink.AssertionJuice
+  use T.Drink.AndRun
+  use T.Drink.AssertionJuice
+  alias T.Run.Rnode
   
   @moduledoc """
   """
@@ -10,4 +12,13 @@ defmodule EctoTestDSL.Run.Rnode.Params do
   def new(params), do: ~M{%__MODULE__ params}
 
   def raw(params), do: params.params
+
+  defimpl Rnode.RunTimeSubstitutable, for: Rnode.Params do
+    def substitute(%{params: params}, neighborhood) do
+      Neighborhood.Expand.keyword_values(params, with: neighborhood)
+    end
+  end
+  
 end
+
+

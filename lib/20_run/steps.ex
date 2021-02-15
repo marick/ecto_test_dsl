@@ -2,9 +2,11 @@ defmodule EctoTestDSL.Run.Steps do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AssertionJuice
   use EctoTestDSL.Drink.AndRun
+  alias Run.Rnode
   import T.Run.Steps.Util
   alias T.Run.ChangesetChecks, as: CC
   alias FlowAssertions.MapA
+  use Magritte
 
   ###################### SETUP #####################################
 
@@ -33,9 +35,10 @@ defmodule EctoTestDSL.Run.Steps do
   def params(running) do
     from(running, use: [:neighborhood, :original_params])
 
-    params = 
-      RunningExample.formatted_params_for_history(running,
-        Neighborhood.Expand.keyword_values(original_params.params, with: neighborhood))
+    params =
+      original_params
+      |> Rnode.RunTimeSubstitutable.substitute(neighborhood)
+      |> RunningExample.formatted_params_for_history(running, ...)
 
     Trace.say(params, :params)
     params
