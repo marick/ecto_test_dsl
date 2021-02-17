@@ -1,4 +1,4 @@
-defmodule Parse.Pnode.PreviouslyNodeTest do
+defmodule Parse.Pnode.PreviouslyTest do
   use EctoTestDSL.Case
   alias EctoTestDSL.Parse.Pnode
 

@@ -1,4 +1,4 @@
-defmodule EctoTestDSL.Parse.Pnode.ParamsLikeNodeTest do
+defmodule EctoTestDSL.Parse.Pnode.ParamsLikeTest do
   use EctoTestDSL.Case
   alias T.Parse.Pnode
 

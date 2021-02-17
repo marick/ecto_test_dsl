@@ -1,4 +1,4 @@
-defmodule Parse.Pnode.FieldsNodeTest do
+defmodule Parse.Pnode.FieldsTest do
   use EctoTestDSL.Case
   alias T.Parse.Pnode
   import T.Parse.InternalFunctions

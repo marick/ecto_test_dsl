@@ -1,4 +1,4 @@
-defmodule EctoTestDSL.Pnode.FieldsLikeNodeTest do
+defmodule EctoTestDSL.Pnode.FieldsLikeTest do
   use EctoTestDSL.Case
   use T.Drink.AndParse
   use T.Parse.Exports

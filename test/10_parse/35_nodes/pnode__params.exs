@@ -1,4 +1,4 @@
-defmodule Parse.Pnode.ParamsNodeTest do
+defmodule Parse.Pnode.ParamsTest do
   use EctoTestDSL.Case
   use T.Drink.AndParse
   use T.Parse.Exports
