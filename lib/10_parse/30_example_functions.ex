@@ -12,6 +12,11 @@ defmodule EctoTestDSL.Parse.ExampleFunctions do
   def params_like(example_name), 
     do: params_like(example_name, except: [])
 
+  def params_from_repo(een, opts),
+    do: {:params, Pnode.ParamsFromRepo.parse(een, opts)}
+  def params_from_repo(een),
+    do: params_from_repo(een, except: [])
+    
 
   # ----------------------------------------------------------------------------
   
