@@ -38,33 +38,19 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsFromRepo do
 
   # ----------------------------------------------------------------------------
 
-  # defimpl Pnode.EENable, for: Pnode.ParamsFromRepo do
-  #   def eens(%{eens: eens}), do: eens
-  #   def ensure_eens(node, default_module) do
-  #     parsed = node.parsed
-  #     reference_een = Pnode.Common.ensure_one_een(parsed.een_or_name, default_module)
-
-  #     case Keyword.get(parsed.opts, :except) do
-  #       nil ->
-  #         eens = [reference_een]
-  #         with_ensured_eens = %{reference_een: reference_een, opts: parsed.opts}
-  #         %{node | eens: eens, with_ensured_eens: with_ensured_eens}
-          
-  #       except_value -> 
-  #         other_eens = Pnode.Common.extract_een_values(except_value)
-  #         eens = [reference_een | other_eens]
-  #         with_ensured_eens = %{reference_een: reference_een, opts: parsed.opts}
-  #         %{node | eens: eens, with_ensured_eens: with_ensured_eens}
-  #     end      
-  #   end
-  # end
+  defimpl Pnode.EENable, for: Pnode.ParamsFromRepo do
+    def eens(%{eens: eens}), do: eens
+    def ensure_eens(node, _default_module) do
+      parsed = node.parsed
+      eens = [parsed.een | Pnode.Common.extract_een_values(parsed.except)]
+      %{node | eens: eens, with_ensured_eens: parsed}
+    end
+  end
 
 
-  # defimpl Pnode.Exportable, for: Pnode.ParamsFromRepo do
-  #   def export(node) do
-  #     exportable = node.with_ensured_eens
-  #     Rnode.ParamsFromRepo.new(exportable.reference_een, exportable.opts)
-  #   end
-  # end
-  
+  defimpl Pnode.Exportable, for: Pnode.ParamsFromRepo do
+    def export(~M{with_ensured_eens}) do
+      Rnode.ParamsFromRepo.new(with_ensured_eens.een, with_ensured_eens.except)
+    end
+  end
 end
