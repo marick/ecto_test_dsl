@@ -11,11 +11,13 @@ defmodule EctoTestDSL.Run.Rnode.ParamsFromRepo do
 
   def new(een, except), do: ~M{%__MODULE__ een, except}
 
-  # defimpl Rnode.Substitutable, for: Rnode.Params do
-  #   def substitute(%{params: params}, neighborhood) do
-  #     Neighborhood.Expand.keyword_values(params, with: neighborhood)
-  #   end
-  # end
+  defimpl Rnode.Substitutable, for: Rnode.ParamsFromRepo do
+    def substitute(node, neighborhood) do
+      base = Map.get(neighborhood, node.een) |> Map.from_struct
+      exceptions = Neighborhood.Expand.values(node.except, with: neighborhood)
+      Map.merge(base, exceptions)
+    end
+  end
 end
 
 

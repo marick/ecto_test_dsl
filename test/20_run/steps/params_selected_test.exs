@@ -14,6 +14,7 @@ defmodule Run.Steps.ParamsSelectedTest do
     stub(
       params_from_selecting: een(other),
       neighborhood: %{een(other) => values})
+
     Steps.params_from_selecting(:running)
   end
 

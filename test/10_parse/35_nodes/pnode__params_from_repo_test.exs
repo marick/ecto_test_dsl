@@ -7,7 +7,7 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsFromRepoTest do
   describe "creation" do
     test "normal" do
       Pnode.ParamsFromRepo.parse(een(:name), [except: [a: 1]])
-      |> assert_fields(parsed: %{een: een(:name), except: [a: 1]})
+      |> assert_fields(parsed: %{een: een(:name), except: %{a: 1}})
     end
     
     test "an een is required" do

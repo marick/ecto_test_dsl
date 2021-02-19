@@ -24,13 +24,16 @@ defmodule EctoTestDSL.Run.RunningExample do
     :changeset_for_update_with, :update_with
   ]
 
+  private_getters :example, [:params]
+  publicize :original_params, renames: :params
+
   def step_value!(running, step_name),
     do: History.fetch!(running.history, step_name)
 
   def neighborhood(running),
     do: Keyword.fetch!(running.history, :repo_setup)
 
-  def original_params(running), do: running.example.params
+#  def original_params(running), do: running.example.params
   def expanded_params(running), do: Keyword.fetch!(running.history, :params)
 
 
@@ -51,7 +54,7 @@ defmodule EctoTestDSL.Run.RunningExample do
       phoenix: &phoenix_format/1
     }
 
-    format = format(running)
+    format = mockable(__MODULE__).format(running)
     case Map.get(formatters, format) do
       nil -> 
         raise """

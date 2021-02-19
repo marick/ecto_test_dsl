@@ -8,7 +8,9 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsFromRepo do
 
   defstruct parsed: %{}, with_ensured_eens: %{}, eens: []
 
-  def parse(%EEN{} = een, except: except), do: new(een, except)
+  def parse(%EEN{} = een, except: except),
+    do: new(een, Enum.into(except, %{}))
+  
   def parse(not_een, except: _except) do
     example_name = if is_atom(not_een), do: not_een, else: :some_name
     message =
