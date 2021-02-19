@@ -221,7 +221,7 @@ defmodule EctoTestDSL.Run.Steps do
   defp do_field_checks(field_checks, to_be_checked, neighborhood) do
     unless Enum.empty?(field_checks) do 
       expected =
-        Neighborhood.Expand.keyword_values(field_checks, with: neighborhood)
+        Neighborhood.Expand.values(field_checks, with: neighborhood)
       assert_fields(to_be_checked, expected)
     end
   end
@@ -239,7 +239,7 @@ defmodule EctoTestDSL.Run.Steps do
       nil ->
         opts
       kws ->
-        excepts = Neighborhood.Expand.keyword_values(kws, with: neighborhood)
+        excepts = Neighborhood.Expand.values(kws, with: neighborhood)
         Keyword.replace(opts, :except, excepts)
     end
   end

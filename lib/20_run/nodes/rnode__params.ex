@@ -15,7 +15,7 @@ defmodule EctoTestDSL.Run.Rnode.Params do
 
   defimpl Rnode.Substitutable, for: Rnode.Params do
     def substitute(%{params: params}, neighborhood) do
-      Neighborhood.Expand.keyword_values(params, with: neighborhood)
+      Neighborhood.Expand.values(params, with: neighborhood)
     end
   end
   

@@ -1,13 +1,13 @@
 defmodule EctoTestDSL.Neighborhood.Expand do
   use EctoTestDSL.Drink.Me
 
-  def keyword_values(kws, with: neighborhood) when is_map(kws),
-    do: keyword_values_(kws, neighborhood, %{})
+  def values(kws, with: neighborhood) when is_map(kws),
+    do: values_(kws, neighborhood, %{})
 
-  def keyword_values(kws, with: neighborhood) when is_list(kws),
-    do: keyword_values_(kws, neighborhood, [])
+  def values(kws, with: neighborhood) when is_list(kws),
+    do: values_(kws, neighborhood, [])
 
-  def keyword_values_(kws, neighborhood, into) do
+  def values_(kws, neighborhood, into) do
     for {name, value} <- kws, into: into do
       if FieldRef.matches?(value),
         do: {name, FieldRef.dereference(value, in: neighborhood)},

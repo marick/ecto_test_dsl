@@ -7,13 +7,13 @@ defmodule Neighborhood.ExpandTest do
     original = %{a: 1}
     neighborhood = %{}
     expected = original
-    actual = Expand.keyword_values(original, with: neighborhood)
+    actual = Expand.values(original, with: neighborhood)
     assert expected == actual
       
     original = %{a: FieldRef.new(id: een(:neighbor))}
     neighborhood = %{een(:neighbor) => %{id: 5}}
     expected = %{a: 5}
-    actual = Expand.keyword_values(original, with: neighborhood)
+    actual = Expand.values(original, with: neighborhood)
     assert expected == actual
   end
 
