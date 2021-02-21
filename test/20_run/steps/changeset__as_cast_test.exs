@@ -23,11 +23,10 @@ defmodule Run.Steps.AsCastTest do
     def changeset(struct, params), do: Changeset.cast(struct, params, [:age, :date])
   end
 
-  defp run([field, {:params, params}, {:cast_to, cast_value}, {:changes, changes}]) do
+  defp run([field, {:params, params}, {:changes, changes}]) do
     changeset = ChangesetX.valid_changeset(changes: changes)
     stub_history(params: params, changeset_from_params: changeset)
     stub(as_cast: AsCast.new(Schema, [field]))
-    given Schema.changeset(%Schema{}, params), return: cast_value
     Steps.as_cast_checks(:running, :changeset_from_params)
   end
 
@@ -35,9 +34,9 @@ defmodule Run.Steps.AsCastTest do
 
   test "as_cast is used" do
     passes = 
-      [:age, params: %{"age" => "6"}, cast_to: 6, changes: %{age: 6}]
+      [:age, params: %{"age" => "6"}, changes: %{age: 6}]
     fails = 
-      [:age, params: %{"age" => "6"}, cast_to: 6, changes: %{age: 7}]
+      [:age, params: %{"age" => "6"}, changes: %{age: 7}]
 
     pass(passes)
 
@@ -54,10 +53,7 @@ defmodule Run.Steps.AsCastTest do
   end
 
   test "the desired parameter can be missing from the changeset" do
-    passes = 
-      [:age, params: %{}, cast_to: 6, changes: %{}]
-
-    pass(passes)
+    [:age, params: %{}, changes: %{}] |> pass()
   end
 
   test "If the `cast` produces an error, that's checked" do

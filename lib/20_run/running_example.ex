@@ -33,7 +33,6 @@ defmodule EctoTestDSL.Run.RunningExample do
   def neighborhood(running),
     do: Keyword.fetch!(running.history, :repo_setup)
 
-#  def original_params(running), do: running.example.params
   def expanded_params(running), do: Keyword.fetch!(running.history, :params)
 
 
