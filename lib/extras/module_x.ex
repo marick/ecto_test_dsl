@@ -75,7 +75,6 @@ defmodule EctoTestDSL.ModuleX do
     end
 
     def get_leaf(so_far, [name | rest]) do
-      IO.inspect {so_far, name, rest}
       module_for(so_far).fetch!(so_far, name) |> get_leaf(rest)
     end
 
