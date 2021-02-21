@@ -80,18 +80,22 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
     get_for_update_with: &default_get_for_update_with/3,
     changeset_for_update_with: &default_changeset_for_update_with/3,
     update_with: &default_update_with/2,
+    get_primary_key_with: &default_get_primary_key_with/3,
     format: :phoenix,
   ]
 
   def default_get_for_update_with(repo, queryable, example),
     do: repo.get!(queryable, example.id)
   
-  def default_changeset_for_update_with(module_under_test, struct, params) do
-    module_under_test.changeset(struct, params)
-  end
+  def default_changeset_for_update_with(module_under_test, struct, params),
+    do: module_under_test.changeset(struct, params)
 
   def default_update_with(repo, changeset),
     do: repo.update(changeset)
+
+  def default_get_primary_key_with(params, _neighborhood, _repo) do
+    Map.fetch!(params, "id")
+  end
   
   # ------------------- Hook functions -----------------------------------------
 

@@ -165,6 +165,13 @@ defmodule EctoTestDSL.Run.Steps do
     RunningExample.insert_with(running).(repo, changeset)
   end
 
+
+  def primary_key(running) do
+    from(running, use: [:get_primary_key_with, :neighborhood, :repo])
+    from_history(running, [:params])
+    get_primary_key_with.(params, neighborhood, repo)
+  end
+
   IO.puts "struct_for_update"
   def struct_for_update(_running) do
   end

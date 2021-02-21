@@ -17,9 +17,11 @@ defmodule EctoTestDSL.Run.RunningExample do
   ]
 
   getters :example, :metadata, [
-    :as_cast, :field_calculators, :insert_with, :name, :repo, :workflow_name,
-    :variant, :format, :module_under_test, :changeset_with,
-    :changeset_for_update_with, :update_with
+    :as_cast, :field_calculators, :name, :repo, :workflow_name,
+    :variant, :format, :module_under_test, 
+
+    :insert_with, :changeset_with,
+    :changeset_for_update_with, :update_with, :get_primary_key_with
   ]
 
   private_getters :example, [:params]
