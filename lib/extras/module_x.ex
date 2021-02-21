@@ -56,7 +56,15 @@ defmodule EctoTestDSL.ModuleX do
   defmodule Util do
     def module_for(%{}), do: Map
     def module_for([_car|_cdr]), do: Keyword
-    
+
+    def get_leaf(so_far, rest) when not is_map(so_far) and not is_list(so_far) do
+      raise """
+            Trying to get #{inspect rest} from inside #{inspect so_far}.
+            Did you forget to make a stub?
+            Did you make a history stub instead of a one-argument stub?
+            """
+    end
+
     def get_leaf(so_far, [namelike]) do
       case namelike do
         {name, default} ->
@@ -66,8 +74,10 @@ defmodule EctoTestDSL.ModuleX do
       end
     end
 
-    def get_leaf(so_far, [name | rest]),
-      do: module_for(so_far).fetch!(so_far, name) |> get_leaf(rest)
+    def get_leaf(so_far, [name | rest]) do
+      IO.inspect {so_far, name, rest}
+      module_for(so_far).fetch!(so_far, name) |> get_leaf(rest)
+    end
 
     def defx(def_kind, namelike, path) do
       true_name =
