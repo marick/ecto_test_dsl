@@ -6,6 +6,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
   alias T.Parse.Start
   alias T.Parse.Callbacks
   import FlowAssertions.Define.BodyParts
+  import ExUnit.Assertions
 
   # ------------------- Step functions -----------------------------------------
 
@@ -94,7 +95,19 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
     do: repo.update(changeset)
 
   def default_get_primary_key_with(params, _neighborhood, _repo) do
-    Map.fetch!(params, "id")
+    message = """
+      By default, the primary key of the entity to be updated is taken
+      to be the value of key "id" in the form parameters. There is no
+      such key. 
+
+      You probably need to set `:get_primary_key_with` in your `start` function.
+      To learn more, see the documentation or look at your variant's
+      definition of `:get_primary_key_with` in `default_start_opts`.
+      """
+
+    primary_key = Map.get(params, "id")
+    assert primary_key, message
+    primary_key
   end
   
   # ------------------- Hook functions -----------------------------------------
