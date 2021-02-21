@@ -44,12 +44,6 @@ defmodule EctoTestDSL.Run.Steps do
     params
   end
 
-  IO.puts "not sure if this serves any purpose"
-  def params_from_selecting(running) do
-    from(running, use: [:neighborhood, :params_from_selecting])
-    Map.get(neighborhood, params_from_selecting)
-  end
-
 
   ###################### CHANGESET #####################################
 

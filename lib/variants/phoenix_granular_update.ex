@@ -33,7 +33,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
   def workflows() do 
     from_start_through_changeset = [
       :repo_setup,
-      :params_from,
+      :params,
       :primary_key,
       :struct_for_update,
       [:changeset_for_update, uses: [:struct_for_update, :params_from]]
