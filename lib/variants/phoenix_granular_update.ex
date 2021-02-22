@@ -81,7 +81,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
     get_for_update_with: &default_get_for_update_with/3,
     changeset_for_update_with: &default_changeset_for_update_with/3,
     update_with: &default_update_with/2,
-    get_primary_key_with: &default_get_primary_key_with/3,
+    get_primary_key_with: &default_get_primary_key_with/1,
     format: :phoenix,
   ]
 
@@ -94,7 +94,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
   def default_update_with(repo, changeset),
     do: repo.update(changeset)
 
-  def default_get_primary_key_with(params, _neighborhood, _repo) do
+  def default_get_primary_key_with(%{params: params}) do
     message = """
       By default, the primary key of the entity to be updated is taken
       to be the value of key "id" in the form parameters. There is no

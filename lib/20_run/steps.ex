@@ -167,9 +167,10 @@ defmodule EctoTestDSL.Run.Steps do
 
 
   def primary_key(running) do
-    from(running, use: [:get_primary_key_with, :neighborhood, :repo])
+    from(running, use: [:get_primary_key_with, :neighborhood])
     from_history(running, [:params])
-    get_primary_key_with.(params, neighborhood, repo)
+
+    get_primary_key_with.(~M{neighborhood, params})
   end
 
   IO.puts "struct_for_update"

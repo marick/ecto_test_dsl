@@ -9,8 +9,7 @@ defmodule Run.Steps.PrimaryTest do
     setup do 
       stub(
         neighborhood: "--irrelevant--",
-        repo: "--irrelevant--",
-        get_primary_key_with: &Update.default_get_primary_key_with/3
+        get_primary_key_with: &Update.default_get_primary_key_with/1
       )
       :ok
     end
@@ -29,6 +28,24 @@ defmodule Run.Steps.PrimaryTest do
         fn ->
           Steps.primary_key(:running)
         end)
+    end
+  end
+
+
+  describe "overridding the primary key getter" do
+    setup do 
+      stub(neighborhood: "--irrelevant--")
+      stub_history(params: "--irrelevant--")
+      :ok
+    end
+      
+    test "the neighborhood is made available" do
+      stub(neighborhood: "a primary key source")
+      stub(get_primary_key_with: fn %{neighborhood: neighborhood} ->
+        neighborhood
+      end)
+    
+      assert Steps.primary_key(:running) == "a primary key source"
     end
   end
 end
