@@ -27,13 +27,20 @@ defmodule EctoTestDSL.Run.RunningExample do
   private_getters :example, [:params]
   publicize :original_params, renames: :params
 
-  def step_value!(running, step_name),
-    do: History.fetch!(running.history, step_name)
+  def step_value!(~M{history}, step_name),
+    do: History.fetch!(history, step_name)
+  # A correct RunningExample will always match the above. If the first
+  # argument does not, we are most likely mocking incorrectly.
+  def step_value!(mocked, step_name) do
+    elaborate_flunk("There does not seem to be a `step_value!` stub for `#{inspect step_name}`",
+      left: "step_value!(#{inspect mocked}, #{inspect step_name})")
+  end
 
-  def neighborhood(running),
-    do: Keyword.fetch!(running.history, :repo_setup)
+  # Conveniences for history values we know will always have the same name.
+  # Possibly a bad idea.
+  def neighborhood(running), do: step_value!(running, :repo_setup)
+  def expanded_params(running), do: step_value!(running, :params)
 
-  def expanded_params(running), do: Keyword.fetch!(running.history, :params)
 
 
   # ----------------------------------------------------------------------------

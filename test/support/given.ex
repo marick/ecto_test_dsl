@@ -134,12 +134,8 @@ defmodule Given do
   The format is not pretty.
   """
   def inspect do
-    filter =
-      fn {{Given, _module, _function_description}, _} -> true
-         _ -> false
-      end
     Process.get
-    |> Enum.filter(filter)
+    |> Enum.filter(&Util.given?/1)
     |> IO.inspect
   end
 
@@ -156,6 +152,9 @@ defmodule Given do
   defmodule Util do
     def process_dictionary_key(module, function_description),
       do: {Given, module, function_description}
+
+    def given?({{Given, _module, _function_description}, _}), do: true
+    def given?(_), do: false
 
     defp new_stub(arglist_spec, return_value),
       do: {arglist_spec, return_value, make_matcher(arglist_spec)}
