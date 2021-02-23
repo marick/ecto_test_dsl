@@ -128,6 +128,21 @@ defmodule Given do
     end
   end
 
+  @doc """
+  This shows (as with `IO.inspect` all the existing stubs.
+
+  The format is not pretty.
+  """
+  def inspect do
+    filter =
+      fn {{Given, _module, _function_description}, _} -> true
+         _ -> false
+      end
+    Process.get
+    |> Enum.filter(filter)
+    |> IO.inspect
+  end
+
   defmacro __using__(_) do
     quote do
       import Given, only: [given: 2]
