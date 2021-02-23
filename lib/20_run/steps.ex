@@ -173,8 +173,11 @@ defmodule EctoTestDSL.Run.Steps do
     get_primary_key_with.(~M{neighborhood, params})
   end
 
-  IO.puts "struct_for_update"
-  def struct_for_update(_running) do
+  def struct_for_update(running, which_primary_key) do
+    from(running, use: [:struct_for_update_with, :repo, :module_under_test])
+    from_history(running, primary_key: which_primary_key)
+
+    struct_for_update_with.(~M{repo, module_under_test, primary_key})
   end
 
   def try_changeset_update(running, which_changeset) do

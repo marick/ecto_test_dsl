@@ -1,6 +1,7 @@
 defmodule EctoTestDSL.Run.RunningExample do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AndRun
+  use EctoTestDSL.Drink.AssertionJuice
   import T.ModuleX
 
   @enforce_keys [:example, :history]
@@ -21,7 +22,8 @@ defmodule EctoTestDSL.Run.RunningExample do
     :variant, :format, :module_under_test, 
 
     :insert_with, :changeset_with,
-    :changeset_for_update_with, :update_with, :get_primary_key_with
+    :changeset_for_update_with, :update_with, :get_primary_key_with,
+    :struct_for_update_with
   ]
 
   private_getters :example, [:params]
