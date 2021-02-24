@@ -4,16 +4,23 @@ defmodule Run.Support.FormatParamsTest do
 
   @params %{
     age: 1,
-    date: "2011-02-03",
+    date_string: "2011-02-03",
     nested: %{a: 3},
-    list: [1, 2, 3]
+    list: [1, 2, 3],
+    date: ~D[2001-02-03],
+    dates: [~D[2001-02-03]],
+    complex: %{a: [~D[2001-02-03], %{a: [~D[2002-02-02]]}]}
   }
 
   @interpreted_as_phoenix %{
     "age" => "1",
-    "date" => "2011-02-03",
+    "date_string" => "2011-02-03",
     "nested" => %{"a" => "3"},
-    "list" => ["1", "2", "3"]}
+    "list" => ["1", "2", "3"],
+    "date" => "2001-02-03",
+    "dates" => ["2001-02-03"],
+    "complex" => %{"a" => ["2001-02-03", %{"a" => ["2002-02-02"]}]}
+  }
 
   test "different formats" do
     expect = fn format, expected ->

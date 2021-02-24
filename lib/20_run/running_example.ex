@@ -74,18 +74,23 @@ defmodule EctoTestDSL.Run.RunningExample do
     end
   end
 
-  defp raw_format(map), do: map
+  def raw_format(map), do: map
   
-  defp phoenix_format(map) do
+  def phoenix_format(map) do
     map
+    |> Map.delete(:__meta__)
     |> Enum.map(fn {k,v} -> {value_to_string(k), value_to_string(v)} end)
     |> Map.new
   end
 
-  defp value_to_string(value) when is_list(value),
-    do: Enum.map(value, &to_string/1)
-  defp value_to_string(value) when is_map(value),
-    do: phoenix_format(value)
-  defp value_to_string(value),
-    do: to_string(value)
+  defp value_to_string(value) do
+    cond do
+      is_list(value) ->
+        Enum.map(value, &value_to_string/1)
+      String.Chars.impl_for(value) ->
+        to_string(value)
+      is_map(value) -> 
+        phoenix_format(value)
+    end
+  end
 end
