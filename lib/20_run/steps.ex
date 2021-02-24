@@ -38,7 +38,7 @@ defmodule EctoTestDSL.Run.Steps do
     params =
       original_params
       |> Rnode.Substitutable.substitute(neighborhood)
-      |> RunningExample.formatted_params_for_history(running, ...)
+      |> RunningExample.formatted_params(running, ...)
 
     Trace.say(params, :params)
     params

@@ -3,6 +3,7 @@ defmodule EctoTestDSL.Run.RunningExample do
   use EctoTestDSL.Drink.AndRun
   use EctoTestDSL.Drink.AssertionJuice
   import T.ModuleX
+  alias Formats.Phoenix
 
   @enforce_keys [:example, :history]
   defstruct [:example, :history,
@@ -56,10 +57,10 @@ defmodule EctoTestDSL.Run.RunningExample do
   end
 
   # ----------------------------------------------------------------------------
-  def formatted_params_for_history(running, params) do
+  def formatted_params(running, params) do
     formatters = %{
-      raw: &raw_format/1,
-      phoenix: &phoenix_format/1
+      raw: &(&1),
+      phoenix: &Phoenix.format/1
     }
 
     format = mockable(__MODULE__).format(running)
@@ -71,26 +72,6 @@ defmodule EctoTestDSL.Run.RunningExample do
         """
       formatter ->
         formatter.(params)
-    end
-  end
-
-  def raw_format(map), do: map
-  
-  def phoenix_format(map) do
-    map
-    |> Map.delete(:__meta__)
-    |> Enum.map(fn {k,v} -> {value_to_string(k), value_to_string(v)} end)
-    |> Map.new
-  end
-
-  defp value_to_string(value) do
-    cond do
-      is_list(value) ->
-        Enum.map(value, &value_to_string/1)
-      String.Chars.impl_for(value) ->
-        to_string(value)
-      is_map(value) -> 
-        phoenix_format(value)
     end
   end
 end
