@@ -8,6 +8,7 @@ defmodule EctoTestDSL.Parse.Exports do
       import EctoTestDSL.Parse.TopLevel
       import EctoTestDSL.Parse.ExampleFunctions
       import EctoTestDSL.Parse.InternalFunctions
+      import EctoTestDSL.Nouns.EEN.Macros
     end
   end
 end
