@@ -1,6 +1,6 @@
 defmodule EctoTestDSL.Nouns.TestData do
   use EctoTestDSL.Drink.Me
-  use T.Drink.AssertionJuice
+  use T.Drink.Assertively
   alias EctoTestDSL.TestDataServer
   
   @moduledoc """

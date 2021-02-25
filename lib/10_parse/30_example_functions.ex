@@ -1,7 +1,7 @@
 defmodule EctoTestDSL.Parse.ExampleFunctions do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndParse
-  use EctoTestDSL.Drink.AssertionJuice
+  use EctoTestDSL.Drink.Assertively
 
   # ----------------------------------------------------------------------------
   def params(opts \\ []),

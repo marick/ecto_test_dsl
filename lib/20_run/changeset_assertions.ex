@@ -1,6 +1,6 @@
 defmodule EctoTestDSL.Run.ChangesetAssertions do
   use EctoTestDSL.Drink.Me
-  use EctoTestDSL.Drink.AssertionJuice
+  use EctoTestDSL.Drink.Assertively
 
   @moduledoc """
   A function that might throw an AssertionError about a given changeset.

@@ -1,6 +1,6 @@
 defmodule EctoTestDSL.Nouns.Example do
   use EctoTestDSL.Drink.Me
-  use T.Drink.AssertionJuice
+  use T.Drink.Assertively
   import T.ModuleX
   
   @moduledoc """

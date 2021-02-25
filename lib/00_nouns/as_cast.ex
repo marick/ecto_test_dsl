@@ -1,6 +1,6 @@
 defmodule EctoTestDSL.Nouns.AsCast do
   use EctoTestDSL.Drink.Me
-  use T.Drink.AssertionJuice
+  use T.Drink.Assertively
   use T.Drink.AndRun
   alias Ecto.Changeset
   alias T.Nouns.AsCast

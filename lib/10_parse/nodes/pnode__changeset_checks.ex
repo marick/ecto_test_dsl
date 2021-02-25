@@ -1,7 +1,7 @@
 defmodule EctoTestDSL.Parse.Pnode.ChangesetChecks do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndParse
-  use T.Drink.AssertionJuice
+  use T.Drink.Assertively
   alias Pnode.ChangesetChecks, as: CC
   
   defstruct parsed: [], with_ensured_eens: [], eens: []

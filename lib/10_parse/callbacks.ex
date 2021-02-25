@@ -1,6 +1,6 @@
 defmodule EctoTestDSL.Parse.Callbacks do
   use EctoTestDSL.Drink.Me
-  use T.Drink.AssertionJuice
+  use T.Drink.Assertively
   alias T.Parse.Start
 
   @required_keys [:module_under_test, :variant] ++ Map.keys(Start.starting_test_data)

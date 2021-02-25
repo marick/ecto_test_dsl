@@ -1,7 +1,7 @@
 defmodule EctoTestDSL.Run.Rnode.ParamsFromRepo do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndRun
-  use T.Drink.AssertionJuice
+  use T.Drink.Assertively
   alias T.Run.Rnode
   
   @moduledoc """

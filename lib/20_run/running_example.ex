@@ -1,7 +1,7 @@
 defmodule EctoTestDSL.Run.RunningExample do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AndRun
-  use EctoTestDSL.Drink.AssertionJuice
+  use EctoTestDSL.Drink.Assertively
   import T.ModuleX
   alias Formats.Phoenix
 

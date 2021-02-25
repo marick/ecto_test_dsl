@@ -1,6 +1,6 @@
 defmodule EctoTestDSL.Run.Steps.Util do
   use EctoTestDSL.Drink.Me
-  use EctoTestDSL.Drink.AssertionJuice
+  use EctoTestDSL.Drink.Assertively
   use EctoTestDSL.Drink.AndRun
   
   def context(name, message),

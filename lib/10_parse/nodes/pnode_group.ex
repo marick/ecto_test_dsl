@@ -1,7 +1,7 @@
 defmodule EctoTestDSL.Parse.Pnode.Group do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndParse
-  use T.Drink.AssertionJuice
+  use T.Drink.Assertively
 
   def squeeze_into_map(kws) do
     reducer = fn {name, value}, acc ->

@@ -1,6 +1,6 @@
 defmodule EctoTestDSL.Run.Steps do
   use EctoTestDSL.Drink.Me
-  use EctoTestDSL.Drink.AssertionJuice
+  use EctoTestDSL.Drink.Assertively
   use EctoTestDSL.Drink.AndRun
   alias Run.Rnode
   import T.Run.Steps.Util

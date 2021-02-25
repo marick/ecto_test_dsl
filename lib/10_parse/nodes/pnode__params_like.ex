@@ -1,7 +1,7 @@
 defmodule EctoTestDSL.Parse.Pnode.ParamsLike do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndParse
-  use T.Drink.AssertionJuice
+  use T.Drink.Assertively
   
   @moduledoc """
   """

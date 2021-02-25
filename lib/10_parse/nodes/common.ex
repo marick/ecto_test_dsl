@@ -1,6 +1,6 @@
 defmodule EctoTestDSL.Parse.Pnode.Common do
   use EctoTestDSL.Drink.Me
-  use T.Drink.AssertionJuice
+  use T.Drink.Assertively
 
   def merge_parsed(module, %{parsed: earlier}, %{parsed: later}),
     do: module.new(Map.merge(earlier, later))

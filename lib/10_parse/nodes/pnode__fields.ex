@@ -1,7 +1,7 @@
 defmodule EctoTestDSL.Parse.Pnode.Fields do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndParse
-  use T.Drink.AssertionJuice
+  use T.Drink.Assertively
   
   defstruct parsed: %{}, with_ensured_eens: %{}, eens: []
 

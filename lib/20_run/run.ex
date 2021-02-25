@@ -1,7 +1,7 @@
 defmodule EctoTestDSL.Run do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndRun
-  use T.Drink.AssertionJuice
+  use T.Drink.Assertively
 
   def example(example, opts \\ []) do
     running = RunningExample.from(example,
