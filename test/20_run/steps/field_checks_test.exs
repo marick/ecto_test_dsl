@@ -7,7 +7,7 @@ defmodule Run.Steps.FieldChecksTest do
   import T.Parse.InternalFunctions
 
   setup do
-    stub(name: :example, neighborhood: %{})
+    stub(name: :example, neighborhood: %{}, usually_ignore: [])
     stub(fields_like: :nothing)  # Fields_like is checked in fields_like_test.exs
     :ok
   end

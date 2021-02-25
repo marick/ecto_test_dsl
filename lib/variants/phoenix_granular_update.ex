@@ -84,6 +84,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
     get_primary_key_with: &default_get_primary_key_with/1,
     struct_for_update_with: &default_struct_for_update_with/1,
     format: :phoenix,
+    usually_ignore: [],
   ]
 
   def default_get_for_update_with(repo, queryable, example),

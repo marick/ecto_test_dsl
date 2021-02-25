@@ -211,12 +211,13 @@ defmodule EctoTestDSL.Run.Steps do
   end
 
   def field_checks(running, which_step) do
-    from(running, use: [:neighborhood, :name, :field_checks, :fields_like])
+    from(running, use: [:neighborhood, :name, :field_checks,
+                        :fields_like, :usually_ignore])
     from_history(running, to_be_checked: which_step)
 
     adjust_assertion_message(fn -> 
       do_field_checks(field_checks, to_be_checked, neighborhood)
-      do_fields_like(fields_like, to_be_checked, neighborhood)
+      do_fields_like(fields_like, to_be_checked, neighborhood, usually_ignore)
     end,
       identify_example(name))
 
@@ -231,10 +232,13 @@ defmodule EctoTestDSL.Run.Steps do
     end
   end
 
-  defp do_fields_like(:nothing, _, _), do: :ok
-  defp do_fields_like(fields_like, to_be_checked, neighborhood) do
+  defp do_fields_like(:nothing, _, _, _), do: :ok
+  defp do_fields_like(fields_like, to_be_checked, neighborhood, usually_ignore) do
     reference_value = Map.get(neighborhood, fields_like.een)
-    opts = expand_expected(fields_like.opts, neighborhood)
+    opts =
+      fields_like.opts
+      |> expand_expected(neighborhood)
+      |> expand_ignoring(usually_ignore)
 
     MapA.assert_same_map(to_be_checked, reference_value, opts)
   end
@@ -246,6 +250,19 @@ defmodule EctoTestDSL.Run.Steps do
       kws ->
         excepts = Neighborhood.Expand.values(kws, with: neighborhood)
         Keyword.replace(opts, :except, excepts)
+    end
+  end
+
+  defp expand_ignoring(opts, usually_ignore) do
+    case Keyword.has_key?(opts, :comparing) do
+      true ->
+        # Note: if they have both `:comparing` and `:ignoring`, fine.
+        # `assert_same_map` will do the complaining.
+        opts
+
+      false -> 
+        {local_ignoring, _rest} = Keyword.pop(opts, :ignoring, [])
+        Keyword.put(opts, :ignoring, local_ignoring ++ usually_ignore)
     end
   end
 

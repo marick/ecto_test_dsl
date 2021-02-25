@@ -9,12 +9,12 @@ defmodule Run.Steps.FieldsLikeTest do
 
   setup do
     stub(name: :example, neighborhood: %{})
-    stub(field_checks: %{})
+    stub(field_checks: %{}, usually_ignore: [])
     :ok
   end
 
-  defp run(~M{under_test, opts}) do 
-    stub_history(updated_value: under_test)
+  defp run(~M{actual, opts}) do 
+    stub_history(updated_value: actual)
     stub(fields_like: Rnode.FieldsLike.new(een(:inserted), opts))
     Steps.field_checks(:running, :updated_value)
   end
@@ -24,12 +24,12 @@ defmodule Run.Steps.FieldsLikeTest do
   describe "fields_like" do
     test "just an een: pass" do
       stub(neighborhood: %{een(:inserted) => %{a: 5}})
-      %{under_test:                          %{a: 5}, opts: []} |> pass()
+      %{actual:                              %{a: 5}, opts: []} |> pass()
     end
 
     test "just an een: fail" do
       stub(neighborhood: %{een(:inserted) => %{a: 4}})
-      input = %{under_test:                  %{a: 5}, opts: []}
+      input = %{actual:                      %{a: 5}, opts: []}
 
       assertion_fails(~r/Example `:example`/,
         [message: ~r/Assertion with == failed/,
@@ -42,7 +42,7 @@ defmodule Run.Steps.FieldsLikeTest do
 
     test "just an een: extra fields" do
       stub(neighborhood: %{een(:inserted) => %{a: 5}})
-      input = %{under_test:                  %{a: 5, b: 4}, opts: []}
+      input = %{actual:                      %{a: 5, b: 4}, opts: []}
 
       assertion_fails(~r/Example `:example`/,
         [message: ~r/Assertion with == failed/,
@@ -56,7 +56,7 @@ defmodule Run.Steps.FieldsLikeTest do
     test "`ignoring` works" do
       stub(neighborhood: %{een(:inserted) => %{a: 5}})
       input = %{
-        under_test:                          %{a: 5, lock_value: 58},
+        actual:                              %{a: 5, lock_value: 58},
         opts:                           [ignoring: [:lock_value]]
       }
 
@@ -67,7 +67,7 @@ defmodule Run.Steps.FieldsLikeTest do
       stub(neighborhood: %{een(:inserted) => %{a: 5, special: "old"}})
 
       input = %{
-                           under_test:       %{a: 5, special: "new"},
+        actual:                              %{a: 5, special: "new"},
         opts:                              [except: [special: "new"]]
       }
 
@@ -79,7 +79,7 @@ defmodule Run.Steps.FieldsLikeTest do
                            een(:bovine)   => %{              id: 12}})
 
       input = %{
-                            under_test:      %{a: 5, species_id: 12},
+                            actual:          %{a: 5, species_id: 12},
                                      opts: [except: [species_id: id_of(:bovine)]]
       }
 
@@ -87,8 +87,33 @@ defmodule Run.Steps.FieldsLikeTest do
     end
   end
 
-  describe "both `fields` and `fields_like` can be used" do
+  describe "global 'usually_ignore'" do
+    test "has an effect" do
+      stub(usually_ignore: [:lock_value])
+      stub(neighborhood: %{een(:inserted) => %{a: 5, lock_value: 8}})
+      run_args = %{opts: [], actual:         %{a: 5, lock_value: 9}}
+      run_args |> pass()
+    end
 
+    test "merges" do
+      stub(usually_ignore: [:lock_value])
+      stub(neighborhood: %{een(:inserted) => %{a: 5, lock_value: 8}})
+      run_args = %{opts: [ignoring: [:a]],
+                   actual:                   %{a: 8, lock_value: 9}}
+      run_args |> pass()
+    end
+
+    test "`comparing` cancels out the effects of the global `usually_ignore`" do
+      stub(usually_ignore: [:a])
+      stub(neighborhood: %{een(:inserted) => %{a: 5, lock_value: 8}})
+      run_args = %{opts: [comparing: [:a]],
+                   actual:                   %{a: 5, lock_value: 9}}
+      run_args |> pass()
+    end
+    
+  end
+
+  describe "both `fields` and `fields_like` can be used" do
     setup do 
       stub(field_checks: [a: "right"])
       stub(fields_like: Rnode.FieldsLike.new(een(:inserted), [comparing: [:b]]))
