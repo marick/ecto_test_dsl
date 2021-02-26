@@ -2,35 +2,15 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
   use EctoTestDSL.Drink.Me
   alias T.Run.Steps
   alias T.Variants.PhoenixGranular.Update, as: ThisVariant
-  import T.Variants.Macros
   alias T.Parse.Start
   alias T.Parse.Callbacks
   import FlowAssertions.Define.BodyParts
   import ExUnit.Assertions
 
-  # ------------------- Step functions -----------------------------------------
+  # ------------------- Workflows -----------------------------------------
 
-  defsteps [
-    :repo_setup,
-    
-    :params,
-    
-    :assert_valid_changeset,
-    :refute_valid_changeset,
-    :example_specific_changeset_checks,
-    :as_cast_checks,
-    :field_calculation_checks,
-    :changeset_for_update,
-    
-    :primary_key,
-    :struct_for_update,
-    :try_changeset_update,
-    
-    :ok_content,
-    :error_content,
-    :field_checks
-  ], from: Steps
-
+  use T.Run.Steps
+  
   def workflows() do 
     from_start_through_changeset = [
       :repo_setup,

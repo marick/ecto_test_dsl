@@ -8,6 +8,8 @@ defmodule EctoTestDSL.Run.Steps do
   alias FlowAssertions.MapA
   use Magritte
 
+  Module.register_attribute __MODULE__, :step, accumulate: true, persist: true
+
   ###################### SETUP #####################################
 
   # I can't offhand think of any case where one `repo_setup` might need to
@@ -25,6 +27,7 @@ defmodule EctoTestDSL.Run.Steps do
     end
   end
 
+  @step :repo_setup
   def repo_setup(running) do
     from(running, use: [:neighborhood, :eens])
     Enum.reduce(eens, neighborhood, &Neighborhood.Create.from_an_een/2)
@@ -32,6 +35,7 @@ defmodule EctoTestDSL.Run.Steps do
 
   ###################### PARAMS #####################################
 
+  @step :params
   def params(running) do
     from(running, use: [:neighborhood, :original_params])
 
@@ -48,11 +52,13 @@ defmodule EctoTestDSL.Run.Steps do
   ###################### CHANGESET #####################################
 
 
+  @step :changeset_from_params
   def changeset_from_params(running) do 
     from(running, use: [:expanded_params, :module_under_test, :changeset_with])
     changeset_with.(module_under_test, expanded_params)
   end
 
+  @step :changeset_for_update
   def changeset_for_update(running, which_struct) do
     from(running,
       use: [:expanded_params, :module_under_test, :changeset_for_update_with])
@@ -62,16 +68,18 @@ defmodule EctoTestDSL.Run.Steps do
   end
   # ----------------------------------------------------------------------------
 
+  @step :assert_valid_changeset
   def assert_valid_changeset(running, which_changeset) do 
     validity_assertions(running, which_changeset,
       ChangesetAssertions.from(:valid), "a valid")
   end
-    
+
+  @step :refute_valid_changeset
   def refute_valid_changeset(running, which_changeset) do 
     validity_assertions(running, which_changeset,
       ChangesetAssertions.from(:invalid), "an invalid")
   end
-    
+
   defp validity_assertions(running, which_changeset, assertion, error_snippet) do
     from(running, use: [:name, :workflow_name])
     from_history(running, changeset: which_changeset)
@@ -89,6 +97,7 @@ defmodule EctoTestDSL.Run.Steps do
 
   # ----------------------------------------------------------------------------
 
+  @step :example_specific_changeset_checks
   def example_specific_changeset_checks(running, which_changeset) do
     from(running, use: [:name])
     from_history(running, changeset: which_changeset)
@@ -101,6 +110,7 @@ defmodule EctoTestDSL.Run.Steps do
   end
 
   # ----------------------------------------------------------------------------
+  @step :as_cast_checks
   def as_cast_checks(running, which_changeset) do
     from(running, use: [:name, :as_cast])
     from_history(running, [:params, changeset: which_changeset])
@@ -113,6 +123,7 @@ defmodule EctoTestDSL.Run.Steps do
     :uninteresting_result
   end
 
+  @step :field_calculation_checks
   def field_calculation_checks(running, which_changeset) do
     from(running, use: [:name, :field_calculators])
     from_history(running, changeset: which_changeset)
@@ -126,6 +137,7 @@ defmodule EctoTestDSL.Run.Steps do
   end
 
   # ----------------------------------------------------------------------------
+  @step :user_checks
   defp user_checks(running) do
     from(running, use: [:neighborhood, :validation_changeset_checks])
 
@@ -158,6 +170,7 @@ defmodule EctoTestDSL.Run.Steps do
 
   ###################### ECTO #####################################
 
+  @step :try_changeset_insertion
   def try_changeset_insertion(running, which_changeset) do
     from(running, use: [:repo])
     from_history(running, changeset: which_changeset)    
@@ -165,7 +178,7 @@ defmodule EctoTestDSL.Run.Steps do
     RunningExample.insert_with(running).(repo, changeset)
   end
 
-
+  @step :primary_key
   def primary_key(running) do
     from(running, use: [:get_primary_key_with, :neighborhood])
     from_history(running, [:params])
@@ -173,6 +186,7 @@ defmodule EctoTestDSL.Run.Steps do
     get_primary_key_with.(~M{neighborhood, params})
   end
 
+  @step :struct_for_update
   def struct_for_update(running, which_primary_key) do
     from(running, use: [:struct_for_update_with, :repo, :module_under_test])
     from_history(running, primary_key: which_primary_key)
@@ -180,6 +194,7 @@ defmodule EctoTestDSL.Run.Steps do
     struct_for_update_with.(~M{repo, module_under_test, primary_key})
   end
 
+  @step :try_changeset_update
   def try_changeset_update(running, which_changeset) do
     from(running, use: [:repo, :update_with])
     from_history(running, changeset: which_changeset)    
@@ -191,10 +206,12 @@ defmodule EctoTestDSL.Run.Steps do
 
   ###################### RESULT CHECKING  #####################################
 
+  @step :ok_content
   def ok_content(running, which_step) do
     extract_content(running, :ok_content, which_step)
   end
 
+  @step :error_content
   def error_content(running, which_step) do
     extract_content(running, :error_content, which_step)
   end
@@ -210,6 +227,7 @@ defmodule EctoTestDSL.Run.Steps do
       identify_example(name))
   end
 
+  @step :field_checks
   def field_checks(running, which_step) do
     from(running, use: [:neighborhood, :name, :field_checks,
                         :fields_like, :usually_ignore])
@@ -266,5 +284,16 @@ defmodule EctoTestDSL.Run.Steps do
     end
   end
 
-  
+
+  defmacro __using__(_) do
+    step_module = __MODULE__
+    for step_name <- @step do
+      quote do
+        def unquote(step_name)(running, rest_args) do
+          args = [running | rest_args]
+          apply(unquote(step_module), unquote(step_name), args)
+        end
+      end
+    end
+  end
 end
