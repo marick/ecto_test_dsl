@@ -191,7 +191,9 @@ defmodule EctoTestDSL.Run.Steps do
     from(running, use: [:struct_for_update_with, :repo, :module_under_test])
     from_history(running, primary_key: which_primary_key)
 
-    struct_for_update_with.(~M{repo, module_under_test, primary_key})
+    ~M{repo, module_under_test, primary_key}
+    |> Map.put(:set_hint, :struct_for_update_with)
+    |> struct_for_update_with.() |> IO.inspect
   end
 
   @step :try_changeset_update
@@ -201,8 +203,6 @@ defmodule EctoTestDSL.Run.Steps do
 
     update_with.(repo, changeset)
   end
-
-  
 
   ###################### RESULT CHECKING  #####################################
 

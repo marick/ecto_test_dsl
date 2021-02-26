@@ -5,7 +5,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
   alias T.Parse.Start
   alias T.Parse.Callbacks
   import FlowAssertions.Define.BodyParts
-  import ExUnit.Assertions
+  alias T.Variants.Common.DefaultFunctions
 
   # ------------------- Workflows -----------------------------------------
 
@@ -58,56 +58,13 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
   end
 
   defp default_start_opts, do: [
-    get_for_update_with: &default_get_for_update_with/3,
-    changeset_for_update_with: &default_changeset_for_update_with/3,
-    update_with: &default_update_with/2,
-    get_primary_key_with: &default_get_primary_key_with/1,
-    struct_for_update_with: &default_struct_for_update_with/1,
+    changeset_for_update_with: &DefaultFunctions.plain_changeset/3,
+    update_with: &DefaultFunctions.plain_update/2,
+    get_primary_key_with: &DefaultFunctions.primary_key_from_id_param/1,
+    struct_for_update_with: &DefaultFunctions.checked_get/1,
     format: :phoenix,
     usually_ignore: [],
   ]
-
-  def default_get_for_update_with(repo, queryable, example),
-    do: repo.get!(queryable, example.id)
-  
-  def default_changeset_for_update_with(module_under_test, struct, params),
-    do: module_under_test.changeset(struct, params)
-
-  def default_update_with(repo, changeset),
-    do: repo.update(changeset)
-
-  def default_get_primary_key_with(%{params: params}) do
-    message = """
-      By default, the primary key of the entity to be updated is taken
-      to be the value of key "id" in the form parameters. There is no
-      such key. 
-
-      You probably need to set `:get_primary_key_with` in your `start` function.
-      To learn more, see the documentation or look at your variant's
-      definition of `:get_primary_key_with` in `default_start_opts`.
-      """
-
-    primary_key = Map.get(params, "id")
-    assert primary_key, message
-    primary_key
-  end
-
-  def default_struct_for_update_with(
-    %{repo: repo, module_under_test: module_under_test, primary_key: primary_key}    
-  ) do
-    
-    message = """
-     Could not fetch a #{inspect module_under_test} with primary key `#{primary_key}`.
-     You may need to set `:struct_for_update_with` in your `start` function.
-     To learn more, see the documentation or look at your variant's
-     definition of `:struct_for_update_with` in `default_start_opts`.
-     """
-
-    result = repo.get(module_under_test, primary_key)
-    assert result, message
-    result
-  end
-  
   
   # ------------------- Hook functions -----------------------------------------
 

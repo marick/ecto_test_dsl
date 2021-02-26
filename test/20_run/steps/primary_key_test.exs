@@ -3,13 +3,13 @@ defmodule Run.Steps.PrimaryTest do
   use T.Drink.AndRun
   alias Run.Steps
   import T.RunningStubs
-  alias EctoTestDSL.Variants.PhoenixGranular.Update  
+  alias T.Variants.Common.DefaultFunctions
 
   describe "default getter" do
     setup do 
       stub(
         neighborhood: "--irrelevant--",
-        get_primary_key_with: &Update.default_get_primary_key_with/1
+        get_primary_key_with: &DefaultFunctions.primary_key_from_id_param/1
       )
       :ok
     end

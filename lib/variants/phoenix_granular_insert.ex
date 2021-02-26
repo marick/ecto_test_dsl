@@ -5,6 +5,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
   alias T.Parse.Start
   alias T.Parse.Callbacks
   import FlowAssertions.Define.BodyParts
+  alias T.Variants.Common.DefaultFunctions
 
   # ------------------- Workflows -----------------------------------------
 
@@ -54,19 +55,12 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
   end
 
   defp default_start_opts, do: [
-    changeset_with: &default_changeset_with/2,
-    insert_with: &default_insert_with/2,
+    changeset_with: &DefaultFunctions.params_only_changeset/2,
+    insert_with: &DefaultFunctions.plain_insert/2,
     format: :phoenix,
     usually_ignore: [],
   ]
 
-  def default_changeset_with(module_under_test, params) do
-    default_struct = struct(module_under_test)
-    module_under_test.changeset(default_struct, params)
-  end
-
-  def default_insert_with(repo, changeset),
-    do: repo.insert(changeset)
   
   # ------------------- Hook functions -----------------------------------------
 
