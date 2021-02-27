@@ -171,7 +171,7 @@ defmodule EctoTestDSL.Run.Steps do
 
     ~M{repo, module_under_test, primary_key}
     |> Map.put(:set_hint, :struct_for_update_with)
-    |> struct_for_update_with.() |> IO.inspect
+    |> struct_for_update_with.()
   end
 
   @step :try_changeset_update

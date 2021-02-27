@@ -114,10 +114,19 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
         end
 
         def inserted(example_name) do
-          {:ok, value} = 
+          result =
             check_workflow(example_name, stop_after: :ok_content)
             |> Keyword.get(:try_changeset_insertion)
-          value
+          case result do
+            {:ok, value} ->
+              value
+            _ ->
+              message = """
+              You asked for the result of a successful insertion,
+              but the actual insertion attempt failed.
+              """
+              elaborate_flunk(message, [left: result])
+          end
         end
       end
     end
