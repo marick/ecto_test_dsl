@@ -5,6 +5,7 @@ defmodule EctoTestDSL.Drink.AndRun do
       alias EctoTestDSL.Run
       alias EctoTestDSL.Run.RunningExample
       alias EctoTestDSL.Run.ChangesetAssertions
+      alias EctoTestDSL.Run.Reporting
     end
   end
 end

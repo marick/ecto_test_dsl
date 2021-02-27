@@ -1,16 +1,8 @@
-defmodule EctoTestDSL.Run.Steps.Util do
+defmodule EctoTestDSL.Run.From do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.Assertively
   use EctoTestDSL.Drink.AndRun
   
-  def context(name, message),
-    do: "Example `#{inspect name}`: #{message}"
-
-  def identify_example(name) do
-    fn message -> context(name, message) end
-  end
-
-  # ----------------------------------------------------------------------------
   defmacro from(running, use: keys) do
     assert_existence(keys, 1)
     varlist = Enum.map(keys, &one_var/1)    
@@ -24,6 +16,7 @@ defmodule EctoTestDSL.Run.Steps.Util do
     emit(varlist, calls)
   end
 
+  # ----------------------------------------------------------------------------
   defp one_var({var_name, _step_name}), do: Macro.var(var_name, nil)
   defp one_var( var_name),              do: Macro.var(var_name, nil)
 

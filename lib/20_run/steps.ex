@@ -2,9 +2,9 @@ defmodule EctoTestDSL.Run.Steps do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.Assertively
   use EctoTestDSL.Drink.AndRun
+  import Run.From
   alias Run.Rnode
-  import T.Run.Steps.Util
-  alias T.Run.ChangesetChecks, as: CC
+  alias Run.ChangesetChecks, as: CC
   alias FlowAssertions.MapA
   use Magritte
 
@@ -157,17 +157,10 @@ defmodule EctoTestDSL.Run.Steps do
         for a <- assertions, do: a.(changeset)
       end,
       fn message ->
-        error_message(name, message, changeset)
+        Reporting.error_message(name, message, changeset)
       end)
   end
   
-  def error_message(name, message, changeset) do
-    """
-    #{context(name, message)}
-    Changeset: #{inspect changeset}
-    """
-  end
-
   ###################### ECTO #####################################
 
   @step :try_changeset_insertion
@@ -224,7 +217,7 @@ defmodule EctoTestDSL.Run.Steps do
       fn ->
         apply(FlowAssertions.MiscA, extractor, [value])
       end,
-      identify_example(name))
+      Reporting.identify_example(name))
   end
 
   @step :field_checks
@@ -237,7 +230,7 @@ defmodule EctoTestDSL.Run.Steps do
       do_field_checks(field_checks, to_be_checked, neighborhood)
       do_fields_like(fields_like, to_be_checked, neighborhood, usually_ignore)
     end,
-      identify_example(name))
+      Reporting.identify_example(name))
 
     :uninteresting_result
   end
