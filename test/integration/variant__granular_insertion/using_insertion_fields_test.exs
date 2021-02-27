@@ -10,7 +10,7 @@ defmodule Integration.UsingInsertionFieldsTest do
     def create_test_data() do
       start(
         module_under_test: Animal.Schema,
-        repo: Unused,
+        repo: "there is no repo",
         insert_with: &tunable_insert/2
       ) |>
 

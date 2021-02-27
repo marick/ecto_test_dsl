@@ -10,7 +10,6 @@ defmodule EctoTestDSL.Runner do
         name = ExUnit.Case.register_test(__ENV__, :example, message, [])
         def unquote(name)(_) do
           if unquote(show_names), do: IO.inspect(unquote(message))
-          unquote(module).allow_asynchronous_tests(unquote(example_name))
           unquote(module).check_workflow(unquote(example_name))
         end
       end)

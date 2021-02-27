@@ -7,16 +7,18 @@ defmodule Variants.PhoenixGranular.WithOverridesTest do
     
     def changeset_maker(SomeSchema, _params) do
       ChangesetX.valid_changeset(changes: %{field: "value"})
-    end      
+    end
+
+    @repo "no database transactions are done in this test"
     
-    def insertion_doer(SomeRepo, %Changeset{changes: %{field: "value"}}) do
+    def insertion_doer(@repo, %Changeset{changes: %{field: "value"}}) do
       {:ok, "insertion return value"}
     end
 
     def create_test_data do
       start(
         module_under_test: SomeSchema,
-        repo: SomeRepo,
+        repo: @repo,
         changeset_with: &changeset_maker/2,      # <<<<<<<<<<<<<
         insert_with: &insertion_doer/2           # <<<<<<<<<<<<<
       ) |>

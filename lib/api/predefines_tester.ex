@@ -19,7 +19,7 @@ defmodule EctoTestDSL.Predefines.Tester do
       
       def example(name),
         do: TestData.example(@name_of_test_data, name)
-      
+
       def params(example_name) do
         check_workflow(example_name, stop_after: :params)
         |> Keyword.get(:params)
@@ -36,8 +36,9 @@ defmodule EctoTestDSL.Predefines.Tester do
           KeywordX.split_and_translate_keys(opts, @trace_server_translations)
         try do
           TraceServer.update(trace_server_opts)
-          example(example_name)
-          |> Run.example(other_opts)
+          example = example(example_name)
+          T.Run.Sandbox.start(example)          
+          Run.example(example, other_opts)
         after
           TraceServer.reset
         end

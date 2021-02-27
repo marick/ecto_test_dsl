@@ -12,21 +12,6 @@ defmodule EctoTestDSL.Run.Steps do
 
   ###################### SETUP #####################################
 
-  # I can't offhand think of any case where one `repo_setup` might need to
-  # use the results of another that isn't part of the same dependency tree.
-  # That might change if I add a workflowy-wide or test-data-wide setup.
-
-  # If that is done, the history must be passed in by `Run.example`
-
-  def start_sandbox(example) do
-    alias Ecto.Adapters.SQL.Sandbox
-
-    repo = Example.repo(example)
-    if repo do  # Convenient for testing, where we might be faking the repo functions.
-      Sandbox.checkout(repo) # it's OK if it's already checked out.
-    end
-  end
-
   @step :repo_setup
   def repo_setup(running) do
     from(running, use: [:neighborhood, :eens])

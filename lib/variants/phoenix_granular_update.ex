@@ -1,6 +1,5 @@
 defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
   use EctoTestDSL.Drink.Me
-  alias T.Run.Steps
   alias T.Variants.PhoenixGranular.Update, as: ThisVariant
   alias T.Parse.Start
   alias T.Parse.Callbacks
@@ -122,9 +121,6 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
             |> Keyword.get(:try_changeset_update)
           value
         end
-
-        def allow_asynchronous_tests(example_name),
-          do: example(example_name) |> Steps.start_sandbox
       end
     end
   end

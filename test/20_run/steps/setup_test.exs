@@ -35,7 +35,7 @@ defmodule Run.Steps.SetupTest do
     def create_test_data do 
       start(
         module_under_test: Schema,
-        repo: Unused,
+        repo: "there is no repo",
         insert_with: &fake_insert/2
       ) |>
 

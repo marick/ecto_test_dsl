@@ -1,6 +1,5 @@
 defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
   use EctoTestDSL.Drink.Me
-  alias T.Run.Steps
   alias T.Variants.PhoenixGranular.Insert, as: ThisVariant
   alias T.Parse.Start
   alias T.Parse.Callbacks
@@ -120,10 +119,6 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
             |> Keyword.get(:try_changeset_insertion)
           value
         end
-
-        def allow_asynchronous_tests(example_name),
-          do: example(example_name) |> Steps.start_sandbox
-        
       end
     end
   end

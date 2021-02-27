@@ -36,7 +36,7 @@ defmodule Variants.PhoenixGranular.ValidationOrderTest do
     def create_test_data do 
       start(
         module_under_test: Schema,
-        repo: Unused
+        repo: "there is no repo"
       ) |>
 
       field_transformations(as_cast: [:age],
