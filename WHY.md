@@ -113,7 +113,7 @@ The `as_cast` `field_transformation` instructs the execution engine to
 add an appropriate `fields` check to *every* example. That's not the
 only transformation, but it's enough for now.
 
-## Different test strategies (workflows)
+## Workflows define what gets done and what gets checked
 
 Both `:bovine` and `:equine` are part of the `:success`
 *workflow*:
@@ -177,7 +177,7 @@ it deserves some shorthand:
 There are ways to vary how workflows work or to create your own, as
 well as to create shorthand snippets like `insert_twice`.
 
-## Associations (foreign keys)
+## Associations and foreign keys
 
 To show how associations work, let's look at inserting an `Animal`. To
 do that, we have to first insert a `Species` and get its primary key
@@ -197,7 +197,7 @@ into the `params`. That's done like this:
 The mention of `:bovine` prompts the engine to insert it and use its
 `id` as the value of `species_id`.
 
-## Hybrid tests
+## Generating test data for ordinary ExUnit tests
 
 The code snippet above gives no proof that `:bovine` is actually created.
 (Maybe I cheated by having `id_of` ignore its argument and just
