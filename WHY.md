@@ -54,7 +54,7 @@ Well, you also require some setup work:
 ```
 
 But that's not really different than what you'll find at the top of
-any `"test.exs"` file.
+any `"_test.exs"` file.
 
 ## Concise and repeated assertions
 
@@ -92,13 +92,13 @@ doesn't look like this:
         |> ...
 ```
 
-That's not a mistake that's unlikely to go noticed for long. However,
+That's not a mistake that's unlikely to go unnoticed for long. However,
 there's some value to documenting in a test that certain fields are
 always just `cast`, not calculated in some more elaborate way.
 
 As long as it's *easy*.
 
-Since this is a property of the field, not of any particular example,
+Since that's a property of the field, not of any particular example,
 it's done like this:
    
 ```elixir
@@ -125,11 +125,11 @@ Both `:bovine` and `:equine` are part of the `:success`
     ) |> 
 ```
 
-The workflow instructs the execution engine. In this `:success` case,
+A workflow instructs the execution engine. In this `:success` case,
 it instructs it to:
 
 1. Convert the parameters so they are in the format Phoenix delivers to a
-   controller (mostly, turns keys and values into strings the
+   controller (mostly, turn keys and values into strings the
    way EEx does), 
    
 2. Call the module-under-test's designated changeset function (by default, `changeset`), 
@@ -140,9 +140,9 @@ it instructs it to:
    (`as_cast` and others), as well as specific checks that can look
    like this:
    
-       ```elixir
-       changeset(changes: [name: "bossie"], errors: [...])
-       ```
+   ```elixir
+   changeset(changes: [name: "bossie"], errors: [...])
+   ```
        
 5. Insert the changeset (using, by default, `Repo.insert`),
 
