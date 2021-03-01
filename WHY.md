@@ -241,5 +241,7 @@ Every second of every day, people are writing Ecto test scaffolding code
 that looks the same as everyone else's Ecto test scaffolding code.
 
 That's a tragic waste of precious time. For the limited domain of
-this one widely-used database library, we can do better. I intend this
-library to be a big part of "better".
+this one widely-used database library, we can do better. I'm betting this
+library can be a big part of "better".
+
+I've been in "stealth mode" for long enough. Time to see if there's interest.
