@@ -1,4 +1,4 @@
-# Rationale for this Ecto Test DSL
+# Why an Ecto Test DSL?
 
 It's easier to write product code that uses Ecto than it is to test that
 code. It should be the other way around.
