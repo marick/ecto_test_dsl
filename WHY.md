@@ -174,7 +174,8 @@ it deserves some shorthand:
        ]
 ```
 
-There are ways to vary how workflows work or to create your own.
+There are ways to vary how workflows work or to create your own, as
+well as to create shorthand snippets like `insert_twice`.
 
 ## Associations (foreign keys)
 
@@ -188,7 +189,7 @@ into the `params`. That's done like this:
     workflow(                                              :success,
       note_free: [params(name: "Bossie",
                          notes: "",
-                         species_id: id_of(bovine: Insert.Species))  # <<<<<
+                         species_id: id_of(bovine: Insert.Species))
                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                  ],
 ```
