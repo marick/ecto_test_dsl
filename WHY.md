@@ -13,14 +13,14 @@ problems:
    `changeset` function properly reject a blank field? Are database
    constraint errors put into the changeset? Etc.
    
-2. Moreover, these boring checks require more elaborate tests than the
+2. Moreover, those boring checks require more elaborate tests than the
    ideas really deserve. To say "the code rejects an attempt to change the `name` field
    to a name that already exists" requires setting up two
    table rows before you even get to the point of the test.
    
 3. Things get even more complicated with associations. Every animal
    `belongs_to` a `species`, which means you can't even create an
-   animal without creating a species. It's a pain to create such
+   animal without first creating a species. It's a pain to create such
    prerequisites and get the foreign keys in all the right places in
    the test data.
    
@@ -39,9 +39,9 @@ use their primary keys as foreign keys. That's as simple as this:
       equine: [params(name: "equine")]
 ```
 
-(For this example, species only have names.)
+(For this example, species have only names.)
 
-OK, I lied. There has to be a bit of setup work:
+Well, you also require some setup work:
 
 ```elixir
   use EctoTestDSL.Variants.PhoenixGranular.Insert
@@ -94,7 +94,7 @@ doesn't look like this:
 
 That's not a mistake that's unlikely to go noticed for long. However,
 there's some value to documenting in a test that certain fields are
-always just `cast`, that they've got no custom transformations.
+always just `cast`, not calculated in some more elaborate way.
 
 As long as it's *easy*.
 
@@ -104,15 +104,14 @@ it's done like this:
 ```elixir
        start(...) |> 
        
-       field_transformations(as_cast: [:id, :name]) |>   # <--------
+       field_transformations(as_cast: [:id, :name]) |>
        ....
 ```
    
 
-The `as_cast` annotation instructs the execution engine to add an
-appropriate `fields` check to *every* example. `:as_cast` is just the
-simplest example of adding always-applicable assertions to many
-examples.
+The `as_cast` `field_transformation` instructs the execution engine to
+add an appropriate `fields` check to *every* example. That's not the
+only transformation, but it's enough for now.
 
 ## Different test strategies (workflows)
 
@@ -126,9 +125,10 @@ Both `:bovine` and `:equine` are part of the `:success`
     ) |> 
 ```
 
-The workflow instructs the execution engine. In the `:success` case, it instructs it to:
+The workflow instructs the execution engine. In this `:success` case,
+it instructs it to:
 
-1. Convert the parameters into the format Phoenix delivers them to a
+1. Convert the parameters so they are in the format Phoenix delivers to a
    controller (mostly, turns keys and values into strings the
    way EEx does), 
    
@@ -136,11 +136,13 @@ The workflow instructs the execution engine. In the `:success` case, it instruct
 
 3. Check that the result is a `:valid` changeset, 
 
-4. Check the changeset values according to the global checks
-   (`as_cast` and others) as well as specific checks that can look
+4. Check the changeset values defined by the global transformations
+   (`as_cast` and others), as well as specific checks that can look
    like this:
    
+       ```elixir
        changeset(changes: [name: "bossie"], errors: [...])
+       ```
        
 5. Insert the changeset (using, by default, `Repo.insert`),
 
@@ -172,6 +174,8 @@ it deserves some shorthand:
        ]
 ```
 
+There are ways to vary how workflows work or to create your own.
+
 ## Associations (foreign keys)
 
 To show how associations work, let's look at inserting an `Animal`. To
@@ -179,29 +183,25 @@ do that, we have to first insert a `Species` and get its primary key
 into the `params`. That's done like this:
 
 ```elixir
+    field_transformations(as_cast: [...]) |>
+
     workflow(                                              :success,
       note_free: [params(name: "Bossie",
                          notes: "",
-                         species_id: id_of(bovine: Insert.Species))
+                         species_id: id_of(bovine: Insert.Species))  # <<<<<
                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                  ],
 ```
 
-That mention of `:bovine` prompts the engine to insert it.
-
-Although it's not obvious from just the example, `:as_cast` is used to
-check the inserted values:
-                 
-```elixir
-    field_transformations(
-      as_cast: [:name, :notes, :lock_uuid, :species_id]
-    ) |>
-```
+The mention of `:bovine` prompts the engine to insert it and use its
+`id` as the value of `species_id`.
 
 ## Hybrid tests
 
-In the above, there's no visible evidence that the `bovine` species was actually
-created. However, that's easy to check. Here's an example from the repl:
+The code snippet above gives no proof that `:bovine` is actually created.
+(Maybe I cheated by having `id_of` ignore its argument and just
+return a constant value.) That's easy to check. Here's an example
+from the repl:
 
 ```elixir
     iex(1)> alias Examples.Schemas20.Insert.Animal.Tester
@@ -223,27 +223,27 @@ created. However, that's easy to check. Here's an example from the repl:
 ```
 
 Functions like `Tester.params` effectively stop a workflow in the
-middle and return the value of the final step. That allows a set of
-examples to be used as fixtures for regular ExUnit tests. For
-example, you could write a controller test that checks animal deletion
+middle and return the value of the final step. That means
+examples can be used as fixtures for regular ExUnit tests. For
+instance, you could write a controller test that checks animal deletion
 like this:
 
 
 ```elixir
-    test "deletion by id" do 
-      id = Tester.inserted(:note_free).id
-      conn = delete(conn, Routes.animal_path(conn, :delete))
+    test "deletion by id", %{conn: conn} do 
+      animal = Tester.inserted(:note_free)
+      conn = delete(conn, Routes.animal_path(conn, :delete, animal))
       ...
     end
 ```
 
 ## Summary
 
-Every second of every day, people are writing Ecto test scaffolding code
+Every single day, people are writing Ecto test scaffolding code
 that looks the same as everyone else's Ecto test scaffolding code.
 
-That's a tragic waste of precious time. For the limited domain of
-this one widely-used database library, we can do better. I'm betting this
-library can be a big part of "better".
+That's a tragic waste of precious time. For Ecto-using applications, I
+believe we can do better, and I'm betting this library can be a big
+part of "better".
 
 I've been in "stealth mode" for long enough. Time to see if there's interest.
