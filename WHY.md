@@ -148,7 +148,7 @@ The workflow instructs the execution engine. In the `:success` case, it instruct
 
 7. Check the field values in `struct` (if desired).
 
-Other workflows act differently. For example, the `:constraint_error`
+Other workflows act differently. For example, the `:constraint_error` workflow
 is about insertion failures due to database constraints:
 
 
@@ -161,7 +161,7 @@ is about insertion failures due to database constraints:
        ] ...
 ```
 
-This implements the easy way to check for unique name constraints:
+That implements one easy way to check for unique name constraints:
 insert the same params twice. Because that's such a common situation,
 it deserves some shorthand:
 
@@ -174,7 +174,7 @@ it deserves some shorthand:
 
 ## Associations (foreign keys)
 
-To show how associations work, let's look at inserting an animal. To
+To show how associations work, let's look at inserting an `Animal`. To
 do that, we have to first insert a `Species` and get its primary key
 into the `params`. That's done like this:
 
@@ -186,6 +186,8 @@ into the `params`. That's done like this:
                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                  ],
 ```
+
+That mention of `:bovine` prompts the engine to insert it.
 
 Although it's not obvious from just the example, `:as_cast` is used to
 check the inserted values:
@@ -222,7 +224,7 @@ created. However, that's easy to check. Here's an example from the repl:
 
 Functions like `Tester.params` effectively stop a workflow in the
 middle and return the value of the final step. That allows a set of
-examples to to be used as fixtures for regular ExUnit tests. For
+examples to be used as fixtures for regular ExUnit tests. For
 example, you could write a controller test that checks animal deletion
 like this:
 
