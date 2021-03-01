@@ -237,7 +237,9 @@ like this:
 
 ## Summary
 
-Every second of the day, people are writing Ecto test scaffolding code that looks the same as everyone else's test scaffolding code.
+Every second of the day, people are writing Ecto test scaffolding code
+that looks the same as everyone else's test scaffolding code.
 
-This is a tragic waste of precious time. For the limited domain of this
-one widely-used library, we can do better.
+That is a tragic waste of precious time. For the limited domain of
+this one widely-used database library, we can do better. I intend this
+library to be a big part of "better".
