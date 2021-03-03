@@ -115,7 +115,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
 
         def inserted(example_name) do
           result =
-            check_workflow(example_name, stop_after: :ok_content)
+            check_workflow(example_name)
             |> Keyword.get(:try_changeset_insertion)
           case result do
             {:ok, value} ->
