@@ -14,20 +14,20 @@ defmodule Parse.FinishParse.GatheringEensTest do
     def field_like_exception, do: id_of(fields_like: Example5)
 
     def create_test_data do
-      Examples.started() |> 
+      Examples.started()
 
-        workflow(:success,
-          example: [
-            params(params_id: params_ref()),
-            changeset(changes: [x: changeset_checks_ref()]),
-            fields(x: fields_ref())
-          ],
-
-          later: [
-            params_like(:example, except: [params_like_id: params_like_ref()]),
-            fields_like(:success, except: [params_like_id: field_like_exception()])
-          ]
-        )
+      workflow(:success,
+        example: [
+          params(params_id: params_ref()),
+          changeset(changes: [x: changeset_checks_ref()]),
+          fields(x: fields_ref())
+        ],
+        
+        later: [
+          params_like(:example, except: [params_like_id: params_like_ref()]),
+          fields_like(:success, except: [params_like_id: field_like_exception()])
+        ]
+      )
     end
   end
 

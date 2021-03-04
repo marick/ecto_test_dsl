@@ -8,7 +8,7 @@ defmodule Nouns.TestDataTest do
     use Template.Trivial
 
     def create_test_data do
-      started() |> 
+      started()
       workflow(     :any_workflow,
         example: [params(a: 1)])
     end

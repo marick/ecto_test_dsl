@@ -12,7 +12,7 @@ defmodule Integration.UsingInsertionFieldsTest do
         module_under_test: Animal.Schema,
         repo: "there is no repo",
         insert_with: &tunable_insert/2
-      ) |>
+      )
 
       workflow(:success,
         animal:  [

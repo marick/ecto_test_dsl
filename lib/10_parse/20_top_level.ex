@@ -2,12 +2,21 @@ defmodule EctoTestDSL.Parse.TopLevel do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndParse
   use T.Drink.Assertively
+  use ExContract
   
   import DeepMerge, only: [deep_merge: 2]
   alias T.Nouns.AsCast
-  alias T.Parse.Hooks
 
   # ----------------------------------------------------------------------------
+  def field_transformations(opts) do
+    BuildState.current
+    |> field_transformations(opts)
+    |> BuildState.put
+  end
+
+  # These separate files are because `field_transformations_test.exs` will
+  # have to be rewritten to work with the above format
+
   def field_transformations(test_data, opts) do
     as_cast =
       AsCast.new(test_data.module_under_test,
@@ -25,8 +34,14 @@ defmodule EctoTestDSL.Parse.TopLevel do
   end
 
   # ----------------------------------------------------------------------------
+  def workflow(workflow, raw_examples) when is_list(raw_examples) do
+    BuildState.current
+    |> workflow(workflow, raw_examples)
+    |> BuildState.put
+  end
+  
   def workflow(test_data, workflow, raw_examples) when is_list(raw_examples) do
-    Hooks.run_hook(test_data, :workflow, [workflow])
+      Hooks.run_hook(test_data, :workflow, [workflow])
 
     proper_examples = for {name, raw_example} <- raw_examples do
       metadata =
@@ -39,7 +54,8 @@ defmodule EctoTestDSL.Parse.TopLevel do
       {name, cooked}
     end
 
-    Map.update!(test_data, :examples, &(&1 ++ proper_examples))
+    test_data
+    |> Map.update!(:examples, &(&1 ++ proper_examples))
   end
 
   def workflow(_, _, _supposed_examples),

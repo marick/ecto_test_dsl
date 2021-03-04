@@ -37,18 +37,17 @@ defmodule Variants.PhoenixGranular.ValidationOrderTest do
       start(
         module_under_test: Schema,
         repo: "there is no repo"
-      ) |>
+      )
 
       field_transformations(as_cast: [:age],
         age_plus: on_success(&(&1+1), applied_to: [:age])
-      ) |>
+      )
     
       workflow(                       :success,
         validity_assertion_comes_first: [
           params(age: "1b"),
           changeset(changes: [age: 1])
-        ]) |> 
-
+        ]) 
 
       workflow(                       :validation_error,
         invalidity_assertion_comes_first: [

@@ -1,7 +1,7 @@
 defmodule EctoTestDSL.Parse.Start do
   use EctoTestDSL.Drink.Me
+  use T.Drink.AndParse
   alias T.Nouns.AsCast
-  alias T.Parse.Hooks
 
   @moduledoc """
   """
@@ -21,5 +21,6 @@ defmodule EctoTestDSL.Parse.Start do
     @starting_test_data
     |> Map.merge(map_data)
     |> Hooks.run_hook(:start)
+    |> BuildState.put
   end
 end

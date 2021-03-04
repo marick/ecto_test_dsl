@@ -19,6 +19,8 @@ defmodule Run.Steps.ChangesetForUpdateTest do
     use Template.PhoenixGranular.Update
   end
 
+  IO.puts "NEXT"
+  @tag :skip
   test "the only result" do
     example = 
       Dynamic.configure(Examples, Schema)

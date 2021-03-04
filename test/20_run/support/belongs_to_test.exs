@@ -24,7 +24,7 @@ defmodule Run.Support.BelongsToTest do
 
     def create_test_data do
       started(module_under_test: Schema) |>
-      SimpleFakeRepo.with_ids(name: %{"no peer" => 111, "has peer" => 222}) |> 
+      SimpleFakeRepo.with_ids(name: %{"no peer" => 111, "has peer" => 222})
 
       workflow(                                 :success,
         no_peer: [params(name: "no peer")],
@@ -35,6 +35,8 @@ defmodule Run.Support.BelongsToTest do
     end
   end
 
+  IO.puts "NEXT"
+  @tag :skip
   test "Inserting a value that `belongs_to` a previous value gets its `id`" do
     Examples.Tester.inserted(:has_peer)
     |> assert_fields(name: "has peer",

@@ -8,13 +8,13 @@ defmodule Integration.GranularInsertion.Workflow.Examples do
       module_under_test: Schema,
       repo: "there is no repo",
       insert_with: &tunable_insert/2
-    ) |> 
+    )
     
     field_transformations(
       as_cast: Schema.fields_to_cast(),
       date: on_success(Date.from_iso8601!(:date_string)),
       days_since_2000: on_success(Date.diff(:date, ~D[2000-01-01]))
-    ) |>
+    )
     
     workflow(:success,
       only_required: [

@@ -21,7 +21,7 @@ defmodule Variants.PhoenixGranular.WithOverridesTest do
         repo: @repo,
         changeset_with: &changeset_maker/2,      # <<<<<<<<<<<<<
         insert_with: &insertion_doer/2           # <<<<<<<<<<<<<
-      ) |>
+      )
 
       workflow(:success,
         example: [params(irrelevant_params: true)]

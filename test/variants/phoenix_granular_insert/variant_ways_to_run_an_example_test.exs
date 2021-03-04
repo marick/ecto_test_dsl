@@ -29,7 +29,7 @@ defmodule EctoTestDSL.Run.RunningExampleTest do
         module_under_test: Schema,
         repo: :unused,
         insert_with: &fake_insert/2
-      ) |>
+      )
       
       workflow(                                         :success,
         young: [params(name: "young")],

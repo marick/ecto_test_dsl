@@ -8,9 +8,9 @@ defmodule Parse.TopLevel.WorkflowTest do
     
     def create_test_data() do
       started()
-      |> workflow(:success, ok:    [params(a: 1,  b: 2)])
-         # Note repeated workflow name
-      |> workflow(:success, other: [params_like(:ok, except: [b: 22])])
+      workflow(:success, ok:    [params(a: 1,  b: 2)])
+      # Note repeated workflow name
+      workflow(:success, other: [params_like(:ok, except: [b: 22])])
     end
   end
 

@@ -5,7 +5,7 @@ defmodule EctoTestDSL.Drink.AndParse do
 
   defmacro __using__(_) do
     quote do
-      alias EctoTestDSL.Parse.Pnode
+      alias EctoTestDSL.Parse.{Pnode,BuildState,Hooks}
       alias EctoTestDSL.Run.Rnode
     end
   end

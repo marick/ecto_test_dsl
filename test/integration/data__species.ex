@@ -24,7 +24,7 @@ defmodule Integration.Species do
         module_under_test: Species.Schema,
         repo: "there is no repo",
         insert_with: &tunable_insert/2
-      ) |>
+      )
 
       workflow(:success,
         bovine: [

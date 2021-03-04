@@ -14,7 +14,7 @@ defmodule Integration.ParamLikeAndIdOfTest do
         insert_with: &tunable_insert/2,  #<<< this generated function
                                          #<<< provides a "cut point" for stubbing
         format: :raw
-      ) |>
+      )
 
       workflow(:validation_success,
         animal:  [

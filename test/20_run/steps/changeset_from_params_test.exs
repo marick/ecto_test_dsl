@@ -19,6 +19,8 @@ defmodule Run.Steps.ChangesetFromParamsTest do
     use Template.PhoenixGranular.Insert
   end
 
+  IO.puts "NEXT"
+  @tag :skip
   test "the only result" do
     example = 
       Dynamic.configure(Examples, Schema)

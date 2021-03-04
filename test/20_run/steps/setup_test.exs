@@ -37,7 +37,7 @@ defmodule Run.Steps.SetupTest do
         module_under_test: Schema,
         repo: "there is no repo",
         insert_with: &fake_insert/2
-      ) |>
+      )
 
       workflow(                                         :success, [
         make(:leaf),
