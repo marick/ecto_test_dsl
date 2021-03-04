@@ -1,0 +1,30 @@
+* Remove the variants of field_transformations and workflow that take
+  a test_data argument. (Will require tweaking tests)
+
+* Allow params_like to take an een argument.
+
+* Nested params_like for associations.
+
+* Have workflow annotate examples with line numbers (make it a macro)
+  Display the filename and line number upon errors in format that allows
+  click to reach example.
+
+* Make mockery come along with ecto_test_dsl
+
+* How will as_cast work with associations? (like as_cast with notes) in multi-note insertion?
+
+* Notation for stubbed field_transformation
+           # date: on_success(Date.utc_today, stubbed: ~D[2001-01-02])) |>
+  This is intended to be an alterative to creating a special test just to
+  set up a mock:
+
+  test "creation" do
+    given(Date.utc_today, return: ~D[2001-01-01])
+    Tester.check_workflow(:note, trace: false)
+  end
+
+
+* Pull `given` out into a mockery_extras package.
+
+* Rearrange examples directory structures, probably delete
+  names. Along the way, figure out a better naming convention for examples files.
