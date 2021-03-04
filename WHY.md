@@ -102,9 +102,9 @@ Since that's a property of the field, not of any particular example,
 it's done like this:
    
 ```elixir
-       start(...) |> 
+       start(...)
        
-       field_transformations(as_cast: [:id, :name]) |>
+       field_transformations(as_cast: [:id, :name])
        ....
 ```
    
@@ -122,7 +122,7 @@ Both `:bovine` and `:equine` are part of the `:success`
     workflow(                                         :success,
       bovine: [params(name: "bovine")],
       equine: [params(name: "equine")]
-    ) |> 
+    )
 ```
 
 A workflow instructs the execution engine. In this `:success` case,
@@ -184,7 +184,7 @@ do that, we have to first insert a `Species` and get its primary key
 into the `params`. That's done like this:
 
 ```elixir
-    field_transformations(as_cast: [...]) |>
+    field_transformations(as_cast: [...])
 
     workflow(                                              :success,
       note_free: [params(name: "Bossie",
