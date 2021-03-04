@@ -10,7 +10,7 @@ defmodule EctoTestDSL.Predefines.Tester do
       alias T.Run
       alias T.TraceServer
       alias T.KeywordX
-      alias T.Nouns.TestData
+      alias T.Nouns.{TestData,Example}
         
       @name_of_test_data Module.split(__MODULE__)
       |> Enum.drop(-1) |> Module.safe_concat
@@ -25,23 +25,16 @@ defmodule EctoTestDSL.Predefines.Tester do
         |> Keyword.get(:params)
       end
 
-      @trace_server_translations %{
-        prefix: :prefix,
-        trace: :emitting?,
-        max_level: :max_level
-      }
-      
       def check_workflow(example_name, opts \\ []) do
-        {trace_server_opts, other_opts} =
-          KeywordX.split_and_translate_keys(opts, @trace_server_translations)
-        try do
-          TraceServer.update(trace_server_opts)
-          example = example(example_name)
-          T.Run.Sandbox.start(example)          
-          Run.example(example, other_opts)
-        after
-          TraceServer.reset
-        end
+        updated = Keyword.put_new(opts, :run, :for_value)
+        example = example(example_name)
+        Run.check(example, updated)
+      end
+
+      def check_automatic_only(example_name, opts \\ []) do
+        updated = Keyword.put_new(opts, :run, :automatic_only)
+        example = example(example_name)
+        Run.check(example, updated)
       end
     end
   end

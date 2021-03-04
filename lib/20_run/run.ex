@@ -2,6 +2,8 @@ defmodule EctoTestDSL.Run do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndRun
   use T.Drink.Assertively
+  alias T.TraceServer
+  alias T.Nouns.Example
 
   def example(example, opts \\ []) do
     running = RunningExample.from(example,
@@ -12,7 +14,38 @@ defmodule EctoTestDSL.Run do
     Trace.apply(&run_steps/1, [running])
   end
 
-  def workflow_script(example, opts) do
+  # ----------------------------------------------------------------------------
+  @trace_server_translations %{
+    prefix: :prefix,
+    trace: :emitting?,
+    max_level: :max_level
+  }
+
+  def check(example, opts) do
+    {trace_server_opts, other_opts} =
+      KeywordX.split_and_translate_keys(opts, @trace_server_translations)
+    try do
+      TraceServer.update(trace_server_opts)
+      run_if_allowed(example, other_opts)
+    after
+      TraceServer.reset
+    end
+  end
+  
+  defp run_if_allowed(example, opts) do
+    case T.Nouns.Example.run_decision(example, opts) do
+      :run -> 
+        T.Run.Sandbox.start(example)
+        T.Run.example(example, opts)
+      :skip_because_only_for_value ->
+        :silently_skipped
+      :user_skip ->
+        IO.puts "\nskipping #{inspect Example.examples_module(example)}.#{Example.name(example)}"
+    end
+  end
+
+  # ----------------------------------------------------------------------------
+  defp workflow_script(example, opts) do
     stop = Keyword.get(opts, :stop_after, :"this should not ever be a step name")
 
     Example.workflow_steps(example)
