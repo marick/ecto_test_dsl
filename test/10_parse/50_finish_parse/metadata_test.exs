@@ -3,15 +3,18 @@ defmodule Parse.FinishParse.MetadataTest do
   use T.Predefines
   use T.Parse.Exports
   alias T.Parse.FinishParse
+  alias T.Parse.BuildState
 
   defmodule Examples do
     use Template.Trivial
   end
 
   test "metadata propagation" do
+    Examples.started()
+    workflow(:workflow, example: [params(age: 1)])
+
     test_data = 
-      Examples.started()
-      |> workflow(:workflow, example: [params(age: 1)])
+      BuildState.current
       |> FinishParse.finish
 
     metadata =

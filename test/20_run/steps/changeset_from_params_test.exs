@@ -2,33 +2,26 @@ defmodule Run.Steps.ChangesetFromParamsTest do
   use EctoTestDSL.Case
   use T.Drink.AndRun
   alias T.Run.Steps
-  alias Template.Dynamic
-
+  import T.RunningStubs
 
   defmodule Schema do
     defstruct age: nil
-    
-    def changeset(struct, attrs) do
-      assert struct == struct(__MODULE__)
-      assert attrs == %{"age" => "1"}
-      :changeset_result
-    end
   end
 
-  defmodule Examples do
-    use Template.PhoenixGranular.Insert
-  end
-
-  IO.puts "NEXT"
-  @tag :skip
   test "the only result" do
-    example = 
-      Dynamic.configure(Examples, Schema)
-      |> Dynamic.example_in_workflow(:success,
-          params: %{age: 1})
+    module_under_test = Schema
+    expanded_params = %{"age" => "1"}
 
-    %RunningExample{example: example, history: [params: %{"age" => "1"}]}
-    |> Steps.changeset_from_params
+    stub(
+      module_under_test: module_under_test,
+      expanded_params: expanded_params,
+      changeset_with: fn given_module, given_params ->
+        assert module_under_test == given_module
+        assert expanded_params == given_params
+        :changeset_result
+      end)
+
+    Steps.changeset_from_params(:running)
     |> assert_equal(:changeset_result)
   end
 end

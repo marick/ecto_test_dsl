@@ -35,13 +35,8 @@ defmodule EctoTestDSL.Parse.TopLevel do
 
   # ----------------------------------------------------------------------------
   def workflow(workflow, raw_examples) when is_list(raw_examples) do
-    BuildState.current
-    |> workflow(workflow, raw_examples)
-    |> BuildState.put
-  end
-  
-  def workflow(test_data, workflow, raw_examples) when is_list(raw_examples) do
-      Hooks.run_hook(test_data, :workflow, [workflow])
+    test_data = BuildState.current
+    Hooks.run_hook(test_data, :workflow, [workflow])
 
     proper_examples = for {name, raw_example} <- raw_examples do
       metadata =
@@ -56,6 +51,7 @@ defmodule EctoTestDSL.Parse.TopLevel do
 
     test_data
     |> Map.update!(:examples, &(&1 ++ proper_examples))
+    |> BuildState.put
   end
 
   def workflow(_, _, _supposed_examples),
