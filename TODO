@@ -1,6 +1,3 @@
-* Remove the variants of field_transformations and workflow that take
-  a test_data argument. (Will require tweaking tests)
-
 * Allow params_like to take an een argument.
 
 * Nested params_like for associations.

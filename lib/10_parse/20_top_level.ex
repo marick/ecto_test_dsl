@@ -35,10 +35,9 @@ defmodule EctoTestDSL.Parse.TopLevel do
 
   # ----------------------------------------------------------------------------
   def workflow(workflow, raw_examples) when is_list(raw_examples) do
-    test_data = BuildState.current
-    Hooks.run_hook(test_data, :workflow, [workflow])
+    run_workflow_hook(workflow)
 
-    proper_examples = for {name, raw_example} <- raw_examples do
+    for {name, raw_example} <- raw_examples do
       metadata =
         %{metadata: %{workflow_name: workflow, name: name}}
       cooked =
@@ -46,16 +45,23 @@ defmodule EctoTestDSL.Parse.TopLevel do
         |> testable_flatten
         |> Pnode.Group.squeeze_into_map
         |> deep_merge(metadata)
-      {name, cooked}
+
+      BuildState.add_example({name, cooked})
     end
 
-    test_data
-    |> Map.update!(:examples, &(&1 ++ proper_examples))
-    |> BuildState.put
+    # It's important to return the latest complete test data because
+    # the result of `build_test_data` is the result of the final `workflow`.
+    BuildState.current
   end
 
   def workflow(_, _, _supposed_examples),
     do: flunk "Examples must be given in a keyword list"
+
+  defp run_workflow_hook(workflow) do
+    BuildState.current
+    |> Hooks.run_hook(:workflow, [workflow])
+    |> BuildState.put
+  end
 
   # N^2 baby!
   def testable_flatten(kws) do
