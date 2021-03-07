@@ -1,20 +1,38 @@
 defmodule Neighborhood.ExpandTest do
   use EctoTestDSL.Case
   alias T.Neighborhood.Expand
-  import T.Parse.InternalFunctions, only: [id_of: 1]
+  use T.Parse.Exports
 
   test "keyword values" do
-    original = %{a: 1}
-    neighborhood = %{}
-    expected = original
-    actual = Expand.values(original, with: neighborhood)
-    assert expected == actual
-      
-    original = %{a: FieldRef.new(id: een(:neighbor))}
+    expect = fn [original, neighborhood], expected ->
+      actual = Expand.values(original, with: neighborhood)
+      assert expected == actual
+    end
+
+    unchanged = fn [original, neighborhood] ->
+      [original, neighborhood] |> expect.(original)
+    end
+
     neighborhood = %{een(:neighbor) => %{id: 5}}
-    expected = %{a: 5}
-    actual = Expand.values(original, with: neighborhood)
-    assert expected == actual
+
+    [%{a: 1}, %{}] |> unchanged.()
+    [%{a: id_of(:neighbor)}, neighborhood] |> expect.(%{a: 5})
+
+    # Nesting
+    [%{notes: %{text: "t"}}, %{}] |> unchanged.()
+
+    [%{         notes: %{id: id_of(:neighbor)}}, neighborhood] |>
+      expect.(%{notes: %{id: 5}})
+
+
+    # A nested list
+    [%{         notes:  [%{id: id_of(:neighbor)},
+                         %{id: id_of(:neighbor), extra: "e"}]}, neighborhood] |> 
+
+      expect.(%{notes: [%{id: 5},
+                        %{id: 5, extra: "e"}]})
+
+    
   end
 
   # ----------------------------------------------------------------------------
@@ -44,7 +62,4 @@ defmodule Neighborhood.ExpandTest do
 
     [changes: [a: 3, b: "four"]] |> expect.([changes: [a: 3, b: "FOUR"]])
   end
-
-
-  
 end

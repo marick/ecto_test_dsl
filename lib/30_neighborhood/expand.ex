@@ -9,9 +9,17 @@ defmodule EctoTestDSL.Neighborhood.Expand do
 
   def values_(kws, neighborhood, into) do
     for {name, value} <- kws, into: into do
-      if FieldRef.matches?(value),
-        do: {name, FieldRef.dereference(value, in: neighborhood)},
-      else: {name, value}
+      processed_value = cond do
+        match?(%FieldRef{}, value) ->
+          FieldRef.dereference(value, in: neighborhood)
+        is_map(value) ->
+          values(value, with: neighborhood)
+        is_list(value) ->
+          Enum.map(value, &(values &1, with: neighborhood))
+        true ->
+          value
+      end
+      {name, processed_value}
     end
   end
 
