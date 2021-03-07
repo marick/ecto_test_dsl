@@ -8,10 +8,21 @@ defmodule EctoTestDSL.Parse.Pnode.Common do
   def extract_eens(~M{parsed}), do: extract_een_values(parsed)
 
   def extract_een_values(kvs) do
-    kvs
-    |> KeyVal.filter_by_value(&FieldRef.matches?/1)
-    |> KeyVal.fetch_map(fn xref -> xref.een end)
+    Enum.flat_map(kvs, fn {_key, value} -> flat_mapper(value) end)
   end
+
+  defp flat_mapper(value) do 
+    cond do
+      match?(%FieldRef{}, value) ->
+        [value.een]
+      is_map(value) ->
+        extract_een_values(value)
+      is_list(value) ->
+        Enum.flat_map(value, &extract_een_values/1)
+      true ->
+        []
+    end
+  end  
 
   def ensure_one_een(%EEN{} = een, _default_module), do: een
   def ensure_one_een(atom, default_module), do: EEN.new(atom, default_module)

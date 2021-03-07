@@ -19,5 +19,3 @@ defmodule EctoTestDSL.Run.Rnode.ParamsFromRepo do
     end
   end
 end
-
-

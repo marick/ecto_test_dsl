@@ -19,9 +19,9 @@ defmodule KeyValTest do
   end
 
 
-  test "`fetch_map` loses keys, transforms values" do
-    assert KeyVal.fetch_map([a: 1, b: 2], &(-&1)) == [-1, -2]
-    assert KeyVal.fetch_map([a: 1, b: 2], &(-&1)) == [-1, -2]
+  test "`fetch_then_map` loses keys, transforms values" do
+    assert KeyVal.fetch_then_map([a: 1, b: 2], &(-&1)) == [-1, -2]
+    assert KeyVal.fetch_then_map([a: 1, b: 2], &(-&1)) == [-1, -2]
   end
 
   

@@ -14,7 +14,7 @@ defmodule EctoTestDSL.KeyVal do
   By analogy to `map_reduce`, this `fetch`es a value then `map`s a function
   over it. The result is a List.
   """
-  def fetch_map(kvs, f) do
+  def fetch_then_map(kvs, f) do
     Enum.map(kvs, fn {_k, v} -> f.(v) end)
   end
 end
