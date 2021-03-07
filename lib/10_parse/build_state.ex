@@ -15,9 +15,9 @@ defmodule EctoTestDSL.Parse.BuildState do
   # correctly have one example refer to a previous one.
   # It shouldn't be necessary to keep them in order, but I like the
   # internal representation to look like the source.
-  def add_example(example) do
+  def add_example(example_pair) do
     current()
-    |> Map.update!(:examples, &(&1 ++ [example]))
+    |> Map.update!(:examples, &(&1 ++ [example_pair]))
     |> put
   end
 end
