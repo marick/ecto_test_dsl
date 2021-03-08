@@ -75,7 +75,7 @@ defmodule Run.Steps.FieldsLikeTest do
     end
 
     test "`except` fills in foreign keys" do
-      [after: %{een(:bovine) => %{id: 12}},
+      [after: %{een(:bovine) => Neighborhood.Value.inserted(%{id: 12})},
 
        compare: %{a: 5, species_id: 12        },
        against: %{a: 5, species_id: "replaced"},

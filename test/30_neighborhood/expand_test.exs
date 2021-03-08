@@ -13,7 +13,7 @@ defmodule Neighborhood.ExpandTest do
       [original, neighborhood] |> expect.(original)
     end
 
-    neighborhood = %{een(:neighbor) => %{id: 5}}
+    neighborhood = %{een(:neighbor) => Neighborhood.Value.inserted(%{id: 5})}
 
     [%{a: 1}, %{}] |> unchanged.()
     [%{a: id_of(:neighbor)}, neighborhood] |> expect.(%{a: 5})

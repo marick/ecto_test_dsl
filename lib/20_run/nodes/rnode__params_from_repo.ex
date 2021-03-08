@@ -13,7 +13,7 @@ defmodule EctoTestDSL.Run.Rnode.ParamsFromRepo do
 
   defimpl Rnode.Substitutable, for: Rnode.ParamsFromRepo do
     def substitute(node, neighborhood) do
-      base = Map.get(neighborhood, node.een) |> Map.from_struct
+      base = Neighborhood.fetch!(neighborhood, node.een, :inserted) |> Map.from_struct
       exceptions = Neighborhood.Expand.values(node.except, with: neighborhood)
       Map.merge(base, exceptions)
     end

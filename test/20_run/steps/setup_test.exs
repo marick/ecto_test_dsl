@@ -85,7 +85,7 @@ defmodule Run.Steps.SetupTest do
       expected = 
         names
         |> Enum.map(fn name ->
-                      {een(name, Examples), Schema.named(to_string name)}
+                      {een(name, Examples), Neighborhood.Value.inserted(Schema.named(to_string name))}
                     end)
         |> Map.new
       assert actual == expected

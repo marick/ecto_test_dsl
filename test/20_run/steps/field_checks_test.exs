@@ -42,7 +42,7 @@ defmodule Run.Steps.FieldChecksTest do
 
   test "references to neighbors are supported" do
     other_een = een(:other_example)
-    stub(neighborhood: %{other_een => %{id: 333}})
+    stub(neighborhood: %{other_een => Neighborhood.Value.inserted(%{id: 333})})
 
     passes = [ %{other_id: id_of(:other_example)}, %{other_id: 333}]
     fails =  [ %{other_id: id_of(:other_example)}, %{other_id: "NOT"}]

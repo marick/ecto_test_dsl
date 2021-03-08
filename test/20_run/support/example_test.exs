@@ -54,14 +54,14 @@ defmodule EctoTestDSL.Run.Support.ExampleTest do
       |> assert_change(name: "young")
     end
 
-    @presupplied "presupplied, not created"
+    @presupplied Neighborhood.Value.inserted("presupplied, not created")
 
     test "a neighborhood (from a nested `repo_setup`) can be passed in" do
       expect = fn example_name, expected ->
         actual =  
           Examples.Tester.example(example_name)
           |> Run.example(repo_setup:
-                %{een(young: Examples) => "presupplied, not created"})
+                %{een(young: Examples) => @presupplied})
         assert Keyword.get(actual, :repo_setup) == expected
       end
 
@@ -69,7 +69,7 @@ defmodule EctoTestDSL.Run.Support.ExampleTest do
       # There is a recursive call
       :two_level |> expect.(%{
             een(young: Examples) => @presupplied,
-            een(dependent: Examples) => "created `dependent`"})
+            een(dependent: Examples) => Neighborhood.Value.inserted("created `dependent`")})
     end
   end
 end

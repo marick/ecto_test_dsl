@@ -12,7 +12,7 @@ defmodule Run.Steps.ParamsTest do
       expected =                  %{"a" => "1", "b_id" => "383"}
 
       stub(original_params: input, format: :phoenix)
-      stub(neighborhood: %{een(b: Module) => %{id: 383}})
+      stub(neighborhood: %{een(b: Module) => Neighborhood.Value.inserted(%{id: 383})})
 
       assert Steps.params(:running) == expected
     end
@@ -26,7 +26,7 @@ defmodule Run.Steps.ParamsTest do
   describe "params from repo" do
     test "substitutions without exceptions" do
       stub(neighborhood: %{
-            een(existing: Schema) => %Schema{a: "a", b_id: 383, extra: 5}})
+            een(existing: Schema) => Neighborhood.Value.inserted(%Schema{a: "a", b_id: 383, extra: 5})})
 
       input = Rnode.ParamsFromRepo.new(een(existing: Schema), %{})
       expected = %{"a" => "a", "b_id" => "383", "extra" => "5"}
@@ -38,8 +38,8 @@ defmodule Run.Steps.ParamsTest do
 
     test "substitutions with exceptions" do 
       stub(neighborhood: %{
-            een(existing: Schema) => %Schema{a: "replaced", b_id: "replaced", extra: 5},
-            een(b: Module) => %{id: 383}})
+            een(existing: Schema) => Neighborhood.Value.inserted(%Schema{a: "replaced", b_id: "replaced", extra: 5}),
+            een(b: Module) => Neighborhood.Value.inserted(%{id: 383})})
 
       input = Rnode.ParamsFromRepo.new(een(existing: Schema),
         %{a: "new", b_id: id_of(b: Module)})

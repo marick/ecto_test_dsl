@@ -14,7 +14,7 @@ defmodule Nouns.FieldRefTest do
   describe "dereference" do 
     test "success" do
       ref = FieldRef.new(id: een(:neighbor))
-      neighborhood = %{een(:neighbor) => %{id: 5}}
+      neighborhood = %{een(:neighbor) => Neighborhood.Value.inserted(%{id: 5})}
 
       assert FieldRef.dereference(ref, in: neighborhood) == 5
     end
@@ -31,7 +31,7 @@ defmodule Nouns.FieldRefTest do
 
     test "no such field" do 
       ref = FieldRef.new(id: een(:neighbor))
-      neighborhood = %{een(:neighbor) => %{not_id: 5}}
+      neighborhood = %{een(:neighbor) => Neighborhood.Value.inserted(%{not_id: 5})}
       
       assertion_fails("There is no key named `:id`",
         fn ->

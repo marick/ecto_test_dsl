@@ -14,7 +14,7 @@ defmodule EctoTestDSL.Nouns.FieldRef do
 
   def dereference(%FieldRef{} = ref, in: neighborhood) do
     neighborhood
-    |> MapX.fetch!(ref.een, &Messages.missing_een/1)
+    |> Neighborhood.fetch!(ref.een, :inserted)
     |> MapX.fetch!(ref.field, &Messages.missing_key/1)
   end
 end

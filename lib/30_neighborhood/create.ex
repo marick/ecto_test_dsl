@@ -1,6 +1,7 @@
 defmodule EctoTestDSL.Neighborhood.Create do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AndRun
+  use Magritte
 
   def from_an_een(%EEN{} = een, so_far) do
     unless_already_present(een, so_far, fn ->
@@ -10,9 +11,9 @@ defmodule EctoTestDSL.Neighborhood.Create do
         |> Run.example(repo_setup: so_far)
 
       dependently_created = Keyword.get(workflow_results, :repo_setup)
-      {:ok, insert_result} = Keyword.get(workflow_results, :try_changeset_insertion)
-      
-      Map.put(dependently_created, een, insert_result)
+      value = Neighborhood.Value.from_workflow_results(workflow_results)
+
+      Map.put(dependently_created, een, value)
     end)
   end
   
