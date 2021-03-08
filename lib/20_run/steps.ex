@@ -15,7 +15,7 @@ defmodule EctoTestDSL.Run.Steps do
   @step :repo_setup
   def repo_setup(running) do
     from(running, use: [:neighborhood, :eens])
-    Enum.reduce(eens, neighborhood, &Neighborhood.Create.from_an_een/2)
+    Neighborhood.augment(neighborhood, eens)
   end
 
   ###################### PARAMS #####################################
