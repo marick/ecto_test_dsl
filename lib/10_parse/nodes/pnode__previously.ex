@@ -35,13 +35,6 @@ defmodule EctoTestDSL.Parse.Pnode.Previously do
   end
 
   defimpl Pnode.EENable, for: Pnode.Previously do
-    def merge(one, two) do
-      [one, two]
-      |> Enum.map(&(&1.parsed))
-      |> Enum.concat
-      |> Pnode.Previously.new
-    end
-
     def eens(%{eens: eens}), do: eens
 
     def ensure_eens(node, default_module) do
