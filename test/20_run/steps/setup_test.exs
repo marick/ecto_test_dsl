@@ -67,33 +67,32 @@ defmodule Run.Steps.SetupTest do
       |> ExMachina.Sequence.reset
     end
       
+    # Note: `setup_for` and `expect` are a bit tricksy. Each example
+    # is supposed to only be created once. By resettting
+    # ExMachina.Sequence before running the test, a repeated creation
+    # would create a different name. So this test would fail if
+    # creations were incorrectly done twice.
 
     def setup_for(example_name) do
-      start_names_with_zero()
+      start_names_with_zero()        # `setup_for` names start with zero.
       Examples.Tester.check_workflow(example_name)
       |> Keyword.get(:repo_setup)
     end
 
-    # Note: `setup_for` and `expect` are a bit tricksy. Each example is
-    # supposed to only be created once. By resettting ExMachina.Sequence
-    # before running the test and checking the actual result,
-    # a duplicate creation will produce a different final name in the two.
-
     def expect(actual, names) do
-      start_names_with_zero()
+      start_names_with_zero()        # ... and so do the ones created by `expect`.
+
+      expected_insertions = for name <- names, into: %{},
+        do: {een(name, Examples), Schema.named(to_string name)}  
+
+      actual_insertions = for {een, value} <- actual, into: %{},
+        do: {een, value.inserted}
       
-      expected = 
-        names
-        |> Enum.map(fn name ->
-                      {een(name, Examples), Neighborhood.Value.inserted(Schema.named(to_string name))}
-                    end)
-        |> Map.new
-      assert actual == expected
+      assert actual_insertions == expected_insertions
     end
     
     # ----------------------------------------------------------------------------
 
-    @tag :skip
     test "insertions" do
       setup_for(:leaf)      |> expect([])  # no setup clause
       setup_for(:dependent) |> expect([:leaf]) # depends on one other value
