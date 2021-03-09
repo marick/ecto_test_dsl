@@ -6,7 +6,12 @@ defmodule EctoTestDSL.Parse.Pnode.Params do
   defstruct parsed: %{}, with_ensured_eens: %{}, eens: []
 
   def parse(kws), do: kws |> Enum.into(%{}) |> new
-  def new(map), do: %__MODULE__{parsed: map}
+  def new(map) do
+    %__MODULE__{
+      parsed: map,
+      eens: Pnode.Common.extract_een_values(map)
+    }
+  end
 
   defimpl Pnode.Mergeable, for: Pnode.Params do
     def merge(earlier, later),
@@ -16,12 +21,12 @@ defmodule EctoTestDSL.Parse.Pnode.Params do
   defimpl Pnode.EENable, for: Pnode.Params do
     def eens(%{eens: eens}), do: eens
     def ensure_eens(node, _default_module) do
-      Pnode.Common.with_ensured(node, Pnode.Common.extract_eens(node), node.parsed)
+      node # Skipped
     end
   end
 
   defimpl Pnode.Exportable, for: Pnode.Params do
-    def export(node), do: Rnode.Params.new(node.with_ensured_eens)
+    def export(node), do: Rnode.Params.new(node.parsed)
   end
 end
 

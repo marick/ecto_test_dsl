@@ -24,12 +24,11 @@ defmodule Parse.Pnode.ParamsTest do
   test "ensuring eens is pretty much a no-op" do
     params = Pnode.Params.parse(a: 1, b: id_of(:fred))
     actual = Pnode.EENable.ensure_eens(params, :ignored)
-    assert actual.with_ensured_eens == actual.parsed
     assert Pnode.EENable.eens(actual) == [een(:fred)]
   end
 
   test "export" do
-    %Pnode.Params{with_ensured_eens: %{a: 1, b: id_of(:fred)}}
+    Pnode.Params.parse(a: 1, b: id_of(:fred))
     |> Pnode.Exportable.export
     |> Rnode.Params.raw
     |> assert_equal(%{a: 1, b: id_of(:fred)})
