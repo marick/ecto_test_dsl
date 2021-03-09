@@ -27,3 +27,6 @@
 
 * Rearrange examples directory structures, probably delete
   names. Along the way, figure out a better naming convention for examples files.
+
+
+* Separate schema_module from module_under_test

@@ -27,12 +27,12 @@ defmodule Integration.UsingInsertionFieldsTest do
   @species_id 3333
 
   setup do
-    insert_returns {:ok, %{id: @species_id}}, in: Species.Examples
+    insert_returns {:ok, %Species.Schema{id: @species_id}}, in: Species.Examples
     :ok
   end
 
   test "fields check uses reference to species id" do
-    insert_returns {:ok, %{species_id: "not 3333"}}, in: Examples
+    insert_returns {:ok, %Animal.Schema{species_id: "not 3333"}}, in: Examples
 
     assertion_fails(~r/Field `:species_id` has the wrong value/,
       [left: "not 3333",

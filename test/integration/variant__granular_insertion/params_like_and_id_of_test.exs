@@ -47,7 +47,7 @@ defmodule Integration.ParamLikeAndIdOfTest do
     ## easy control over, for example, constraint errors.
     ## In this case, we stub out `Ecto.insert` for a species value to
     ## produce a value to be checked in testing.
-    insert_returns {:ok, %{id: @species_id}}, in: Species.Examples
+    insert_returns {:ok, %Species.Schema{id: @species_id}}, in: Species.Examples
     :ok
   end
 

@@ -93,6 +93,7 @@ defmodule Run.Steps.SetupTest do
     
     # ----------------------------------------------------------------------------
 
+    @tag :skip
     test "insertions" do
       setup_for(:leaf)      |> expect([])  # no setup clause
       setup_for(:dependent) |> expect([:leaf]) # depends on one other value
