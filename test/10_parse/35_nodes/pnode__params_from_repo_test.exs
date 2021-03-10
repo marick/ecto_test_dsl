@@ -7,7 +7,9 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsFromRepoTest do
   describe "creation" do
     test "normal" do
       Pnode.ParamsFromRepo.parse(een(:name), [except: [a: 1]])
-      |> assert_fields(parsed: %{een: een(:name), except: %{a: 1}})
+      |> assert_fields(reference_een: een(:name),
+                       except: %{a: 1},
+                       eens: [een(:name)])
     end
     
     test "an een is required" do
@@ -38,24 +40,23 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsFromRepoTest do
     end
   end
 
-  describe "ensuring eens" do
+  describe "eens" do
     test "een and id_of" do
       actual =
         Pnode.ParamsFromRepo.parse(een(:name), [except: [a: id_of(:other)]])
         |> Pnode.EENable.ensure_eens("unused default module")
 
-      assert actual.with_ensured_eens == actual.parsed
       assert Pnode.EENable.eens(actual) == [een(:name), een(other: __MODULE__)]
     end
   end
 
   test "export" do
-    input = %Pnode.ParamsFromRepo{with_ensured_eens: %{een: "...some een...",
-                                                       except: "...exceptions..."}}
+    input =
+      Pnode.ParamsFromRepo.parse(een("...some een..."), except: [x_id: id_of(:x)])
 
     expected = %Rnode.ParamsFromRepo{
-      een: "...some een...",
-      except: "...exceptions..."}
+      een: een("...some een..."),
+      except: %{x_id: id_of(:x)}}
 
     assert Pnode.Exportable.export(input) == expected
   end

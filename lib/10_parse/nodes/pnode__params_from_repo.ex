@@ -6,7 +6,7 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsFromRepo do
   @moduledoc """
   """
 
-  defstruct parsed: %{}, with_ensured_eens: %{}, eens: []
+  defstruct reference_een: nil, except: [], eens: []
 
   def parse(%EEN{} = een, except: except),
     do: new(een, Enum.into(except, %{}))
@@ -32,27 +32,23 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsFromRepo do
   end
   
   
-  def new(een, except) do
-    parsed = %{een: een, except: except}
-    %__MODULE__{parsed: parsed}
+  def new(reference_een, except) do
+    eens = [reference_een | Pnode.Common.extract_een_values(except)]
+    ~M{%__MODULE__ reference_een, except, eens}
   end
-    
 
   # ----------------------------------------------------------------------------
 
   defimpl Pnode.EENable, for: Pnode.ParamsFromRepo do
     def eens(%{eens: eens}), do: eens
     def ensure_eens(node, _default_module) do
-      parsed = node.parsed
-      eens = [parsed.een | Pnode.Common.extract_een_values(parsed.except)]
-      %{node | eens: eens, with_ensured_eens: parsed}
+      node
     end
   end
 
-
   defimpl Pnode.Exportable, for: Pnode.ParamsFromRepo do
-    def export(~M{with_ensured_eens}) do
-      Rnode.ParamsFromRepo.new(with_ensured_eens.een, with_ensured_eens.except)
+    def export(node) do
+      Rnode.ParamsFromRepo.new(node.reference_een, node.except)
     end
   end
 end

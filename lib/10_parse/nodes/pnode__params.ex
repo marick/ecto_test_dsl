@@ -3,7 +3,7 @@ defmodule EctoTestDSL.Parse.Pnode.Params do
   use T.Drink.AndParse
   use T.Drink.Assertively
   
-  defstruct parsed: %{}, with_ensured_eens: %{}, eens: []
+  defstruct parsed: %{}, eens: []
 
   def parse(kws), do: kws |> Enum.into(%{}) |> new
   def new(map) do

@@ -3,10 +3,15 @@ defmodule EctoTestDSL.Parse.Pnode.Fields do
   use T.Drink.AndParse
   use T.Drink.Assertively
   
-  defstruct parsed: %{}, with_ensured_eens: %{}, eens: []
+  defstruct parsed: %{}, eens: []
 
   def parse(kws), do: kws |> Enum.into(%{}) |> new
-  def new(map), do: %__MODULE__{parsed: map}
+  def new(map) do 
+    %__MODULE__{
+      parsed: map,
+      eens: Pnode.Common.extract_een_values(map)
+    }
+  end
 
   defimpl Pnode.Mergeable, for: Pnode.Fields do
     def merge(earlier, later),
@@ -16,12 +21,12 @@ defmodule EctoTestDSL.Parse.Pnode.Fields do
   defimpl Pnode.EENable, for: Pnode.Fields do
     def eens(%{eens: eens}), do: eens
     def ensure_eens(node, _default_module) do
-      Pnode.Common.with_ensured(node, Pnode.Common.extract_eens(node), node.parsed)
+      node
     end
       
   end
 
   defimpl Pnode.Exportable, for: Pnode.Fields do
-    def export(node), do: node.with_ensured_eens
+    def export(node), do: node.parsed
   end
 end
