@@ -9,9 +9,9 @@ defmodule Parse.Pnode.PreviouslyTest do
   end
 
   test "creation" do
-    expect = fn arg, expected_parsed ->
+    expect = fn arg, expected ->
       actual = Pnode.Previously.parse(arg)
-      assert actual.parsed == expected_parsed
+      assert Pnode.EENable.eens(actual) == expected
     end
 
     [insert: :a]                    |> expect.([een(a: Examples)])

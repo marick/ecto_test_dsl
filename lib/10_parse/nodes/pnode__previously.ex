@@ -3,7 +3,7 @@ defmodule EctoTestDSL.Parse.Pnode.Previously do
   use T.Drink.AndParse
   use T.Drink.Assertively
   
-  defstruct [:parsed, :with_ensured_eens, :eens]
+  defstruct [:eens]
 
   def parse(kws) do
     kws
@@ -25,7 +25,7 @@ defmodule EctoTestDSL.Parse.Pnode.Previously do
 
   def new(parsed) do
     eens = extract_eens(parsed)
-    %__MODULE__{parsed: eens, eens: eens}
+    %__MODULE__{eens: eens}
   end
 
   defp extract_eens(parsed) do
@@ -43,7 +43,7 @@ defmodule EctoTestDSL.Parse.Pnode.Previously do
   defimpl Pnode.Mergeable, for: Pnode.Previously do
     def merge(one, two) do
       [one, two]
-      |> Enum.map(&(&1.parsed))
+      |> Enum.map(&(&1.eens))
       |> Enum.concat
       |> Pnode.Previously.new
     end
