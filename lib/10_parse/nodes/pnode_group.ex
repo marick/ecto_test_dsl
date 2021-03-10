@@ -30,13 +30,9 @@ defmodule EctoTestDSL.Parse.Pnode.Group do
       &(Pnode.Substitutable.substitute(&1, previous_examples)))
   end
 
-  def handle_eens(example, default_module) do
-    new_example = 
-      update_for_protocol(example, Pnode.EENable,
-        &(Pnode.EENable.ensure_eens(&1, default_module)))
-    
-    eens = accumulated_eens(new_example)
-    Map.put(new_example, :eens, eens)
+  def collect_eens(example) do
+    eens = accumulated_eens(example)
+    Map.put(example, :eens, eens)
   end
 
   def export(example) do

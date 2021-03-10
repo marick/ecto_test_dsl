@@ -20,9 +20,6 @@ defmodule EctoTestDSL.Parse.Pnode.Params do
 
   defimpl Pnode.EENable, for: Pnode.Params do
     def eens(%{eens: eens}), do: eens
-    def ensure_eens(node, _default_module) do
-      node # Skipped
-    end
   end
 
   defimpl Pnode.Exportable, for: Pnode.Params do

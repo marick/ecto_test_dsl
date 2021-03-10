@@ -41,9 +41,6 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsFromRepo do
 
   defimpl Pnode.EENable, for: Pnode.ParamsFromRepo do
     def eens(%{eens: eens}), do: eens
-    def ensure_eens(node, _default_module) do
-      node
-    end
   end
 
   defimpl Pnode.Exportable, for: Pnode.ParamsFromRepo do

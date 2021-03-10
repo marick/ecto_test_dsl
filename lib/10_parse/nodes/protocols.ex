@@ -1,7 +1,6 @@
 alias EctoTestDSL.Parse.Pnode
 
 defprotocol Pnode.EENable do
-  def ensure_eens(node, default_module)
   def eens(node)
 end
 

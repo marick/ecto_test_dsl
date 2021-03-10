@@ -44,7 +44,6 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsFromRepoTest do
     test "een and id_of" do
       actual =
         Pnode.ParamsFromRepo.parse(een(:name), [except: [a: id_of(:other)]])
-        |> Pnode.EENable.ensure_eens("unused default module")
 
       assert Pnode.EENable.eens(actual) == [een(:name), een(other: __MODULE__)]
     end

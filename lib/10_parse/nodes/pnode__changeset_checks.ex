@@ -31,10 +31,6 @@ defmodule EctoTestDSL.Parse.Pnode.ChangesetChecks do
 
   defimpl Pnode.EENable, for: CC do
     def eens(%{eens: eens}), do: eens
-
-    def ensure_eens(node, _default_module) do
-      node
-    end
   end
 
   defimpl Pnode.Exportable, for: CC do

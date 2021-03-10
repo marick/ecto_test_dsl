@@ -39,9 +39,6 @@ defmodule EctoTestDSL.Parse.Pnode.FieldsLike do
 
   defimpl Pnode.EENable, for: Pnode.FieldsLike do
     def eens(%{eens: eens}), do: eens
-    def ensure_eens(node, _default_module) do
-      node # function going away.
-    end
   end
 
   defimpl Pnode.Exportable, for: Pnode.FieldsLike do

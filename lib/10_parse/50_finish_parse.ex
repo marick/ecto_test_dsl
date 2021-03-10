@@ -20,7 +20,7 @@ defmodule EctoTestDSL.Parse.FinishParse do
       example
       |> propagate_metadata(metadata)
       |> Pnode.Group.parse_time_substitutions(acc)
-      |> Pnode.Group.handle_eens(metadata.examples_module)
+      |> Pnode.Group.collect_eens()
       # Note: it is important for each example to be put in the
       # keyword list as it's finished because later examples can
       # refer back to earlier ones.

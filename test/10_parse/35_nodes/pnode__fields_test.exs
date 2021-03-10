@@ -21,10 +21,9 @@ defmodule Parse.Pnode.FieldsTest do
     assert Pnode.Mergeable.merge(ab, bc) == expected
   end
   
-  test "ensuring eens is pretty much a no-op" do
+  test "included eens" do
     params = Pnode.Fields.parse(a: 1, b: id_of(:fred))
-    actual = Pnode.EENable.ensure_eens(params, :ignored)
-    assert Pnode.EENable.eens(actual) == [een(:fred)]
+    assert Pnode.EENable.eens(params) == [een(:fred)]
   end
 
   test "export" do

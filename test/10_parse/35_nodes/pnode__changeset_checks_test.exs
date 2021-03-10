@@ -39,7 +39,6 @@ defmodule Parse.Pnode.ChangesetChecksTest do
 
   test "export" do         # also add some top-level tests for merging and eens
     CC.parse(data: [species_id: id_of(:bovine)])
-    |> Pnode.EENable.ensure_eens(:ignored)
     |> Pnode.Exportable.export
     |> assert_equal(data: [species_id: id_of(:bovine)])
   end

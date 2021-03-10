@@ -51,10 +51,6 @@ defmodule EctoTestDSL.Parse.Pnode.Previously do
 
   defimpl Pnode.EENable, for: Pnode.Previously do
     def eens(%{eens: eens}), do: eens
-
-    def ensure_eens(node, _default_module) do
-      node # skipped
-    end
   end
 
   defimpl Pnode.Deletable, for: Pnode.Previously do
