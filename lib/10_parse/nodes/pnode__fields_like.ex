@@ -20,6 +20,7 @@ defmodule EctoTestDSL.Parse.Pnode.FieldsLike do
     }
   end
 
+  # Rethink allowing a plain name (not an een)
   defp reference_een(een_or_name) do 
     default_module = BuildState.examples_module
     Pnode.Common.ensure_one_een(een_or_name, default_module)
