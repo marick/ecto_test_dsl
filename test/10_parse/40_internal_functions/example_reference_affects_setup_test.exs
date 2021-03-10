@@ -5,14 +5,14 @@ defmodule Parse.InternalFunctions.ExampleReferenceAffectsSetupTest do
   alias T.Parse.BuildState
 
   defmodule Examples do 
-    use Template.Trivial
+    use Template.PhoenixGranular.Insert
   end
 
   describe "id_of" do
     test "instances of `id_of` generate a setup" do
       Examples.started()
-      workflow(:valid, ok: [params(a: 1, b: 2)])
-      workflow(:invalid, similar: [
+      workflow(:success, ok: [params(a: 1, b: 2)])
+      workflow(:validation_error, similar: [
             params_like(:ok, except: [a: id_of(species: ExampleModule)])
           ])
 
@@ -25,7 +25,7 @@ defmodule Parse.InternalFunctions.ExampleReferenceAffectsSetupTest do
 
     test "adds on to existing setup" do
       Examples.started(examples_module: ExampleModule)
-      workflow(:invalid, name: [
+      workflow(:validation_error, name: [
             params(
               a: id_of(species: ExampleModule),
               b: id_of(:thing)),

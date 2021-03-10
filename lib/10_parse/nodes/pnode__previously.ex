@@ -23,7 +23,22 @@ defmodule EctoTestDSL.Parse.Pnode.Previously do
       left: wrong)
   end    
 
-  def new(parsed), do: %__MODULE__{parsed: parsed}
+  def new(parsed) do
+    eens = extract_eens(parsed)
+    %__MODULE__{parsed: eens, eens: eens}
+  end
+
+  defp extract_eens(parsed) do
+    default_module = BuildState.examples_module
+    one = fn
+      {name, module} -> EEN.new(name, module)
+      %EEN{} = een  -> een
+      name           -> EEN.new(name, default_module)
+    end
+
+    Enum.map(parsed, one)
+  end
+  
 
   defimpl Pnode.Mergeable, for: Pnode.Previously do
     def merge(one, two) do
@@ -37,15 +52,8 @@ defmodule EctoTestDSL.Parse.Pnode.Previously do
   defimpl Pnode.EENable, for: Pnode.Previously do
     def eens(%{eens: eens}), do: eens
 
-    def ensure_eens(node, default_module) do
-      ensure_one = fn
-        {name, module} -> EEN.new(name, module)
-        %EEN{} = een  -> een
-        name           -> EEN.new(name, default_module)
-      end
-
-      ensured = Enum.map(node.parsed, ensure_one)
-      %{node | with_ensured_eens: ensured, eens: ensured}
+    def ensure_eens(node, _default_module) do
+      node # skipped
     end
   end
 
@@ -54,5 +62,3 @@ defmodule EctoTestDSL.Parse.Pnode.Previously do
       do: raise "should never be called"
   end
 end
-
-

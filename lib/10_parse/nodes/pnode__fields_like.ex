@@ -15,7 +15,6 @@ defmodule EctoTestDSL.Parse.Pnode.FieldsLike do
     %__MODULE__{parsed: parsed}
   end
     
-
   # ----------------------------------------------------------------------------
 
   defimpl Pnode.EENable, for: Pnode.FieldsLike do

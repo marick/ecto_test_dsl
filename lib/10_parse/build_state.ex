@@ -11,6 +11,10 @@ defmodule EctoTestDSL.Parse.BuildState do
     Process.get(BuildState)
   end
 
+  def examples_module do
+    current().examples_module
+  end
+
   # This N^2 process of building up examples makes it easier to 
   # correctly have one example refer to a previous one.
   # It shouldn't be necessary to keep them in order, but I like the
