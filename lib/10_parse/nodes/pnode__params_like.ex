@@ -27,7 +27,7 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsLike do
           elaborate_flunk("There is no previous example `#{ex}`",
             right: Map.keys(node.overrides))
         previous ->
-          Pnode.Mergeable.merge(previous.params, Pnode.Params.new(node.overrides))
+          Pnode.Mergeable.merge(previous.params, Pnode.Params.parse(node.overrides))
       end
     end
   end

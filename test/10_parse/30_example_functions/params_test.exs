@@ -5,13 +5,13 @@ defmodule Parse.ExampleFunctions.ParamsTest do
 
   describe "creation" do 
     test "without eens" do
-      assert params(id: 5, age: 3) == {:params, Pnode.Params.new(%{id: 5, age: 3})}
+      assert params(id: 5, age: 3) == {:params, Pnode.Params.parse(%{id: 5, age: 3})}
     end
 
     test "with eens" do
       input = [id: 5, other_id: id_of(:other)]
       expected = %{id: 5, other_id: id_of(:other)}
-      assert params(input) == {:params, Pnode.Params.new(expected)}
+      assert params(input) == {:params, Pnode.Params.parse(expected)}
     end
   end    
 
