@@ -54,13 +54,10 @@ defmodule EctoTestDSL.Parse.Pnode.Common do
     end      
   end
 
-  def extract_een_values(kvs) do
-    FromPairs.extract_een_values(kvs)
+  defmodule NameOrEEN do
+    def lift(%EEN{} = een, _default_module), do: een
+    def lift(atom, default_module), do: EEN.new(atom, default_module)
   end
-
-  def ensure_one_een(%EEN{} = een, _default_module), do: een
-  def ensure_one_een(atom, default_module), do: EEN.new(atom, default_module)
-
 end
 
   

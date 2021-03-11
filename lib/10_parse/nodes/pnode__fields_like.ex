@@ -2,7 +2,7 @@ defmodule EctoTestDSL.Parse.Pnode.FieldsLike do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndParse
   use T.Drink.Assertively
-  alias Pnode.Common.EENWithOpts
+  alias Pnode.Common.{EENWithOpts,NameOrEEN}
   alias Pnode.FieldsLike, as: This
   
   @moduledoc """
@@ -18,7 +18,7 @@ defmodule EctoTestDSL.Parse.Pnode.FieldsLike do
   # Rethink allowing a plain name (not an een)
   defp reference_een(een_or_name) do 
     default_module = BuildState.examples_module
-    Pnode.Common.ensure_one_een(een_or_name, default_module)
+    NameOrEEN.lift(een_or_name, default_module)
   end
     
   # ----------------------------------------------------------------------------
