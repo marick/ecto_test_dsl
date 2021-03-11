@@ -1,5 +1,6 @@
 defmodule EctoTestDSL.Neighborhood.Expand do
   use EctoTestDSL.Drink.Me
+  alias T.Nouns.RefHolder
 
   def values(kws, with: neighborhood) when is_map(kws),
     do: values_(kws, neighborhood, %{})
@@ -10,8 +11,8 @@ defmodule EctoTestDSL.Neighborhood.Expand do
   def values_(kws, neighborhood, into) do
     for {name, value} <- kws, into: into do
       processed_value = cond do
-        match?(%FieldRef{}, value) ->
-          FieldRef.dereference(value, in: neighborhood)
+        RefHolder.impl_for(value) -> 
+          RefHolder.dereference(value, in: neighborhood)
         is_map(value) ->
           values(value, with: neighborhood)
         is_list(value) ->

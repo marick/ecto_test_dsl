@@ -1,8 +1,11 @@
 defmodule EctoTestDSL.Parse.Pnode.Common do
   use EctoTestDSL.Drink.Me
   use T.Drink.Assertively
+  alias T.Nouns.RefHolder
 
-  defmodule FromPairs do 
+  defmodule FromPairs do
+    alias T.Nouns
+    
     def parse(module, kvs) do
       map = Enum.into(kvs, %{})
       
@@ -20,8 +23,8 @@ defmodule EctoTestDSL.Parse.Pnode.Common do
     def extract_een_values(kvs) do
       flat_mapper = fn value -> 
         cond do
-          match?(%FieldRef{}, value) ->
-            [value.een]
+          RefHolder.impl_for(value) -> 
+            RefHolder.eens(value)
           is_map(value) ->
             extract_een_values(value)
           is_list(value) ->

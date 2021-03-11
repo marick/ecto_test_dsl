@@ -1,5 +1,6 @@
 defmodule Nouns.FieldRefTest do
   use EctoTestDSL.Case
+  alias T.Nouns.RefHolder
 
   test "creation" do
     expect = fn een, kvs ->
@@ -16,7 +17,7 @@ defmodule Nouns.FieldRefTest do
       ref = FieldRef.new(id: een(:neighbor))
       neighborhood = %{een(:neighbor) => Neighborhood.Value.inserted(%{id: 5})}
 
-      assert FieldRef.dereference(ref, in: neighborhood) == 5
+      assert RefHolder.dereference(ref, in: neighborhood) == 5
     end
 
     test "no such example" do 
@@ -25,7 +26,7 @@ defmodule Nouns.FieldRefTest do
       
       assertion_fails("There is no example named `:neighbor` in FieldRefTest",
         fn ->
-          FieldRef.dereference(ref, in: neighborhood)
+          RefHolder.dereference(ref, in: neighborhood)
         end)
     end
 
@@ -35,7 +36,7 @@ defmodule Nouns.FieldRefTest do
       
       assertion_fails("There is no key named `:id`",
         fn ->
-          FieldRef.dereference(ref, in: neighborhood)
+          RefHolder.dereference(ref, in: neighborhood)
         end)
     end
   end
