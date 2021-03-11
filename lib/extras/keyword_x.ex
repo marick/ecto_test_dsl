@@ -76,4 +76,12 @@ defmodule EctoTestDSL.KeywordX do
       "Keyword list should not have duplicate keys",
       left: kws, right: keys)
   end
+
+  def at_most_this_key?(kws, key) do
+    case kws do
+      [] -> true
+      [{^key, _}] -> true
+      _ -> false
+    end
+  end
 end

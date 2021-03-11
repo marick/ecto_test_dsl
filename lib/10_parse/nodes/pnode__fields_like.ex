@@ -2,8 +2,8 @@ defmodule EctoTestDSL.Parse.Pnode.FieldsLike do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndParse
   use T.Drink.Assertively
-
   alias Pnode.Common.EENWithOpts
+  alias Pnode.FieldsLike, as: This
   
   @moduledoc """
   """
@@ -12,7 +12,7 @@ defmodule EctoTestDSL.Parse.Pnode.FieldsLike do
 
   def parse(een_or_name, opts) do
     reference_een = reference_een(een_or_name)
-    EENWithOpts.parse(Pnode.FieldsLike, reference_een, opts)
+    EENWithOpts.parse(This, reference_een, opts)
   end
 
   # Rethink allowing a plain name (not an een)
@@ -23,11 +23,11 @@ defmodule EctoTestDSL.Parse.Pnode.FieldsLike do
     
   # ----------------------------------------------------------------------------
 
-  defimpl Pnode.EENable, for: Pnode.FieldsLike do
+  defimpl Pnode.EENable, for: This do
     def eens(%{eens: eens}), do: eens
   end
 
-  defimpl Pnode.Exportable, for: Pnode.FieldsLike do
+  defimpl Pnode.Exportable, for: This do
     def export(node) do
       Rnode.FieldsLike.new(node.reference_een, node.opts)
     end

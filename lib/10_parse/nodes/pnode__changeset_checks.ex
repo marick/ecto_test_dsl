@@ -2,13 +2,14 @@ defmodule EctoTestDSL.Parse.Pnode.ChangesetChecks do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndParse
   use T.Drink.Assertively
-  alias Pnode.ChangesetChecks, as: CC
+  alias Pnode.ChangesetChecks, as: This
+  
   
   defstruct parsed: [], eens: []
 
   def parse(kws), do: new(kws)
   def new(kws) do
-    %CC{parsed: kws,
+    %This{parsed: kws,
         eens: Enum.flat_map(kws, &top_level/1)}
   end
 
@@ -22,18 +23,21 @@ defmodule EctoTestDSL.Parse.Pnode.ChangesetChecks do
   defp lower_level(~M(%FieldRef een)   ),            do: [een]
   defp lower_level(_value              ),            do: [   ]
 
-  defimpl Pnode.Mergeable, for: CC do
-    def merge(%CC{parsed: earlier}, %CC{parsed: later}) do
+  defimpl Pnode.Mergeable, for: This do
+    def merge(earlier, %This{} = later) do
       # I actually do mean this rather than Keyword.merge
-      CC.new(earlier ++ later)
+      %This{
+        parsed: earlier.parsed ++ later.parsed,
+        eens: earlier.eens ++ later.eens
+      }
     end
   end
 
-  defimpl Pnode.EENable, for: CC do
+  defimpl Pnode.EENable, for: This do
     def eens(%{eens: eens}), do: eens
   end
 
-  defimpl Pnode.Exportable, for: CC do
+  defimpl Pnode.Exportable, for: This do
     def export(node) do
       node.parsed
     end

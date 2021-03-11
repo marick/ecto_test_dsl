@@ -2,6 +2,7 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsLike do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndParse
   use T.Drink.Assertively
+  alias Pnode.ParamsLike, as: This
   
   @moduledoc """
   """
@@ -19,7 +20,7 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsLike do
 
   # ----------------------------------------------------------------------------
 
-  defimpl Pnode.Substitutable, for: Pnode.ParamsLike do
+  defimpl Pnode.Substitutable, for: This do
     def substitute(node, named_examples) do
       case Keyword.get(named_examples, node.previous_name) do
         nil ->

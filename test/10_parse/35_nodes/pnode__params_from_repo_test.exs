@@ -6,9 +6,9 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsFromRepoTest do
 
   describe "creation" do
     test "normal" do
-      Pnode.ParamsFromRepo.parse(een(:name), [except: [a: 1]])
+      Pnode.ParamsFromRepo.parse(een(:name), except: [a: 1])
       |> assert_fields(reference_een: een(:name),
-                       except: %{a: 1},
+                       opts: [except: [a: 1]],
                        eens: [een(:name)])
     end
     
@@ -29,7 +29,7 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsFromRepoTest do
     test "bad options" do
       assertion_fails(~r/`params_from_repo`'s second argument must be `except: <keyword_list>`/,
         [left: [excep: [a: 1]]], fn -> 
-          Pnode.ParamsFromRepo.parse("name", [excep: [a: 1]])
+          Pnode.ParamsFromRepo.parse(een(:name), [excep: [a: 1]])
         end)
     end
 

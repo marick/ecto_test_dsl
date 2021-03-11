@@ -31,10 +31,18 @@ defmodule Parse.Pnode.ChangesetChecksTest do
   end
 
   test "merging" do
-    first = CC.parse(changed: [x: 5])
-    second = CC.parse(errors: [:x], changed: [y: 8])
+    first = CC.parse(changed: [x: 5, first_id: id_of(:first)])
+    second = CC.parse(errors: [:x], changed: [y: 8, second_id: id_of(:second)])
     actual = Pnode.Mergeable.merge(first, second)
-    assert actual.parsed == [changed: [x: 5], errors: [:x], changed: [y: 8]]
+
+    expected_parsed = [
+      changed: [x: 5, first_id: id_of(:first)],
+      errors: [:x],
+      changed: [y: 8, second_id: id_of(:second)]]
+    assert actual.parsed == expected_parsed
+
+
+    assert actual.eens == [een(:first), een(:second)]
   end
 
   test "export" do         # also add some top-level tests for merging and eens

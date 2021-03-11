@@ -3,21 +3,22 @@ defmodule EctoTestDSL.Parse.Pnode.Params do
   use T.Drink.AndParse
   use T.Drink.Assertively
   alias Pnode.Common.FromPairs
+  alias Pnode.Params, as: This
   
   defstruct parsed: %{}, eens: []
 
-  def parse(kws), do: FromPairs.parse(Pnode.Params, kws)
+  def parse(kws), do: FromPairs.parse(This, kws)
 
-  defimpl Pnode.Mergeable, for: Pnode.Params do
-    def merge(earlier, %Pnode.Params{} = later),
-      do: FromPairs.merge(Pnode.Params, earlier, later)
+  defimpl Pnode.Mergeable, for: This do
+    def merge(earlier, %This{} = later),
+      do: FromPairs.merge(This, earlier, later)
   end
 
-  defimpl Pnode.EENable, for: Pnode.Params do
+  defimpl Pnode.EENable, for: This do
     def eens(%{eens: eens}), do: eens
   end
 
-  defimpl Pnode.Exportable, for: Pnode.Params do
+  defimpl Pnode.Exportable, for: This do
     def export(node), do: Rnode.Params.new(node.parsed)
   end
 end

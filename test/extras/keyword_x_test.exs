@@ -103,4 +103,12 @@ defmodule KeywordXTest do
                        |> a.plus.(left: [a: 1, b: 2, a: 3],
                                   right: [:a, :b, :a])
   end
+
+
+  test "at_most_this_key?" do
+    assert KeywordX.at_most_this_key?([], :key)
+    assert KeywordX.at_most_this_key?([key: 1], :key)
+    refute KeywordX.at_most_this_key?([key: 1, other: 2], :key)
+    refute KeywordX.at_most_this_key?([not: 1], :key)
+  end
 end

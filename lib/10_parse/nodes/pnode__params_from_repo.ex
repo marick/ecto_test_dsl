@@ -2,16 +2,25 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsFromRepo do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndParse
   use T.Drink.Assertively
+  alias Pnode.Common.EENWithOpts
+  alias Pnode.ParamsFromRepo, as: This
   
   @moduledoc """
   """
 
-  defstruct reference_een: nil, except: [], eens: []
+  defstruct reference_een: nil, opts: [], eens: []
 
-  def parse(%EEN{} = een, except: except),
-    do: new(een, Enum.into(except, %{}))
+  def parse(%EEN{} = een, opts) do
+    unless KeywordX.at_most_this_key?(opts, :except) do 
+      elaborate_flunk(
+        "`params_from_repo`'s second argument must be `except: <keyword_list>`.",
+        left: opts)
+    end
+    
+    EENWithOpts.parse(This, een, opts)
+  end
   
-  def parse(not_een, except: _except) do
+  def parse(not_een, _) do
     example_name = if is_atom(not_een), do: not_een, else: :some_name
     message =
       """
@@ -21,31 +30,17 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsFromRepo do
     
     elaborate_flunk(message, left: not_een)
   end
-  
-  def parse(_een, opts) do
-    message =
-      """
-      `params_from_repo`'s second argument must be `except: <keyword_list>`.
-      """
-    
-    elaborate_flunk(message, left: opts)
-  end
-  
-  
-  def new(reference_een, except) do
-    eens = [reference_een | Pnode.Common.extract_een_values(except)]
-    ~M{%__MODULE__ reference_een, except, eens}
-  end
 
   # ----------------------------------------------------------------------------
 
-  defimpl Pnode.EENable, for: Pnode.ParamsFromRepo do
+  defimpl Pnode.EENable, for: This do
     def eens(%{eens: eens}), do: eens
   end
 
-  defimpl Pnode.Exportable, for: Pnode.ParamsFromRepo do
+  defimpl Pnode.Exportable, for: This do
     def export(node) do
-      Rnode.ParamsFromRepo.new(node.reference_een, node.except)
+      except = Keyword.get(node.opts, :except, []) |> Enum.into(%{})
+      Rnode.ParamsFromRepo.new(node.reference_een, except)
     end
   end
 end

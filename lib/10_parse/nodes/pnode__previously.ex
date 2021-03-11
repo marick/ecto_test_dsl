@@ -2,6 +2,7 @@ defmodule EctoTestDSL.Parse.Pnode.Previously do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndParse
   use T.Drink.Assertively
+  alias Pnode.Previously, as: This
   
   defstruct [:eens]
 
@@ -40,20 +41,20 @@ defmodule EctoTestDSL.Parse.Pnode.Previously do
   end
   
 
-  defimpl Pnode.Mergeable, for: Pnode.Previously do
+  defimpl Pnode.Mergeable, for: This do
     def merge(one, two) do
       [one, two]
       |> Enum.map(&(&1.eens))
       |> Enum.concat
-      |> Pnode.Previously.new
+      |> This.new
     end
   end
 
-  defimpl Pnode.EENable, for: Pnode.Previously do
+  defimpl Pnode.EENable, for: This do
     def eens(%{eens: eens}), do: eens
   end
 
-  defimpl Pnode.Deletable, for: Pnode.Previously do
+  defimpl Pnode.Deletable, for: This do
   def a_protocol_must_have_at_least_one_function(_node),
       do: raise "should never be called"
   end
