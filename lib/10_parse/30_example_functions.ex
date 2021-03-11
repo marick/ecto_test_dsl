@@ -3,6 +3,28 @@ defmodule EctoTestDSL.Parse.ExampleFunctions do
   use T.Drink.AndParse
   use EctoTestDSL.Drink.Assertively
 
+  @moduledoc """
+  There are three special categories of example-level commands, as reflected
+  in their names:
+
+  `*_of` functions record the intention to derefence an EEN a test-run time and
+  replace the "of" value with a field from the persistent value.__struct__
+
+       id_of(een)
+
+  `*_from` are like `of` functions, but they substitute many fields. They
+  are used for things like having one `Repo.insert` create not just a single
+  primary value but also other associated values (belongs_to, etc.)
+
+       params_from(een, except: ...)
+
+  `*_like` functions are akin to uses of macros. They are expanded to include
+  the params (and only the params) from an example defined in the same module.
+
+       params_like(:example_name)
+
+  """
+
   # ----------------------------------------------------------------------------
   def params(opts \\ []),
     do: {:params, Pnode.Params.parse(opts)}
@@ -12,10 +34,10 @@ defmodule EctoTestDSL.Parse.ExampleFunctions do
   def params_like(example_name), 
     do: params_like(example_name, except: [])
 
-  def params_from_repo(een, opts),
-    do: {:params, Pnode.ParamsFromRepo.parse(een, opts)}
-  def params_from_repo(een),
-    do: params_from_repo(een, except: [])
+  def params_from(een, opts),
+    do: {:params, Pnode.ParamsFrom.parse(een, opts)}
+  def params_from(een),
+    do: params_from(een, except: [])
     
 
   # ----------------------------------------------------------------------------

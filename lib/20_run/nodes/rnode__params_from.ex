@@ -1,4 +1,4 @@
-defmodule EctoTestDSL.Run.Rnode.ParamsFromRepo do
+defmodule EctoTestDSL.Run.Rnode.ParamsFrom do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndRun
   use T.Drink.Assertively
@@ -11,7 +11,7 @@ defmodule EctoTestDSL.Run.Rnode.ParamsFromRepo do
 
   def new(een, except), do: ~M{%__MODULE__ een, except}
 
-  defimpl Rnode.Substitutable, for: Rnode.ParamsFromRepo do
+  defimpl Rnode.Substitutable, for: Rnode.ParamsFrom do
     def substitute(node, neighborhood) do
       base = Neighborhood.fetch!(neighborhood, node.een, :inserted) |> Map.from_struct
       exceptions = Neighborhood.Expand.values(node.except, with: neighborhood)

@@ -2,8 +2,6 @@
   Possible notation?
          Insert.Note.fresh(:note))]])
 
-* rename `params_from_repo` to `update_params(note_free: Insert.animal, except: [...])`
-
 * Have workflow annotate examples with line numbers (make it a macro)
   Display the filename and line number upon errors in format that allows
   click to reach example.
