@@ -1,4 +1,4 @@
-defmodule Run.Steps.FieldsLikeTest do
+defmodule Run.Steps.FieldsFromTest do
   use EctoTestDSL.Case
   use T.Drink.AndRun
   alias Run.Steps
@@ -19,8 +19,8 @@ defmodule Run.Steps.FieldsLikeTest do
     stub(neighborhood:
       Map.put(neighborhood, een(:reference_struct), reference_struct))
     
-    instructions = Rnode.FieldsLike.new(een(:reference_struct), adjustments)
-    stub(fields_like: instructions)
+    instructions = Rnode.FieldsFrom.new(een(:reference_struct), adjustments)
+    stub(fields_from: instructions)
 
     stub_history(new_struct: new_struct)
     Steps.field_checks(:running, :new_struct)
@@ -34,7 +34,7 @@ defmodule Run.Steps.FieldsLikeTest do
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result
 
-  describe "fields_like basics" do
+  describe "fields_from basics" do
     test "just an een" do
       [compare: %{a: 5},
        against: %{a: 5}] |> pass()
@@ -135,10 +135,10 @@ defmodule Run.Steps.FieldsLikeTest do
     end      
   end
 
-  describe "both `fields` and `fields_like` can be used" do
+  describe "both `fields` and `fields_from` can be used" do
     setup do 
       stub(field_checks: [a: "right"])
-      stub(fields_like: Rnode.FieldsLike.new(een(:reference_struct), [comparing: [:b]]))
+      stub(fields_from: Rnode.FieldsFrom.new(een(:reference_struct), [comparing: [:b]]))
       :ok
     end
 
@@ -155,7 +155,7 @@ defmodule Run.Steps.FieldsLikeTest do
         end)
     end
 
-    test "that `fields_like` can fail" do 
+    test "that `fields_from` can fail" do 
       stub(neighborhood: %{een(:reference_struct) => %{a: "right", b: "right"}})
       stub_history(new_struct:            %{a: "right", b: "wrong"})
 

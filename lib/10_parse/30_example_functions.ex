@@ -52,8 +52,8 @@ defmodule EctoTestDSL.Parse.ExampleFunctions do
 
   def fields(opts), do: {:field_checks, Pnode.Fields.parse(opts)}
 
-  def fields_like(een_or_name, opts \\ []),
-    do: {:fields_like, Pnode.FieldsLike.parse(een_or_name, opts)}
+  def fields_from(een_or_name, opts \\ []),
+    do: {:fields_from, Pnode.FieldsFrom.parse(een_or_name, opts)}
 
   # ----------------------------------------------------------------------------
 

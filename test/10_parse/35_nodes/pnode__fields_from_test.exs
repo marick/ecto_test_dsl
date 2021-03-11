@@ -1,4 +1,4 @@
-defmodule EctoTestDSL.Pnode.FieldsLikeTest do
+defmodule EctoTestDSL.Pnode.FieldsFromTest do
   use EctoTestDSL.Case
   use T.Drink.AndParse
   use T.Parse.Exports
@@ -11,7 +11,7 @@ defmodule EctoTestDSL.Pnode.FieldsLikeTest do
   describe "parsing" do
     setup do
       run = fn een_or_name, opts ->
-        Pnode.FieldsLike.parse(een_or_name, opts)
+        Pnode.FieldsFrom.parse(een_or_name, opts)
       end
 
       [run: run]
@@ -51,10 +51,10 @@ defmodule EctoTestDSL.Pnode.FieldsLikeTest do
   end
 
   test "export" do
-    input = %Pnode.FieldsLike{reference_een: "...some een...",
+    input = %Pnode.FieldsFrom{reference_een: "...some een...",
                               opts: "...some opts..."}
 
-    expected = %Rnode.FieldsLike{een: "...some een...", opts: "...some opts..."}
+    expected = %Rnode.FieldsFrom{een: "...some een...", opts: "...some opts..."}
 
     assert Pnode.Exportable.export(input) == expected
   end

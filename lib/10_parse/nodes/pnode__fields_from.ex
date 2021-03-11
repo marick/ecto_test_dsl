@@ -1,9 +1,9 @@
-defmodule EctoTestDSL.Parse.Pnode.FieldsLike do
+defmodule EctoTestDSL.Parse.Pnode.FieldsFrom do
   use EctoTestDSL.Drink.Me
   use T.Drink.AndParse
   use T.Drink.Assertively
   alias Pnode.Common.{EENWithOpts,NameOrEEN}
-  alias Pnode.FieldsLike, as: This
+  alias Pnode.FieldsFrom, as: This
   
   @moduledoc """
   """
@@ -29,7 +29,7 @@ defmodule EctoTestDSL.Parse.Pnode.FieldsLike do
 
   defimpl Pnode.Exportable, for: This do
     def export(node) do
-      Rnode.FieldsLike.new(node.reference_een, node.opts)
+      Rnode.FieldsFrom.new(node.reference_een, node.opts)
     end
   end
 end

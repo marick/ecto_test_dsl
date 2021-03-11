@@ -15,7 +15,7 @@ defmodule EctoTestDSL.Run.RunningExample do
     validation_changeset_checks: [],
     constraint_changeset_checks: [],
     field_checks: %{},
-    fields_like: :nothing,
+    fields_from: :nothing,
   ]
 
   getters :example, :metadata, [

@@ -208,12 +208,12 @@ defmodule EctoTestDSL.Run.Steps do
   @step :field_checks
   def field_checks(running, which_step) do
     from(running, use: [:neighborhood, :name, :field_checks,
-                        :fields_like, :usually_ignore])
+                        :fields_from, :usually_ignore])
     from_history(running, to_be_checked: which_step)
 
     adjust_assertion_message(fn -> 
       do_field_checks(field_checks, to_be_checked, neighborhood)
-      do_fields_like(fields_like, to_be_checked, neighborhood, usually_ignore)
+      do_fields_from(fields_from, to_be_checked, neighborhood, usually_ignore)
     end,
       Reporting.identify_example(name))
 
@@ -228,11 +228,11 @@ defmodule EctoTestDSL.Run.Steps do
     end
   end
 
-  defp do_fields_like(:nothing, _, _, _), do: :ok
-  defp do_fields_like(fields_like, to_be_checked, neighborhood, usually_ignore) do
-    reference_value = Map.get(neighborhood, fields_like.een)
+  defp do_fields_from(:nothing, _, _, _), do: :ok
+  defp do_fields_from(fields_from, to_be_checked, neighborhood, usually_ignore) do
+    reference_value = Map.get(neighborhood, fields_from.een)
     opts =
-      fields_like.opts
+      fields_from.opts
       |> expand_expected(neighborhood)
       |> expand_ignoring(usually_ignore)
 

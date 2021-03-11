@@ -1,4 +1,4 @@
-defmodule EctoTestDSL.Run.Rnode.FieldsLike do
+defmodule EctoTestDSL.Run.Rnode.FieldsFrom do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.Assertively
   
