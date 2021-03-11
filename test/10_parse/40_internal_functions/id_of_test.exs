@@ -1,8 +1,16 @@
-defmodule Parse.InternalFunctions.ExampleReferenceAffectsSetupTest do
+defmodule Parse.InternalFunctions.IdOfTest do
   use EctoTestDSL.Case
   use T.Predefines
   alias T.Parse.FinishParse
   alias T.Parse.BuildState
+
+  describe "basic parsing" do 
+    test "id_of" do
+      assert id_of(animal: Examples) == FieldRef.new(id: een(animal: Examples))
+      assert id_of(:animal) == FieldRef.new(id: een(animal: __MODULE__))
+    end
+  end
+
 
   defmodule Examples do 
     use Template.PhoenixGranular.Insert
@@ -43,4 +51,6 @@ defmodule Parse.InternalFunctions.ExampleReferenceAffectsSetupTest do
                       een(thing: __MODULE__)]))
     end
   end
+  
 end
+
