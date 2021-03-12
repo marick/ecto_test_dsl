@@ -3,7 +3,7 @@ defmodule EctoTestDSL.Drink.Me do
     quote do
       alias EctoTestDSL, as: T
       import T.Nouns.EEN.Macros
-      alias T.Nouns.{EEN,FieldRef,FieldCalculator,AsCast,TestData,Example}
+      alias T.Nouns.{EEN,FieldRef,FieldCalculator,AsCast,TestData,Example, StructRef}
       alias T.{Parse,Run,Neighborhood}
       alias T.Messages
       alias T.Trace

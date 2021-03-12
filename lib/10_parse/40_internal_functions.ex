@@ -1,14 +1,25 @@
 defmodule EctoTestDSL.Parse.InternalFunctions do
   use EctoTestDSL.Drink.Me
   alias T.MacroX
+  alias T.Parse.BuildState
 
   # ----------------------------------------------------------------------------
-  defmacro id_of(extended_example_desc) do
+  defmacro id_of(name_or_pair) do
     quote do
-      een = een(unquote(extended_example_desc))
+      een = een(unquote(name_or_pair))
       FieldRef.new(id: een)
     end
   end
+
+  def module(), do: BuildState.examples_module
+
+  def from(%EEN{} = een, opts), do: StructRef.new(een,                 opts)
+  def from(atom,         opts), do: StructRef.new(een(atom, module()), opts)
+  
+  def from(%EEN{} = een),            do: from(een,                 [  ])
+  def from([{name, module} | opts]), do: from(een(name, module  ), opts)
+  def from(atom) when is_atom(atom), do: from(een(atom, module()), [  ])
+
 
   # ----------------------------------------------------------------------------
 
