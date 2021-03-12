@@ -1,17 +1,20 @@
 defmodule EctoTestDSL.Nouns.StructRef do
   use EctoTestDSL.Drink.Me
+  alias T.Parse.Pnode.Common.EENWithOpts
   alias T.Nouns
 
   @moduledoc """
   A reference to an entire example
   """
 
-  defstruct [:een, :opts]
+  defstruct [:reference_een, :eens, :opts]
   
-  def new(een, opts), do: ~M{%__MODULE__ een, opts}
+  def new(een, opts) do 
+    EENWithOpts.parse(__MODULE__, een, opts)
+  end
 
   defimpl Nouns.RefHolder, for: __MODULE__ do
-    def eens(_value), do: :wrong
+    def eens(value), do: value.eens
 
     def dereference(_ref, in: _neighborhood) do
       :wrong
