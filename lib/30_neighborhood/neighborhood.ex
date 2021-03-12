@@ -6,6 +6,7 @@ defmodule EctoTestDSL.Neighborhood do
     defstruct [:params, :changeset, :inserted]
 
     def inserted(value), do: %__MODULE__{inserted: value}
+    def params(value), do: %__MODULE__{params: value}
 
     def from_workflow_results(results) do
       schema_module = Keyword.get(results, :example).metadata.module_under_test

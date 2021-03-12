@@ -16,11 +16,9 @@ defmodule EctoTestDSL.Nouns.StructRef do
   defimpl Nouns.RefHolder, for: __MODULE__ do
     def eens(value), do: value.eens
 
-    def dereference(_ref, in: _neighborhood) do
-      :wrong
-      # neighborhood
-      # |> Neighborhood.fetch!(ref.een, :inserted)
-      # |> MapX.fetch!(ref.field, &Messages.missing_key/1)
+    def dereference(ref, in: neighborhood) do
+      neighborhood
+      |> Neighborhood.fetch!(ref.reference_een, :params)
     end
   end
 

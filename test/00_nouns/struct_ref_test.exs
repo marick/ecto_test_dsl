@@ -13,6 +13,15 @@ defmodule Nouns.StructRefTest do
   end
 
 
-  describe "dereference" do 
+  describe "dereference" do
+    test "simple case" do
+      neighborhood = %{
+        een(:een) => Neighborhood.Value.params(%{a: 5})
+      }
+      ref = StructRef.new(een(:een), [])
+
+      RefHolder.dereference(ref, in: neighborhood)
+      |> assert_equal(%{a: 5})
+    end
   end
 end 
