@@ -233,13 +233,13 @@ defmodule EctoTestDSL.Run.Steps do
     reference_value = Map.get(neighborhood, fields_from.een)
     opts =
       fields_from.opts
-      |> expand_expected(neighborhood)
+      |> expand_exceptions(neighborhood)
       |> expand_ignoring(usually_ignore)
 
     MapA.assert_same_map(to_be_checked, reference_value, opts)
   end
 
-  defp expand_expected(opts, neighborhood) do
+  defp expand_exceptions(opts, neighborhood) do
     case Keyword.get(opts, :except) do
       nil ->
         opts
