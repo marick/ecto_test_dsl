@@ -1,3 +1,10 @@
+* Fix problem that, for params, `except: [text: "foo"]` doesn't work because
+  params comes back as %{"text" => "foo"}
+
+      with_notes_2: [params_like(:note_free,
+                      except: [notes: [from(note: Insert.Note, except: [text: "foo"])]])]
+
+
 * Nested associations.
   Possible notation?
          Insert.Note.fresh(:note))]])

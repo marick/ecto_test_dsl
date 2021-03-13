@@ -22,11 +22,14 @@ defmodule EctoTestDSL.Nouns.StructRef do
     ~M{%__MODULE__ reference_een, except, eens, ignoring, only}
   end
 
+  IO.puts "write something that will error nicely given except: [:note])]]"
+
   defimpl Nouns.RefHolder, for: __MODULE__ do
     def eens(value), do: value.eens
 
     def dereference(ref, in: neighborhood) do
       base = Neighborhood.fetch!(neighborhood, ref.reference_een, :params)
+
       filtered = 
         case {ref.only, ref.ignoring} do
           {[  ], [    ]} -> base
