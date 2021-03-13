@@ -4,8 +4,6 @@ defmodule EctoTestDSL.Parse.Pnode.Common do
   alias T.Nouns.RefHolder
 
   defmodule FromPairs do
-    alias T.Nouns
-    
     def parse(module, kvs) do
       map = Enum.into(kvs, %{})
       
@@ -21,22 +19,25 @@ defmodule EctoTestDSL.Parse.Pnode.Common do
     end
 
     def extract_een_values(kvs) do
-      flat_mapper = fn value -> 
-        cond do
-          RefHolder.impl_for(value) -> 
-            RefHolder.eens(value)
-          is_map(value) ->
-            extract_een_values(value)
-          is_list(value) ->
-            Enum.flat_map(value, &extract_een_values/1)
-          true ->
-            []
-        end
+      Enum.flat_map(kvs, fn {_key, value} -> extract_from_one_value(value) end)
+    end
+
+    def extract_from_one_value(value) do
+      cond do
+        RefHolder.impl_for(value) -> 
+          RefHolder.eens(value)
+        is_map(value) ->
+          extract_een_values(value)
+        KeywordX.is_keyword_list(value) ->
+          Enum.flat_map(value, &extract_een_values/1)
+        is_list(value) ->
+          Enum.flat_map(value, &extract_from_one_value/1)
+        true ->
+          []
       end
-      
-      Enum.flat_map(kvs, fn {_key, value} -> flat_mapper.(value) end)
     end
   end
+
 
   # This only parses EENs out the :except option. The other options
   # are expected not to contain EENs. That's the case when the options

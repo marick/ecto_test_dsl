@@ -32,7 +32,9 @@ defmodule Neighborhood.ExpandTest do
       expect.(%{notes: [%{id: 5},
                         %{id: 5, extra: "e"}]})
 
-    
+    # A list of values
+    [%{          notes: [1, id_of(:neighbor), 3]}, neighborhood]
+    |> expect.(%{notes: [1, 5,                3]})
   end
 
   # ----------------------------------------------------------------------------

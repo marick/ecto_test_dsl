@@ -10,18 +10,23 @@ defmodule EctoTestDSL.Neighborhood.Expand do
 
   def values_(kws, neighborhood, into) do
     for {name, value} <- kws, into: into do
-      processed_value = cond do
-        RefHolder.impl_for(value) -> 
-          RefHolder.dereference(value, in: neighborhood)
-        is_map(value) ->
-          values(value, with: neighborhood)
-        is_list(value) ->
-          Enum.map(value, &(values &1, with: neighborhood))
-        true ->
-          value
-      end
-      {name, processed_value}
+      {name, one_value(value, neighborhood)}
     end
+  end
+
+  def one_value(value, neighborhood) do
+    cond do
+      RefHolder.impl_for(value) -> 
+        RefHolder.dereference(value, in: neighborhood)
+      is_map(value) ->
+        values(value, with: neighborhood)
+      KeywordX.is_keyword_list(value) ->
+        Enum.map(value, &(values &1, with: neighborhood))
+      is_list(value) ->
+        Enum.map(value, &one_value(&1, neighborhood))
+      true ->
+        value
+      end
   end
 
   # ----------------------------------------------------------------------------

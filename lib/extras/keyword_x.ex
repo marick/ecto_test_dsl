@@ -84,4 +84,8 @@ defmodule EctoTestDSL.KeywordX do
       _ -> false
     end
   end
+
+  def is_keyword_list([]), do: false
+  def is_keyword_list([{_k,_v} | _rest]), do: true
+  def is_keyword_list(_), do: false
 end

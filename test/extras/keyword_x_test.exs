@@ -111,4 +111,18 @@ defmodule KeywordXTest do
     refute KeywordX.at_most_this_key?([key: 1, other: 2], :key)
     refute KeywordX.at_most_this_key?([not: 1], :key)
   end
+
+  test "if list is a keyword list" do
+    expect = fn input, expected ->
+      assert KeywordX.is_keyword_list(input) == expected
+    end
+
+    [] |> expect.(false)
+    [1] |> expect.(false)
+    [a: 3] |> expect.(true)
+
+    # Only checks the first value
+    [{:a, 3}, 3] |> expect.(true)
+  end
+      
 end
