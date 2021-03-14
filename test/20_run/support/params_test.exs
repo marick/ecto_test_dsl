@@ -1,6 +1,6 @@
-defmodule Run.Support.FormatParamsTest do
+defmodule Run.Support.ParamsTest do
   use EctoTestDSL.Case
-  alias T.Run.RunningExample
+  alias T.Run.Params
 
   # This is not intended to be a complee example, just shows
   # that the appropriate formatter is used.
@@ -22,15 +22,17 @@ defmodule Run.Support.FormatParamsTest do
 
   test "different formats" do
     expect = fn format, expected ->
-      example = %{metadata: Enum.into(format, %{format: :raw})}
-      running = RunningExample.from(example)
-
-      RunningExample.formatted_params(running, @params)
+      Params.format(@params, format)
       |> assert_fields(expected)
     end
 
-    [format: :phoenix] |> expect.(@interpreted_as_phoenix)
-    [format: :raw    ] |> expect.(@params)
-    [                ] |> expect.(@params)
+    :phoenix |> expect.(@interpreted_as_phoenix)
+    :raw     |> expect.(@params)
+
+    assertion_fails(~r/`nil` is not a valid format for test data params/,
+      [message: ~r/Try one of these: `\[:phoenix, :raw\]`/],
+      fn -> 
+        Params.format(@params, nil)
+      end)
   end
 end

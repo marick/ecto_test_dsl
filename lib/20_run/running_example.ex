@@ -44,7 +44,10 @@ defmodule EctoTestDSL.Run.RunningExample do
   def neighborhood(running), do: step_value!(running, :repo_setup)
   def expanded_params(running), do: step_value!(running, :params)
 
-
+  def formatted_params(running) do
+    expanded_params(running)
+    |> Run.Params.format(format(running))
+  end
 
   # ----------------------------------------------------------------------------
 
@@ -54,24 +57,5 @@ defmodule EctoTestDSL.Run.RunningExample do
       script: Keyword.get(opts, :script, []),
       history: Keyword.get(opts, :history, History.new(example))
     }
-  end
-
-  # ----------------------------------------------------------------------------
-  def formatted_params(running, params) do
-    formatters = %{
-      raw: &(&1),
-      phoenix: &Phoenix.format/1
-    }
-
-    format = mockable(__MODULE__).format(running)
-    case Map.get(formatters, format) do
-      nil -> 
-        raise """
-        `#{inspect format}` is not a valid format for test data params.
-        Try one of these: `#{inspect Map.keys(formatters)}`
-        """
-      formatter ->
-        formatter.(params)
-    end
   end
 end
