@@ -1,6 +1,6 @@
 defmodule EctoTestDSL.RunningStubs do
   use Mockery
-  use Given
+  alias MockeryExtras.Given
   alias EctoTestDSL.Run.RunningExample
 
   defmacro stub(kws) do

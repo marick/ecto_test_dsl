@@ -5,7 +5,7 @@ defmodule EctoTestDSL.Case do
       use ExUnit.Case, async: true
       use FlowAssertions
       use FlowAssertions.Ecto
-      use Given
+      use MockeryExtras.Given
       import FlowAssertions.AssertionA
       import FlowAssertions.Define.Tabular
       alias T.Run
