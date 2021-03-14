@@ -10,14 +10,14 @@ defmodule Run.Steps.ChangesetFromParamsTest do
 
   test "the only result" do
     module_under_test = Schema
-    expanded_params = %{"age" => "1"}
+    formatted_params = %{"age" => "1"}
 
     stub(
       module_under_test: module_under_test,
-      expanded_params: expanded_params,
+      formatted_params: formatted_params,
       changeset_with: fn given_module, given_params ->
         assert module_under_test == given_module
-        assert expanded_params == given_params
+        assert formatted_params == given_params
         :changeset_result
       end)
 

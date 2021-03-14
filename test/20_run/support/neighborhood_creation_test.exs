@@ -58,7 +58,7 @@ defmodule EctoTestDSL.Run.Support.NeighborhoodCreationTest do
       assert Map.get(neighborhood, een(young: Examples)) == presupplied
 
       dependent = mk_getter(neighborhood, :dependent)
-      dependent.(:params)    |> assert_equal(%{"name" => "dependent"})
+      dependent.(:params)    |> assert_equal(%{name: "dependent"})
       dependent.(:inserted)  |> assert_equal(%Schema{name: "created `dependent`"})
       dependent.(:changeset) |> assert_change(name: "dependent")
     end
@@ -70,12 +70,12 @@ defmodule EctoTestDSL.Run.Support.NeighborhoodCreationTest do
         |> Keyword.get(:repo_setup)
 
       young = mk_getter(neighborhood, :young)
-      young.(:params)    |> assert_equal(%{"name" => "young"})
+      young.(:params)    |> assert_equal(%{name: "young"})
       young.(:inserted)  |> assert_equal(%Schema{name: "created `young`"})
       young.(:changeset) |> assert_change(name: "young")
       
       dependent = mk_getter(neighborhood, :dependent)
-      dependent.(:params)    |> assert_equal(%{"name" => "dependent"})
+      dependent.(:params)    |> assert_equal(%{name: "dependent"})
       dependent.(:inserted)  |> assert_equal(%Schema{name: "created `dependent`"})
       dependent.(:changeset) |> assert_change(name: "dependent")
     end

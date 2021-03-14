@@ -21,8 +21,11 @@ defmodule EctoTestDSL.Predefines.Tester do
         do: TestData.example(@name_of_test_data, name)
 
       def params(example_name) do
-        check_workflow(example_name, stop_after: :params)
-        |> Keyword.get(:params)
+        unformatted = 
+          check_workflow(example_name, stop_after: :params)
+          |> Keyword.get(:params)
+
+        Run.Params.format_for_example(unformatted, example(example_name))
       end
 
       def check_workflow(example_name, opts \\ []) do

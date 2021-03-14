@@ -27,5 +27,4 @@ defmodule Variants.TrivialTest do
       assert Examples.start(@minimal_start) == expected
     end
   end
-        
 end

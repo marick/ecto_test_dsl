@@ -27,7 +27,6 @@ defmodule EctoTestDSL.Run.Steps do
     params =
       original_params
       |> Rnode.Substitutable.substitute(neighborhood)
-      |> RunningExample.formatted_params(running, ...)
 
     Trace.say(params, :params)
     params
@@ -39,17 +38,17 @@ defmodule EctoTestDSL.Run.Steps do
 
   @step :changeset_from_params
   def changeset_from_params(running) do 
-    from(running, use: [:expanded_params, :module_under_test, :changeset_with])
-    changeset_with.(module_under_test, expanded_params)
+    from(running, use: [:formatted_params, :module_under_test, :changeset_with])
+    changeset_with.(module_under_test, formatted_params)
   end
 
   @step :changeset_for_update
   def changeset_for_update(running, which_struct) do
     from(running,
-      use: [:expanded_params, :module_under_test, :changeset_for_update_with])
+      use: [:formatted_params, :module_under_test, :changeset_for_update_with])
     from_history(running, struct: which_struct)
 
-    changeset_for_update_with.(module_under_test, struct, expanded_params)
+    changeset_for_update_with.(module_under_test, struct, formatted_params)
   end
   # ----------------------------------------------------------------------------
 

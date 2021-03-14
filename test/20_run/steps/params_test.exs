@@ -8,10 +8,10 @@ defmodule Run.Steps.ParamsTest do
 
   describe "ordinary params" do
     test "substitutions" do
-      input =    Rnode.Params.new(%{ a:     1,   b_id: id_of(b: Module)})
-      expected =                  %{"a" => "1", "b_id" => "383"}
+      input =    Rnode.Params.new(%{a: 1, b_id: id_of(b: Module)})
+      expected =                  %{a: 1, b_id: 383}
 
-      stub(original_params: input, format: :phoenix)
+      stub(original_params: input)
       stub(neighborhood: %{een(b: Module) => Neighborhood.Value.inserted(%{id: 383})})
 
       assert Steps.params(:running) == expected
@@ -22,16 +22,17 @@ defmodule Run.Steps.ParamsTest do
     defstruct [:a, :b_id, :extra]
   end
 
-
+  # Note that parameters are not formatted at this stage. That's because
+  # they may be included with other sources of params (as with `from(een)`.
   describe "params from repo" do
     test "substitutions without exceptions" do
       stub(neighborhood: %{
             een(existing: Schema) => Neighborhood.Value.inserted(%Schema{a: "a", b_id: 383, extra: 5})})
 
       input = Rnode.ParamsFrom.new(een(existing: Schema), %{})
-      expected = %{"a" => "a", "b_id" => "383", "extra" => "5"}
+      expected = %{a: "a", b_id: 383, extra: 5}
 
-      stub(original_params: input, format: :phoenix)
+      stub(original_params: input)
 
       assert Steps.params(:running) == expected
     end
@@ -43,9 +44,9 @@ defmodule Run.Steps.ParamsTest do
 
       input = Rnode.ParamsFrom.new(een(existing: Schema),
         %{a: "new", b_id: id_of(b: Module)})
-      expected = %{"a" => "new", "b_id" => "383", "extra" => "5"}
+      expected = %{a: "new", b_id: 383, extra: 5}
 
-      stub(original_params: input, format: :phoenix)
+      stub(original_params: input)
 
       assert Steps.params(:running) == expected
     end
