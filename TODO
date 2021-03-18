@@ -5,9 +5,11 @@
                       except: [notes: [from(note: Insert.Note, except: [text: "foo"])]])]
 
 
-* Nested associations.
-  Possible notation?
-         Insert.Note.fresh(:note))]])
+* Insert.Note.note notation:
+                 def note(opts \\ []) do
+                   from(een(note: __MODULE__), opts)
+                 end
+
 
 * Have workflow annotate examples with line numbers (make it a macro)
   Display the filename and line number upon errors in format that allows
