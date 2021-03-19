@@ -155,6 +155,12 @@ defmodule EctoTestDSL.Run.Steps do
     RunningExample.insert_with(running).(repo, changeset)
   end
 
+  @step :try_params_insertion
+  def try_params_insertion(running) do
+    from(running, use: [:repo, :formatted_params, :insert_with])
+    insert_with.(repo, formatted_params)
+  end
+
   @step :primary_key
   def primary_key(running) do
     from(running, use: [:get_primary_key_with, :neighborhood])
