@@ -1,10 +1,3 @@
-* Fix problem that, for params, `except: [text: "foo"]` doesn't work because
-  params comes back as %{"text" => "foo"}
-
-      with_notes_2: [params_like(:note_free,
-                      except: [notes: [from(note: Insert.Note, except: [text: "foo"])]])]
-
-
 * Insert.Note.note notation:
                  def note(opts \\ []) do
                    from(een(note: __MODULE__), opts)
@@ -14,8 +7,6 @@
 * Have workflow annotate examples with line numbers (make it a macro)
   Display the filename and line number upon errors in format that allows
   click to reach example.
-
-* Make mockery come along with ecto_test_dsl
 
 * How will as_cast work with associations? (like as_cast with notes) in multi-note insertion?
 
@@ -28,12 +19,6 @@
     given(Date.utc_today, return: ~D[2001-01-01])
     Tester.check_workflow(:note, trace: false)
   end
-
-
-* Pull `given` out into a mockery_extras package.
-
-* Rearrange examples directory structures, probably delete
-  names. Along the way, figure out a better naming convention for examples files.
 
 
 * Separate schema_module from module_under_test

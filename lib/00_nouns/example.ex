@@ -1,7 +1,7 @@
 defmodule EctoTestDSL.Nouns.Example do
   use EctoTestDSL.Drink.Me
   use T.Drink.Assertively
-  import T.ModuleX
+  import MockeryExtras.Getters
   
   @moduledoc """
   All that is known, across major modules, about the example datastructure.

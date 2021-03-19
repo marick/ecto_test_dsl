@@ -2,8 +2,7 @@ defmodule EctoTestDSL.Run.RunningExample do
   use EctoTestDSL.Drink.Me
   use EctoTestDSL.Drink.AndRun
   use EctoTestDSL.Drink.Assertively
-  import T.ModuleX
-  alias Formats.Phoenix
+  import MockeryExtras.Getters
 
   @enforce_keys [:example, :history]
   defstruct [:example, :history,
@@ -27,8 +26,7 @@ defmodule EctoTestDSL.Run.RunningExample do
     :struct_for_update_with
   ]
 
-  private_getters :example, [:params]
-  publicize :original_params, renames: :params
+  getter :original_params, for: [:example, :params]
 
   def step_value!(~M{history}, step_name),
     do: History.fetch!(history, step_name)

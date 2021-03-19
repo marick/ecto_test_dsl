@@ -69,10 +69,7 @@ defmodule EctoTestDSL.MixProject do
       {:deep_merge, "~> 1.0"},      
       {:ex_machina, "~> 2.3", only: :test},
       {:magritte, "~> 0.1.2"},
-      {:mockery_extras, "~> 0.1",
-       path: "/Users/bem/src/mockery_extras"
-      },
-
+      {:mockery_extras, "~> 0.2"},
       {:ex_contract, "~> 0.1.1"},
       {:shorter_maps, "~> 2.2"}
       
