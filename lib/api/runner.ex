@@ -34,7 +34,19 @@ defmodule EctoTestDSL.Runner do
 
       case Regex.run(@module_name_regex, first_line) do
         [_all, module_name] ->
-          Module.safe_concat(module_name, "Tester")
+         try do 
+            Module.safe_concat(module_name, "Tester")
+          rescue ex in ArgumentError ->
+            message = """
+            Module #{module_name} is not available.
+            Most likely, its directory wasn't added to the mix.exs compile path, 
+            which should look something like this:
+                defp elixirc_paths(:test), do: ["lib", "test", "test/examples"]
+                                                               ^^^^^^^^^^^^^^^
+           """                                                               
+            IO.puts message
+            reraise ex, __STACKTRACE__
+          end
         _ ->
           raise ~s/Could not find the module name inside file "#{path}"/
       end
