@@ -5,9 +5,9 @@ examples against the assertions.
 
 You get terse tests and examples that explain a lot in (comparatively) few words. 
 
-The separate repository [examples_for_ecto_test_dsl/](https://github.com/marick/examples_for_ecto_test_dsl) has examples.
+The separate repository [examples_for_ecto_test_dsl](https://github.com/marick/examples_for_ecto_test_dsl) has examples.
 
 *This is a work in progress. However, I am actively looking for people who'd like me to try applying this package to their app and thus improve it.*
 
-*Contact [marick@exampler.com](mailto:marick@exampler.com) or [@marick](https://twitter.com/marick/).
+*Contact [marick@exampler.com](mailto:marick@exampler.com) or [@marick](https://twitter.com/marick/).*
 
