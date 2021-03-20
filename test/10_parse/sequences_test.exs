@@ -28,14 +28,13 @@ defmodule Parse.SequencesTest do
       ])
   end
 
-  @tag :skip
   test "blanks" do
     blank="can't be blank"
     
     expect(
       blanks([:a, :b]), [
         params(a: "", b: ""),
-        changeset: [errors: [a: blank, b: blank]]
+        changeset(errors: [a: blank, b: blank])
       ])
   end
 end

@@ -17,11 +17,14 @@ defmodule EctoTestDSL.Parse.Sequences do
       ])
   end
 
-  def blanks(params) do 
-      # Util.sequence([
-      #   previously(insert: example_name),
-      #   params_like(example_name)
-      # ])
+  def blanks(names) do
+    param_list = for n <- names, do: {n, ""}
+    error_list = for n <- names, do: {n, "can't be blank"}
+
+    Util.sequence([
+      params(param_list),
+      changeset(errors: error_list)
+    ])
   end
 
 end

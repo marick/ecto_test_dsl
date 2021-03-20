@@ -3,7 +3,6 @@ defmodule Template.Trivial do
     quote do 
       use EctoTestDSL.Variants.Trivial
 
-
       def started(opts \\ []) do
         opts =
           Keyword.merge(
