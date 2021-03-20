@@ -55,10 +55,4 @@ defmodule EctoTestDSL.Parse.ExampleFunctions do
   def fields_from(een_or_name, opts \\ []),
     do: {:fields_from, Pnode.FieldsFrom.parse(een_or_name, opts)}
 
-  # ----------------------------------------------------------------------------
-
-  # This is expanded during normalization.
-  def insert_twice(example_name),
-    do: {:__flatten, [previously(insert: example_name), params_like(example_name)]}
-
 end
