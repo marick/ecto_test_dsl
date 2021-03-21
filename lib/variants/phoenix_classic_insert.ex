@@ -54,8 +54,8 @@ defmodule EctoTestDSL.Variants.PhoenixClassic.Insert do
   end
 
   defp assert_valid_keys(top_level) do
-    required_keys = [:examples_module, :repo] ++ Keyword.keys(default_start_opts())
-    optional_keys = [:schema]
+    required_keys = [:schema, :examples_module, :repo] ++ Keyword.keys(default_start_opts())
+    optional_keys = []
     
     top_level
     |> Callbacks.validate_top_level_keys(required_keys, optional_keys)
