@@ -26,7 +26,7 @@ defmodule Run.Steps.AsCastTest do
   defp run([field, {:params, params}, {:changes, changes}]) do
     changeset = ChangesetX.valid_changeset(changes: changes)
     stub_history(params: params, changeset_from_params: changeset)
-    stub(as_cast: AsCast.new(Schema, [field]))
+    stub(as_cast: AsCast.new([field]), schema: Schema)
     Steps.as_cast_checks(:running, :changeset_from_params)
   end
 
@@ -57,7 +57,7 @@ defmodule Run.Steps.AsCastTest do
   end
 
   test "If the `cast` produces an error, that's checked" do
-    stub(as_cast: AsCast.new(Schema, [:date]))
+    stub(as_cast: AsCast.new([:date]), schema: Schema)
     stub_history(params: %{"date" => "2001-0"})
 
     changeset =
@@ -77,7 +77,7 @@ defmodule Run.Steps.AsCastTest do
   end
 
   test "a user assertion overrides `as_cast`" do
-    stub(as_cast: AsCast.new(Schema, [:age]))
+    stub(as_cast: AsCast.new([:age]), schema: Schema)
     stub_history(params: %{"age" => "5858"})   # Cast value will be ignored
     # ... in favor of:
     stub(validation_changeset_checks: [changes:  [age: 0]])
@@ -88,7 +88,7 @@ defmodule Run.Steps.AsCastTest do
   end
   
   test "but other as_cast values are checked" do
-    stub(as_cast: AsCast.new(Schema, [:age, :date]))
+    stub(as_cast: AsCast.new([:age, :date]), schema: Schema)
     stub_history(params: %{"age" => "5858", "date" => "2001-1"})
     stub(validation_changeset_checks: [changes:  [age: 0]])
 

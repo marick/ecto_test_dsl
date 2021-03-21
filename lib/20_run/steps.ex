@@ -96,12 +96,12 @@ defmodule EctoTestDSL.Run.Steps do
   # ----------------------------------------------------------------------------
   @step :as_cast_checks
   def as_cast_checks(running, which_changeset) do
-    from(running, use: [:name, :as_cast])
+    from(running, use: [:name, :as_cast, :schema])
     from_history(running, [:params, changeset: which_changeset])
 
     as_cast
     |> AsCast.subtract(excluded_fields(running))
-    |> AsCast.assertions(params)
+    |> AsCast.assertions(schema, params)
     |> run_assertions(changeset, name)
 
     :uninteresting_result

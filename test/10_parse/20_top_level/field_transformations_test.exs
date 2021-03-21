@@ -14,20 +14,20 @@ defmodule Parse.TopLevel.FieldTransformationsTest do
     test "simple creation" do
       @empty
       |> field_transformations(as_cast: [:a])
-      |> assert_field(as_cast: AsCast.new(Schema, [:a]))
+      |> assert_field(as_cast: AsCast.new([:a]))
     end
 
     test "more than one in a single field calculation" do
       @empty
       |> field_transformations(as_cast: [:a], as_cast: [:b])
-      |> assert_field(as_cast: AsCast.new(Schema, [:a, :b]))
+      |> assert_field(as_cast: AsCast.new([:a, :b]))
     end
 
     test "multiple field calculations" do
       @empty
       |> field_transformations(as_cast: [:a], as_cast: [:b])
       |> field_transformations(as_cast: [:b, :c])
-      |> assert_field(as_cast: AsCast.new(Schema, [:a, :b, :b, :c]))
+      |> assert_field(as_cast: AsCast.new([:a, :b, :b, :c]))
       # Note that duplicates aren't filtered out because they're harmless.
     end
   end
@@ -75,7 +75,7 @@ defmodule Parse.TopLevel.FieldTransformationsTest do
       @empty
       |> field_transformations(as_cast: [:a], b: on_success(to_string(:int)))
     
-    assert as_cast == AsCast.new(Schema, [:a])
+    assert as_cast == AsCast.new([:a])
     assert field_calculator.args == [:int]
   end
 end

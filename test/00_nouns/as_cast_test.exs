@@ -25,8 +25,8 @@ defmodule Nouns.AsCastTest do
   # that's easier to examine.
   test "creating and checking, part 1" do
     expect = fn [cast_fields, params], expected ->
-      AsCast.new(Schema, cast_fields)
-      |> AsCast.changeset_checks(params)
+      AsCast.new(cast_fields)
+      |> AsCast.changeset_checks(Schema, params)
       |> assert_equal(expected)
     end
       
@@ -56,8 +56,8 @@ defmodule Nouns.AsCastTest do
 
   test "creating and checking, part 2: assertions" do
     [assertion] = 
-      AsCast.new(Schema, [:int_field])
-      |> AsCast.assertions(%{"int_field" => "383"})
+      AsCast.new([:int_field])
+      |> AsCast.assertions(Schema, %{"int_field" => "383"})
 
     wrapped_location = [{:changeset, [{:changes, [int_field: 383]}, "..."]}]
     additional_context = [as_cast: [:int_field]]
@@ -73,21 +73,21 @@ defmodule Nouns.AsCastTest do
 
   test "there is a null AsCast value" do
     AsCast.nothing()
-    |> AsCast.changeset_checks(%{"date_string" => "irrelevant"})
+    |> AsCast.changeset_checks(Schema, %{"date_string" => "irrelevant"})
     |> assert_equal([])
   end
 
   test "merging" do
     AsCast.nothing
-    |> AsCast.merge(AsCast.new(Schema, [:a]))
-    |> assert_fields(module: Schema, field_names: [:a])
-    |> AsCast.merge(AsCast.new(Schema, [:b]))
-    |> assert_fields(module: Schema, field_names: [:a, :b])
+    |> AsCast.merge(AsCast.new([:a]))
+    |> assert_fields(field_names: [:a])
+    |> AsCast.merge(AsCast.new([:b]))
+    |> assert_fields(field_names: [:a, :b])
   end
 
   test "subtracting field names" do
-    AsCast.new(Schema, [:a, :b, :c])
+    AsCast.new([:a, :b, :c])
     |> AsCast.subtract([:b, :c, :d])
-    |> assert_fields(module: Schema, field_names: [:a])
+    |> assert_fields(field_names: [:a])
   end
 end 
