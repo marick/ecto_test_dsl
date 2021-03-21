@@ -54,7 +54,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
   end
 
   defp default_start_opts, do: [
-    changeset_with: &DefaultFunctions.params_only_changeset/1,
+    changeset_with: &DefaultFunctions.params_only_changeset/2,
     insert_with: &DefaultFunctions.plain_insert/2,
     format: :phoenix,
     usually_ignore: [],

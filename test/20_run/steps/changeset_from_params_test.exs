@@ -20,7 +20,7 @@ defmodule Run.Steps.ChangesetFromParamsTest do
       api_module: expected_api_module,
       schema: expected_schema,
       formatted_params: expected_params,
-      changeset_with: fn ~M{schema, api_module, formatted_params} ->
+      changeset_with: fn ~M{schema, api_module}, formatted_params ->
         assert api_module == expected_api_module
         assert schema == expected_schema
         assert expected_params == formatted_params

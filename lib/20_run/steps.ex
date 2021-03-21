@@ -39,7 +39,7 @@ defmodule EctoTestDSL.Run.Steps do
   @step :changeset_from_params
   def changeset_from_params(running) do 
     from(running, use: [:formatted_params, :api_module, :schema, :changeset_with])
-    changeset_with.(~M{api_module, formatted_params, schema})
+    changeset_with.(~M{api_module, schema}, formatted_params)
   end
 
   @step :changeset_for_update
