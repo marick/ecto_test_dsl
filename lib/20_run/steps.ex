@@ -212,20 +212,20 @@ defmodule EctoTestDSL.Run.Steps do
 
   @step :check_results
   def check_results(running, which_step) do
-    from(running, use: [:neighborhood, :name, :result_fields,
-                        :result_matches, :usually_ignore])
+    from(running, use: [:name, :result_fields, :result_matches])
     from_history(running, to_be_checked: which_step)
 
     adjust_assertion_message(fn -> 
-      check_result_fields(result_fields, to_be_checked, neighborhood)
-      check_against_previous_struct(result_matches, to_be_checked, neighborhood, usually_ignore)
+      check_result_fields(result_fields, to_be_checked, running)
+      check_against_previous_struct(result_matches, to_be_checked, running)
     end,
       Reporting.identify_example(name))
 
     :uninteresting_result
   end
 
-  defp check_result_fields(result_fields, to_be_checked, neighborhood) do
+  defp check_result_fields(result_fields, to_be_checked, running) do
+    from(running, use: [:neighborhood])
     unless Enum.empty?(result_fields) do 
       expected =
         Neighborhood.Expand.values(result_fields, with: neighborhood)
@@ -233,9 +233,9 @@ defmodule EctoTestDSL.Run.Steps do
     end
   end
 
-  defp check_against_previous_struct(:unused, _, _, _), do: :ok
-  defp check_against_previous_struct(
-    fields_from, to_be_checked, neighborhood, usually_ignore) do
+  defp check_against_previous_struct(:unused, _, _), do: :ok
+  defp check_against_previous_struct(fields_from, to_be_checked, running) do 
+    from(running, use: [:neighborhood, :usually_ignore])
     
     reference_value = Map.get(neighborhood, fields_from.een)
     opts =
