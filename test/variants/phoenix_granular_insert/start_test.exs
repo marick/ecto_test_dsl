@@ -8,7 +8,7 @@ defmodule Variants.PhoenixGranular.StartTest do
   end
 
   @minimal_start [
-    module_under_test: SomeSchema,
+    api_module: Api,
     repo: Repo
   ]
     
@@ -18,7 +18,7 @@ defmodule Variants.PhoenixGranular.StartTest do
     metadata
     |> assert_fields(
          format: :phoenix,
-         module_under_test: SomeSchema,
+         api_module: Api,
          variant: Variant,
          examples: []
       )

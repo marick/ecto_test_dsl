@@ -5,7 +5,7 @@ defmodule Parse.TopLevel.FieldTransformationsTest do
   alias T.Nouns.{AsCast,FieldCalculator}
 
   @empty %{
-    module_under_test: Schema,
+    api_module: Schema,
     as_cast: AsCast.nothing,
     field_calculators: []
   }

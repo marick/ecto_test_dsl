@@ -9,7 +9,7 @@ defmodule EctoTestDSL.Neighborhood do
     def params(value), do: %__MODULE__{params: value}
 
     def from_workflow_results(results) do
-      schema_module = Keyword.get(results, :example).metadata.module_under_test
+      schema_module = Keyword.get(results, :example) |> Example.api_module
       Enum.reduce(results, %__MODULE__{}, fn {name, value}, acc ->
         cond do 
           is_struct(value, schema_module) && acc.inserted == nil ->

@@ -19,7 +19,7 @@ defmodule EctoTestDSL.Parse.TopLevel do
 
   def field_transformations(test_data, opts) do
     as_cast =
-      AsCast.new(test_data.module_under_test,
+      AsCast.new(test_data.api_module,      #### XXXX
         Keyword.get_values(opts, :as_cast) |> Enum.concat)
 
     calculators =

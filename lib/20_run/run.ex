@@ -60,7 +60,7 @@ defmodule EctoTestDSL.Run do
 
   defp run_step([step_name | opts], running) do
     case opts do
-      [uses: rest_args] -> 
+      [uses: rest_args] ->
         module = RunningExample.variant(running)
         value = apply_or_flunk(module, step_name, [running, rest_args])
         Map.update!(running, :history, &(History.add(&1, step_name, value)))

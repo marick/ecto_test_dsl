@@ -6,7 +6,7 @@ defmodule Template.PhoenixGranular.Insert do
       def started(opts \\ []) do
         opts =
           Keyword.merge(
-            [module_under_test: "the module under test is irrelevant",
+            [api_module: "the module under test is irrelevant",
              repo: "no database transactions are done in this test"],
             opts)
             

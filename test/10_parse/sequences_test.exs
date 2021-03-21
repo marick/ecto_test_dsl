@@ -12,7 +12,7 @@ defmodule Parse.SequencesTest do
   end
 
   setup do
-    Examples.started(examples_module: Examples, module_under_test: Schema)
+    Examples.started(examples_module: Examples, api_module: Schema)
     :ok
   end
 

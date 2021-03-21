@@ -35,7 +35,7 @@ defmodule Variants.PhoenixGranular.ValidationOrderTest do
     
     def create_test_data do 
       start(
-        module_under_test: Schema,
+        api_module: Schema,
         repo: "there is no repo"
       )
 

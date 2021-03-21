@@ -38,17 +38,17 @@ defmodule EctoTestDSL.Run.Steps do
 
   @step :changeset_from_params
   def changeset_from_params(running) do 
-    from(running, use: [:formatted_params, :module_under_test, :changeset_with])
-    changeset_with.(module_under_test, formatted_params)
+    from(running, use: [:formatted_params, :api_module, :changeset_with])
+    changeset_with.(api_module, formatted_params)
   end
 
   @step :changeset_for_update
   def changeset_for_update(running, which_struct) do
     from(running,
-      use: [:formatted_params, :module_under_test, :changeset_for_update_with])
+      use: [:formatted_params, :api_module, :changeset_for_update_with])
     from_history(running, struct: which_struct)
 
-    changeset_for_update_with.(module_under_test, struct, formatted_params)
+    changeset_for_update_with.(api_module, struct, formatted_params)
   end
   # ----------------------------------------------------------------------------
 
@@ -171,10 +171,10 @@ defmodule EctoTestDSL.Run.Steps do
 
   @step :struct_for_update
   def struct_for_update(running, which_primary_key) do
-    from(running, use: [:struct_for_update_with, :repo, :module_under_test])
+    from(running, use: [:struct_for_update_with, :repo, :api_module])
     from_history(running, primary_key: which_primary_key)
 
-    ~M{repo, module_under_test, primary_key}
+    ~M{repo, api_module, primary_key}
     |> Map.put(:set_hint, :struct_for_update_with)
     |> struct_for_update_with.()
   end

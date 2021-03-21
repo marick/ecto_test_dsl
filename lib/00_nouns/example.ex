@@ -9,7 +9,8 @@ defmodule EctoTestDSL.Nouns.Example do
   specific knowledge.)
   """
 
-  getters :metadata, [:name, :workflow_name, :repo, :run, :examples_module, :format]
+  getters :metadata, [
+    :name, :workflow_name, :repo, :run, :examples_module, :format, :api_module]
 
   private_getters :metadata, [:variant]
 

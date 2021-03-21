@@ -6,14 +6,14 @@ defmodule Run.Steps.StructForUpdateTest do
 
   setup do 
     stub_history(primary_key: 333)
-    stub(repo: "repo", module_under_test: "module")
+    stub(repo: "repo", api_module: "module")
     :ok
   end
       
   test "success" do
-    stub(struct_for_update_with: fn ~M{repo, module_under_test, primary_key} ->
+    stub(struct_for_update_with: fn ~M{repo, api_module, primary_key} ->
       assert repo == "repo"
-      assert module_under_test == "module"
+      assert api_module == "module"
       assert primary_key == 333
       
       "some result"

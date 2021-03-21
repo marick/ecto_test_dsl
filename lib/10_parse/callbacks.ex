@@ -3,7 +3,7 @@ defmodule EctoTestDSL.Parse.Callbacks do
   use T.Drink.Assertively
   alias T.Parse.Start
 
-  @required_keys [:module_under_test, :variant] ++ Map.keys(Start.starting_test_data)
+  @required_keys [:api_module, :variant] ++ Map.keys(Start.starting_test_data)
   @optional_keys []
 
   def validate_top_level_keys(test_data, variant_required, variant_optional) do

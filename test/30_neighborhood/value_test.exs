@@ -7,7 +7,7 @@ defmodule Neighborhood.ValueTest do
     defstruct [:age]
   end
 
-  @example %{metadata: %{module_under_test: Schema}}
+  @example %{metadata: %{api_module: Schema}}
 
   test "neighborhood can contain inserted value" do
     # Note that the last-created value is taken

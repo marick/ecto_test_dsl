@@ -2,12 +2,12 @@ defmodule EctoTestDSL.Variants.Common.DefaultFunctions do
   use EctoTestDSL.Drink.Me
   import ExUnit.Assertions
   
-  def plain_changeset(module_under_test, struct, params),
-    do: module_under_test.changeset(struct, params)
+  def plain_changeset(schema, struct, params),
+    do: schema.changeset(struct, params)
   
-  def params_only_changeset(module_under_test, params) do
-    default_struct = struct(module_under_test)
-    module_under_test.changeset(default_struct, params)
+  def params_only_changeset(schema, params) do
+    default_struct = struct(schema)
+    schema.changeset(default_struct, params)
   end
 
   def primary_key_from_id_param(%{params: params}) do
@@ -25,13 +25,13 @@ defmodule EctoTestDSL.Variants.Common.DefaultFunctions do
   end
   
 
-  def checked_get(~M{repo, module_under_test, primary_key, set_hint}) do 
+  def checked_get(~M{repo, schema, primary_key, set_hint}) do
     message = to_learn_more("""
-     Could not fetch a #{inspect module_under_test} with primary key `#{primary_key}`.
+     Could not fetch a #{inspect schema} with primary key `#{primary_key}`.
      You may need to set `#{inspect set_hint}` in your `start` function.
      """)
 
-    result = repo.get(module_under_test, primary_key) 
+    result = repo.get(schema, primary_key) 
     assert result, message
     result
   end

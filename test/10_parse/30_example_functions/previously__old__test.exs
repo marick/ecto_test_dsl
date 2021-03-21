@@ -3,7 +3,7 @@ defmodule Parse.PreviouslyTest do
   use T.Parse.Exports
 
   def expect(input, expected) do
-    %{module_under_test: Schema, examples_module: Examples, examples: []}
+    %{api_module: Schema, examples_module: Examples, examples: []}
     |> workflow(:success, example: [input])
     |> Map.get(:examples)
     |> Keyword.get(:example)

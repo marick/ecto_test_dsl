@@ -48,7 +48,7 @@ Well, you also require some setup work:
 
   def create_test_data do 
     start(
-      module_under_test: Schemas.Species,
+      api_module: Schemas.Species,
       repo: App.Repo
     )
 ```

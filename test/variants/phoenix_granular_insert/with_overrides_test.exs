@@ -5,7 +5,7 @@ defmodule Variants.PhoenixGranular.WithOverridesTest do
   defmodule Examples do
     use T.Variants.PhoenixGranular.Insert
     
-    def changeset_maker(SomeSchema, _params) do
+    def changeset_maker(Api, _params) do
       ChangesetX.valid_changeset(changes: %{field: "value"})
     end
 
@@ -17,7 +17,7 @@ defmodule Variants.PhoenixGranular.WithOverridesTest do
 
     def create_test_data do
       start(
-        module_under_test: SomeSchema,
+        api_module: Api,
         repo: @repo,
         changeset_with: &changeset_maker/2,      # <<<<<<<<<<<<<
         insert_with: &insertion_doer/2           # <<<<<<<<<<<<<

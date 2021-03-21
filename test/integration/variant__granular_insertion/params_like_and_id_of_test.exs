@@ -9,7 +9,7 @@ defmodule Integration.ParamLikeAndIdOfTest do
     
     def create_test_data() do
       start(
-        module_under_test: Animal.Schema,
+        api_module: Animal.Schema,
         repo: "there is no repo",
         insert_with: &tunable_insert/2,  #<<< this generated function
                                          #<<< provides a "cut point" for stubbing

@@ -9,13 +9,13 @@ defmodule Variants.TrivialTest do
 
   describe "start" do 
     @minimal_start [
-      module_under_test: SomeSchema,
+      api_module: Api,
     ]
     
     test "adds steps, workflows, etc." do
       expected = 
         %{format: :raw,
-          module_under_test: SomeSchema,
+          api_module: Api,
           variant: T.Variants.Trivial,
           examples: [],
           as_cast: AsCast.nothing,

@@ -19,7 +19,7 @@ defmodule EctoTestDSL.Run.RunningExample do
 
   getters :example, :metadata, [
     :as_cast, :field_calculators, :name, :repo, :workflow_name,
-    :variant, :format, :module_under_test, :usually_ignore,
+    :variant, :format, :api_module, :usually_ignore,
 
     :insert_with, :changeset_with,
     :changeset_for_update_with, :update_with, :get_primary_key_with,

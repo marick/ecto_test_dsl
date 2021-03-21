@@ -6,7 +6,7 @@ defmodule Template.Trivial do
       def started(opts \\ []) do
         opts =
           Keyword.merge(
-            [module_under_test: :irrelevant_module_under_test,
+            [api_module: :irrelevant_api_module,
              format: :raw,
              examples_module: :default_trivial_examples_module,
              examples: []],
