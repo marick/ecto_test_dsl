@@ -6,6 +6,7 @@ defmodule Integration.GranularInsertion.Workflow.Examples do
   def create_test_data do
     start(
       api_module: Schema,
+      schema: Schema,
       repo: "there is no repo",
       insert_with: &tunable_insert/2
     )

@@ -47,7 +47,10 @@ defmodule EctoTestDSL.Run.RunningExample do
     |> Run.Params.format(format(running))
   end
 
-  def schema(running), do: Map.get(running.example, :schema) || api_module(running)
+  def schema(running) do
+    direct = Map.get(running.example.metadata, :schema)
+    direct || api_module(running)
+  end
 
   # ----------------------------------------------------------------------------
 

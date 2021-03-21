@@ -79,7 +79,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
 
   defp assert_valid_keys(top_level) do
     required_keys = [:examples_module, :repo] ++ Keyword.keys(default_start_opts())
-    optional_keys = []
+    optional_keys = [:schema]
     
     top_level
     |> Callbacks.validate_top_level_keys(required_keys, optional_keys)
