@@ -9,18 +9,21 @@ defmodule Run.Steps.ChangesetForUpdateTest do
   end
 
   test "the only result" do
-    api_module = Schema
-    struct = %Schema{age: 33}
-    formatted_params = %{"age" => "1"}
+    expected_api_module = Api
+    expected_schema = Schema
+    expected_struct = %Schema{age: 33}
+    expected_params = %{"age" => "1"}
 
-    stub_history(struct_for_update: struct)
+    stub_history(struct_for_update: expected_struct)
     stub(
-      api_module: api_module,
-      formatted_params: formatted_params,
-      changeset_for_update_with: fn given_module, given_struct, given_params ->
-        assert api_module == given_module
-        assert struct == given_struct
-        assert formatted_params == given_params
+      api_module: expected_api_module,
+      schema: expected_schema,
+      formatted_params: expected_params,
+      changeset_for_update_with: fn ~M{api_module, schema}, given_struct, given_params ->
+        assert expected_api_module == api_module
+        assert expected_schema == schema
+        assert expected_struct == given_struct
+        assert expected_params == given_params
         :changeset_result
       end)
         

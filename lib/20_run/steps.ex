@@ -45,10 +45,10 @@ defmodule EctoTestDSL.Run.Steps do
   @step :changeset_for_update
   def changeset_for_update(running, which_struct) do
     from(running,
-      use: [:formatted_params, :api_module, :changeset_for_update_with])
+      use: [:formatted_params, :api_module, :schema, :changeset_for_update_with])
     from_history(running, struct: which_struct)
 
-    changeset_for_update_with.(api_module, struct, formatted_params)
+    changeset_for_update_with.(~M{api_module, schema}, struct, formatted_params)
   end
   # ----------------------------------------------------------------------------
 

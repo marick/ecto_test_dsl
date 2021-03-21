@@ -2,7 +2,7 @@ defmodule EctoTestDSL.Variants.Common.DefaultFunctions do
   use EctoTestDSL.Drink.Me
   import ExUnit.Assertions
   
-  def plain_changeset(schema, struct, params),
+  def plain_changeset(~M{schema}, struct, params),
     do: schema.changeset(struct, params)
   
   def params_only_changeset(~M{schema}, formatted_params) do
