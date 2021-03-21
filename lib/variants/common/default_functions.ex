@@ -5,9 +5,9 @@ defmodule EctoTestDSL.Variants.Common.DefaultFunctions do
   def plain_changeset(schema, struct, params),
     do: schema.changeset(struct, params)
   
-  def params_only_changeset(schema, params) do
+  def params_only_changeset(~M{schema, formatted_params}) do
     default_struct = struct(schema)
-    schema.changeset(default_struct, params)
+    schema.changeset(default_struct, formatted_params)
   end
 
   def primary_key_from_id_param(%{params: params}) do

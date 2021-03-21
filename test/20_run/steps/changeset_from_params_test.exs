@@ -8,16 +8,22 @@ defmodule Run.Steps.ChangesetFromParamsTest do
     defstruct age: nil
   end
 
+  defmodule Api do
+  end
+
   test "the only result" do
-    api_module = Schema
-    formatted_params = %{"age" => "1"}
+    expected_api_module = Api
+    expected_schema = Schema
+    expected_params = %{"age" => "1"}
 
     stub(
-      api_module: api_module,
-      formatted_params: formatted_params,
-      changeset_with: fn given_module, given_params ->
-        assert api_module == given_module
-        assert formatted_params == given_params
+      api_module: expected_api_module,
+      schema: expected_schema,
+      formatted_params: expected_params,
+      changeset_with: fn ~M{schema, api_module, formatted_params} ->
+        assert api_module == expected_api_module
+        assert schema == expected_schema
+        assert expected_params == formatted_params
         :changeset_result
       end)
 
