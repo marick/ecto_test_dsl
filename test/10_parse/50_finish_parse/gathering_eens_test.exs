@@ -11,7 +11,7 @@ defmodule Parse.FinishParse.GatheringEensTest do
     def params_like_ref, do: id_of(params_like: Example2)
     def changeset_checks_ref, do: id_of(changeset_checks: Example3)
     def fields_ref, do: id_of(fields: Example4)
-    def fields_from_exception, do: id_of(fields_from: Example5)
+    def result_matches_exception, do: id_of(result_matches: Example5)
 
     def create_test_data do
       Examples.started()
@@ -20,12 +20,12 @@ defmodule Parse.FinishParse.GatheringEensTest do
         example: [
           params(params_id: params_ref()),
           changeset(changes: [x: changeset_checks_ref()]),
-          fields(x: fields_ref())
+          result(x: fields_ref())
         ],
         
         later: [
           params_like(:example, except: [params_like_id: params_like_ref()]),
-          fields_from(:success, except: [params_like_id: fields_from_exception()])
+          result_matches(:success, except: [params_like_id: result_matches_exception()])
         ]
       )
     end
@@ -49,7 +49,7 @@ defmodule Parse.FinishParse.GatheringEensTest do
         Examples.params_ref.een,
         Examples.params_like_ref.een,
         een(success: Examples),
-        Examples.fields_from_exception.een
+        Examples.result_matches_exception.een
       ]
       
       Examples.Tester.example(:later).eens

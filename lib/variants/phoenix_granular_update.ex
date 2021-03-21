@@ -44,7 +44,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
       success: from_start_through_validation ++ [
         [:try_changeset_update,      uses: [:changeset_for_update]],
         [:ok_content,                uses: [:try_changeset_update]],
-        [:field_checks,              uses: [:ok_content]],
+        [:check_results,             uses: [:ok_content]],
       ],
     }
   end

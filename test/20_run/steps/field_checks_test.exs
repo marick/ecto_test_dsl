@@ -8,14 +8,14 @@ defmodule Run.Steps.FieldChecksTest do
 
   setup do
     stub(name: :example, neighborhood: %{}, usually_ignore: [])
-    stub(fields_from: :nothing)  # fields_from is checked in fields_from_test.exs
+    stub(result_matches: :unused)  # result_matches is checked in result_matches_test.exs
     :ok
   end
 
   defp run([checks, value]) do 
     stub_history(inserted_value: value)
-    stub(field_checks: checks)
-    Steps.field_checks(:running, :inserted_value)
+    stub(result_fields: checks)
+    Steps.check_results(:running, :inserted_value)
   end
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result

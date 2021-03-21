@@ -9,7 +9,7 @@ defmodule Run.Steps.FieldsFromTest do
 
   setup do
     stub(name: :example, neighborhood: %{})
-    stub(field_checks: %{}, usually_ignore: [])
+    stub(result_fields: %{}, usually_ignore: [])
     :ok
   end
 
@@ -20,10 +20,10 @@ defmodule Run.Steps.FieldsFromTest do
       Map.put(neighborhood, een(:reference_struct), reference_struct))
     
     instructions = Rnode.FieldsFrom.new(een(:reference_struct), adjustments)
-    stub(fields_from: instructions)
+    stub(result_matches: instructions)
 
     stub_history(new_struct: new_struct)
-    Steps.field_checks(:running, :new_struct)
+    Steps.check_results(:running, :new_struct)
   end
 
   defp run([{:compare, new_struct}, {:against, reference_struct} | adjustments]) do
@@ -34,7 +34,7 @@ defmodule Run.Steps.FieldsFromTest do
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result
 
-  describe "fields_from basics" do
+  describe "result_matches basics" do
     test "just an een" do
       [compare: %{a: 5},
        against: %{a: 5}] |> pass()
@@ -135,10 +135,10 @@ defmodule Run.Steps.FieldsFromTest do
     end      
   end
 
-  describe "both `fields` and `fields_from` can be used" do
+  describe "both `fields` and `result_matches` can be used" do
     setup do 
-      stub(field_checks: [a: "right"])
-      stub(fields_from: Rnode.FieldsFrom.new(een(:reference_struct), [comparing: [:b]]))
+      stub(result_fields: [a: "right"])
+      stub(result_matches: Rnode.FieldsFrom.new(een(:reference_struct), [comparing: [:b]]))
       :ok
     end
 
@@ -151,11 +151,11 @@ defmodule Run.Steps.FieldsFromTest do
       [left:  "wrong",
        right: "right"],
         fn ->
-          Steps.field_checks(:running, :new_struct)
+          Steps.check_results(:running, :new_struct)
         end)
     end
 
-    test "that `fields_from` can fail" do 
+    test "that `result_matches` can fail" do 
       stub(neighborhood: %{een(:reference_struct) => %{a: "right", b: "right"}})
       stub_history(new_struct:            %{a: "right", b: "wrong"})
 
@@ -163,7 +163,7 @@ defmodule Run.Steps.FieldsFromTest do
       [left:  %{b: "wrong"},
        right: %{b: "right"}],
         fn ->
-          Steps.field_checks(:running, :new_struct)
+          Steps.check_results(:running, :new_struct)
         end)
     end
   end

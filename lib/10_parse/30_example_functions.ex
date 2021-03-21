@@ -50,9 +50,9 @@ defmodule EctoTestDSL.Parse.ExampleFunctions do
   def constraint_changeset(opts),
     do: {:constraint_changeset_checks, Pnode.ChangesetChecks.parse(opts)}
 
-  def fields(opts), do: {:field_checks, Pnode.Fields.parse(opts)}
+  def result(opts), do: {:result_fields, Pnode.Fields.parse(opts)}
 
-  def fields_from(een_or_name, opts \\ []),
-    do: {:fields_from, Pnode.FieldsFrom.parse(een_or_name, opts)}
+  def result_matches(een_or_name, opts \\ []),
+    do: {:result_matches, Pnode.FieldsFrom.parse(een_or_name, opts)}
 
 end

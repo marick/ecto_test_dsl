@@ -13,8 +13,8 @@ defmodule EctoTestDSL.Run.RunningExample do
     eens: [],
     validation_changeset_checks: [],
     constraint_changeset_checks: [],
-    field_checks: %{},
-    fields_from: :nothing,
+    result_fields: %{},
+    result_matches: :unused,
   ]
 
   getters :example, :metadata, [

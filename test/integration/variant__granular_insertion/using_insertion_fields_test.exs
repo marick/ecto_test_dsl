@@ -18,7 +18,7 @@ defmodule Integration.UsingInsertionFieldsTest do
         animal:  [
           params(name: "bossie", date_string: "2001-01-01", age: 5,
             species_id: id_of(bovine: Species.Examples)),
-          fields(species_id: id_of(bovine: Species.Examples))
+          result(species_id: id_of(bovine: Species.Examples))
         ]
       )
     end
