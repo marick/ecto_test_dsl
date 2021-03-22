@@ -28,13 +28,16 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
     ]
     
     %{
-      validation_success: from_start_through_validation,
+      validation_success: from_start_through_validation ++ [
+        :postcheck
+      ],
 
       validation_error: from_start_through_changeset ++ [
         [:refute_valid_changeset,            uses: [:changeset_for_update]],
         [:example_specific_changeset_checks, uses: [:changeset_for_update]],
         [:as_cast_checks,                    uses: [:changeset_for_update]],
         :assert_no_insertion,
+        :postcheck
       ],
       
       constraint_error: from_start_through_validation ++ [
@@ -43,11 +46,13 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
         [:refute_valid_changeset,            uses: [:error_content]],
         [:example_specific_changeset_checks, uses: [:error_content]],
         :assert_no_insertion,
+        :postcheck
       ],
       success: from_start_through_validation ++ [
         [:try_changeset_update,      uses: [:changeset_for_update]],
         [:ok_content,                uses: [:try_changeset_update]],
         [:check_results,             uses: [:ok_content]],
+        :postcheck
       ],
     }
   end

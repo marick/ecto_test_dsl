@@ -303,6 +303,23 @@ defmodule EctoTestDSL.Run.Steps do
     :uninteresting_result
   end
 
+  @step :postcheck
+  def postcheck(running) do
+    from(running, use: [:postcheck, :name])
+
+    if postcheck do 
+      adjust_assertion_message(
+        fn ->
+          postcheck.(running)
+        end,
+        fn message ->
+          Reporting.context(name, "Postcheck assertion failed.\n#{message}")
+        end)
+    end
+    
+    :uninteresting_result
+  end
+
   defmacro __using__(_) do
     step_module = __MODULE__
     for step_name <- @step do

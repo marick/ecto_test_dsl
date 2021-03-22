@@ -8,7 +8,6 @@ defmodule Run.Steps.AssertNoInsertionTest do
   end
 
   defmodule Repo do
-    def all(_schema), do: :stub_me
   end
 
   setup do 

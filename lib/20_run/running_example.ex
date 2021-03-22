@@ -14,6 +14,7 @@ defmodule EctoTestDSL.Run.RunningExample do
     validation_changeset_checks: [],
     constraint_changeset_checks: [],
     result_fields: %{},
+    postcheck: nil,
     result_matches: :unused,
   ]
 
