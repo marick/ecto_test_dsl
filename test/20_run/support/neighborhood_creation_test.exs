@@ -25,7 +25,7 @@ defmodule EctoTestDSL.Run.Support.NeighborhoodCreationTest do
     def create_test_data do 
       start(
         api_module: Schema,
-        repo: :unused,
+        repo: "unused repo",
         insert_with: &fake_insert/2
       )
       

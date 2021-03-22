@@ -48,8 +48,14 @@ defmodule EctoTestDSL.Variants.Common.DefaultFunctions do
     """
   end
 
-  def existing_ids(~M{repo, schema}) do
+  def existing_ids(~M{repo, schema}) when is_atom(repo) and is_atom(schema) do
     mockable(repo).all(schema)
     |> Enum.map(&(&1.id))
   end
+
+  # Because snapshotting ids is a frequent step and happens immediately after
+  # setup, it's convenient to have it be a no-op in the case of tests that
+  # don't use a repo or a schema (in which case, the values are conventionally
+  # strings like "unused repo".
+  def existing_ids(_), do: []
 end

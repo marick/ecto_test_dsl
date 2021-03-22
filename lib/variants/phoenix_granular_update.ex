@@ -13,6 +13,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
   def workflows() do 
     from_start_through_changeset = [
       :repo_setup,
+      :existing_ids,
       :params,
       :primary_key,
       [:struct_for_update, uses: [:primary_key]],
@@ -33,6 +34,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
         [:refute_valid_changeset,            uses: [:changeset_for_update]],
         [:example_specific_changeset_checks, uses: [:changeset_for_update]],
         [:as_cast_checks,                    uses: [:changeset_for_update]],
+        :assert_no_insertion,
       ],
       
       constraint_error: from_start_through_validation ++ [
@@ -40,6 +42,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
         [:error_content,                     uses: [:try_changeset_update]],
         [:refute_valid_changeset,            uses: [:error_content]],
         [:example_specific_changeset_checks, uses: [:error_content]],
+        :assert_no_insertion,
       ],
       success: from_start_through_validation ++ [
         [:try_changeset_update,      uses: [:changeset_for_update]],
@@ -61,6 +64,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Update do
     update_with: &DefaultFunctions.plain_update/2,
     get_primary_key_with: &DefaultFunctions.primary_key_from_id_param/1,
     struct_for_update_with: &DefaultFunctions.checked_get/1,
+    existing_ids_with: &DefaultFunctions.existing_ids/1,
     format: :phoenix,
     usually_ignore: [],
   ]

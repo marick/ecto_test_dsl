@@ -13,9 +13,9 @@ defmodule EctoTestDSL.Variants.PhoenixClassic.Insert do
   def workflows() do
     common = [
       :repo_setup,
+      :existing_ids,
       :params,
       :try_params_insertion,
-      :existing_ids,
     ]
 
     %{
