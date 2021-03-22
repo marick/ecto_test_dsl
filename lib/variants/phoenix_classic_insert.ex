@@ -19,14 +19,19 @@ defmodule EctoTestDSL.Variants.PhoenixClassic.Insert do
     ]
 
     %{
-      validation_error: common ++ [
-      [:error_content,                     uses: [:try_params_insertion]],
-      [:refute_valid_changeset,            uses: [:error_content]],
-      [:example_specific_changeset_checks, uses: [:error_content]],
-      [:as_cast_checks,                    uses: [:error_content]],
-      :assert_no_insertion,
-      :postcheck
-    ]
+      error: common ++ [
+        [:error_content,                     uses: [:try_params_insertion]],
+        [:refute_valid_changeset,            uses: [:error_content]],
+        [:example_specific_changeset_checks, uses: [:error_content]],
+        [:as_cast_checks,                    uses: [:error_content]],
+        :assert_no_insertion,
+        :postcheck
+       ],
+      success: common ++ [
+        [:ok_content,         uses: [:try_params_insertion]],
+        [:check_results,      uses: [:ok_content]],
+        :postcheck,
+       ]
     } 
   end
 
