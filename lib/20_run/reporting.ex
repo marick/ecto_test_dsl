@@ -3,7 +3,7 @@ defmodule EctoTestDSL.Run.Reporting do
     fn message -> context(name, message) end
   end
 
-  def error_message(name, message, changeset) do
+  def changeset_error_message(name, message, changeset) do
     """
     #{context(name, message)}
     Changeset: #{inspect changeset}

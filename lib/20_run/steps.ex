@@ -75,7 +75,7 @@ defmodule EctoTestDSL.Run.Steps do
         assertion.(changeset)
       end,
       fn _ ->
-        Reporting.error_message(name, message, changeset)
+        Reporting.changeset_error_message(name, message, changeset)
       end)
 
     :uninteresting_result
@@ -144,7 +144,7 @@ defmodule EctoTestDSL.Run.Steps do
         for a <- assertions, do: a.(changeset)
       end,
       fn message ->
-        Reporting.error_message(name, message, changeset)
+        Reporting.changeset_error_message(name, message, changeset)
       end)
   end
   
