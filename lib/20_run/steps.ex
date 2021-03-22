@@ -270,6 +270,13 @@ defmodule EctoTestDSL.Run.Steps do
     end
   end
 
+  ###################### DOUBLE CHECKING  #####################################
+
+  @step :existing_ids
+  def existing_ids(running) do
+    from(running, use: [:existing_ids_with, :repo, :schema])
+    existing_ids_with.(~M{repo, schema})
+  end
 
   defmacro __using__(_) do
     step_module = __MODULE__

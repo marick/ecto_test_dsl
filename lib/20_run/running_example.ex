@@ -23,7 +23,7 @@ defmodule EctoTestDSL.Run.RunningExample do
 
     :insert_with, :changeset_with,
     :changeset_for_update_with, :update_with, :get_primary_key_with,
-    :struct_for_update_with
+    :struct_for_update_with, :existing_ids_with
   ]
 
   getter :original_params, for: [:example, :params]

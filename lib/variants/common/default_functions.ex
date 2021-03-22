@@ -47,4 +47,9 @@ defmodule EctoTestDSL.Variants.Common.DefaultFunctions do
     definition of `default_start_opts`.
     """
   end
+
+  def existing_ids(~M{repo, schema}) do
+    mockable(repo).all(schema)
+    |> Enum.map(&(&1.id))
+  end
 end

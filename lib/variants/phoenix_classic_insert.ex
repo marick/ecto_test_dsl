@@ -15,6 +15,7 @@ defmodule EctoTestDSL.Variants.PhoenixClassic.Insert do
       :repo_setup,
       :params,
       :try_params_insertion,
+      :existing_ids,
     ]
 
     %{
@@ -36,6 +37,7 @@ defmodule EctoTestDSL.Variants.PhoenixClassic.Insert do
 
   defp default_start_opts, do: [
     insert_with: &DefaultFunctions.plain_insert/2,
+    existing_ids_with: &DefaultFunctions.existing_ids/1,
     format: :phoenix,
     usually_ignore: [],
   ]
