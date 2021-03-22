@@ -7,6 +7,8 @@ defmodule EctoTestDSL.Predefines do
       alias EctoTestDSL, as: T
       alias T.Impl
       use T.Parse.Exports
+      import ExUnit.Assertions
+      use FlowAssertions
       
       alias T.{Get,Validations}
     end
