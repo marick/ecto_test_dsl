@@ -10,6 +10,6 @@ defmodule EctoTestDSL.Run.Reporting do
     """
   end
 
-  defp context(name, message),
+  def context(name, message),
     do: "Example `#{inspect name}`: #{message}"
 end

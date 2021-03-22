@@ -24,6 +24,7 @@ defmodule EctoTestDSL.Variants.PhoenixClassic.Insert do
       [:refute_valid_changeset,            uses: [:error_content]],
       [:example_specific_changeset_checks, uses: [:error_content]],
       [:as_cast_checks,                    uses: [:error_content]],
+      :assert_no_insertion,
     ]
     } 
   end

@@ -69,12 +69,14 @@ defmodule EctoTestDSL.Run.Steps do
     from_history(running, changeset: which_changeset)
       
     message =
-      "Example `#{inspect name}`: workflow `#{inspect workflow_name}` expects #{error_snippet} changeset"
+      "workflow `#{inspect workflow_name}` expects #{error_snippet} changeset"
     adjust_assertion_message(
       fn ->
         assertion.(changeset)
       end,
-      fn _ -> message end)
+      fn _ ->
+        Reporting.error_message(name, message, changeset)
+      end)
 
     :uninteresting_result
   end
@@ -276,6 +278,29 @@ defmodule EctoTestDSL.Run.Steps do
   def existing_ids(running) do
     from(running, use: [:existing_ids_with, :repo, :schema])
     existing_ids_with.(~M{repo, schema})
+  end
+
+  @step :assert_no_insertion
+  def assert_no_insertion(running) do
+    from(running, use: [:name, :schema])
+    from_history(running, previous: :existing_ids)
+    current = existing_ids(running)
+    ids_now = length(current)
+    ids_then = length(previous)
+
+    message = """
+    #{inspect schema} entries were supposed to be unchanged.
+    There were #{ids_then}. Now there are #{ids_now}.
+    Here are the before and after ids:
+    """
+
+    elaborate_assert(length(current) == length(previous),
+      Reporting.context(name, message),
+      left: previous, right: current)
+
+    Trace.say([before: previous, now: current], :ids)
+    
+    :uninteresting_result
   end
 
   defmacro __using__(_) do
