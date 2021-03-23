@@ -5,6 +5,7 @@ defmodule EctoTestDSL.Run.Steps do
   import Run.From
   alias Run.Rnode
   alias Run.ChangesetChecks, as: CC
+  alias Run.ChangesetAsCast
   alias FlowAssertions.MapA
   use Magritte
 
@@ -104,7 +105,7 @@ defmodule EctoTestDSL.Run.Steps do
 
     as_cast
     |> AsCast.subtract(excluded_fields(running))
-    |> AsCast.assertions(schema, params)
+    |> ChangesetAsCast.assertions(schema, params)
     |> run_assertions(changeset, name)
 
     :uninteresting_result
