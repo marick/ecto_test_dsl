@@ -1,4 +1,4 @@
-defmodule Run.Steps.FieldChecksTest do
+defmodule Run.Steps.CheckAgainstGivenFieldsTest do
   use EctoTestDSL.Case
   use T.Drink.AndRun
   alias Run.Steps
@@ -15,7 +15,7 @@ defmodule Run.Steps.FieldChecksTest do
   defp run([checks, value]) do 
     stub_history(inserted_value: value)
     stub(result_fields: checks)
-    Steps.check_results(:running, :inserted_value)
+    Steps.check_against_given_fields(:running, :inserted_value)
   end
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result

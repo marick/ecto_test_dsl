@@ -214,8 +214,8 @@ defmodule EctoTestDSL.Run.Steps do
       Reporting.identify_example(name))
   end
 
-  @step :check_results
-  def check_results(running, which_step) do
+  @step :check_against_given_fields
+  def check_against_given_fields(running, which_step) do
     from(running, use: [:name, :result_fields, :result_matches])
     from_history(running, to_be_checked: which_step)
 

@@ -1,4 +1,4 @@
-defmodule Run.Steps.FieldsFromTest do
+defmodule Run.Steps.CheckAgainstEarlierExampleTest do
   use EctoTestDSL.Case
   use T.Drink.AndRun
   alias Run.Steps
@@ -23,7 +23,7 @@ defmodule Run.Steps.FieldsFromTest do
     stub(result_matches: instructions)
 
     stub_history(new_struct: new_struct)
-    Steps.check_results(:running, :new_struct)
+    Steps.check_against_given_fields(:running, :new_struct)
   end
 
   defp run([{:compare, new_struct}, {:against, reference_struct} | adjustments]) do
@@ -151,7 +151,7 @@ defmodule Run.Steps.FieldsFromTest do
       [left:  "wrong",
        right: "right"],
         fn ->
-          Steps.check_results(:running, :new_struct)
+          Steps.check_against_given_fields(:running, :new_struct)
         end)
     end
 
@@ -163,7 +163,7 @@ defmodule Run.Steps.FieldsFromTest do
       [left:  %{b: "wrong"},
        right: %{b: "right"}],
         fn ->
-          Steps.check_results(:running, :new_struct)
+          Steps.check_against_given_fields(:running, :new_struct)
         end)
     end
   end

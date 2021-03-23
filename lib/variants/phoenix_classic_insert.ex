@@ -28,8 +28,8 @@ defmodule EctoTestDSL.Variants.PhoenixClassic.Insert do
         :postcheck
        ],
       success: common ++ [
-        [:ok_content,         uses: [:try_params_insertion]],
-        [:check_results,      uses: [:ok_content]],
+        [:ok_content,                        uses: [:try_params_insertion]],
+        [:check_against_given_fields,     uses: [:ok_content]],
         :postcheck,
        ]
     } 
