@@ -1,4 +1,4 @@
-defmodule Run.Steps.AsCastTest do
+defmodule Run.Steps.AsCastChangesetTest do
   use EctoTestDSL.Case
   use T.Drink.AndRun
   alias Run.Steps
@@ -27,7 +27,7 @@ defmodule Run.Steps.AsCastTest do
     changeset = ChangesetX.valid_changeset(changes: changes)
     stub_history(params: params, changeset_from_params: changeset)
     stub(as_cast: AsCast.new([field]), schema: Schema)
-    Steps.as_cast_checks(:running, :changeset_from_params)
+    Steps.as_cast_changeset_checks(:running, :changeset_from_params)
   end
 
   defp pass(setup), do: assert run(setup) == :uninteresting_result
@@ -72,7 +72,7 @@ defmodule Run.Steps.AsCastTest do
        left: ["the wrong error message"],
        right: "is invalid"],
       fn ->
-        Steps.as_cast_checks(:running, :changeset_from_params)
+        Steps.as_cast_changeset_checks(:running, :changeset_from_params)
       end)
   end
 
@@ -84,7 +84,7 @@ defmodule Run.Steps.AsCastTest do
 
     stub_history(changeset_from_params: ChangesetX.valid_changeset([changes: %{age: 0}]))
 
-    assert Steps.as_cast_checks(:running, :changeset_from_params) == :uninteresting_result
+    assert Steps.as_cast_changeset_checks(:running, :changeset_from_params) == :uninteresting_result
   end
   
   test "but other as_cast values are checked" do
@@ -104,7 +104,7 @@ defmodule Run.Steps.AsCastTest do
        left: ["the wrong error message"],
        right: "is invalid"],
       fn ->
-        Steps.as_cast_checks(:running, :changeset_from_params)
+        Steps.as_cast_changeset_checks(:running, :changeset_from_params)
       end)
   end
   

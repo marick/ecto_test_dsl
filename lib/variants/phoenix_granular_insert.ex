@@ -21,7 +21,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
     from_start_through_validation = from_start_through_changeset ++ [
       [:assert_valid_changeset,            uses: [:changeset_from_params]],
       [:example_specific_changeset_checks, uses: [:changeset_from_params]],
-      [:as_cast_checks,                    uses: [:changeset_from_params]],
+      [:as_cast_changeset_checks,          uses: [:changeset_from_params]],
       [:field_calculation_checks,          uses: [:changeset_from_params]],
     ]
     
@@ -33,7 +33,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
       validation_error: from_start_through_changeset ++ [
         [:refute_valid_changeset,            uses: [:changeset_from_params]],
         [:example_specific_changeset_checks, uses: [:changeset_from_params]],
-        [:as_cast_checks,                    uses: [:changeset_from_params]],
+        [:as_cast_changeset_checks,          uses: [:changeset_from_params]],
         :assert_no_insertion,
         :postcheck,
       ],

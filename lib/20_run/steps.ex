@@ -96,8 +96,8 @@ defmodule EctoTestDSL.Run.Steps do
   end
 
   # ----------------------------------------------------------------------------
-  @step :as_cast_checks
-  def as_cast_checks(running, which_changeset) do
+  @step :as_cast_changeset_checks
+  def as_cast_changeset_checks(running, which_changeset) do
 
     from(running, use: [:name, :as_cast, :schema])
     from_history(running, [:params, changeset: which_changeset])
