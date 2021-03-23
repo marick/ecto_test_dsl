@@ -23,7 +23,7 @@ defmodule Run.Steps.CheckAgainstEarlierExampleTest do
     stub(result_matches: instructions)
 
     stub_history(new_struct: new_struct)
-    Steps.check_against_given_fields(:running, :new_struct)
+    Steps.check_against_earlier_example(:running, :new_struct)
   end
 
   defp run([{:compare, new_struct}, {:against, reference_struct} | adjustments]) do
@@ -133,38 +133,5 @@ defmodule Run.Steps.CheckAgainstEarlierExampleTest do
                   except: [a: "right"]]
       pass(run_args)
     end      
-  end
-
-  describe "both `fields` and `result_matches` can be used" do
-    setup do 
-      stub(result_fields: [a: "right"])
-      stub(result_matches: Rnode.FieldsFrom.new(een(:reference_struct), [comparing: [:b]]))
-      :ok
-    end
-
-
-    test "that `fields` can fail" do 
-      stub(neighborhood: %{een(:reference_struct) => %{a: "right", b: "right"}})
-      stub_history(new_struct:            %{a: "wrong", b: "right"})
-
-    assertion_fails(~r/Field `:a` has the wrong value/,
-      [left:  "wrong",
-       right: "right"],
-        fn ->
-          Steps.check_against_given_fields(:running, :new_struct)
-        end)
-    end
-
-    test "that `result_matches` can fail" do 
-      stub(neighborhood: %{een(:reference_struct) => %{a: "right", b: "right"}})
-      stub_history(new_struct:            %{a: "right", b: "wrong"})
-
-      assertion_fails(~r/Assertion with == failed/,
-      [left:  %{b: "wrong"},
-       right: %{b: "right"}],
-        fn ->
-          Steps.check_against_given_fields(:running, :new_struct)
-        end)
-    end
   end
 end

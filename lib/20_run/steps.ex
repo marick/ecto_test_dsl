@@ -214,27 +214,33 @@ defmodule EctoTestDSL.Run.Steps do
       Reporting.identify_example(name))
   end
 
+  # ----------------------------------------------------------------------------
   @step :check_against_given_fields
   def check_against_given_fields(running, which_step) do
-    from(running, use: [:name, :result_fields, :result_matches])
-    from_history(running, to_be_checked: which_step)
+    from(running, use: [:name, :result_fields, :neighborhood])
+    from_history(running, actual: which_step)
 
-    adjust_assertion_message(fn -> 
-      check_result_fields(result_fields, to_be_checked, running)
-      check_against_previous_struct(result_matches, to_be_checked, running)
+    adjust_assertion_message(fn ->
+      expected = Neighborhood.Expand.values(result_fields, with: neighborhood)
+      assert_fields(actual, expected)
     end,
       Reporting.identify_example(name))
 
     :uninteresting_result
   end
 
-  defp check_result_fields(result_fields, to_be_checked, running) do
-    from(running, use: [:neighborhood])
-    unless Enum.empty?(result_fields) do 
-      expected =
-        Neighborhood.Expand.values(result_fields, with: neighborhood)
-      assert_fields(to_be_checked, expected)
-    end
+  # ----------------------------------------------------------------------------
+  @step :check_against_earlier_example
+  def check_against_earlier_example(running, which_step) do
+    from(running, use: [:name, :result_matches])
+    from_history(running, to_be_checked: which_step)
+    
+    adjust_assertion_message(fn -> 
+      check_against_previous_struct(result_matches, to_be_checked, running)
+    end,
+      Reporting.identify_example(name))
+    
+    :uninteresting_result
   end
 
   defp check_against_previous_struct(:unused, _, _), do: :ok
@@ -259,14 +265,14 @@ defmodule EctoTestDSL.Run.Steps do
         Keyword.replace(opts, :except, excepts)
     end
   end
-
+  
   defp expand_ignoring(opts, usually_ignore) do
     case Keyword.has_key?(opts, :comparing) do
       true ->
-        # Note: if they have both `:comparing` and `:ignoring`, fine.
-        # `assert_same_map` will do the complaining.
-        opts
-
+       # Note: if they have both `:comparing` and `:ignoring`, fine.
+       # `assert_same_map` will do the complaining.
+       opts
+       
       false -> 
         {local_ignoring, _rest} = Keyword.pop(opts, :ignoring, [])
         Keyword.put(opts, :ignoring, local_ignoring ++ usually_ignore)

@@ -49,7 +49,8 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
       success: from_start_through_validation ++ [
         [:try_changeset_insertion,           uses: [:changeset_from_params]],
         [:ok_content,                        uses: [:try_changeset_insertion]],
-        [:check_against_given_fields,     uses: [:ok_content]],
+        [:check_against_given_fields,        uses: [:ok_content]],
+        [:check_against_earlier_example,     uses: [:ok_content]],
         :postcheck,
       ],
     }
