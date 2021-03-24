@@ -265,15 +265,19 @@ defmodule EctoTestDSL.Run.Steps do
     from(running, use: [:as_cast, :schema, :name, :result_matches, :result_fields])
     from_history(running, [:params, struct: which_struct])
 
+    if result_matches == :unused do
+      relevant = fields_to_check(as_cast.field_names, result_fields)
+      expected = ChangesetAsCast.cast_results(schema, relevant, params).changes
+          
+      Trace.say(expected, :expected)
+      run_as_cast_assertion(struct, expected, name)
+    end
+    :uninteresting_result
+  end
+      
+  defp run_as_cast_assertion(struct, expected, name) do 
     adjust_assertion_message(
       fn ->
-        relevant =
-          fields_to_check(as_cast.field_names, result_fields)
-        expected =
-          ChangesetAsCast.cast_results(schema, relevant, params).changes
-          
-        Trace.say(expected, :expected)
-        
         assert_fields(struct, expected)
       end,
       fn message ->
@@ -281,10 +285,7 @@ defmodule EctoTestDSL.Run.Steps do
           "#{message} according to `:as_cast`",
           struct)
       end)
-
-    :uninteresting_result
   end
-
 
   defp fields_to_check(possibilities, result_fields) do
     result_keys = Map.keys(result_fields)

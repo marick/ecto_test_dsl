@@ -55,4 +55,14 @@ defmodule Run.Steps.SchemaAsCastTest do
     assert actual == :uninteresting_result
   end
   
+  test "as_cast is unused when the result is compared to a previous example" do
+    stub(result_matches: :anything_that_is_used)
+    stub_history(
+      params: %{"age" => "1", "date" => "2012-03-03"},
+      inserted_value: %Schema{age: 2333, date: "very wrong"})
+
+    actual = Steps.as_cast_field_checks(:running, :inserted_value)
+    assert actual == :uninteresting_result
+  end
+  
 end
