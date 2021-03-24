@@ -1,6 +1,7 @@
 defmodule EctoTestDSL.Run.ChangesetAssertions do
   use EctoTestDSL.Drink.Me
-  use EctoTestDSL.Drink.Assertively
+  use T.Drink.Assertively
+  use T.Drink.AndRun
 
   @moduledoc """
   A function that might throw an AssertionError about a given changeset.
@@ -46,4 +47,17 @@ defmodule EctoTestDSL.Run.ChangesetAssertions do
 
   defp assert_name(changeset_check),
     do: "assert_#{to_string changeset_check}" |> String.to_atom
+
+  # ----------------------------------------------------------------------------
+
+  def run_assertions(assertions, changeset, name) do
+    adjust_assertion_message(
+      fn ->
+        for a <- assertions, do: a.(changeset)
+      end,
+      fn message ->
+        Reporting.changeset_error_message(name, message, changeset)
+      end)
+  end
+  
 end

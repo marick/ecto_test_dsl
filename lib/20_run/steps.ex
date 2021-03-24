@@ -86,12 +86,13 @@ defmodule EctoTestDSL.Run.Steps do
 
   @step :example_specific_changeset_checks
   def example_specific_changeset_checks(running, which_changeset) do
-    from(running, use: [:name])
+    from(running, use: [:name, :neighborhood, :validation_changeset_checks])
     from_history(running, changeset: which_changeset)
-    
-    user_checks(running)
+
+    validation_changeset_checks
+    |> Neighborhood.Expand.changeset_checks(neighborhood)
     |> ChangesetAssertions.from
-    |> run_assertions(changeset, name)
+    |> ChangesetAssertions.run_assertions(changeset, name)
 
     :uninteresting_result
   end
@@ -101,12 +102,15 @@ defmodule EctoTestDSL.Run.Steps do
   def as_cast_changeset_checks(running, which_changeset) do
 
     from(running, use: [:name, :as_cast, :schema])
+    from(running, use: [:neighborhood, :validation_changeset_checks])
     from_history(running, [:params, changeset: which_changeset])
 
+    excluded = CC.excluded_fields(validation_changeset_checks, neighborhood)
+
     as_cast
-    |> AsCast.subtract(excluded_fields(running))
+    |> AsCast.subtract(excluded)
     |> ChangesetAsCast.assertions(schema, params)
-    |> run_assertions(changeset, name)
+    |> ChangesetAssertions.run_assertions(changeset, name)
 
     :uninteresting_result
   end
@@ -114,41 +118,19 @@ defmodule EctoTestDSL.Run.Steps do
   @step :field_calculation_checks
   def field_calculation_checks(running, which_changeset) do
     from(running, use: [:name, :field_calculators])
+    from(running, use: [:neighborhood, :validation_changeset_checks])
     from_history(running, changeset: which_changeset)
+
+    excluded = CC.excluded_fields(validation_changeset_checks, neighborhood)
     
     field_calculators
-    |> FieldCalculator.subtract(excluded_fields(running))
+    |> FieldCalculator.subtract(excluded)
     |> FieldCalculator.assertions(changeset)
-    |> run_assertions(changeset, name)
+    |> ChangesetAssertions.run_assertions(changeset, name)
     
     :uninteresting_result
   end
 
-  # ----------------------------------------------------------------------------
-  @step :user_checks
-  defp user_checks(running) do
-    from(running, use: [:neighborhood, :validation_changeset_checks])
-
-    validation_changeset_checks
-    |> Neighborhood.Expand.changeset_checks(neighborhood)
-  end
-
-  defp excluded_fields(running) do
-    user_checks = user_checks(running)
-    # as_cast checks
-    CC.unique_fields(user_checks)
-  end    
-
-  defp run_assertions(assertions, changeset, name) do
-    adjust_assertion_message(
-      fn ->
-        for a <- assertions, do: a.(changeset)
-      end,
-      fn message ->
-        Reporting.changeset_error_message(name, message, changeset)
-      end)
-  end
-  
   ###################### ECTO #####################################
 
   @step :try_changeset_insertion

@@ -15,4 +15,13 @@ defmodule EctoTestDSL.Run.ChangesetChecks do
 
   defp field({field, _value}), do: field
   defp field(field), do: field
+
+  # ----------------------------------------------------------------------------
+
+  def excluded_fields(changeset_checks, neighborhood) do
+    changeset_checks
+    |> Neighborhood.Expand.changeset_checks(neighborhood)
+    |> unique_fields
+  end    
+  
 end
