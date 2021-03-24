@@ -262,13 +262,16 @@ defmodule EctoTestDSL.Run.Steps do
   # ----------------------------------------------------------------------------
   @step :as_cast_field_checks
   def as_cast_field_checks(running, which_struct) do
-    from(running, use: [:as_cast, :schema, :name])
+    from(running, use: [:as_cast, :schema, :name, :result_matches, :result_fields])
     from_history(running, [:params, struct: which_struct])
 
     adjust_assertion_message(
       fn ->
+        relevant =
+          fields_to_check(as_cast.field_names, result_fields)
         expected =
-          ChangesetAsCast.cast_results(schema, as_cast.field_names, params).changes
+          ChangesetAsCast.cast_results(schema, relevant, params).changes
+          
         Trace.say(expected, :expected)
         
         assert_fields(struct, expected)
@@ -280,7 +283,13 @@ defmodule EctoTestDSL.Run.Steps do
       end)
 
     :uninteresting_result
-  end  
+  end
+
+
+  defp fields_to_check(possibilities, result_fields) do
+    result_keys = Map.keys(result_fields)
+    Enum.reject(possibilities, &Enum.member?(result_keys, &1))
+  end
 
   ###################### DOUBLE CHECKING  #####################################
 

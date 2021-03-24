@@ -31,7 +31,6 @@ defmodule Run.Steps.SchemaAsCastTest do
     assert actual == :uninteresting_result
   end
 
-
   test "an as_cast failure" do 
     stub_history(
       params: %{"age" => "1", "date" => "2012-03-03"},
@@ -45,4 +44,15 @@ defmodule Run.Steps.SchemaAsCastTest do
         Steps.as_cast_field_checks(:running, :inserted_value)
       end)
   end
+
+  test "as_cast is overridden by specific values" do
+    stub(result_fields: %{age: 2})
+    stub_history(
+      params: %{"age" => "1", "date" => "2012-03-03"},
+      inserted_value: %Schema{age: 2, date: ~D{2012-03-03}})
+
+    actual = Steps.as_cast_field_checks(:running, :inserted_value)
+    assert actual == :uninteresting_result
+  end
+  
 end
