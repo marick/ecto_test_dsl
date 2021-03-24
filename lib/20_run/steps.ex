@@ -279,6 +279,29 @@ defmodule EctoTestDSL.Run.Steps do
     end
   end
 
+  # ----------------------------------------------------------------------------
+  @step :as_cast_field_checks
+  def as_cast_field_checks(running, which_struct) do
+    from(running, use: [:as_cast, :schema, :name])
+    from_history(running, [:params, struct: which_struct])
+
+    adjust_assertion_message(
+      fn ->
+        expected =
+          ChangesetAsCast.cast_results(schema, as_cast.field_names, params).changes
+        Trace.say(expected, :expected)
+        
+        assert_fields(struct, expected)
+      end,
+      fn message ->
+        Reporting.schema_error_message(name,
+          "#{message} according to `:as_cast`",
+          struct)
+      end)
+
+    :uninteresting_result
+  end  
+
   ###################### DOUBLE CHECKING  #####################################
 
   @step :existing_ids

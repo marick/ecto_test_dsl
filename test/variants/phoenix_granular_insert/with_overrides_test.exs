@@ -1,6 +1,14 @@
 defmodule Variants.PhoenixGranular.WithOverridesTest do
   use EctoTestDSL.Case
   alias Ecto.Changeset
+
+  defmodule Schema do 
+    use Ecto.Schema
+    schema "bogus" do
+      field :age, :integer
+      field :date, :date
+    end
+  end
   
   defmodule Examples do
     use T.Variants.PhoenixGranular.Insert
@@ -18,7 +26,7 @@ defmodule Variants.PhoenixGranular.WithOverridesTest do
 
     def create_test_data do
       start(
-        api_module: Api,
+        api_module: Schema,
         repo: @repo,
         changeset_with: &changeset_maker/2,
         insert_with: &insertion_doer/2 

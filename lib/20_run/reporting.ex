@@ -10,6 +10,13 @@ defmodule EctoTestDSL.Run.Reporting do
     """
   end
 
+  def schema_error_message(name, message, struct) do
+    """
+    #{context(name, message)}
+    Whole structure: #{inspect struct}
+    """
+  end
+
   def context(name, message),
     do: "Example `#{inspect name}`: #{message}"
 end

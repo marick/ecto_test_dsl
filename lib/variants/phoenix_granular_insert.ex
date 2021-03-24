@@ -51,6 +51,7 @@ defmodule EctoTestDSL.Variants.PhoenixGranular.Insert do
         [:ok_content,                        uses: [:try_changeset_insertion]],
         [:check_against_given_fields,        uses: [:ok_content]],
         [:check_against_earlier_example,     uses: [:ok_content]],
+        [:as_cast_field_checks,              uses: [:ok_content]],
         :postcheck,
       ],
     }

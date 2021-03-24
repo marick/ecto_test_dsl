@@ -41,7 +41,7 @@ defmodule EctoTestDSL.Run.ChangesetAsCast do
     |> KeyVal.reject_by_value(&Enum.empty?/1)
   end
 
-  defp cast_results(schema, field_names, params) do
+  def cast_results(schema, field_names, params) do
     struct(schema)
     |> Changeset.cast(params, field_names)
   end
