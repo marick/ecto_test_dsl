@@ -101,11 +101,10 @@ defmodule EctoTestDSL.Run.Steps do
   @step :as_cast_changeset_checks
   def as_cast_changeset_checks(running, which_changeset) do
 
-    from(running, use: [:name, :as_cast, :schema])
-    from(running, use: [:neighborhood, :validation_changeset_checks])
+    from(running, use: [:name, :as_cast, :schema, :validation_changeset_checks])
     from_history(running, [:params, changeset: which_changeset])
 
-    excluded = CC.excluded_fields(validation_changeset_checks, neighborhood)
+    excluded = CC.fields_mentioned(validation_changeset_checks)
 
     as_cast
     |> AsCast.subtract(excluded)
@@ -117,11 +116,10 @@ defmodule EctoTestDSL.Run.Steps do
 
   @step :field_calculation_checks
   def field_calculation_checks(running, which_changeset) do
-    from(running, use: [:name, :field_calculators])
-    from(running, use: [:neighborhood, :validation_changeset_checks])
+    from(running, use: [:name, :field_calculators, :validation_changeset_checks])
     from_history(running, changeset: which_changeset)
 
-    excluded = CC.excluded_fields(validation_changeset_checks, neighborhood)
+    excluded = CC.fields_mentioned(validation_changeset_checks)
     
     field_calculators
     |> FieldCalculator.subtract(excluded)

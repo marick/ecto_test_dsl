@@ -17,11 +17,27 @@ defmodule EctoTestDSL.Run.ChangesetChecks do
   defp field(field), do: field
 
   # ----------------------------------------------------------------------------
-
-  def excluded_fields(changeset_checks, neighborhood) do
-    changeset_checks
-    |> Neighborhood.Expand.changeset_checks(neighborhood)
-    |> unique_fields
-  end    
+  def fields_mentioned(changeset_checks) do
+    for top_element <- changeset_checks do
+      case top_element do
+        {_changeset_key, value} ->
+          cond do
+            is_list(value) ->
+              for lower <- value do
+                case lower do
+                  {field, _value} ->  # [changed: [a: 5, ...], ...]
+                    field
+                  _ ->                # [changed: [:a, ...], ...]
+                    lower             
+                end
+              end
+            true ->                   # [changed: :a, ...]
+              value
+          end
+        _ ->                          # [:valid, ...]
+          []
+      end
+    end |> List.flatten
+  end
   
 end
