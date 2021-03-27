@@ -323,6 +323,28 @@ defmodule EctoTestDSL.Run.Steps do
     :uninteresting_result
   end
 
+  @step :assert_id_inserted
+  def assert_id_inserted(running, which_step) do
+    from(running, use: [:name, :schema])
+
+    from_history(running, previous: :existing_ids, struct:  which_step)
+    current = existing_ids(running)
+    desired_id = struct.id
+    
+    adjust_assertion_message(fn ->
+      elaborate_refute(Enum.member?(previous, desired_id),
+        "Before the insertion, there already was a `#{inspect schema}` with id #{desired_id}",
+        left: previous, right: desired_id)
+      
+      elaborate_assert(Enum.member?(current, desired_id),
+        "There is no `#{inspect schema}` with id #{desired_id}",
+        left: current, right: desired_id)
+    end,
+      Reporting.identify_example(name))
+      
+    :uninteresting_result
+  end
+
   @step :postcheck
   def postcheck(running) do
     from(running, use: [:postcheck, :name])
