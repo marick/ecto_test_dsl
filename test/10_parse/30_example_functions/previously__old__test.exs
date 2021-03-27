@@ -13,19 +13,22 @@ defmodule Parse.PreviouslyTest do
 
   @tag :skip
   test "expansion of `previously` arguments" do
-    previously(insert: :a)         |> expect([insert: een(a: Examples)])
-    previously(insert: [:a, :b]) |> expect([insert: een(a: Examples),
-                                            insert: een(b: Examples)])
-    previously(insert: :a, insert: [:b, :c]) |> expect([insert: een(a: Examples),
-                                                       insert: een(b: Examples),
-                                                        insert: een(c: Examples)])
-
-    previously(insert: [a: Other]) |> expect([insert: een(:a, Other)])
-    previously(insert: [a: Examples, b: Other]) |> expect([insert: een(:a, Examples),
-                                                          insert: een(:b, Other)])
+    previously(insert: :a)                      |> expect([insert: een(a: Examples)])
     
-    previously(insert: [:a, :b, c: Other]) |> expect([insert: een(:a, Examples),
-                                                      insert: een(:b, Examples),
-                                                      insert: een(:c, Other)])
+    previously(insert: [:a, :b])                |> expect([insert: een(a: Examples),
+                                                           insert: een(b: Examples)])
+    
+    previously(insert: :a, insert: [:b, :c])    |> expect([insert: een(a: Examples),
+                                                           insert: een(b: Examples),
+                                                           insert: een(c: Examples)])
+
+    previously(insert: [a: Other])              |> expect([insert: een(:a, Other)])
+    
+    previously(insert: [a: Examples, b: Other]) |> expect([insert: een(:a, Examples),
+                                                           insert: een(:b, Other)])
+    
+    previously(insert: [:a, :b, c: Other])      |> expect([insert: een(:a, Examples),
+                                                           insert: een(:b, Examples),
+                                                           insert: een(:c, Other)])
   end
 end
