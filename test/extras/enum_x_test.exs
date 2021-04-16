@@ -1,6 +1,7 @@
 defmodule EnumXTest do
   use EctoTestDSL.Drink.Me
   use ExUnit.Case
+  alias FlowAssertions.TabularA
 
   describe "take_until" do
     test "doesn't stop" do
@@ -13,11 +14,8 @@ defmodule EnumXTest do
   end
 
 
-  test "difference" do 
-    expect = fn {first, second}, expected ->
-      actual = EnumX.difference(first, second)
-      assert actual == expected
-    end
+  test "difference" do
+    expect = TabularA.run_and_assert(&EnumX.difference/2)
     
     # Base cases.
     {  [],        [  ] } |> expect.([  ])
@@ -33,6 +31,4 @@ defmodule EnumXTest do
     # Note that duplicates can be retained
     {  [:b, :b      ], [:a, :a] } |> expect.([:b, :b])
   end
-
-  
 end

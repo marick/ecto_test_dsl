@@ -6,10 +6,7 @@ defmodule Run.Support.ReplaceReferencesTest do
   # ----------------------------------------------------------------------------
 
   test "unique_fields" do
-    expect = fn changeset_checks, expected ->
-      actual = unique_fields(changeset_checks)
-      assert actual == expected
-    end
+    expect = TabularA.run_and_assert(&unique_fields/1)
     
     # Handling of lone symbols
     [change: :a            ] |> expect.([:a])

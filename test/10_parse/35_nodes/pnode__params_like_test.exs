@@ -10,9 +10,9 @@ defmodule EctoTestDSL.Parse.Pnode.ParamsLikeTest do
       |> Pnode.Substitutable.substitute(previous_examples)
     end
 
-    expect = fn input, expected ->
-      assert run.(input) == Pnode.Params.parse(expected)
-    end
+    expect = TabularA.run_and_assert(
+      run,
+      &(&1 == Pnode.Params.parse(&2)))
 
     [:previous, []] |> expect.(%{a: 1, b: 2})
     [:previous, [a: "a"] ] |> expect.(%{a: "a", b: 2})

@@ -2,9 +2,7 @@ defmodule KeywordXTest do
   use EctoTestDSL.Case
 
   test "translate_keys" do
-    expect = fn [kws, key_map], expected ->
-      assert KeywordX.translate_keys(kws, key_map) == expected
-    end
+    expect = TabularA.run_and_assert(&KeywordX.translate_keys/2)
 
     # Filters out values not mentioned in the second argument.
     [[a: 5], %{     }] |> expect.([    ])
@@ -19,9 +17,7 @@ defmodule KeywordXTest do
 
 
   test "split_and_translate_keys" do
-    expect = fn [kws, key_map], expected ->
-      assert KeywordX.split_and_translate_keys(kws, key_map) == expected
-    end
+    expect = TabularA.run_and_assert(&KeywordX.split_and_translate_keys/2)
     
     [[a: 5], %{     }] |> expect.({[    ], [a: 5]})
     [[a: 5], %{a: :a}] |> expect.({[a: 5], [    ]})
@@ -113,9 +109,7 @@ defmodule KeywordXTest do
   end
 
   test "if list is a keyword list" do
-    expect = fn input, expected ->
-      assert KeywordX.is_keyword_list(input) == expected
-    end
+    expect = TabularA.run_and_assert(&KeywordX.is_keyword_list/1)
 
     [] |> expect.(false)
     [1] |> expect.(false)

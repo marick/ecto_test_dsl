@@ -9,16 +9,16 @@ defmodule Parse.Pnode.PreviouslyTest do
   end
 
   test "creation" do
-    expect = fn arg, expected ->
-      actual = Pnode.Previously.parse(arg)
-      assert Pnode.EENable.eens(actual) == expected
-    end
+    expect = TabularA.run_and_assert(
+      &(Pnode.Previously.parse(&1) |> Pnode.EENable.eens))
 
-    [insert: :a]                    |> expect.([een(a: Examples)])
-    [insert: [:a, :b]]              |> expect.([een(a: Examples), een(b: Examples)])
-    [insert: [:a, b: List]]         |> expect.([een(a: Examples), een(b: List)])
+    [insert:  :a                  ] |> expect.([een(a: Examples)])
+    [insert: [:a, :b      ]       ] |> expect.([een(a: Examples), een(b: Examples)])
+    [insert: [:a,  b: List]       ] |> expect.([een(a: Examples), een(b: List)])
+
     [insert: :a, insert: [b: List]] |> expect.([een(a: Examples), een(b: List)])
-    [insert: een(a: Examples)]      |> expect.([een(a: Examples)])
+    
+    [insert: een(a: Examples)     ] |> expect.([een(a: Examples)])
 
     assertion_fails("`previously` takes arguments of form [insert: <atom>|<list>...]",
       [left: {:inser, :a}],

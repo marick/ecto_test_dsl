@@ -24,22 +24,30 @@ defmodule Nouns.ChangesetAsCastTest do
 
   # This generates `changeset` notation rather than assertions because
   # that's easier to examine.
-  test "creating and checking, part 1" do
-    expect = fn [cast_fields, params], expected ->
+  test "creating and checking, part 1: changeset notation" do
+    run = fn [cast_fields, params] ->
       AsCast.new(cast_fields)
       |> ChangesetAsCast.changeset_checks(Schema, params)
-      |> assert_equal(expected)
     end
+
+    {expect, raises} = TabularA.runners(run)
+    
+    # expect = fn args, expected ->
+    #   run.(args)
+    #   |> assert_equal(expected)
+    # end
       
 
-    [[:int_field], %{"int_field" => "383"}]
-                          |> expect.([changes: [int_field: 383]])
-    [[:int_field], %{                    }]
-                          |> expect.([no_changes: [:int_field]])
-    [[:int_field], %{"int_field" => "foo"}]
-                          |> expect.([no_changes: [:int_field],
-                                     errors: [int_field: "is invalid"]])
-
+    [[:int_field], %{"int_field" => "383"}] |> expect.(
+                                                 [changes:    [int_field: 383]    ])
+    [[:int_field], %{                    }] |> expect.(
+                                                 [no_changes: [:int_field]        ])
+    [[:int_field], %{"int_field" => "foo"}] |> expect.(
+                                                 [no_changes: [:int_field         ],
+                                                  errors: [int_field: "is invalid"]])
+    
+    [[:mistake], %{"int_field" => "383"}] |> raises.([ArgumentError,
+                                                   ~r/unknown field `:mistake`/])
     # A big example
     [[:int_field, :string_field, :association_field_id],
      %{"int_field" => "ape", "string_field" => "s", "association_field_id" => "8",
@@ -48,11 +56,6 @@ defmodule Nouns.ChangesetAsCastTest do
     |> expect.([changes: [association_field_id: 8, string_field: "s"],
                no_changes: [:int_field],
                errors: [int_field: "is invalid"]])
-
-    # The default error message is OK.
-    assert_raise(ArgumentError, fn -> 
-      [[:mistake], %{"int_field" => "383"}] |> expect.([changes: [int_field: 383]])
-    end)
   end
 
   test "creating and checking, part 2: assertions" do

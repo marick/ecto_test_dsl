@@ -1,6 +1,7 @@
 defmodule MacroXTest do
   use ExUnit.Case
   alias EctoTestDSL.MacroX
+  alias FlowAssertions.TabularA
 
   describe "decomposing a function call" do
     defp expect(input, expected) do
@@ -35,9 +36,8 @@ defmodule MacroXTest do
   end
 
   test "alias_to_module" do
-    expect = fn [the_alias, kws], expected ->
-      assert MacroX.alias_to_module(the_alias, %{aliases: kws}) == expected
-    end
+    expect = TabularA.run_and_assert(
+      &(MacroX.alias_to_module(&1, %{aliases: &2})))
 
     [Chars, [{Chars, String.Chars}]] |> expect.(String.Chars)
     [Chars, [                     ]] |> expect.(       Chars)

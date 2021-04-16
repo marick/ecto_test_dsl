@@ -81,24 +81,20 @@ defmodule Nouns.FieldCalculatorTest do
   end
 
   test "which fields can be used in a calculation" do
-    expect = fn changeset_fields, expected_ ->
-      expected = MapSet.new(expected_)
-
-      ChangesetX.valid_changeset(changeset_fields)
-      |> FieldCalculator.valid_prerequisites
-      |> assert_equal(expected)
-    end
+    expect = TabularA.run_and_assert(
+      &(ChangesetX.valid_changeset(&1) |> FieldCalculator.valid_prerequisites),
+      &(assert_equal &1, MapSet.new(&2)))
 
     [changes: %{field: 1}] |> expect.([:field])
     [changes: %{field: 1}, errors: [field: "..."]] |> expect.([])
   end
 
   test "which calculators can be used" do
-    expect = fn [calc_args, valid_args], expected ->
-      FieldCalculator.new(:irrelevant, calc_args)
-      |> FieldCalculator.relevant?(MapSet.new(valid_args))
-      |> assert_equal(expected)
-    end
+    expect = TabularA.run_and_assert(
+      fn calc_args, valid_args ->
+        FieldCalculator.new(:irrelevant, calc_args)
+        |> FieldCalculator.relevant?(MapSet.new(valid_args))
+      end)
     
     [ [:field1], [           ] ] |> expect.(false)
     [ [:field1], [:field1    ] ] |> expect.(true)

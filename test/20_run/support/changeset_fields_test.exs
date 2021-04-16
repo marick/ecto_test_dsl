@@ -3,10 +3,10 @@ defmodule Run.Support.ChangesetFieldsTest do
   alias T.Run.ChangesetChecks, as: CC
 
   test "fields_mentioned" do
-    expect = fn checks, expected ->
-      assert_good_enough(CC.fields_mentioned(checks), in_any_order(expected))
-    end
-
+    expect = TabularA.run_and_assert(
+      &CC.fields_mentioned/1,
+      &(assert_good_enough(&1, in_any_order(&2))))
+    
     [                                 ] |> expect.([          ])
     [:valid,       :other             ] |> expect.([          ])
     [errors: [:a], changed: [:b      ]] |> expect.([:a, :b    ])

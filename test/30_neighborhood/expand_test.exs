@@ -4,10 +4,9 @@ defmodule Neighborhood.ExpandTest do
   use T.Parse.Exports
 
   test "keyword values" do
-    expect = fn [original, neighborhood], expected ->
-      actual = Expand.values(original, with: neighborhood)
-      assert expected == actual
-    end
+    expect = TabularA.run_and_assert(fn [original, neighborhood] ->
+      Expand.values(original, with: neighborhood)
+    end)
 
     unchanged = fn [original, neighborhood] ->
       [original, neighborhood] |> expect.(original)
@@ -47,11 +46,11 @@ defmodule Neighborhood.ExpandTest do
   end
 
   test "tested_replace_check_values" do
-    expect = fn original, expected ->
+    expect = TabularA.run_and_assert(fn original ->
       predicate = &is_binary/1
       replacer = &String.upcase/1
-      assert Expand.tested_replace_check_values(original, predicate, replacer) == expected
-    end
+      Expand.tested_replace_check_values(original, predicate, replacer)
+    end)
 
     unchanged = fn original -> original |> expect.(original) end
 

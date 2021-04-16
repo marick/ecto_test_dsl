@@ -8,6 +8,7 @@ defmodule EctoTestDSL.Case do
       use MockeryExtras.Given
       import FlowAssertions.AssertionA
       import FlowAssertions.Define.Tabular
+      alias FlowAssertions.TabularA
       alias T.Run
       import ShorterMaps
     end

@@ -5,44 +5,45 @@ defmodule Parse.Pnode.CommonTest do
   alias Parse.Pnode.Common
 
   describe "FromPairs" do
-    defp expect(input, expected) do 
-      assert_good_enough(
-        Common.FromPairs.extract_een_values(input),
-        in_any_order(expected))
+    setup do
+      expect = TabularA.run_and_assert(
+        &Common.FromPairs.extract_een_values/1,
+        &assert_good_enough(&1, in_any_order(&2)))
+      [expect: expect]
     end
-    
-    test "extract een values - simple" do
-      %{id: 5, age: 3} |> expect([])
-      %{id: 5, other_id: id_of(:v)} |> expect([een(:v)])
+      
+    test "extract een values - simple", s do
+      %{id: 5, age: 3} |> s.expect.([])
+      %{id: 5, other_id: id_of(:v)} |> s.expect.([een(:v)])
     end
 
-    test "recursive map (typically an association)" do 
+    test "recursive map (typically an association)", s do 
       %{id: 5,
         other_id: id_of(:top),
         note: %{id: 6, other_id: id_of(:lower)}}
-      |> expect([een(:top), een(:lower)])
+      |> s.expect.([een(:top), een(:lower)])
     end
       
-    test "a list of nested structures (as with has-many, for example)" do 
+    test "a list of nested structures (as with has-many, for example)", s do 
       %{id: 5,
         other_id: id_of(:top),
         notes: [%{id: 6, other_id: id_of(:lower1)},
                 %{id: 7, other_id: id_of(:lower2)}]}
-      |> expect([een(:top), een(:lower1), een(:lower2)])
+      |> s.expect.([een(:top), een(:lower1), een(:lower2)])
     end
 
-    test "a list that does not contain structures" do
+    test "a list that does not contain structures", s do
       %{notes: [1, id_of(:two), 3]}
-      |> expect([een(:two)])
+      |> s.expect.([een(:two)])
     end
 
-    test "a format sometimes created for a list of structures" do 
+    test "a format sometimes created for a list of structures", s do 
       %{id: 5,
         other_id: id_of(:top),
         notes: %{"0" => %{id: 6, other_id: id_of(:lower1)},
                  "1" => %{id: 7, other_id: id_of(:lower2)},
                  "2" => %{id: "", other_id: ""}}}
-      |> expect([een(:top), een(:lower1), een(:lower2)])
+      |> s.expect.([een(:top), een(:lower1), een(:lower2)])
     end
 
 
@@ -57,6 +58,4 @@ defmodule Parse.Pnode.CommonTest do
                        eens: in_any_order([een(:id1), een(:id2)]))
     end
   end
-
-  
 end

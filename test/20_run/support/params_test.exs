@@ -21,10 +21,9 @@ defmodule Run.Support.ParamsTest do
   }
 
   test "different formats" do
-    expect = fn format, expected ->
-      Params.format(@params, format)
-      |> assert_fields(expected)
-    end
+    expect = TabularA.run_and_assert(
+      &(Params.format(@params, &1)),
+      &assert_fields/2)
 
     :phoenix |> expect.(@interpreted_as_phoenix)
     :raw     |> expect.(@params)
