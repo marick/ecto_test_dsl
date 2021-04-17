@@ -57,10 +57,10 @@ defmodule EctoTestDSL.MixProject do
   defp deps do
     [
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
-      {:flow_assertions, "~> 0.7",
-       path: "/Users/bem/src/flow_assertions",
-       override: true
-      },
+      {:flow_assertions, "~> 0.1"},
+      #  path: "/Users/bem/src/flow_assertions",
+      #  override: true
+      # },
       {:ecto_flow_assertions, "~> 0.1"},
       #  path: "/Users/bem/src/ecto_flow_assertions"
       # },
