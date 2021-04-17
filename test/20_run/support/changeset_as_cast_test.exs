@@ -25,19 +25,12 @@ defmodule Nouns.ChangesetAsCastTest do
   # This generates `changeset` notation rather than assertions because
   # that's easier to examine.
   test "creating and checking, part 1: changeset notation" do
-    run = fn [cast_fields, params] ->
-      AsCast.new(cast_fields)
-      |> ChangesetAsCast.changeset_checks(Schema, params)
-    end
-
-    {expect, raises} = TabularA.runners(run)
+    {expect, raises} = TabularA.runners(
+      fn cast_fields, params ->
+        AsCast.new(cast_fields)
+        |> ChangesetAsCast.changeset_checks(Schema, params)
+      end)
     
-    # expect = fn args, expected ->
-    #   run.(args)
-    #   |> assert_equal(expected)
-    # end
-      
-
     [[:int_field], %{"int_field" => "383"}] |> expect.(
                                                  [changes:    [int_field: 383]    ])
     [[:int_field], %{                    }] |> expect.(

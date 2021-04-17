@@ -92,8 +92,8 @@ defmodule KeywordXTest do
   test "assert_no_duplicate_keys" do
     a = assertion_runners_for(&KeywordX.assert_no_duplicate_keys/1)
 
-    [] |> a.pass.()
-    [a: 1, b: 2] |> a.pass.()
+    [               ] |> a.pass.()
+    [a: 1, b: 2     ] |> a.pass.()
 
     [a: 1, b: 2, a: 3] |> a.fail.("Keyword list should not have duplicate keys")
                        |> a.plus.(left: [a: 1, b: 2, a: 3],
